@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1bd6yss" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
-  <bpmn:process id="highmedorg_pingAutostart" isExecutable="true" camunda:versionTag="#{version}">
+  <bpmn:process id="dsfdev_pingAutostart" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:endEvent id="Event_1ukqals">
       <bpmn:incoming>Flow_1h835ja</bpmn:incoming>
     </bpmn:endEvent>
@@ -48,14 +48,14 @@
     <bpmn:intermediateThrowEvent id="startPing" name="start ping">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-start-ping|#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://dsf.dev/fhir/StructureDefinition/task-start-ping|#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">startPing</camunda:inputParameter>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/ping/#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://dsf.dev/bpe/Process/ping/#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0jy9ipp</bpmn:incoming>
       <bpmn:outgoing>Flow_1yj8623</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1gjl6d4" camunda:class="org.highmed.dsf.bpe.message.SendStartPing" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1gjl6d4" camunda:class="dev.dsf.bpe.message.SendStartPing" />
     </bpmn:intermediateThrowEvent>
     <bpmn:startEvent id="AutostartPingStopMessageStartEvent" name="stop ping autostart">
       <bpmn:outgoing>Flow_0y7niuq</bpmn:outgoing>
@@ -94,7 +94,7 @@
     <bpmn:sequenceFlow id="Flow_10ocr9f" sourceRef="Gateway_1ndxuiu" targetRef="Event_1mo4srw" />
     <bpmn:sequenceFlow id="Flow_096pj3d" name="stop" sourceRef="Event_1mo4srw" targetRef="Gateway_1xqxerc" />
     <bpmn:sequenceFlow id="Flow_15y3sqm" sourceRef="Activity_1jgc3di" targetRef="Gateway_1xqxerc" />
-    <bpmn:serviceTask id="Activity_1jgc3di" name="Set Target and configure Timer" camunda:class="org.highmed.dsf.bpe.service.SetTargetAndConfigureTimer">
+    <bpmn:serviceTask id="Activity_1jgc3di" name="Set Target and configure Timer" camunda:class="dev.dsf.bpe.service.SetTargetAndConfigureTimer">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="stop">no</camunda:outputParameter>
@@ -106,9 +106,9 @@
   </bpmn:process>
   <bpmn:message id="Message_13deqwn" name="startPingAutostart" />
   <bpmn:message id="Message_1ws42uv" name="stopPingAutostart" />
-  <bpmn:signal id="Signal_0tpz01n" name="stop_highmedorg_pingAutostart_#{version}" />
+  <bpmn:signal id="Signal_0tpz01n" name="stop_dsfdev_pingAutostart_#{version}" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_pingAutostart">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_pingAutostart">
       <bpmndi:BPMNEdge id="Flow_1yj8623_di" bpmnElement="Flow_1yj8623">
         <di:waypoint x="638" y="197" />
         <di:waypoint x="695" y="197" />

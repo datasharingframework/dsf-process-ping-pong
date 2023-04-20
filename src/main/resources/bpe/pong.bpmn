@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_15v05m6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
-  <bpmn:process id="highmedorg_pong" isExecutable="true" camunda:versionTag="#{version}">
+  <bpmn:process id="dsfdev_pong" isExecutable="true" camunda:versionTag="#{version}">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_07w11cw</bpmn:outgoing>
       <bpmn:messageEventDefinition messageRef="Message_0u91abp" />
@@ -9,20 +9,20 @@
     <bpmn:endEvent id="EndEvent_1ivxrjg">
       <bpmn:extensionElements>
         <camunda:inputOutput>
-          <camunda:inputParameter name="instantiatesUri">http://highmed.org/bpe/Process/ping/#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="instantiatesUri">http://dsf.dev/bpe/Process/ping/#{version}</camunda:inputParameter>
           <camunda:inputParameter name="messageName">pong</camunda:inputParameter>
-          <camunda:inputParameter name="profile">http://highmed.org/fhir/StructureDefinition/task-pong|#{version}</camunda:inputParameter>
+          <camunda:inputParameter name="profile">http://dsf.dev/fhir/StructureDefinition/task-pong|#{version}</camunda:inputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1ism9wt</bpmn:incoming>
-      <bpmn:messageEventDefinition messageRef="Message_1h0kvyq" camunda:class="org.highmed.dsf.bpe.message.SendPong" />
+      <bpmn:messageEventDefinition messageRef="Message_1h0kvyq" camunda:class="dev.dsf.bpe.message.SendPong" />
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_09i9zb8" sourceRef="logPing" targetRef="selectTarget" />
-    <bpmn:serviceTask id="logPing" name="logPing" camunda:class="org.highmed.dsf.bpe.service.LogPing">
+    <bpmn:serviceTask id="logPing" name="logPing" camunda:class="dev.dsf.bpe.service.LogPing">
       <bpmn:incoming>SequenceFlow_07w11cw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_09i9zb8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="selectTarget" name="selectTarget" camunda:class="org.highmed.dsf.bpe.service.SelectPongTarget">
+    <bpmn:serviceTask id="selectTarget" name="selectTarget" camunda:class="dev.dsf.bpe.service.SelectPongTarget">
       <bpmn:incoming>SequenceFlow_09i9zb8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ism9wt</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -40,7 +40,7 @@
   <bpmn:message id="Message_1h0kvyq" name="pong" />
   <bpmn:error id="Error_1j0t9ud" name="target_not_allowed" errorCode="target_not_allowed" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="highmedorg_pong">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_pong">
       <bpmndi:BPMNEdge id="Flow_0yr2pmf_di" bpmnElement="Flow_0yr2pmf">
         <di:waypoint x="528" y="178" />
         <di:waypoint x="528" y="210" />
