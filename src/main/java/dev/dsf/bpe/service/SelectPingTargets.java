@@ -66,11 +66,6 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	@Override
 	public void doExecute(DelegateExecution execution) throws Exception
 	{
-		Task task = getLeadingTaskFromExecutionVariables(execution);
-		task.addOutput(getTaskHelper().createOutput(ConstantsBase.CODESYSTEM_DSF_BPMN,
-				ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_BUSINESS_KEY, execution.getBusinessKey()));
-		updateLeadingTaskInExecutionVariables(execution, task);
-
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(execution).map(this::searchForEndpoints)
 				.orElse(allEndpointsNotLocal());
 
