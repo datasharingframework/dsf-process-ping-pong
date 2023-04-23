@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
@@ -27,16 +28,13 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import dev.dsf.bpe.ConstantsBase;
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.delegate.AbstractServiceDelegate;
-import dev.dsf.fhir.authorization.read.ReadAccessHelper;
-import dev.dsf.fhir.client.FhirWebserviceClientProvider;
-import dev.dsf.fhir.organization.OrganizationProvider;
-import dev.dsf.fhir.task.TaskHelper;
-import dev.dsf.fhir.variables.Target;
-import dev.dsf.fhir.variables.Targets;
-import dev.dsf.fhir.variables.TargetsValues;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
+import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
+import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
+import dev.dsf.bpe.v1.variables.Target;
+import dev.dsf.bpe.v1.variables.Variables;
 
 public class SelectPingTargets extends AbstractServiceDelegate implements InitializingBean
 {
@@ -45,34 +43,20 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	private static final Pattern endpointResouceTypes = Pattern.compile(
 			"Endpoint|HealthcareService|ImagingStudy|InsurancePlan|Location|Organization|OrganizationAffiliation|PractitionerRole");
 
-	private final OrganizationProvider organizationProvider;
-
-	public SelectPingTargets(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider)
+	public SelectPingTargets(ProcessPluginApi api)
 	{
-		super(clientProvider, taskHelper, readAccessHelper);
-
-		this.organizationProvider = organizationProvider;
+		super(api);
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
-		super.afterPropertiesSet();
-
-		Objects.requireNonNull(organizationProvider, "organizationProvider");
-	}
-
-	@Override
-	public void doExecute(DelegateExecution execution) throws Exception
-	{
-		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(execution).map(this::searchForEndpoints)
+		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables).map(this::searchForEndpoints)
 				.orElse(allEndpointsNotLocal());
 
-		Map<String, Identifier> organizationIdentifierByOrganizationId = getAllActiveOrganizations()
-				.collect(Collectors.toMap(o -> o.getIdElement().getIdPart(), o -> o.getIdentifier().stream()
-						.filter(i -> ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER.equals(i.getSystem()))
-						.findFirst().get()));
+		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
+		Map<String, Identifier> organizationIdentifierByOrganizationId = remoteOrganizations.stream().collect(
+				Collectors.toMap(o -> o.getIdElement().getIdPart(), o -> OrganizationIdentifier.findFirst(o).get()));
 
 		Stream<Endpoint> remoteTargetEndpointsWithActiveOrganization = targetEndpoints
 				.filter(e -> getOrganizationIdentifier(e, organizationIdentifierByOrganizationId).isPresent());
@@ -80,21 +64,21 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		List<Target> targets = remoteTargetEndpointsWithActiveOrganization.map(e ->
 		{
 			String organizationIdentifier = getOrganizationIdentifier(e, organizationIdentifierByOrganizationId).get();
-			String endpointIdentifier = getEndpointIdentifier(e).get();
-			String endpointAddress = getEndpointAddress(e).get();
-			return Target.createBiDirectionalTarget(organizationIdentifier, endpointIdentifier, endpointAddress,
+			String endpointIdentifier = EndpointIdentifier.findFirst(e).map(Identifier::getValue).get();
+			String endpointAddress = e.getAddress();
+
+			return variables.createBiDirectionalTarget(organizationIdentifier, endpointIdentifier, endpointAddress,
 					UUID.randomUUID().toString());
 		}).collect(Collectors.toList());
 
-		execution.setVariable(ConstantsBase.BPMN_EXECUTION_VARIABLE_TARGETS,
-				TargetsValues.create(new Targets(targets)));
+		variables.setTargets(variables.createTargets(targets));
 	}
 
-	private Optional<UriComponents> getTargetEndpointsSearchParameter(DelegateExecution execution)
+	private Optional<UriComponents> getTargetEndpointsSearchParameter(Variables variables)
 	{
-		Task task = getLeadingTaskFromExecutionVariables(execution);
-		return getTaskHelper()
-				.getFirstInputParameterStringValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
+		Task mainTask = variables.getMainTask();
+		return api.getTaskHelper()
+				.getFirstInputParameterStringValue(mainTask, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS)
 				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
 	}
@@ -117,7 +101,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		queryParameters.putAll(searchParameters.getQueryParams());
 		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
 
-		Bundle searchResult = getFhirWebserviceClientProvider().getLocalWebserviceClient()
+		Bundle searchResult = api.getFhirWebserviceClientProvider().getLocalWebserviceClient()
 				.searchWithStrictHandling(resourceType.get(), queryParameters);
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
@@ -155,12 +139,12 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 
 	private Predicate<? super Endpoint> isLocalEndpoint()
 	{
-		return e -> Objects.equals(getFhirWebserviceClientProvider().getLocalBaseUrl(), e.getAddress());
+		return e -> Objects.equals(api.getEndpointProvider().getLocalEndpointAddress(), e.getAddress());
 	}
 
 	private Stream<Endpoint> allEndpoints(int page, int currentTotal)
 	{
-		Bundle searchResult = getFhirWebserviceClientProvider().getLocalWebserviceClient()
+		Bundle searchResult = api.getFhirWebserviceClientProvider().getLocalWebserviceClient()
 				.searchWithStrictHandling(Endpoint.class, Map.of("status", Collections.singletonList("active"), "_page",
 						Collections.singletonList(String.valueOf(page))));
 
@@ -190,47 +174,5 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 				.ofNullable(organizationIdentifierByOrganizationId
 						.get(endpoint.getManagingOrganization().getReferenceElement().getIdPart()))
 				.map(Identifier::getValue);
-	}
-
-	private Optional<String> getEndpointIdentifier(Endpoint endpoint)
-	{
-		return endpoint.getIdentifier().stream()
-				.filter(i -> ConstantsBase.NAMINGSYSTEM_DSF_ENDPOINT_IDENTIFIER.equals(i.getSystem())).findFirst()
-				.map(Identifier::getValue);
-	}
-
-	private Optional<String> getEndpointAddress(Endpoint endpoint)
-	{
-		return endpoint.hasAddress() ? Optional.of(endpoint.getAddress()) : Optional.empty();
-	}
-
-	private Stream<Organization> getAllActiveOrganizations()
-	{
-		return getActiveOrganizations(1, 0);
-	}
-
-	private Stream<Organization> getActiveOrganizations(int page, int currentTotal)
-	{
-		Map<String, List<String>> queryParameters = new HashMap<String, List<String>>();
-		queryParameters.put("active", Collections.singletonList("true"));
-		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
-
-		Bundle searchResult = getFhirWebserviceClientProvider().getLocalWebserviceClient()
-				.searchWithStrictHandling(Organization.class, queryParameters);
-
-		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
-			return Stream.concat(toOrganization(searchResult),
-					getActiveOrganizations(page + 1, currentTotal + searchResult.getEntry().size()));
-		else
-			return toOrganization(searchResult);
-	}
-
-	private Stream<Organization> toOrganization(Bundle searchResult)
-	{
-		Objects.requireNonNull(searchResult, "searchResult");
-
-		return searchResult.getEntry().stream().filter(BundleEntryComponent::hasResource)
-				.filter(e -> e.getResource() instanceof Organization).map(e -> (Organization) e.getResource())
-				.filter(e -> e.getActive());
 	}
 }

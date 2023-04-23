@@ -2,11 +2,11 @@ package dev.dsf.bpe.spring.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
-import ca.uhn.fhir.context.FhirContext;
-import dev.dsf.bpe.documentation.ProcessDocumentation;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.message.SendPing;
 import dev.dsf.bpe.message.SendPong;
@@ -14,40 +14,18 @@ import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
 import dev.dsf.bpe.service.LogPong;
-import dev.dsf.bpe.service.MailService;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
 import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.util.PingStatusGenerator;
-import dev.dsf.fhir.authorization.read.ReadAccessHelper;
-import dev.dsf.fhir.client.FhirWebserviceClientProvider;
-import dev.dsf.fhir.organization.EndpointProvider;
-import dev.dsf.fhir.organization.OrganizationProvider;
-import dev.dsf.fhir.task.TaskHelper;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 
 @Configuration
 public class PingConfig
 {
 	@Autowired
-	private FhirWebserviceClientProvider clientProvider;
-
-	@Autowired
-	private TaskHelper taskHelper;
-
-	@Autowired
-	private ReadAccessHelper readAccessHelper;
-
-	@Autowired
-	private OrganizationProvider organizationProvider;
-
-	@Autowired
-	private EndpointProvider endpointProvider;
-
-	@Autowired
-	private FhirContext fhirContext;
-
-	@Autowired
-	private MailService mailService;
+	private ProcessPluginApi api;
 
 	@ProcessDocumentation(description = "To enable a mail being send if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_ping")
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPingProcessFailed:false}")
@@ -58,16 +36,17 @@ public class PingConfig
 	boolean sendPongProcessFailedMail;
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
 	{
-		return new SetTargetAndConfigureTimer(clientProvider, taskHelper, readAccessHelper, organizationProvider,
-				endpointProvider);
+		return new SetTargetAndConfigureTimer(api);
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendStartPing sendStartPing()
 	{
-		return new SendStartPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+		return new SendStartPing(api);
 	}
 
 	@Bean
@@ -79,51 +58,55 @@ public class PingConfig
 	@Bean
 	public ErrorMailService errorLogger()
 	{
-		return new ErrorMailService(mailService, clientProvider, organizationProvider.getLocalIdentifierValue(),
-				sendPingProcessFailedMail, sendPongProcessFailedMail);
+		return new ErrorMailService(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendPing sendPing()
 	{
-		return new SendPing(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
-				responseGenerator(), errorLogger());
+		return new SendPing(api, responseGenerator(), errorLogger());
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendPong sendPong()
 	{
-		return new SendPong(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext,
-				responseGenerator(), errorLogger());
+		return new SendPong(api, responseGenerator(), errorLogger());
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public LogPing logPing()
 	{
-		return new LogPing(clientProvider, taskHelper, readAccessHelper);
+		return new LogPing(api);
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public LogPong logPong()
 	{
-		return new LogPong(clientProvider, taskHelper, readAccessHelper, responseGenerator());
+		return new LogPong(api, responseGenerator());
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public LogNoResponse logNoResponse()
 	{
-		return new LogNoResponse(clientProvider, taskHelper, readAccessHelper, responseGenerator(), errorLogger());
+		return new LogNoResponse(api, responseGenerator(), errorLogger());
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SelectPingTargets selectPingTargets()
 	{
-		return new SelectPingTargets(clientProvider, taskHelper, readAccessHelper, organizationProvider);
+		return new SelectPingTargets(api);
 	}
 
 	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SelectPongTarget selectPongTarget()
 	{
-		return new SelectPongTarget(clientProvider, taskHelper, readAccessHelper, endpointProvider);
+		return new SelectPongTarget(api);
 	}
 }

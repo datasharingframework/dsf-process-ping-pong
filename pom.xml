@@ -6,7 +6,7 @@
 
 	<groupId>dev.dsf</groupId>
 	<artifactId>dsf-process-ping-pong</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -39,8 +39,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-base</artifactId>
+			<artifactId>dsf-bpe-process-api-v1</artifactId>
 			<version>${dsf.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>6.0.8</version>
 			<scope>provided</scope>
 		</dependency>
 

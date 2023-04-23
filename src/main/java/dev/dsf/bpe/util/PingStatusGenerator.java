@@ -2,13 +2,13 @@ package dev.dsf.bpe.util;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
-import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task.TaskOutputComponent;
 
-import dev.dsf.bpe.ConstantsBase;
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.fhir.variables.Target;
+import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
+import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
+import dev.dsf.bpe.v1.variables.Target;
 
 public class PingStatusGenerator
 {
@@ -45,11 +45,9 @@ public class PingStatusGenerator
 		extension.setUrl(ConstantsPing.EXTENSION_URL_PING_STATUS);
 		extension.addExtension(ConstantsPing.EXTENSION_URL_CORRELATION_KEY, new StringType(target.getCorrelationKey()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER)
-				.setValue(new Identifier().setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER)
-						.setValue(target.getOrganizationIdentifierValue()));
+				.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
-				.setValue(new Identifier().setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ENDPOINT_IDENTIFIER)
-						.setValue(target.getEndpointIdentifierValue()));
+				.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
 		if (errorMessage != null)
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
 					.setValue(new StringType(errorMessage));

@@ -5,32 +5,27 @@ import java.util.Objects;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
-import ca.uhn.fhir.context.FhirContext;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.PingStatusGenerator;
-import dev.dsf.fhir.authorization.read.ReadAccessHelper;
-import dev.dsf.fhir.client.FhirWebserviceClientProvider;
-import dev.dsf.fhir.organization.OrganizationProvider;
-import dev.dsf.fhir.task.AbstractTaskMessageSend;
-import dev.dsf.fhir.task.TaskHelper;
-import dev.dsf.fhir.variables.Target;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
+import dev.dsf.bpe.v1.variables.Target;
+import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
 public class SendPong extends AbstractTaskMessageSend
 {
 	private final PingStatusGenerator statusGenerator;
-	private final ErrorMailService errorLogger;
+	private final ErrorMailService errorMailService;
 
-	public SendPong(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
-			PingStatusGenerator statusGenerator, ErrorMailService errorLogger)
+	public SendPong(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
 	{
-		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+		super(api);
 
 		this.statusGenerator = statusGenerator;
-		this.errorLogger = errorLogger;
+		this.errorMailService = errorMailService;
 	}
 
 	@Override
@@ -39,28 +34,29 @@ public class SendPong extends AbstractTaskMessageSend
 		super.afterPropertiesSet();
 
 		Objects.requireNonNull(statusGenerator, "statusGenerator");
-		Objects.requireNonNull(errorLogger, "errorLogger");
+		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
 	@Override
-	public void doExecute(DelegateExecution execution) throws Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws Exception
 	{
-		super.doExecute(execution);
+		super.doExecute(execution, variables);
 
-		Target target = getTarget(execution);
-		Task task = getLeadingTaskFromExecutionVariables(execution);
-		task.addOutput(statusGenerator.createPongStatusOutput(target,
+		Target target = variables.getTarget();
+		Task mainTask = variables.getMainTask();
+		mainTask.addOutput(statusGenerator.createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SEND));
-		updateLeadingTaskInExecutionVariables(execution, task);
+		variables.updateTask(mainTask);
 	}
 
 	@Override
-	protected void handleEndEventError(DelegateExecution execution, Exception exception, String errorMessage)
+	protected void handleEndEventError(DelegateExecution execution, Variables variables, Exception exception,
+			String errorMessage)
 	{
-		Target target = getTarget(execution);
-		Task task = getLeadingTaskFromExecutionVariables(execution);
+		Target target = variables.getTarget();
+		Task mainTask = variables.getMainTask();
 
-		if (task != null)
+		if (mainTask != null)
 		{
 			String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
 			if (exception instanceof WebApplicationException)
@@ -75,16 +71,16 @@ public class SendPong extends AbstractTaskMessageSend
 
 			String specialErrorMessage = createErrorMessage(exception);
 
-			task.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, specialErrorMessage));
-			updateLeadingTaskInExecutionVariables(execution, task);
+			mainTask.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, specialErrorMessage));
+			variables.updateTask(mainTask);
 
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
-				errorLogger.endpointNotReachableForPong(task.getIdElement(), target, specialErrorMessage);
+				errorMailService.endpointNotReachableForPong(mainTask.getIdElement(), target, specialErrorMessage);
 			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
-				errorLogger.endpointReachablePongForbidden(task.getIdElement(), target, specialErrorMessage);
+				errorMailService.endpointReachablePongForbidden(mainTask.getIdElement(), target, specialErrorMessage);
 		}
 
-		super.handleEndEventError(execution, exception, errorMessage);
+		super.handleEndEventError(execution, variables, exception, errorMessage);
 	}
 
 	private String createErrorMessage(Exception exception)

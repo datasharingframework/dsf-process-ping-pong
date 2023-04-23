@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
@@ -20,28 +19,32 @@ import org.slf4j.LoggerFactory;
 
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
-import dev.dsf.bpe.ConstantsBase;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.util.PingStatusGenerator;
+import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
+import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
+import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
+import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.fhir.validation.ResourceValidator;
 import dev.dsf.fhir.validation.ResourceValidatorImpl;
 import dev.dsf.fhir.validation.ValidationSupportRule;
-import dev.dsf.fhir.variables.Target;
 
 public class TaskProfileTest
 {
 	private static final Logger logger = LoggerFactory.getLogger(TaskProfileTest.class);
 
+	private static final PingProcessPluginDefinition def = new PingProcessPluginDefinition();
+
 	@ClassRule
-	public static final ValidationSupportRule validationRule = new ValidationSupportRule(
-			PingProcessPluginDefinition.VERSION, PingProcessPluginDefinition.RELEASE_DATE,
-			Arrays.asList("dsf-task-base-0.5.0.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
+	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
+			def.getResourceReleaseDate(),
+			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
 					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
 					"dsf-task-stop-ping-autostart.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-0.5.0.xml", "dsf-ping.xml",
+			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-0.5.0.xml", "dsf-ping.xml",
+			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml", "dsf-pong-status.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
@@ -110,18 +113,18 @@ public class TaskProfileTest
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
+		task.setInstantiatesCanonical(
+				ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME))
-				.getType().addCoding().setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
+				.getType().addCoding(BpmnMessage.messageName());
 
 		return task;
 	}
@@ -142,18 +145,18 @@ public class TaskProfileTest
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI_AND_LATEST_VERSION);
+		task.setInstantiatesCanonical(
+				ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME))
-				.getType().addCoding().setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
+				.getType().addCoding(BpmnMessage.messageName());
 
 		return task;
 	}
@@ -191,9 +194,8 @@ public class TaskProfileTest
 	public void testTaskStartPingProcessProfileValidWithBuisnessKeyOutput() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
-		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_BUSINESS_KEY);
+		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -205,13 +207,36 @@ public class TaskProfileTest
 	@Test
 	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingStatusOutput() throws Exception
 	{
-		Task task = createValidTaskStartPingProcess();
-		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_BUSINESS_KEY);
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
 
-		Target target = Target.createBiDirectionalTarget("target.org", "endpoint.target.org",
-				"https://endpoint.target.org/fhir", UUID.randomUUID().toString());
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
+
+		Task task = createValidTaskStartPingProcess();
+		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, "some error message"));
 
@@ -226,7 +251,7 @@ public class TaskProfileTest
 	public void testTaskStartPingProcessProfileNotValid1() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
-		task.setInstantiatesUri("http://dsf.dev/bpe/Process/ping/0.1.0"); // not valid
+		task.setInstantiatesCanonical("http://dsf.dev/bpe/Process/ping/0.1.0"); // not valid
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -265,18 +290,17 @@ public class TaskProfileTest
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI_AND_LATEST_VERSION);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
-				.addCoding().setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
+				.addCoding(BpmnMessage.messageName());
 
 		return task;
 	}
@@ -296,10 +320,34 @@ public class TaskProfileTest
 	@Test
 	public void testTaskPingValidWithPingStatusOutput() throws Exception
 	{
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
+
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
 		Task task = createValidTaskPing();
-		task.addOutput(new PingStatusGenerator().createPongStatusOutput(
-				Target.createBiDirectionalTarget("target.org", "endpoint.target.org",
-						"https://endpoint.target.org/fhir", UUID.randomUUID().toString()),
+		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SEND));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -313,28 +361,24 @@ public class TaskProfileTest
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_PONG_PROCESS_URI_AND_LATEST_VERSION);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PONG_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("MeDIC 1");
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("MeDIC 1"));
 
-		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_MESSAGE_NAME)).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_BUSINESS_KEY);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_CORRELATION_KEY);
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_MESSAGE_NAME)).getType()
+				.addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
 		task.addInput()
-				.setValue(new Reference().setIdentifier(new Identifier()
-						.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ENDPOINT_IDENTIFIER).setValue("endpoint.target.org"))
-						.setType(ResourceType.Endpoint.name()))
+				.setValue(new Reference().setType(ResourceType.Endpoint.name())
+						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
 				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
 
@@ -357,24 +401,21 @@ public class TaskProfileTest
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PONG_TASK);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI_AND_LATEST_VERSION);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("MeDIC 1");
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER).setValue("TTP");
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("MeDIC 1"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 
-		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PONG_MESSAGE_NAME)).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_BUSINESS_KEY);
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType().addCoding()
-				.setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_CORRELATION_KEY);
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PONG_MESSAGE_NAME)).getType()
+				.addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
 
 		return task;
 	}

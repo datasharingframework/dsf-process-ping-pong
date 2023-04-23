@@ -3,11 +3,12 @@ package dev.dsf.bpe;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
-import org.springframework.core.env.StandardEnvironment;
+import java.util.List;
+import java.util.Map;
 
-import ca.uhn.fhir.context.FhirContext;
-import dev.dsf.fhir.resources.ResourceProvider;
+import org.junit.Test;
+
+import dev.dsf.bpe.v1.ProcessPluginDefinition;
 
 public class PingProcessPluginDefinitionTest
 {
@@ -15,23 +16,23 @@ public class PingProcessPluginDefinitionTest
 	public void testResourceLoading() throws Exception
 	{
 		ProcessPluginDefinition definition = new PingProcessPluginDefinition();
-		ResourceProvider provider = definition.getResourceProvider(FhirContext.forR4(), getClass().getClassLoader(),
-				new StandardEnvironment());
-		assertNotNull(provider);
+		Map<String, List<String>> resourcesByProcessId = definition.getFhirResourcesByProcessId();
 
-		var ping = provider
-				.getResources(ConstantsPing.PROCESS_NAME_FULL_PING + "/" + PingProcessPluginDefinition.VERSION);
+		var ping = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING);
 		assertNotNull(ping);
-		assertEquals(8, ping.count());
+		assertEquals(9, ping.stream().filter(this::exists).count());
 
-		var pingAutostart = provider.getResources(
-				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART + "/" + PingProcessPluginDefinition.VERSION);
+		var pingAutostart = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART);
 		assertNotNull(pingAutostart);
-		assertEquals(5, pingAutostart.count());
+		assertEquals(5, pingAutostart.stream().filter(this::exists).count());
 
-		var pong = provider
-				.getResources(ConstantsPing.PROCESS_NAME_FULL_PONG + "/" + PingProcessPluginDefinition.VERSION);
+		var pong = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PONG);
 		assertNotNull(pong);
-		assertEquals(7, pong.count());
+		assertEquals(7, pong.stream().filter(this::exists).count());
+	}
+
+	private boolean exists(String file)
+	{
+		return getClass().getClassLoader().getResourceAsStream(file) != null;
 	}
 }

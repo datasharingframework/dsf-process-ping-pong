@@ -4,23 +4,14 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import org.springframework.core.env.PropertyResolver;
-
-import ca.uhn.fhir.context.FhirContext;
 import dev.dsf.bpe.spring.config.PingConfig;
-import dev.dsf.fhir.resources.AbstractResource;
-import dev.dsf.fhir.resources.ActivityDefinitionResource;
-import dev.dsf.fhir.resources.CodeSystemResource;
-import dev.dsf.fhir.resources.ResourceProvider;
-import dev.dsf.fhir.resources.StructureDefinitionResource;
-import dev.dsf.fhir.resources.ValueSetResource;
+import dev.dsf.bpe.v1.ProcessPluginDefinition;
 
 public class PingProcessPluginDefinition implements ProcessPluginDefinition
 {
-	public static final String VERSION = "0.7.0";
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2022, 10, 18);
+	public static final String VERSION = "1.0.0.0";
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2023, 4, 22);
 
 	@Override
 	public String getName()
@@ -41,51 +32,46 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 	}
 
 	@Override
-	public Stream<String> getBpmnFiles()
+	public List<String> getProcessModels()
 	{
-		return Stream.of("bpe/ping-autostart.bpmn", "bpe/ping.bpmn", "bpe/pong.bpmn");
+		return List.of("bpe/ping-autostart.bpmn", "bpe/ping.bpmn", "bpe/pong.bpmn");
 	}
 
 	@Override
-	public Stream<Class<?>> getSpringConfigClasses()
+	public List<Class<?>> getSpringConfigurations()
 	{
-		return Stream.of(PingConfig.class);
+		return List.of(PingConfig.class);
 	}
 
 	@Override
-	public ResourceProvider getResourceProvider(FhirContext fhirContext, ClassLoader classLoader,
-			PropertyResolver resolver)
+	public Map<String, List<String>> getFhirResourcesByProcessId()
 	{
-		var aPing = ActivityDefinitionResource.file("fhir/ActivityDefinition/dsf-ping.xml");
-		var aPingAutostart = ActivityDefinitionResource.file("fhir/ActivityDefinition/dsf-ping-autostart.xml");
-		var aPong = ActivityDefinitionResource.file("fhir/ActivityDefinition/dsf-pong.xml");
+		var aPing = "fhir/ActivityDefinition/dsf-ping.xml";
+		var aPingAutostart = "fhir/ActivityDefinition/dsf-ping-autostart.xml";
+		var aPong = "fhir/ActivityDefinition/dsf-pong.xml";
 
-		var cPing = CodeSystemResource.file("fhir/CodeSystem/dsf-ping.xml");
-		var cPingStatus = CodeSystemResource.file("fhir/CodeSystem/dsf-ping-status.xml");
+		var cPing = "fhir/CodeSystem/dsf-ping.xml";
+		var cPingStatus = "fhir/CodeSystem/dsf-ping-status.xml";
 
-		var sPingStatus = StructureDefinitionResource.file("fhir/StructureDefinition/dsf-extension-ping-status.xml");
-		var sPing = StructureDefinitionResource.file("fhir/StructureDefinition/dsf-task-ping.xml");
-		var sPong = StructureDefinitionResource.file("fhir/StructureDefinition/dsf-task-pong.xml");
-		var sStartPing = StructureDefinitionResource.file("fhir/StructureDefinition/dsf-task-start-ping.xml");
-		var sStartPingAutostart = StructureDefinitionResource
-				.file("fhir/StructureDefinition/dsf-task-start-ping-autostart.xml");
-		var sStopPingAutostart = StructureDefinitionResource
-				.file("fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml");
+		var sPingStatus = "fhir/StructureDefinition/dsf-extension-ping-status.xml";
+		var sPing = "fhir/StructureDefinition/dsf-task-ping.xml";
+		var sPong = "fhir/StructureDefinition/dsf-task-pong.xml";
+		var sStartPing = "fhir/StructureDefinition/dsf-task-start-ping.xml";
+		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
+		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
 
-		var vPing = ValueSetResource.file("fhir/ValueSet/dsf-ping.xml");
-		var vPingStatus = ValueSetResource.file("fhir/ValueSet/dsf-ping-status.xml");
-		var vPongStatus = ValueSetResource.file("fhir/ValueSet/dsf-pong-status.xml");
+		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 
-		Map<String, List<AbstractResource>> resourcesByProcessKeyAndVersion = Map.of(
-				ConstantsPing.PROCESS_NAME_FULL_PING + "/" + VERSION,
-				Arrays.asList(aPing, cPing, cPingStatus, sPingStatus, sStartPing, sPong, vPing, vPingStatus),
-				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART + "/" + VERSION,
+		var vPing = "fhir/ValueSet/dsf-ping.xml";
+		var vPingStatus = "fhir/ValueSet/dsf-ping-status.xml";
+		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
+
+		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
+				Arrays.asList(aPing, cPing, cPingStatus, sPingStatus, sStartPing, sPong, tStartPing, vPing,
+						vPingStatus),
+				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, vPing),
-				ConstantsPing.PROCESS_NAME_FULL_PONG + "/" + VERSION,
+				ConstantsPing.PROCESS_NAME_FULL_PONG,
 				Arrays.asList(aPong, cPing, cPingStatus, sPingStatus, sPing, vPing, vPongStatus));
-
-		return ResourceProvider.read(VERSION, RELEASE_DATE,
-				() -> fhirContext.newXmlParser().setStripVersionsFromReferences(false), classLoader, resolver,
-				resourcesByProcessKeyAndVersion);
 	}
 }

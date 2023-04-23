@@ -1,0 +1,38 @@
+<Task xmlns="http://hl7.org/fhir">
+	<meta>
+		<profile value="http://dsf.dev/fhir/StructureDefinition/task-start-ping|#{version}"/>
+	</meta>
+	<identifier>
+		<system value="http://dsf.dev/sid/task-identifier"/>
+		<value value="http://dsf.dev/bpe/Process/ping/task-start-ping|#{version}"/>
+	</identifier>
+	<instantiatesCanonical value="http://dsf.dev/bpe/Process/ping|#{version}"/>
+	<status value="draft"/>
+	<intent value="order"/>
+	<authoredOn value="#{date}"/>
+	<requester>
+		<type value="Organization"/>
+		<identifier>
+			<system value="http://dsf.dev/sid/organization-identifier"/>
+			<value value="#{organization}"/>
+		</identifier>
+	</requester>
+	<restriction>
+		<recipient>
+			<type value="Organization"/>
+			<identifier>
+				<system value="http://dsf.dev/sid/organization-identifier"/>
+				<value value="#{organization}"/>
+			</identifier>
+		</recipient>
+	</restriction>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/bpmn-message"/>
+				<code value="message-name"/>
+			</coding>
+		</type>
+		<valueString value="startPing"/>
+	</input>
+</Task>

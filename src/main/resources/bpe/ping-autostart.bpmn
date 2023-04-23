@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1bd6yss" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.11.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1bd6yss" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.7.0">
   <bpmn:process id="dsfdev_pingAutostart" isExecutable="true" camunda:versionTag="#{version}">
-    <bpmn:endEvent id="Event_1ukqals">
+    <bpmn:endEvent id="EndEvent">
       <bpmn:incoming>Flow_1h835ja</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_1xqxerc">
@@ -11,11 +11,11 @@
       <bpmn:outgoing>Flow_0g1txh0</bpmn:outgoing>
       <bpmn:outgoing>Flow_0jy9ipp</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:startEvent id="AutostartPingStartMessageStartEvent" name="start ping autostart">
+    <bpmn:startEvent id="StartPingAutostartMessageStartEvent" name="start ping autostart">
       <bpmn:outgoing>Flow_1m61xqv</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1ot9xdv" messageRef="Message_13deqwn" />
     </bpmn:startEvent>
-    <bpmn:intermediateCatchEvent id="Event_0eqigaq" name="wait">
+    <bpmn:intermediateCatchEvent id="IntermediateTimerCatchEvent" name="wait">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="stop">no</camunda:outputParameter>
@@ -27,8 +27,8 @@
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">${timerInterval}</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_09o8bb5" sourceRef="Event_0ougty7" targetRef="Activity_1jgc3di" />
-    <bpmn:sequenceFlow id="Flow_1ltiore" name="continue" sourceRef="Event_0eqigaq" targetRef="Gateway_1xqxerc" />
+    <bpmn:sequenceFlow id="Flow_09o8bb5" sourceRef="StopIntermediateSignalThrowEvent" targetRef="SetTargetAndConfigureTimer" />
+    <bpmn:sequenceFlow id="Flow_1ltiore" name="continue" sourceRef="IntermediateTimerCatchEvent" targetRef="Gateway_1xqxerc" />
     <bpmn:sequenceFlow id="Flow_0g1txh0" name="stop" sourceRef="Gateway_1xqxerc" targetRef="Gateway_0sx5e0s">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${stop == 'yes'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -38,36 +38,42 @@
       <bpmn:outgoing>Flow_1h835ja</bpmn:outgoing>
       <bpmn:outgoing>Flow_19zyiou</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1h835ja" name="stop" sourceRef="Gateway_0sx5e0s" targetRef="Event_1ukqals">
+    <bpmn:sequenceFlow id="Flow_1h835ja" name="stop" sourceRef="Gateway_0sx5e0s" targetRef="EndEvent">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${stop == 'yes'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0jy9ipp" name="continue" sourceRef="Gateway_1xqxerc" targetRef="startPing">
+    <bpmn:sequenceFlow id="Flow_0jy9ipp" name="continue" sourceRef="Gateway_1xqxerc" targetRef="SendStartPing">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${stop == 'no'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1yj8623" sourceRef="startPing" targetRef="Gateway_0sx5e0s" />
-    <bpmn:intermediateThrowEvent id="startPing" name="start ping">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="profile">http://dsf.dev/fhir/StructureDefinition/task-start-ping|#{version}</camunda:inputParameter>
-          <camunda:inputParameter name="messageName">startPing</camunda:inputParameter>
-          <camunda:inputParameter name="instantiatesUri">http://dsf.dev/bpe/Process/ping/#{version}</camunda:inputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
+    <bpmn:sequenceFlow id="Flow_1yj8623" sourceRef="SendStartPing" targetRef="Gateway_0sx5e0s" />
+    <bpmn:intermediateThrowEvent id="SendStartPing" name="startPing">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_0jy9ipp</bpmn:incoming>
       <bpmn:outgoing>Flow_1yj8623</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1gjl6d4" camunda:class="dev.dsf.bpe.message.SendStartPing" />
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1gjl6d4" messageRef="Message_0cp23l9" camunda:class="dev.dsf.bpe.message.SendStartPing">
+        <bpmn:extensionElements>
+          <camunda:field name="profile">
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-start-ping|#{version}</camunda:string>
+          </camunda:field>
+          <camunda:field name="messageName">
+            <camunda:string>startPing</camunda:string>
+          </camunda:field>
+          <camunda:field name="instantiatesCanonical">
+            <camunda:string>http://dsf.dev/bpe/Process/ping|#{version}</camunda:string>
+          </camunda:field>
+        </bpmn:extensionElements>
+      </bpmn:messageEventDefinition>
     </bpmn:intermediateThrowEvent>
-    <bpmn:startEvent id="AutostartPingStopMessageStartEvent" name="stop ping autostart">
+    <bpmn:startEvent id="StopPingAutostartMessageStartEvent" name="stop ping autostart">
       <bpmn:outgoing>Flow_0y7niuq</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_07n337k" messageRef="Message_1ws42uv" />
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0y7niuq" sourceRef="AutostartPingStopMessageStartEvent" targetRef="Event_0l02l31" />
-    <bpmn:endEvent id="Event_0l02l31" name="stop">
+    <bpmn:sequenceFlow id="Flow_0y7niuq" sourceRef="StopPingAutostartMessageStartEvent" targetRef="StopSignalEndEvent" />
+    <bpmn:endEvent id="StopSignalEndEvent" name="stop">
       <bpmn:incoming>Flow_0y7niuq</bpmn:incoming>
       <bpmn:signalEventDefinition id="SignalEventDefinition_12qfzdb" signalRef="Signal_0tpz01n" />
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1m61xqv" sourceRef="AutostartPingStartMessageStartEvent" targetRef="Event_0ougty7" />
-    <bpmn:intermediateThrowEvent id="Event_0ougty7" name="stop existing instances">
+    <bpmn:sequenceFlow id="Flow_1m61xqv" sourceRef="StartPingAutostartMessageStartEvent" targetRef="StopIntermediateSignalThrowEvent" />
+    <bpmn:intermediateThrowEvent id="StopIntermediateSignalThrowEvent" name="stop existing instances">
       <bpmn:incoming>Flow_1m61xqv</bpmn:incoming>
       <bpmn:outgoing>Flow_09o8bb5</bpmn:outgoing>
       <bpmn:signalEventDefinition id="SignalEventDefinition_1d9hcv1" signalRef="Signal_0tpz01n" />
@@ -80,8 +86,8 @@
       <bpmn:outgoing>Flow_18lkrxy</bpmn:outgoing>
       <bpmn:outgoing>Flow_10ocr9f</bpmn:outgoing>
     </bpmn:eventBasedGateway>
-    <bpmn:sequenceFlow id="Flow_18lkrxy" sourceRef="Gateway_1ndxuiu" targetRef="Event_0eqigaq" />
-    <bpmn:intermediateCatchEvent id="Event_1mo4srw" name="stop">
+    <bpmn:sequenceFlow id="Flow_18lkrxy" sourceRef="Gateway_1ndxuiu" targetRef="IntermediateTimerCatchEvent" />
+    <bpmn:intermediateCatchEvent id="StopIntermediateSignalCatchEvent" name="stop">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="stop">yes</camunda:outputParameter>
@@ -91,10 +97,10 @@
       <bpmn:outgoing>Flow_096pj3d</bpmn:outgoing>
       <bpmn:signalEventDefinition id="SignalEventDefinition_157gg35" signalRef="Signal_0tpz01n" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:sequenceFlow id="Flow_10ocr9f" sourceRef="Gateway_1ndxuiu" targetRef="Event_1mo4srw" />
-    <bpmn:sequenceFlow id="Flow_096pj3d" name="stop" sourceRef="Event_1mo4srw" targetRef="Gateway_1xqxerc" />
-    <bpmn:sequenceFlow id="Flow_15y3sqm" sourceRef="Activity_1jgc3di" targetRef="Gateway_1xqxerc" />
-    <bpmn:serviceTask id="Activity_1jgc3di" name="Set Target and configure Timer" camunda:class="dev.dsf.bpe.service.SetTargetAndConfigureTimer">
+    <bpmn:sequenceFlow id="Flow_10ocr9f" sourceRef="Gateway_1ndxuiu" targetRef="StopIntermediateSignalCatchEvent" />
+    <bpmn:sequenceFlow id="Flow_096pj3d" name="stop" sourceRef="StopIntermediateSignalCatchEvent" targetRef="Gateway_1xqxerc" />
+    <bpmn:sequenceFlow id="Flow_15y3sqm" sourceRef="SetTargetAndConfigureTimer" targetRef="Gateway_1xqxerc" />
+    <bpmn:serviceTask id="SetTargetAndConfigureTimer" name="set target and configure timer" camunda:class="dev.dsf.bpe.service.SetTargetAndConfigureTimer">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="stop">no</camunda:outputParameter>
@@ -107,24 +113,77 @@
   <bpmn:message id="Message_13deqwn" name="startPingAutostart" />
   <bpmn:message id="Message_1ws42uv" name="stopPingAutostart" />
   <bpmn:signal id="Signal_0tpz01n" name="stop_dsfdev_pingAutostart_#{version}" />
+  <bpmn:message id="Message_0cp23l9" name="startPing" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_pingAutostart">
-      <bpmndi:BPMNEdge id="Flow_1yj8623_di" bpmnElement="Flow_1yj8623">
-        <di:waypoint x="638" y="197" />
-        <di:waypoint x="695" y="197" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0jy9ipp_di" bpmnElement="Flow_0jy9ipp">
-        <di:waypoint x="545" y="197" />
-        <di:waypoint x="602" y="197" />
+      <bpmndi:BPMNShape id="Event_1ukqals_di" bpmnElement="EndEvent">
+        <dc:Bounds x="802" y="179" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1xqxerc_di" bpmnElement="Gateway_1xqxerc" isMarkerVisible="true">
+        <dc:Bounds x="495" y="172" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0g2pqnk_di" bpmnElement="StartPingAutostartMessageStartEvent">
+        <dc:Bounds x="162" y="179" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="549" y="179" width="42" height="14" />
+          <dc:Bounds x="161" y="222" width="46" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1h835ja_di" bpmnElement="Flow_1h835ja">
-        <di:waypoint x="745" y="197" />
-        <di:waypoint x="802" y="197" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0eqigaq_di" bpmnElement="IntermediateTimerCatchEvent">
+        <dc:Bounds x="602" y="292" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="749" y="179" width="22" height="14" />
+          <dc:Bounds x="610" y="331" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0sx5e0s_di" bpmnElement="Gateway_0sx5e0s" isMarkerVisible="true">
+        <dc:Bounds x="695" y="172" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0dsz1xu_di" bpmnElement="SendStartPing">
+        <dc:Bounds x="602" y="179" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="599" y="222" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07w8ukc_di" bpmnElement="StopPingAutostartMessageStartEvent">
+        <dc:Bounds x="162" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="515" width="45" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1e0uy38_di" bpmnElement="StopSignalEndEvent">
+        <dc:Bounds x="252" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="259" y="515" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1aaza9o_di" bpmnElement="StopIntermediateSignalThrowEvent">
+        <dc:Bounds x="252" y="179" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="239" y="222" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1qp6nuq_di" bpmnElement="Gateway_1ndxuiu">
+        <dc:Bounds x="695" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1mo4srw_di" bpmnElement="StopIntermediateSignalCatchEvent">
+        <dc:Bounds x="602" y="392" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="609" y="435" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01usi4o_di" bpmnElement="SetTargetAndConfigureTimer">
+        <dc:Bounds x="340" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_09o8bb5_di" bpmnElement="Flow_09o8bb5">
+        <di:waypoint x="288" y="197" />
+        <di:waypoint x="340" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ltiore_di" bpmnElement="Flow_1ltiore">
+        <di:waypoint x="602" y="310" />
+        <di:waypoint x="520" y="310" />
+        <di:waypoint x="520" y="222" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="540" y="292" width="42" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0g1txh0_di" bpmnElement="Flow_0g1txh0">
@@ -136,17 +195,23 @@
           <dc:Bounds x="519" y="82" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ltiore_di" bpmnElement="Flow_1ltiore">
-        <di:waypoint x="602" y="310" />
-        <di:waypoint x="520" y="310" />
-        <di:waypoint x="520" y="222" />
+      <bpmndi:BPMNEdge id="Flow_1h835ja_di" bpmnElement="Flow_1h835ja">
+        <di:waypoint x="745" y="197" />
+        <di:waypoint x="802" y="197" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="540" y="292" width="42" height="14" />
+          <dc:Bounds x="749" y="179" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09o8bb5_di" bpmnElement="Flow_09o8bb5">
-        <di:waypoint x="288" y="197" />
-        <di:waypoint x="340" y="197" />
+      <bpmndi:BPMNEdge id="Flow_0jy9ipp_di" bpmnElement="Flow_0jy9ipp">
+        <di:waypoint x="545" y="197" />
+        <di:waypoint x="602" y="197" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="549" y="179" width="42" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yj8623_di" bpmnElement="Flow_1yj8623">
+        <di:waypoint x="638" y="197" />
+        <di:waypoint x="695" y="197" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y7niuq_di" bpmnElement="Flow_0y7niuq">
         <di:waypoint x="198" y="490" />
@@ -184,63 +249,6 @@
         <di:waypoint x="440" y="197" />
         <di:waypoint x="495" y="197" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="Event_0g2pqnk_di" bpmnElement="AutostartPingStartMessageStartEvent">
-        <dc:Bounds x="162" y="179" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="161" y="222" width="46" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_07w8ukc_di" bpmnElement="AutostartPingStopMessageStartEvent">
-        <dc:Bounds x="162" y="472" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="158" y="515" width="45" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1e0uy38_di" bpmnElement="Event_0l02l31">
-        <dc:Bounds x="252" y="472" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="259" y="515" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1aaza9o_di" bpmnElement="Event_0ougty7">
-        <dc:Bounds x="252" y="179" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="239" y="222" width="62" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_01usi4o_di" bpmnElement="Activity_1jgc3di">
-        <dc:Bounds x="340" y="157" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1xqxerc_di" bpmnElement="Gateway_1xqxerc" isMarkerVisible="true">
-        <dc:Bounds x="495" y="172" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0sx5e0s_di" bpmnElement="Gateway_0sx5e0s" isMarkerVisible="true">
-        <dc:Bounds x="695" y="172" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0dsz1xu_di" bpmnElement="startPing">
-        <dc:Bounds x="602" y="179" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="598" y="222" width="46" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1qp6nuq_di" bpmnElement="Gateway_1ndxuiu">
-        <dc:Bounds x="695" y="285" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0eqigaq_di" bpmnElement="Event_0eqigaq">
-        <dc:Bounds x="602" y="292" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="610" y="331" width="20" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1mo4srw_di" bpmnElement="Event_1mo4srw">
-        <dc:Bounds x="602" y="392" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="609" y="435" width="22" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1ukqals_di" bpmnElement="Event_1ukqals">
-        <dc:Bounds x="802" y="179" width="36" height="36" />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

@@ -21,9 +21,9 @@
   <baseDefinition value="http://dsf.dev/fhir/StructureDefinition/task-base" />
   <derivation value="constraint" />
   <differential>
-    <element id="Task.instantiatesUri">
-      <path value="Task.instantiatesUri" />
-      <fixedUri value="http://dsf.dev/bpe/Process/pingAutostart/#{version}" />
+    <element id="Task.instantiatesCanonical">
+      <path value="Task.instantiatesCanonical" />
+      <fixedCanonical value="http://dsf.dev/bpe/Process/pingAutostart|#{version}" />
     </element>
     <element id="Task.input">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
