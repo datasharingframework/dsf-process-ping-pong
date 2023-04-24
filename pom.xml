@@ -169,7 +169,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>documentation-generation</goal>
+							<goal>generate</goal>
 						</goals>
 					</execution>
 				</executions>
