@@ -41,7 +41,7 @@ public class ErrorMailService implements InitializingBean
 	{
 		StringBuilder b = new StringBuilder();
 
-		b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue());
+		b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
 		b.append('/');
 		b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
 

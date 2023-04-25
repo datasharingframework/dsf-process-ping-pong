@@ -29,11 +29,11 @@ public class PingConfig
 
 	@ProcessDocumentation(description = "To enable a mail being send if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_ping")
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPingProcessFailed:false}")
-	boolean sendPingProcessFailedMail;
+	private boolean sendPingProcessFailedMail;
 
 	@ProcessDocumentation(description = "To enable a mail being send if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_pong")
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPongProcessFailed:false}")
-	boolean sendPongProcessFailedMail;
+	private boolean sendPongProcessFailedMail;
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
