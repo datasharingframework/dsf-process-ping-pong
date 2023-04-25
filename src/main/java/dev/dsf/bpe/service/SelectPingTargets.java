@@ -67,7 +67,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 			String endpointIdentifier = EndpointIdentifier.findFirst(e).map(Identifier::getValue).get();
 			String endpointAddress = e.getAddress();
 
-			return variables.createBiDirectionalTarget(organizationIdentifier, endpointIdentifier, endpointAddress,
+			return variables.createTarget(organizationIdentifier, endpointIdentifier, endpointAddress,
 					UUID.randomUUID().toString());
 		}).collect(Collectors.toList());
 

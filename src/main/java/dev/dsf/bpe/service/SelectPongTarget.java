@@ -43,8 +43,8 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 					return new BpmnError("target_not_allowed");
 				});
 
-		variables.setTarget(variables.createBiDirectionalTarget(targetOrganizationIdentifierValue,
-				targetEndpointIdentifierValue, targetEndpointAddress, correlationKey));
+		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,
+				targetEndpointAddress, correlationKey));
 	}
 
 	private String getEndpointIdentifierValue(Task task)

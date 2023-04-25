@@ -27,10 +27,10 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 				timerInterval);
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
-		variables.setTarget(variables.createUniDirectionalTarget(
-				api.getOrganizationProvider().getLocalOrganizationIdentifierValue().get(),
-				api.getEndpointProvider().getLocalEndpointIdentifierValue().get(),
-				api.getEndpointProvider().getLocalEndpointAddress()));
+		variables.setTarget(
+				variables.createTarget(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().get(),
+						api.getEndpointProvider().getLocalEndpointIdentifierValue().get(),
+						api.getEndpointProvider().getLocalEndpointAddress()));
 	}
 
 	private String getTimerInterval(Variables variables)
