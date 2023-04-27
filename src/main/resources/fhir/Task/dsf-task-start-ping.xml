@@ -4,7 +4,7 @@
 	</meta>
 	<identifier>
 		<system value="http://dsf.dev/sid/task-identifier"/>
-		<value value="http://dsf.dev/bpe/Process/ping/task-start-ping|#{version}"/>
+		<value value="http://dsf.dev/bpe/Process/ping/#{version}/task-start-ping"/>
 	</identifier>
 	<instantiatesCanonical value="http://dsf.dev/bpe/Process/ping|#{version}"/>
 	<status value="draft"/>

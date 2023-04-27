@@ -76,7 +76,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 
 	private Optional<UriComponents> getTargetEndpointsSearchParameter(Variables variables)
 	{
-		Task mainTask = variables.getMainTask();
+		Task mainTask = variables.getStartTask();
 		return api.getTaskHelper()
 				.getFirstInputParameterStringValue(mainTask, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS)

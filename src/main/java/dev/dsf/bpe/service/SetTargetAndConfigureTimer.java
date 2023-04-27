@@ -36,7 +36,7 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 	private String getTimerInterval(Variables variables)
 	{
 		return api.getTaskHelper()
-				.getFirstInputParameterStringValue(variables.getMainTask(), ConstantsPing.CODESYSTEM_DSF_PING,
+				.getFirstInputParameterStringValue(variables.getStartTask(), ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL)
 				.orElse(ConstantsPing.TIMER_INTERVAL_DEFAULT_VALUE);
 	}

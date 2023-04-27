@@ -27,7 +27,7 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
-		Task task = variables.getMainTask();
+		Task task = variables.getStartTask();
 
 		String correlationKey = api.getTaskHelper()
 				.getFirstInputParameterStringValue(task, BpmnMessage.URL, BpmnMessage.Codes.CORRELATION_KEY).get();

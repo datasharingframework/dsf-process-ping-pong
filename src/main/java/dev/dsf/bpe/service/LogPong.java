@@ -46,7 +46,7 @@ public class LogPong extends AbstractServiceDelegate
 		logger.info("PONG from {} (endpoint: {})", target.getOrganizationIdentifierValue(),
 				target.getEndpointIdentifierValue());
 
-		Task mainTask = variables.getMainTask();
+		Task mainTask = variables.getStartTask();
 		mainTask.addOutput(responseGenerator.createPingStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED));
 		variables.updateTask(mainTask);

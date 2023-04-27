@@ -55,7 +55,7 @@ public class SendPing extends AbstractTaskMessageSend
 			String errorMessage)
 	{
 		Target target = variables.getTarget();
-		Task mainTask = variables.getMainTask();
+		Task mainTask = variables.getStartTask();
 
 		if (mainTask != null)
 		{

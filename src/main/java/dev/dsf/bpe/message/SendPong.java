@@ -43,7 +43,7 @@ public class SendPong extends AbstractTaskMessageSend
 		super.doExecute(execution, variables);
 
 		Target target = variables.getTarget();
-		Task mainTask = variables.getMainTask();
+		Task mainTask = variables.getStartTask();
 		mainTask.addOutput(statusGenerator.createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SEND));
 		variables.updateTask(mainTask);
@@ -54,7 +54,7 @@ public class SendPong extends AbstractTaskMessageSend
 			String errorMessage)
 	{
 		Target target = variables.getTarget();
-		Task mainTask = variables.getMainTask();
+		Task mainTask = variables.getStartTask();
 
 		if (mainTask != null)
 		{
