@@ -59,7 +59,7 @@
 		<!-- testing -->
 		<dependency>
 			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-base</artifactId>
+			<artifactId>dsf-bpe-process-api-v1</artifactId>
 			<version>${dsf.version}</version>
 			<scope>test</scope>
 			<type>test-jar</type>
