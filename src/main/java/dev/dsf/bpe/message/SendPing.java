@@ -45,9 +45,9 @@ public class SendPing extends AbstractTaskMessageSend
 	@Override
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		return Stream.of(api.getTaskHelper().createInput(ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER,
-				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name())));
+		return Stream.of(api.getTaskHelper().createInput(
+				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER));
 	}
 
 	@Override

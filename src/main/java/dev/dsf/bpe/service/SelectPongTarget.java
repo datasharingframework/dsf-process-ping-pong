@@ -50,8 +50,8 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 	private String getEndpointIdentifierValue(Task task)
 	{
 		return api.getTaskHelper()
-				.getFirstInputParameterReferenceValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER)
+				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
+						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER, Reference.class)
 				.map(Reference::getIdentifier).map(Identifier::getValue).get();
 	}
 }
