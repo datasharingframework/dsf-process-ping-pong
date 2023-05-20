@@ -1,22 +1,14 @@
 package dev.dsf.bpe.mail;
 
-import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
 
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.Endpoint;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import dev.dsf.bpe.ConstantsBase;
-import dev.dsf.bpe.service.MailService;
-import dev.dsf.fhir.client.FhirWebserviceClientProvider;
-import dev.dsf.fhir.variables.Target;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.variables.Target;
 
 public class ErrorMailService implements InitializingBean
 {
@@ -26,21 +18,14 @@ public class ErrorMailService implements InitializingBean
 	private static final String SUBJECT_PING_PROCESS_FAILED = "Ping Process Failed";
 	private static final String SUBJECT_PONG_PROCESS_FAILED = "Pong Process Failed";
 
-	private final String localOrganizationIdentifierValue;
-
-	private final MailService mailService;
-	private final FhirWebserviceClientProvider clientProvider;
+	private final ProcessPluginApi api;
 
 	private final boolean sendPingProcessFailedMail;
 	private final boolean sendPongProcessFailedMail;
 
-	public ErrorMailService(MailService mailService, FhirWebserviceClientProvider clientProvider,
-			String localOrganizationIdentifierValue, boolean sendPingProcessFailedMail,
-			boolean sendPongProcessFailedMail)
+	public ErrorMailService(ProcessPluginApi api, boolean sendPingProcessFailedMail, boolean sendPongProcessFailedMail)
 	{
-		this.mailService = mailService;
-		this.clientProvider = clientProvider;
-		this.localOrganizationIdentifierValue = localOrganizationIdentifierValue;
+		this.api = api;
 
 		this.sendPingProcessFailedMail = sendPingProcessFailedMail;
 		this.sendPongProcessFailedMail = sendPongProcessFailedMail;
@@ -49,33 +34,16 @@ public class ErrorMailService implements InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		Objects.requireNonNull(mailService, "mailService");
-		Objects.requireNonNull(clientProvider, "clientProvider");
-		Objects.requireNonNull(localOrganizationIdentifierValue, "localOrganizationIdentifierValue");
-	}
-
-	private String localEndpointIdentifierValue()
-	{
-		Bundle result = clientProvider.getLocalWebserviceClient().searchWithStrictHandling(Endpoint.class,
-				Map.of("address", Collections.singletonList(clientProvider.getLocalBaseUrl())));
-
-		if (result.getTotal() != 1)
-			return "?";
-
-		return result.getEntry().stream().filter(BundleEntryComponent::hasResource)
-				.map(BundleEntryComponent::getResource).filter(r -> r instanceof Endpoint).map(r -> (Endpoint) r)
-				.findFirst().stream().flatMap(e -> e.getIdentifier().stream())
-				.filter(i -> ConstantsBase.NAMINGSYSTEM_DSF_ENDPOINT_IDENTIFIER.equals(i.getSystem())).findFirst()
-				.map(Identifier::getValue).orElse("?");
+		Objects.requireNonNull(api, "api");
 	}
 
 	private String createMessage(Target target, String message, String messageDetails, IdType taskId)
 	{
 		StringBuilder b = new StringBuilder();
 
-		b.append(localOrganizationIdentifierValue);
+		b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
 		b.append('/');
-		b.append(localEndpointIdentifierValue());
+		b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
 
 		b.append(" -> ");
 
@@ -93,7 +61,8 @@ public class ErrorMailService implements InitializingBean
 		}
 
 		b.append("\n\nProcess started by: ");
-		b.append(taskId.toVersionless().withServerBase(clientProvider.getLocalBaseUrl(), "Task").getValue());
+		b.append(taskId.toVersionless().withServerBase(api.getEndpointProvider().getLocalEndpointAddress(), "Task")
+				.getValue());
 
 		return b.toString();
 	}
@@ -105,7 +74,7 @@ public class ErrorMailService implements InitializingBean
 
 		if (sendPingProcessFailedMail)
 		{
-			mailService.send(SUBJECT_PING_PROCESS_FAILED,
+			api.getMailService().send(SUBJECT_PING_PROCESS_FAILED,
 					createMessage(target, "No pong message received", null, taskId));
 		}
 	}
@@ -117,7 +86,7 @@ public class ErrorMailService implements InitializingBean
 
 		if (sendPingProcessFailedMail)
 		{
-			mailService.send(SUBJECT_PING_PROCESS_FAILED,
+			api.getMailService().send(SUBJECT_PING_PROCESS_FAILED,
 					createMessage(target, "Not reachable with ping", errorMessage, taskId));
 		}
 	}
@@ -129,7 +98,7 @@ public class ErrorMailService implements InitializingBean
 
 		if (sendPongProcessFailedMail)
 		{
-			mailService.send(SUBJECT_PING_PROCESS_FAILED,
+			api.getMailService().send(SUBJECT_PING_PROCESS_FAILED,
 					createMessage(target, "Ping forbidden", errorMessage, taskId));
 		}
 	}
@@ -141,7 +110,7 @@ public class ErrorMailService implements InitializingBean
 
 		if (sendPongProcessFailedMail)
 		{
-			mailService.send(SUBJECT_PONG_PROCESS_FAILED,
+			api.getMailService().send(SUBJECT_PONG_PROCESS_FAILED,
 					createMessage(target, "Not reachable with pong", errorMessage, taskId));
 		}
 	}
@@ -153,7 +122,7 @@ public class ErrorMailService implements InitializingBean
 
 		if (sendPongProcessFailedMail)
 		{
-			mailService.send(SUBJECT_PONG_PROCESS_FAILED,
+			api.getMailService().send(SUBJECT_PONG_PROCESS_FAILED,
 					createMessage(target, "Pong forbidden", errorMessage, taskId));
 		}
 	}

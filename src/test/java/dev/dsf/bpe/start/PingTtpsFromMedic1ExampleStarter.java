@@ -6,8 +6,10 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
-import dev.dsf.bpe.ConstantsBase;
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.PingProcessPluginDefinition;
+import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
+import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
 
 public class PingTtpsFromMedic1ExampleStarter
 {
@@ -22,22 +24,22 @@ public class PingTtpsFromMedic1ExampleStarter
 
 	private static Task task()
 	{
+		var def = new PingProcessPluginDefinition();
+
 		Task task = new Task();
-		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING_AND_LATEST_VERSION);
-		task.setInstantiatesUri(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI_AND_LATEST_VERSION);
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING + "|" + def.getResourceVersion());
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(Task.TaskStatus.REQUESTED);
 		task.setIntent(Task.TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
-		task.getRequester().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER)
-				.setValue(ConstantsExampleStarters.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1);
-		task.getRestriction().addRecipient().setType(ResourceType.Organization.name()).getIdentifier()
-				.setSystem(ConstantsBase.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER)
-				.setValue(ConstantsExampleStarters.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1);
+		task.getRequester().setType(ResourceType.Organization.name()).setIdentifier(OrganizationIdentifier
+				.withValue(ConstantsExampleStarters.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier
+						.withValue(ConstantsExampleStarters.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER_VALUE_MEDIC_1));
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
-				.addCoding().setSystem(ConstantsBase.CODESYSTEM_DSF_BPMN)
-				.setCode(ConstantsBase.CODESYSTEM_DSF_BPMN_VALUE_MESSAGE_NAME);
+				.addCoding(BpmnMessage.messageName());
 
 		task.addInput().setValue(new StringType(
 				"OrganizationAffiliation?primary-organization:identifier=http://dsf.dev/sid/organization-identifier|highmed.org"

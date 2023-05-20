@@ -1,47 +1,36 @@
 package dev.dsf.bpe.message;
 
-import java.util.Collections;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
-import org.hl7.fhir.r4.model.Endpoint;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
-import ca.uhn.fhir.context.FhirContext;
-import dev.dsf.bpe.ConstantsBase;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.PingStatusGenerator;
-import dev.dsf.fhir.authorization.read.ReadAccessHelper;
-import dev.dsf.fhir.client.FhirWebserviceClientProvider;
-import dev.dsf.fhir.organization.OrganizationProvider;
-import dev.dsf.fhir.task.AbstractTaskMessageSend;
-import dev.dsf.fhir.task.TaskHelper;
-import dev.dsf.fhir.variables.Target;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
+import dev.dsf.bpe.v1.variables.Target;
+import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
 public class SendPing extends AbstractTaskMessageSend
 {
 	private final PingStatusGenerator statusGenerator;
-	private final ErrorMailService errorLogger;
+	private final ErrorMailService errorMailService;
 
-	public SendPing(FhirWebserviceClientProvider clientProvider, TaskHelper taskHelper,
-			ReadAccessHelper readAccessHelper, OrganizationProvider organizationProvider, FhirContext fhirContext,
-			PingStatusGenerator statusGenerator, ErrorMailService errorLogger)
+	public SendPing(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
 	{
-		super(clientProvider, taskHelper, readAccessHelper, organizationProvider, fhirContext);
+		super(api);
 
 		this.statusGenerator = statusGenerator;
-		this.errorLogger = errorLogger;
+		this.errorMailService = errorMailService;
 	}
 
 	@Override
@@ -50,24 +39,25 @@ public class SendPing extends AbstractTaskMessageSend
 		super.afterPropertiesSet();
 
 		Objects.requireNonNull(statusGenerator, "statusGenerator");
-		Objects.requireNonNull(errorLogger, "errorLogger");
+		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
 	@Override
-	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution)
+	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		return Stream.of(getTaskHelper().createInput(ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER,
-				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name())));
+		return Stream.of(api.getTaskHelper().createInput(
+				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER));
 	}
 
 	@Override
-	protected void handleSendTaskError(DelegateExecution execution, Exception exception, String errorMessage)
+	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
+			String errorMessage)
 	{
-		Target target = getTarget(execution);
-		Task task = getLeadingTaskFromExecutionVariables(execution);
+		Target target = variables.getTarget();
+		Task mainTask = variables.getStartTask();
 
-		if (task != null)
+		if (mainTask != null)
 		{
 			String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
 			if (exception instanceof WebApplicationException webApplicationException)
@@ -81,16 +71,16 @@ public class SendPing extends AbstractTaskMessageSend
 
 			String specialErrorMessage = createErrorMessage(exception);
 
-			task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
-			updateLeadingTaskInExecutionVariables(execution, task);
+			mainTask.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
+			variables.updateTask(mainTask);
 
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
-				errorLogger.endpointNotReachableForPing(task.getIdElement(), target, specialErrorMessage);
+				errorMailService.endpointNotReachableForPing(mainTask.getIdElement(), target, specialErrorMessage);
 			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
-				errorLogger.endpointReachablePingForbidden(task.getIdElement(), target, specialErrorMessage);
+				errorMailService.endpointReachablePingForbidden(mainTask.getIdElement(), target, specialErrorMessage);
 		}
 
-		super.handleSendTaskError(execution, exception, errorMessage);
+		super.handleSendTaskError(execution, variables, exception, errorMessage);
 	}
 
 	@Override
@@ -109,15 +99,7 @@ public class SendPing extends AbstractTaskMessageSend
 
 	private Identifier getLocalEndpointIdentifier()
 	{
-		Bundle bundle = getFhirWebserviceClientProvider().getLocalWebserviceClient().search(Endpoint.class,
-				Map.of("address", Collections.singletonList(getFhirWebserviceClientProvider().getLocalBaseUrl())));
-		return bundle.getEntry().stream().filter(BundleEntryComponent::hasResource)
-				.filter(e -> e.getResource() instanceof Endpoint).map(e -> (Endpoint) e.getResource()).findFirst()
-				.filter(e -> e.hasIdentifier())
-				.flatMap(e -> e.getIdentifier().stream()
-						.filter(i -> ConstantsBase.NAMINGSYSTEM_DSF_ENDPOINT_IDENTIFIER.equals(i.getSystem()))
-						.findFirst())
-				.orElseThrow(() -> new IllegalStateException("No Identifier for Endpoint or Endpoint with address "
-						+ getFhirWebserviceClientProvider().getLocalBaseUrl() + " found"));
+		return api.getEndpointProvider().getLocalEndpointIdentifier()
+				.orElseThrow(() -> new IllegalStateException("Local endpoint identifier unknown"));
 	}
 }
