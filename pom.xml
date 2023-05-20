@@ -13,7 +13,7 @@
 		<compileSource>17</compileSource>
 		<compileTarget>17</compileTarget>
 
-		<dsf.version>1.0.0-SNAPSHOT</dsf.version>
+		<dsf.version>1.0.0-M1</dsf.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
 
@@ -197,9 +197,6 @@
 			<id>github</id>
 			<name>GitHub DSF Apache Maven Packages</name>
 			<url>https://maven.pkg.github.com/datasharingframework/dsf</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
 			<snapshots>
 				<enabled>true</enabled>
 			</snapshots>
