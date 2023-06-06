@@ -13,7 +13,7 @@
 		<compileSource>17</compileSource>
 		<compileTarget>17</compileTarget>
 
-		<dsf.version>1.0.0-M1</dsf.version>
+		<dsf.version>1.0.0-SNAPSHOT</dsf.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
 
@@ -294,7 +294,7 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3medic-ttp/medic1</id>
+								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic1</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -307,11 +307,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic1/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic1/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3medic-ttp/medic2</id>
+								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic2</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -324,11 +324,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic2/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic2/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3medic-ttp/medic3</id>
+								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic3</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -341,11 +341,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic3/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic3/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3medic-ttp/ttp</id>
+								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/ttp</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -358,7 +358,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/ttp/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/ttp/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 						</executions>
@@ -376,28 +376,28 @@
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic1/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic1/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic2/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic2/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/medic3/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic3/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3medic-ttp/ttp/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/ttp/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>

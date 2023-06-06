@@ -28,18 +28,18 @@ public class ActivityDefinitionProfileTest
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(
 			PingProcessPluginDefinition.VERSION, PingProcessPluginDefinition.RELEASE_DATE,
-			Arrays.asList("dsf-activity-definition-0.5.0.xml", "dsf-extension-process-authorization-0.5.0.xml",
-					"dsf-extension-process-authorization-consortium-role-0.5.0.xml",
-					"dsf-extension-process-authorization-organization-0.5.0.xml",
-					"dsf-coding-process-authorization-local-all-0.5.0.xml",
-					"dsf-coding-process-authorization-local-consortium-role-0.5.0.xml",
-					"dsf-coding-process-authorization-local-organization-0.5.0.xml",
-					"dsf-coding-process-authorization-remote-all-0.5.0.xml",
-					"dsf-coding-process-authorization-remote-consortium-role-0.5.0.xml",
-					"dsf-coding-process-authorization-remote-organization-0.5.0.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-process-authorization-0.5.0.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-process-authorization-recipient-0.5.0.xml",
-					"dsf-process-authorization-requester-0.5.0.xml"));
+			Arrays.asList("dsf-activity-definition-1.0.0.xml", "dsf-extension-process-authorization-1.0.0.xml",
+					"dsf-extension-process-authorization-consortium-role-1.0.0.xml",
+					"dsf-extension-process-authorization-organization-1.0.0.xml",
+					"dsf-coding-process-authorization-local-all-1.0.0.xml",
+					"dsf-coding-process-authorization-local-consortium-role-1.0.0.xml",
+					"dsf-coding-process-authorization-local-organization-1.0.0.xml",
+					"dsf-coding-process-authorization-remote-all-1.0.0.xml",
+					"dsf-coding-process-authorization-remote-consortium-role-1.0.0.xml",
+					"dsf-coding-process-authorization-remote-organization-1.0.0.xml"),
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-process-authorization-1.0.0.xml"),
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-process-authorization-recipient-1.0.0.xml",
+					"dsf-process-authorization-requester-1.0.0.xml"));
 
 	private final ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
