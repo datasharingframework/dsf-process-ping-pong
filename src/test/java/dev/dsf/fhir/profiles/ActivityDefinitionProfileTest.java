@@ -29,17 +29,25 @@ public class ActivityDefinitionProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(
 			PingProcessPluginDefinition.VERSION, PingProcessPluginDefinition.RELEASE_DATE,
 			Arrays.asList("dsf-activity-definition-1.0.0.xml", "dsf-extension-process-authorization-1.0.0.xml",
-					"dsf-extension-process-authorization-consortium-role-1.0.0.xml",
 					"dsf-extension-process-authorization-organization-1.0.0.xml",
+					"dsf-extension-process-authorization-organization-practitioner-1.0.0.xml",
+					"dsf-extension-process-authorization-parent-organization-role-1.0.0.xml",
+					"dsf-extension-process-authorization-parent-organization-role-practitioner-1.0.0.xml",
+					"dsf-extension-process-authorization-practitioner-1.0.0.xml",
 					"dsf-coding-process-authorization-local-all-1.0.0.xml",
-					"dsf-coding-process-authorization-local-consortium-role-1.0.0.xml",
+					"dsf-coding-process-authorization-local-all-practitioner-1.0.0.xml",
 					"dsf-coding-process-authorization-local-organization-1.0.0.xml",
+					"dsf-coding-process-authorization-local-organization-practitioner-1.0.0.xml",
+					"dsf-coding-process-authorization-local-parent-organization-role-1.0.0.xml",
+					"dsf-coding-process-authorization-local-parent-organization-role-practitioner-1.0.0.xml",
 					"dsf-coding-process-authorization-remote-all-1.0.0.xml",
-					"dsf-coding-process-authorization-remote-consortium-role-1.0.0.xml",
+					"dsf-coding-process-authorization-remote-parent-organization-role-1.0.0.xml",
 					"dsf-coding-process-authorization-remote-organization-1.0.0.xml"),
-			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-process-authorization-1.0.0.xml"),
-			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-process-authorization-recipient-1.0.0.xml",
-					"dsf-process-authorization-requester-1.0.0.xml"));
+			Arrays.asList("dsf-organization-role-1.0.0.xml", "dsf-practitioner-role-1.0.0.xml",
+					"dsf-process-authorization-1.0.0.xml", "dsf-read-access-tag-1.0.0.xml"),
+			Arrays.asList("dsf-organization-role-1.0.0.xml", "dsf-practitioner-role-1.0.0.xml",
+					"dsf-process-authorization-recipient-1.0.0.xml", "dsf-process-authorization-requester-1.0.0.xml",
+					"dsf-read-access-tag-1.0.0.xml"));
 
 	private final ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
@@ -58,7 +66,8 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
+				orgIdentifier -> true, organizationRole -> true));
 	}
 
 	@Test
@@ -73,7 +82,8 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
+				orgIdentifier -> true, organizationRole -> true));
 	}
 
 	@Test
@@ -88,6 +98,7 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, orgIdentifier -> true, role -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
+				orgIdentifier -> true, organizationRole -> true));
 	}
 }
