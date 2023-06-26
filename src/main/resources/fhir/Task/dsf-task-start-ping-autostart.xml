@@ -35,4 +35,22 @@
 		</type>
 		<valueString value="startPingAutostart"/>
 	</input>
+   <input>
+      <type>
+         <coding>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
+            <code value="target-endpoints"></code>
+         </coding>
+      </type>
+      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"></valueString>
+   </input>
+   <input>
+      <type>
+         <coding>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
+            <code value="timer-interval"></code>
+         </coding>
+      </type>
+      <valueString value="PT24H"></valueString>
+   </input>
 </Task>
