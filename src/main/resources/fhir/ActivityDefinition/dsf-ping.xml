@@ -18,6 +18,18 @@
 				<code value="LOCAL_ALL" />
 			</valueCoding>
 		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization-practitioner">
+					<valueCoding>
+						<system value="http://dsf.dev/fhir/CodeSystem/practitioner-role" />
+						<code value="DSF_ADMIN" />
+					</valueCoding>
+				</extension>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL_PRACTITIONER" />
+			</valueCoding>
+		</extension>
 		<extension url="recipient">
 			<valueCoding>
 				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
