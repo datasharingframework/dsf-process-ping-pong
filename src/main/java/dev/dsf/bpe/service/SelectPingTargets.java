@@ -52,7 +52,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables).map(this::searchForEndpoints)
-				.orElse(allEndpointsNotLocal());
+				.orElse(allEndpoints()).filter(isLocalEndpoint().negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
 		Map<String, Identifier> organizationIdentifierByOrganizationId = remoteOrganizations.stream().collect(
@@ -132,9 +132,9 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		}
 	}
 
-	private Stream<Endpoint> allEndpointsNotLocal()
+	private Stream<Endpoint> allEndpoints()
 	{
-		return allEndpoints(1, 0).filter(isLocalEndpoint().negate());
+		return allEndpoints(1, 0);
 	}
 
 	private Predicate<? super Endpoint> isLocalEndpoint()
@@ -144,8 +144,10 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 
 	private Stream<Endpoint> allEndpoints(int page, int currentTotal)
 	{
-		Bundle searchResult = api.getFhirWebserviceClientProvider().getLocalWebserviceClient()
-				.searchWithStrictHandling(Endpoint.class, Map.of("status", Collections.singletonList("active"), "_page",
+		Bundle searchResult = api.getFhirWebserviceClientProvider().getLocalWebserviceClient().searchWithStrictHandling(
+				Endpoint.class,
+				Map.of("status", Collections.singletonList("active"), "identifier",
+						Collections.singletonList("http://dsf.dev/sid/endpoint-identifier|"), "_page",
 						Collections.singletonList(String.valueOf(page))));
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())

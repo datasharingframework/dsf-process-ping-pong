@@ -24,7 +24,7 @@ public class PingProcessPluginDefinitionTest
 
 		var pingAutostart = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART);
 		assertNotNull(pingAutostart);
-		assertEquals(5, pingAutostart.stream().filter(this::exists).count());
+		assertEquals(7, pingAutostart.stream().filter(this::exists).count());
 
 		var pong = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PONG);
 		assertNotNull(pong);

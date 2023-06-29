@@ -42,9 +42,9 @@ public class TaskProfileTest
 			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
 					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
 					"dsf-task-stop-ping-autostart.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml"),
-			Arrays.asList("dsf-read-access-tag-0.5.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml", "dsf-pong-status.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
@@ -368,7 +368,7 @@ public class TaskProfileTest
 		task.getRequester().setType(ResourceType.Organization.name())
 				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
-				.setIdentifier(OrganizationIdentifier.withValue("MeDIC 1"));
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
@@ -406,7 +406,7 @@ public class TaskProfileTest
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
 		task.getRequester().setType(ResourceType.Organization.name())
-				.setIdentifier(OrganizationIdentifier.withValue("MeDIC 1"));
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
 		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
 				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
 
