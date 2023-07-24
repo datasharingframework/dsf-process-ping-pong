@@ -11,7 +11,7 @@ import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
 
-public class StopAutostartPing3MedicFromTtpExampleStarter
+public class StartAutostartPing3DicFromTtpExampleStarter
 {
 	// Environment variable "DSF_CLIENT_CERTIFICATE_PATH" or args[0]: the path to the client-certificate
 	// dsf/dsf-tools/dsf-tools-test-data-generator/cert/Webbrowser_Test_User/Webbrowser_Test_User_certificate.p12
@@ -27,9 +27,9 @@ public class StopAutostartPing3MedicFromTtpExampleStarter
 		var def = new PingProcessPluginDefinition();
 
 		Task task = new Task();
-		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART + "|" + def.getResourceVersion());
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART + "|" + def.getResourceVersion());
 		task.setInstantiatesCanonical(
-				ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI + "|" + def.getResourceVersion());
+				ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(Task.TaskStatus.REQUESTED);
 		task.setIntent(Task.TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());
@@ -39,8 +39,14 @@ public class StopAutostartPing3MedicFromTtpExampleStarter
 				.setIdentifier(OrganizationIdentifier
 						.withValue(ConstantsExampleStarters.NAMINGSYSTEM_DSF_ORGANIZATION_IDENTIFIER_VALUE_TTP));
 
-		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME))
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME))
 				.getType().addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType("Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|"))
+				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
+		task.addInput().setValue(new StringType("PT7M")).getType().addCoding()
+				.setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL);
 
 		return task;
 	}

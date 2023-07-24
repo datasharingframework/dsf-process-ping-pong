@@ -21,6 +21,7 @@
 	<compose>
 		<include>
 			<system value="http://dsf.dev/fhir/CodeSystem/ping-status" />
+			<version value="#{version}" />
 			<concept>
 				<code value="not-allowed" />
 				<display value="Not allowed" />

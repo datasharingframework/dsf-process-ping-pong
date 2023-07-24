@@ -1,0 +1,56 @@
+<Task xmlns="http://hl7.org/fhir">
+	<meta>
+		<profile value="http://dsf.dev/fhir/StructureDefinition/task-start-ping-autostart|#{version}"/>
+	</meta>
+	<identifier>
+		<system value="http://dsf.dev/sid/task-identifier"/>
+		<value value="http://dsf.dev/bpe/Process/pingAutostart/#{version}/task-start-ping-autostart"/>
+	</identifier>
+	<instantiatesCanonical value="http://dsf.dev/bpe/Process/pingAutostart|#{version}"/>
+	<status value="draft"/>
+	<intent value="order"/>
+	<authoredOn value="#{date}"/>
+	<requester>
+		<type value="Organization"/>
+		<identifier>
+			<system value="http://dsf.dev/sid/organization-identifier"/>
+			<value value="#{organization}"/>
+		</identifier>
+	</requester>
+	<restriction>
+		<recipient>
+			<type value="Organization"/>
+			<identifier>
+				<system value="http://dsf.dev/sid/organization-identifier"/>
+				<value value="#{organization}"/>
+			</identifier>
+		</recipient>
+	</restriction>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/bpmn-message"/>
+				<code value="message-name"/>
+			</coding>
+		</type>
+		<valueString value="startPingAutostart"/>
+	</input>
+   <input>
+      <type>
+         <coding>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
+            <code value="target-endpoints"></code>
+         </coding>
+      </type>
+      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"></valueString>
+   </input>
+   <input>
+      <type>
+         <coding>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
+            <code value="timer-interval"></code>
+         </coding>
+      </type>
+      <valueString value="PT24H"></valueString>
+   </input>
+</Task>
