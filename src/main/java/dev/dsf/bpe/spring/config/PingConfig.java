@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.message.SendPing;
 import dev.dsf.bpe.message.SendPong;
@@ -14,6 +15,8 @@ import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
 import dev.dsf.bpe.service.LogPong;
+import dev.dsf.bpe.service.LogSendError;
+import dev.dsf.bpe.service.SaveResults;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
 import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
@@ -61,18 +64,54 @@ public class PingConfig
 		return new ErrorMailService(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
 	}
 
+
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPing sendPing()
+	public SelectPingTargets selectPingTargets()
 	{
-		return new SendPing(api, responseGenerator(), errorLogger());
+		return new SelectPingTargets(api);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPong sendPong()
+	public SendPing sendPing()
 	{
-		return new SendPong(api, responseGenerator(), errorLogger());
+		return new SendPing(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SetCorrelationKeyListener setCorrelationKeyListener()
+	{
+		return new SetCorrelationKeyListener(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogPong logPong()
+	{
+		return new LogPong(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogNoResponse logNoResponse()
+	{
+		return new LogNoResponse(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogSendError logSendError()
+	{
+		return new LogSendError(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SaveResults savePingResults()
+	{
+		return new SaveResults(api, responseGenerator(), errorLogger());
 	}
 
 	@Bean
@@ -84,29 +123,15 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogPong logPong()
-	{
-		return new LogPong(api, responseGenerator());
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogNoResponse logNoResponse()
-	{
-		return new LogNoResponse(api, responseGenerator(), errorLogger());
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SelectPingTargets selectPingTargets()
-	{
-		return new SelectPingTargets(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SelectPongTarget selectPongTarget()
 	{
 		return new SelectPongTarget(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SendPong sendPong()
+	{
+		return new SendPong(api, responseGenerator(), errorLogger());
 	}
 }
