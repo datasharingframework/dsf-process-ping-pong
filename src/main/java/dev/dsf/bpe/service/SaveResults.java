@@ -1,5 +1,6 @@
 package dev.dsf.bpe.service;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -12,6 +13,7 @@ import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
+import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Targets;
 import dev.dsf.bpe.v1.variables.Variables;
 
@@ -43,7 +45,7 @@ public class SaveResults extends AbstractServiceDelegate implements Initializing
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 
-		targets.getEntries().stream().forEach(target ->
+		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
 			String correlationKey = target.getCorrelationKey();
 
