@@ -13,7 +13,7 @@
 		<compileSource>17</compileSource>
 		<compileTarget>17</compileTarget>
 
-		<dsf.version>1.2.0-SNAPSHOT</dsf.version>
+		<dsf.version>1.2.0-RC1</dsf.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
 
