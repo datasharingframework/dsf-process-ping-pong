@@ -1,6 +1,5 @@
 package dev.dsf.bpe.message;
 
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -11,35 +10,18 @@ import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.mail.ErrorMailService;
-import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
-import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.StatusType;
 
 public class SendPing extends AbstractTaskMessageSend
 {
-	private final PingStatusGenerator statusGenerator;
-	private final ErrorMailService errorMailService;
-
-	public SendPing(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
+	public SendPing(ProcessPluginApi api)
 	{
 		super(api);
-
-		this.statusGenerator = statusGenerator;
-		this.errorMailService = errorMailService;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
-		super.afterPropertiesSet();
-
-		Objects.requireNonNull(statusGenerator, "statusGenerator");
-		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
 	@Override
@@ -51,36 +33,17 @@ public class SendPing extends AbstractTaskMessageSend
 	}
 
 	@Override
-	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
-			String errorMessage)
+	protected void handleIntermediateThrowEventError(DelegateExecution execution, Variables variables,
+			Exception exception, String errorMessage)
 	{
-		Target target = variables.getTarget();
-		Task mainTask = variables.getStartTask();
+		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
+				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
+						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
+						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+		execution.setVariableLocal("statusCode", statusCode);
 
-		if (mainTask != null)
-		{
-			String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
-			if (exception instanceof WebApplicationException webApplicationException)
-			{
-				if (webApplicationException.getResponse() != null && webApplicationException.getResponse()
-						.getStatus() == Response.Status.FORBIDDEN.getStatusCode())
-				{
-					statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED;
-				}
-			}
-
-			String specialErrorMessage = createErrorMessage(exception);
-
-			mainTask.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, specialErrorMessage));
-			variables.updateTask(mainTask);
-
-			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
-				errorMailService.endpointNotReachableForPing(mainTask.getIdElement(), target, specialErrorMessage);
-			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
-				errorMailService.endpointReachablePingForbidden(mainTask.getIdElement(), target, specialErrorMessage);
-		}
-
-		super.handleSendTaskError(execution, variables, exception, errorMessage);
+		String specialErrorMessage = createErrorMessage(exception);
+		execution.setVariableLocal("errorMessage", specialErrorMessage);
 	}
 
 	@Override
@@ -91,10 +54,14 @@ public class SendPing extends AbstractTaskMessageSend
 
 	private String createErrorMessage(Exception exception)
 	{
-		return exception.getClass().getSimpleName()
-				+ ((exception.getMessage() != null && !exception.getMessage().isBlank())
-						? (": " + exception.getMessage())
-						: "");
+		if (exception instanceof WebApplicationException w
+				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
+		{
+			StatusType statusInfo = w.getResponse().getStatusInfo();
+			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
+		}
+		else
+			return exception.getMessage();
 	}
 
 	private Identifier getLocalEndpointIdentifier()

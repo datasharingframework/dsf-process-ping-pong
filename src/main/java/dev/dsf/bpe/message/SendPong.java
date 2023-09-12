@@ -14,6 +14,7 @@ import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.StatusType;
 
 public class SendPong extends AbstractTaskMessageSend
 {
@@ -58,16 +59,10 @@ public class SendPong extends AbstractTaskMessageSend
 
 		if (mainTask != null)
 		{
-			String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
-			if (exception instanceof WebApplicationException)
-			{
-				WebApplicationException webApplicationException = (WebApplicationException) exception;
-				if (webApplicationException.getResponse() != null && webApplicationException.getResponse()
-						.getStatus() == Response.Status.FORBIDDEN.getStatusCode())
-				{
-					statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED;
-				}
-			}
+			String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
+					&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
+							? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
+							: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
 
 			String specialErrorMessage = createErrorMessage(exception);
 
@@ -85,9 +80,13 @@ public class SendPong extends AbstractTaskMessageSend
 
 	private String createErrorMessage(Exception exception)
 	{
-		return exception.getClass().getSimpleName()
-				+ ((exception.getMessage() != null && !exception.getMessage().isBlank())
-						? (": " + exception.getMessage())
-						: "");
+		if (exception instanceof WebApplicationException w
+				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
+		{
+			StatusType statusInfo = w.getResponse().getStatusInfo();
+			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
+		}
+		else
+			return exception.getMessage();
 	}
 }
