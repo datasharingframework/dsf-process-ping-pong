@@ -10,18 +10,14 @@
   </bpmn:collaboration>
   <bpmn:process id="dsfdev_ping" isExecutable="true" camunda:versionTag="#{version}" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartPingMessageStartEvent" name="startPing">
-      <bpmn:outgoing>Flow_00lor5a</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0fpikty</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_06brz1s" messageRef="Message_1pklz6t" />
     </bpmn:startEvent>
     <bpmn:exclusiveGateway id="Gateway_0xw5i5v" default="Flow_152nb9r">
-      <bpmn:incoming>Flow_1ufourf</bpmn:incoming>
+      <bpmn:incoming>Flow_0fpikty</bpmn:incoming>
       <bpmn:outgoing>Flow_0iuuyo1</bpmn:outgoing>
       <bpmn:outgoing>Flow_152nb9r</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0pp43ny" name="Read Configuration">
-      <bpmn:incoming>Flow_00lor5a</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ufourf</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate Resource">
       <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1qz7z39</bpmn:outgoing>
@@ -204,8 +200,6 @@
       </bpmn:textAnnotation>
       <bpmn:association id="Association_0l3n1oc" sourceRef="TextAnnotation_08ic0l2" targetRef="Activity_0h9o9u7" />
     </bpmn:subProcess>
-    <bpmn:sequenceFlow id="Flow_00lor5a" sourceRef="StartPingMessageStartEvent" targetRef="Activity_0pp43ny" />
-    <bpmn:sequenceFlow id="Flow_1ufourf" sourceRef="Activity_0pp43ny" targetRef="Gateway_0xw5i5v" />
     <bpmn:sequenceFlow id="Flow_0iuuyo1" sourceRef="Gateway_0xw5i5v" targetRef="Gateway_0bifi5h">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSize &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -218,12 +212,14 @@
     <bpmn:sequenceFlow id="Flow_1du5wys" sourceRef="SaveResults" targetRef="EndEvent" />
     <bpmn:sequenceFlow id="Flow_0gubpgz" sourceRef="Activity_0802w0b" targetRef="SaveResults" />
     <bpmn:sequenceFlow id="Flow_1bfs68o" sourceRef="SubProcess" targetRef="Activity_0802w0b" />
+    <bpmn:sequenceFlow id="Flow_0fpikty" sourceRef="StartPingMessageStartEvent" targetRef="Gateway_0xw5i5v" />
     <bpmn:textAnnotation id="TextAnnotation_1plclrb">
       <bpmn:text>Cleanup steps:
 - delete generated resource</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:textAnnotation id="TextAnnotation_0dhecha">
-      <bpmn:text>- downloadResourceSize read from Input Paramater (default tbd)
+      <bpmn:text>Process Parameters
+- downloadResourceSize read from Input Paramater (default tbd)
 - maxDownloadSizeBytes read from environment variable (default tbd)
 - maxUpdloadSizeBytes read from environment variables (default tbd)</bpmn:text>
     </bpmn:textAnnotation>
@@ -231,7 +227,6 @@
       <bpmn:text>generates up to maxUploadSizeBystes</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1f86scd" sourceRef="TextAnnotation_1plclrb" targetRef="Activity_0802w0b" />
-    <bpmn:association id="Association_0blesix" sourceRef="Activity_0pp43ny" targetRef="TextAnnotation_0dhecha" />
     <bpmn:association id="Association_0xonsp5" sourceRef="Activity_0nwtf8o" targetRef="TextAnnotation_1j1ytqy" />
     <bpmn:textAnnotation id="TextAnnotation_1ig0151">
       <bpmn:text>Includes download speeds and errors of all pongs</bpmn:text>
@@ -240,18 +235,14 @@
   </bpmn:process>
   <bpmn:process id="dsfdev_pong" isExecutable="false" camunda:versionTag="#{version}">
     <bpmn:startEvent id="PingMessageStartEvent" name="ping">
-      <bpmn:outgoing>SequenceFlow_07w11cw</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0huy3o3</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_128t2ek" messageRef="Message_0u91abp" />
     </bpmn:startEvent>
     <bpmn:exclusiveGateway id="Gateway_1jwjxzn" default="Flow_10z0d4x">
-      <bpmn:incoming>Flow_0gfjp39</bpmn:incoming>
+      <bpmn:incoming>Flow_0huy3o3</bpmn:incoming>
       <bpmn:outgoing>Flow_10z0d4x</bpmn:outgoing>
       <bpmn:outgoing>Flow_08gidyv</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0u5hv42" name="Read Configuration">
-      <bpmn:incoming>SequenceFlow_07w11cw</bpmn:incoming>
-      <bpmn:outgoing>Flow_0gfjp39</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_095j2gg" name="Download Resource And Measure Speed">
       <bpmn:incoming>Flow_10z0d4x</bpmn:incoming>
       <bpmn:outgoing>Flow_0zphif7</bpmn:outgoing>
@@ -353,8 +344,6 @@
       <bpmn:outgoing>Flow_0uj7rm3</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="SequenceFlow_07w11cw" sourceRef="PingMessageStartEvent" targetRef="Activity_0u5hv42" />
-    <bpmn:sequenceFlow id="Flow_0gfjp39" sourceRef="Activity_0u5hv42" targetRef="Gateway_1jwjxzn" />
     <bpmn:sequenceFlow id="Flow_10z0d4x" sourceRef="Gateway_1jwjxzn" targetRef="Activity_095j2gg" />
     <bpmn:sequenceFlow id="Flow_08gidyv" sourceRef="Gateway_1jwjxzn" targetRef="Gateway_1ggdr8l">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSize &lt; 0}</bpmn:conditionExpression>
@@ -404,11 +393,7 @@
       <bpmn:incoming>Flow_0x7t1ii</bpmn:incoming>
       <bpmn:outgoing>Flow_1w09zt7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:textAnnotation id="TextAnnotation_14ea4yc">
-      <bpmn:text>- downloadResourceSize read from Input Paramater (no default, value from message expected)
-- maxDownloadSizeBytes read from environment variable (default tbd)
-- maxUpdloadSizeBytes read from environment variables (default tbd)</bpmn:text>
-    </bpmn:textAnnotation>
+    <bpmn:sequenceFlow id="Flow_0huy3o3" sourceRef="PingMessageStartEvent" targetRef="Gateway_1jwjxzn" />
     <bpmn:textAnnotation id="TextAnnotation_1cled7l">
       <bpmn:text>downloads up to maxDownloadSizeBytes</bpmn:text>
     </bpmn:textAnnotation>
@@ -416,7 +401,7 @@
       <bpmn:text>Information in message:
 - downloadedResourceHash: String
 - downloadedBytes: long
-- downloadDurationMillis: long
+- downloadedDurationMillis: long
 - downloadResourceReference: Reference
 - downloadResourceHash: String
 - errors: List</bpmn:text>
@@ -431,12 +416,17 @@
     <bpmn:textAnnotation id="TextAnnotation_1mo7foe">
       <bpmn:text>generates up to maxUploadSizeBystes</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_1boul4g" sourceRef="TextAnnotation_14ea4yc" targetRef="Activity_0u5hv42" />
     <bpmn:association id="Association_18psz8j" sourceRef="Activity_095j2gg" targetRef="TextAnnotation_1cled7l" />
     <bpmn:association id="Association_1py3u4x" sourceRef="Activity_005ywv2" targetRef="TextAnnotation_1o7v81w" />
     <bpmn:association id="Association_05fync1" sourceRef="Activity_0otptjn" targetRef="TextAnnotation_17fzn7d" />
     <bpmn:association id="Association_0wskzb7" sourceRef="Activity_0xcqxjs" targetRef="TextAnnotation_1bv3jri" />
     <bpmn:association id="Association_1thj094" sourceRef="TextAnnotation_1mo7foe" targetRef="Activity_1m4wavi" />
+    <bpmn:textAnnotation id="TextAnnotation_14ea4yc">
+      <bpmn:text>Process Parameters
+- downloadResourceSize read from Input Paramater (no default, value from message expected)
+- maxDownloadSizeBytes read from environment variable (default tbd)
+- maxUpdloadSizeBytes read from environment variables (default tbd)</bpmn:text>
+    </bpmn:textAnnotation>
   </bpmn:process>
   <bpmn:message id="Message_1pklz6t" name="startPing" />
   <bpmn:message id="Message_10o3b8y" name="pong" />
@@ -460,10 +450,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0xw5i5v_di" bpmnElement="Gateway_0xw5i5v" isMarkerVisible="true">
         <dc:Bounds x="415" y="475" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wteyb4_di" bpmnElement="Activity_0pp43ny">
-        <dc:Bounds x="280" y="460" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1r4mggo_di" bpmnElement="Activity_0nwtf8o">
         <dc:Bounds x="460" y="600" width="100" height="80" />
@@ -690,7 +676,7 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0dhecha_di" bpmnElement="TextAnnotation_0dhecha">
-        <dc:Bounds x="380" y="360" width="419.9974036141997" height="54.858934169278996" />
+        <dc:Bounds x="380" y="360" width="419.9974036141997" height="68.9655172413793" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1j1ytqy_di" bpmnElement="TextAnnotation_1j1ytqy">
@@ -701,14 +687,6 @@
         <dc:Bounds x="3080" y="379" width="160" height="49" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_00lor5a_di" bpmnElement="Flow_00lor5a">
-        <di:waypoint x="248" y="500" />
-        <di:waypoint x="280" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ufourf_di" bpmnElement="Flow_1ufourf">
-        <di:waypoint x="380" y="500" />
-        <di:waypoint x="415" y="500" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0iuuyo1_di" bpmnElement="Flow_0iuuyo1">
         <di:waypoint x="465" y="500" />
         <di:waypoint x="795" y="500" />
@@ -755,10 +733,6 @@
         <di:waypoint x="3103" y="630" />
         <di:waypoint x="3074" y="550" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0blesix_di" bpmnElement="Association_0blesix">
-        <di:waypoint x="362" y="460" />
-        <di:waypoint x="398" y="415" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_0xonsp5_di" bpmnElement="Association_0xonsp5">
         <di:waypoint x="489" y="680" />
         <di:waypoint x="468" y="720" />
@@ -767,8 +741,16 @@
         <di:waypoint x="3169" y="470" />
         <di:waypoint x="3148" y="428" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fpikty_di" bpmnElement="Flow_0fpikty">
+        <di:waypoint x="248" y="500" />
+        <di:waypoint x="415" y="500" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0eb6dp7_di" bpmnElement="Participant_0eb6dp7" isHorizontal="true">
         <dc:Bounds x="160" y="1020" width="2710" height="517" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1bdbmbf" bpmnElement="TextAnnotation_14ea4yc">
+        <dc:Bounds x="330" y="1040" width="584.9987257236971" height="68.9655172413793" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1qh431z_di" bpmnElement="PingMessageStartEvent">
@@ -779,10 +761,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1jwjxzn_di" bpmnElement="Gateway_1jwjxzn" isMarkerVisible="true">
         <dc:Bounds x="505" y="1142" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1thpn6e" bpmnElement="Activity_0u5hv42">
-        <dc:Bounds x="330" y="1127" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_095j2gg_di" bpmnElement="Activity_095j2gg">
         <dc:Bounds x="580" y="1277" width="100" height="80" />
@@ -863,16 +841,12 @@
         <dc:Bounds x="970" y="1277" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1bdbmbf" bpmnElement="TextAnnotation_14ea4yc">
-        <dc:Bounds x="350" y="1040" width="584.9987257236971" height="54.858934169278996" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1cled7l_di" bpmnElement="TextAnnotation_1cled7l">
         <dc:Bounds x="630" y="1210" width="170" height="37" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1o7v81w_di" bpmnElement="TextAnnotation_1o7v81w">
-        <dc:Bounds x="1840" y="1296" width="250" height="112.85266457680251" />
+        <dc:Bounds x="1840" y="1296" width="250" height="112.9996081504702" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_17fzn7d_di" bpmnElement="TextAnnotation_17fzn7d">
@@ -899,14 +873,6 @@
           <dc:Bounds x="1829" y="1220" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_07w11cw_di" bpmnElement="SequenceFlow_07w11cw">
-        <di:waypoint x="258" y="1167" />
-        <di:waypoint x="330" y="1167" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0gfjp39_di" bpmnElement="Flow_0gfjp39">
-        <di:waypoint x="430" y="1167" />
-        <di:waypoint x="505" y="1167" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10z0d4x_di" bpmnElement="Flow_10z0d4x">
         <di:waypoint x="530" y="1192" />
         <di:waypoint x="530" y="1317" />
@@ -1024,10 +990,6 @@
         <di:waypoint x="2510" y="1267" />
         <di:waypoint x="2570" y="1267" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1boul4g_di" bpmnElement="Association_1boul4g">
-        <di:waypoint x="509" y="1095" />
-        <di:waypoint x="429" y="1134" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_18psz8j_di" bpmnElement="Association_18psz8j">
         <di:waypoint x="652" y="1277" />
         <di:waypoint x="668" y="1247" />
@@ -1047,6 +1009,10 @@
       <bpmndi:BPMNEdge id="Association_1thj094_di" bpmnElement="Association_1thj094">
         <di:waypoint x="1048" y="1401" />
         <di:waypoint x="1033" y="1357" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0huy3o3_di" bpmnElement="Flow_0huy3o3">
+        <di:waypoint x="258" y="1167" />
+        <di:waypoint x="505" y="1167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_16l0acs_di" bpmnElement="Participant_16l0acs" isHorizontal="true" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
         <dc:Bounds x="160" y="80" width="540" height="160" />
