@@ -38,10 +38,10 @@
 	<input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
-            <code value="target-endpoints"></code>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+            <code value="target-endpoints"/>
          </coding>
       </type>
-      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"></valueString>
+      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"/>
    </input>
 </Task>
