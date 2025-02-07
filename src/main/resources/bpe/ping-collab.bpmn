@@ -18,21 +18,9 @@
       <bpmn:outgoing>Flow_0iuuyo1</bpmn:outgoing>
       <bpmn:outgoing>Flow_152nb9r</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate Resource">
-      <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qz7z39</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1668nfu" name="Hash Resource">
-      <bpmn:incoming>Flow_1qz7z39</bpmn:incoming>
-      <bpmn:outgoing>Flow_12a5546</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:serviceTask id="SelectPingTargets" name="Select Targets" camunda:class="dev.dsf.bpe.service.SelectPingTargets">
       <bpmn:incoming>Flow_1c15ef2</bpmn:incoming>
       <bpmn:outgoing>Flow_0j92st0</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_16rb6hc" name="Store Resource">
-      <bpmn:incoming>Flow_12a5546</bpmn:incoming>
-      <bpmn:outgoing>Flow_0m0hq4h</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_0bifi5h">
       <bpmn:incoming>Flow_0iuuyo1</bpmn:incoming>
@@ -42,11 +30,11 @@
     <bpmn:endEvent id="EndEvent">
       <bpmn:incoming>Flow_1du5wys</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="SaveResults" name="Store Results" camunda:class="dev.dsf.bpe.service.SaveResults">
+    <bpmn:serviceTask id="SaveResults" name="Store Results" camunda:class="dev.dsf.bpe.service.StoreResults">
       <bpmn:incoming>Flow_0gubpgz</bpmn:incoming>
       <bpmn:outgoing>Flow_1du5wys</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0802w0b" name="Cleanup">
+    <bpmn:serviceTask id="Activity_0802w0b" name="Cleanup" camunda:class="dev.dsf.bpe.service.Cleanup">
       <bpmn:incoming>Flow_1bfs68o</bpmn:incoming>
       <bpmn:outgoing>Flow_0gubpgz</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -81,7 +69,7 @@
         <bpmn:outgoing>Flow_0y9usku</bpmn:outgoing>
         <bpmn:outgoing>Flow_1lghrxh</bpmn:outgoing>
       </bpmn:eventBasedGateway>
-      <bpmn:serviceTask id="LogNoResponse" name="Log and Save No Response" camunda:class="dev.dsf.bpe.service.LogNoResponse">
+      <bpmn:serviceTask id="LogNoResponse" name="Log and Save No Response" camunda:class="dev.dsf.bpe.service.LogAndSaveNoResponse">
         <bpmn:incoming>Flow_1fjeq2h</bpmn:incoming>
         <bpmn:outgoing>Flow_136htek</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -90,7 +78,7 @@
         <bpmn:outgoing>Flow_1j54c2s</bpmn:outgoing>
         <bpmn:outgoing>Flow_101sqed</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="LogSendError" name="Log and Save Send Error" camunda:class="dev.dsf.bpe.service.LogSendError">
+      <bpmn:serviceTask id="LogSendError" name="Log and Save Send Error" camunda:class="dev.dsf.bpe.service.LogAndSaveSendError">
         <bpmn:incoming>Flow_101sqed</bpmn:incoming>
         <bpmn:outgoing>Flow_16ssf4a</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -139,7 +127,7 @@
         <bpmn:outgoing>Flow_13u1nzy</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="Activity_0h9o9u7" />
-      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed">
+      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeed">
         <bpmn:incoming>Flow_1yt9547</bpmn:incoming>
         <bpmn:outgoing>Flow_02vykzd</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -152,14 +140,9 @@
         <bpmn:outgoing>Flow_0pj6d62</bpmn:outgoing>
       </bpmn:sendTask>
       <bpmn:sequenceFlow id="Flow_10h6pqh" sourceRef="Event_0i4slcz" targetRef="Activity_0akr23c" />
-      <bpmn:serviceTask id="Activity_0akr23c" name="Log and Save Error">
+      <bpmn:serviceTask id="Activity_0akr23c" name="Log and Save Error" camunda:class="dev.dsf.bpe.service.LogAndSaveError">
         <bpmn:incoming>Flow_10h6pqh</bpmn:incoming>
         <bpmn:outgoing>Flow_0w8n7ok</bpmn:outgoing>
-      </bpmn:serviceTask>
-      <bpmn:serviceTask id="Activity_09cp9zv" name="Compare Hashes">
-        <bpmn:incoming>Flow_02vykzd</bpmn:incoming>
-        <bpmn:incoming>Flow_0w8n7ok</bpmn:incoming>
-        <bpmn:outgoing>Flow_1t8wvoj</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:exclusiveGateway id="Gateway_02orad4">
         <bpmn:incoming>Flow_13u1nzy</bpmn:incoming>
@@ -169,7 +152,7 @@
       <bpmn:sequenceFlow id="Flow_13u1nzy" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSize &lt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:serviceTask id="Activity_0i9uqk0" name="Save Download Speeds">
+      <bpmn:serviceTask id="Activity_0i9uqk0" name="Save Download Speeds" camunda:class="dev.dsf.bpe.service.SaveDownloadSpeeds">
         <bpmn:incoming>Flow_03nx6rk</bpmn:incoming>
         <bpmn:outgoing>Flow_0v6axlv</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -177,11 +160,16 @@
         <bpmn:incoming>Flow_0v6axlv</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0v6axlv" sourceRef="Activity_0i9uqk0" targetRef="Event_1foycg9" />
-      <bpmn:sequenceFlow id="Flow_02vykzd" sourceRef="Activity_0h9o9u7" targetRef="Activity_09cp9zv" />
-      <bpmn:sequenceFlow id="Flow_0w8n7ok" sourceRef="Activity_0akr23c" targetRef="Activity_09cp9zv" />
-      <bpmn:sequenceFlow id="Flow_1t8wvoj" sourceRef="Activity_09cp9zv" targetRef="Activity_0vw65a2" />
       <bpmn:sequenceFlow id="Flow_0pj6d62" sourceRef="Activity_0vw65a2" targetRef="Gateway_02orad4" />
       <bpmn:sequenceFlow id="Flow_03nx6rk" sourceRef="Gateway_02orad4" targetRef="Activity_0i9uqk0" />
+      <bpmn:serviceTask id="Activity_09cp9zv" name="Compare Hashes" camunda:class="dev.dsf.bpe.service.CompareHashes">
+        <bpmn:incoming>Flow_0w8n7ok</bpmn:incoming>
+        <bpmn:incoming>Flow_02vykzd</bpmn:incoming>
+        <bpmn:outgoing>Flow_1t8wvoj</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1t8wvoj" sourceRef="Activity_09cp9zv" targetRef="Activity_0vw65a2" />
+      <bpmn:sequenceFlow id="Flow_0w8n7ok" sourceRef="Activity_0akr23c" targetRef="Activity_09cp9zv" />
+      <bpmn:sequenceFlow id="Flow_02vykzd" sourceRef="Activity_0h9o9u7" targetRef="Activity_09cp9zv" />
       <bpmn:textAnnotation id="TextAnnotation_0uc8utt">
         <bpmn:text>Information in message:
 - dowloadResourceSize: long
@@ -205,7 +193,6 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_152nb9r" sourceRef="Gateway_0xw5i5v" targetRef="Activity_0nwtf8o" />
     <bpmn:sequenceFlow id="Flow_1qz7z39" sourceRef="Activity_0nwtf8o" targetRef="Activity_1668nfu" />
-    <bpmn:sequenceFlow id="Flow_12a5546" sourceRef="Activity_1668nfu" targetRef="Activity_16rb6hc" />
     <bpmn:sequenceFlow id="Flow_1c15ef2" sourceRef="Gateway_0bifi5h" targetRef="SelectPingTargets" />
     <bpmn:sequenceFlow id="Flow_0j92st0" sourceRef="SelectPingTargets" targetRef="SubProcess" />
     <bpmn:sequenceFlow id="Flow_0m0hq4h" sourceRef="Activity_16rb6hc" targetRef="Gateway_0bifi5h" />
@@ -213,6 +200,19 @@
     <bpmn:sequenceFlow id="Flow_0gubpgz" sourceRef="Activity_0802w0b" targetRef="SaveResults" />
     <bpmn:sequenceFlow id="Flow_1bfs68o" sourceRef="SubProcess" targetRef="Activity_0802w0b" />
     <bpmn:sequenceFlow id="Flow_0fpikty" sourceRef="StartPingMessageStartEvent" targetRef="Gateway_0xw5i5v" />
+    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate Resource" camunda:class="dev.dsf.bpe.service.GenerateResource">
+      <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qz7z39</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_16rb6hc" name="Store Resource" camunda:class="dev.dsf.bpe.service.StoreResource">
+      <bpmn:incoming>Flow_12a5546</bpmn:incoming>
+      <bpmn:outgoing>Flow_0m0hq4h</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1668nfu" name="Hash Resource" camunda:class="dev.dsf.bpe.service.HashResource">
+      <bpmn:incoming>Flow_1qz7z39</bpmn:incoming>
+      <bpmn:outgoing>Flow_12a5546</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_12a5546" sourceRef="Activity_1668nfu" targetRef="Activity_16rb6hc" />
     <bpmn:textAnnotation id="TextAnnotation_1plclrb">
       <bpmn:text>Cleanup steps:
 - delete generated resource</bpmn:text>
@@ -227,11 +227,11 @@
       <bpmn:text>generates up to maxUploadSizeBystes</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_1f86scd" sourceRef="TextAnnotation_1plclrb" targetRef="Activity_0802w0b" />
-    <bpmn:association id="Association_0xonsp5" sourceRef="Activity_0nwtf8o" targetRef="TextAnnotation_1j1ytqy" />
     <bpmn:textAnnotation id="TextAnnotation_1ig0151">
       <bpmn:text>Includes download speeds and errors of all pongs</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_02mkojs" sourceRef="SaveResults" targetRef="TextAnnotation_1ig0151" />
+    <bpmn:association id="Association_0xonsp5" sourceRef="Activity_0nwtf8o" targetRef="TextAnnotation_1j1ytqy" />
   </bpmn:process>
   <bpmn:process id="dsfdev_pong" isExecutable="false" camunda:versionTag="#{version}">
     <bpmn:startEvent id="PingMessageStartEvent" name="ping">
@@ -243,13 +243,9 @@
       <bpmn:outgoing>Flow_10z0d4x</bpmn:outgoing>
       <bpmn:outgoing>Flow_08gidyv</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_095j2gg" name="Download Resource And Measure Speed">
+    <bpmn:serviceTask id="Activity_095j2gg" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeed">
       <bpmn:incoming>Flow_10z0d4x</bpmn:incoming>
       <bpmn:outgoing>Flow_0zphif7</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0ok8dva" name="Hash Resource">
-      <bpmn:incoming>Flow_0zphif7</bpmn:incoming>
-      <bpmn:outgoing>Flow_0gohf1b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="SelectPongTarget" name="Select Pong Target" camunda:class="dev.dsf.bpe.service.SelectPongTarget">
       <bpmn:incoming>Flow_061qpt4</bpmn:incoming>
@@ -264,7 +260,7 @@
       <bpmn:incoming>Flow_1o3n9u6</bpmn:incoming>
       <bpmn:outgoing>Flow_061qpt4</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_005ywv2" name="Pong">
+    <bpmn:sendTask id="Activity_005ywv2" name="Pong" camunda:class="dev.dsf.bpe.message.SendPong">
       <bpmn:extensionElements>
         <camunda:field name="instantiatesCanonical">
           <camunda:string>http://dsf.dev/bpe/Process/ping|#{version}</camunda:string>
@@ -285,7 +281,7 @@
       <bpmn:outgoing>Flow_1bzjspe</bpmn:outgoing>
       <bpmn:outgoing>Flow_00t1ck1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0t0ex36" name="Log And Store Send Error">
+    <bpmn:serviceTask id="Activity_0t0ex36" name="Log And Store Send Error" camunda:class="dev.dsf.bpe.service.LogAndStoreSendError">
       <bpmn:incoming>Flow_0h8flp6</bpmn:incoming>
       <bpmn:outgoing>Flow_05ucfds</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -316,23 +312,23 @@
       <bpmn:incoming>Flow_1qg0rto</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0fvmtve">
-      <bpmn:incoming>Flow_0gohf1b</bpmn:incoming>
       <bpmn:incoming>Flow_1jehvly</bpmn:incoming>
+      <bpmn:incoming>Flow_0gohf1b</bpmn:incoming>
       <bpmn:outgoing>Flow_0x7t1ii</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1umihbr" name="Log and Save And Store Error">
+    <bpmn:serviceTask id="Activity_1umihbr" name="Log and Save And Store Error" camunda:class="dev.dsf.bpe.service.LogAndSaveAndStoreError">
       <bpmn:incoming>Flow_0uj7rm3</bpmn:incoming>
       <bpmn:outgoing>Flow_1jehvly</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1qh25on">
       <bpmn:incoming>Flow_0yr2pmf</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0otptjn" name="Cleanup">
+    <bpmn:serviceTask id="Activity_0otptjn" name="Cleanup" camunda:class="dev.dsf.bpe.service.Cleanup">
       <bpmn:incoming>Flow_0wy02qe</bpmn:incoming>
       <bpmn:incoming>Flow_165e73u</bpmn:incoming>
       <bpmn:outgoing>Flow_1qg0rto</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0mwyelp" name="Store Download Speeds">
+    <bpmn:serviceTask id="Activity_0mwyelp" name="Store Download Speeds" camunda:class="dev.dsf.bpe.service.StoreDownloadSpeeds">
       <bpmn:incoming>Flow_0cl2bet</bpmn:incoming>
       <bpmn:outgoing>Flow_165e73u</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -349,7 +345,6 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSize &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0zphif7" sourceRef="Activity_095j2gg" targetRef="Activity_0ok8dva" />
-    <bpmn:sequenceFlow id="Flow_0gohf1b" sourceRef="Activity_0ok8dva" targetRef="Gateway_0fvmtve" />
     <bpmn:sequenceFlow id="Flow_061qpt4" sourceRef="LogPing" targetRef="SelectPongTarget" />
     <bpmn:sequenceFlow id="Flow_1eass2g" sourceRef="SelectPongTarget" targetRef="Activity_005ywv2" />
     <bpmn:sequenceFlow id="Flow_1o3n9u6" sourceRef="Gateway_1ggdr8l" targetRef="LogPing" />
@@ -372,28 +367,33 @@
     <bpmn:sequenceFlow id="Flow_1jehvly" sourceRef="Activity_1umihbr" targetRef="Gateway_0fvmtve" />
     <bpmn:sequenceFlow id="Flow_0x7t1ii" sourceRef="Gateway_0fvmtve" targetRef="Activity_1m4wavi" />
     <bpmn:sequenceFlow id="Flow_0uj7rm3" sourceRef="Event_0olr5yw" targetRef="Activity_1umihbr" />
-    <bpmn:sequenceFlow id="Flow_0h9y3hl" sourceRef="Activity_02cgfz7" targetRef="Activity_04mv5cn" />
     <bpmn:sequenceFlow id="Flow_03hviat" sourceRef="Activity_04mv5cn" targetRef="Activity_0xcqxjs" />
     <bpmn:sequenceFlow id="Flow_1w09zt7" sourceRef="Activity_1m4wavi" targetRef="Activity_02cgfz7" />
     <bpmn:sequenceFlow id="Flow_0yr2pmf" sourceRef="SelectPongTargetErrorBoundaryEvent" targetRef="Event_1qh25on" />
     <bpmn:sequenceFlow id="Flow_165e73u" sourceRef="Activity_0mwyelp" targetRef="Activity_0otptjn" />
-    <bpmn:serviceTask id="Activity_0xcqxjs" name="Estimate Cleanup Timer Duration">
+    <bpmn:sequenceFlow id="Flow_0huy3o3" sourceRef="PingMessageStartEvent" targetRef="Gateway_1jwjxzn" />
+    <bpmn:serviceTask id="Activity_0xcqxjs" name="Estimate Cleanup Timer Duration" camunda:class="dev.dsf.bpe.service.EstimateCleanupTimerDuration">
       <bpmn:incoming>Flow_03hviat</bpmn:incoming>
       <bpmn:outgoing>Flow_0gvrnxd</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_04mv5cn" name="Store Resource">
+    <bpmn:serviceTask id="Activity_04mv5cn" name="Store Resource" camunda:class="dev.dsf.bpe.service.StoreResource">
       <bpmn:incoming>Flow_0h9y3hl</bpmn:incoming>
       <bpmn:outgoing>Flow_03hviat</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_02cgfz7" name="Hash Resource">
-      <bpmn:incoming>Flow_1w09zt7</bpmn:incoming>
-      <bpmn:outgoing>Flow_0h9y3hl</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate Resource">
+    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate Resource" camunda:class="dev.dsf.bpe.service.GenerateResource">
       <bpmn:incoming>Flow_0x7t1ii</bpmn:incoming>
       <bpmn:outgoing>Flow_1w09zt7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0huy3o3" sourceRef="PingMessageStartEvent" targetRef="Gateway_1jwjxzn" />
+    <bpmn:serviceTask id="Activity_02cgfz7" name="Hash Resource" camunda:class="dev.dsf.bpe.service.HashResource">
+      <bpmn:incoming>Flow_1w09zt7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0h9y3hl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0h9y3hl" sourceRef="Activity_02cgfz7" targetRef="Activity_04mv5cn" />
+    <bpmn:serviceTask id="Activity_0ok8dva" name="Hash Resource" camunda:class="dev.dsf.bpe.service.HashResource">
+      <bpmn:incoming>Flow_0zphif7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gohf1b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0gohf1b" sourceRef="Activity_0ok8dva" targetRef="Gateway_0fvmtve" />
     <bpmn:textAnnotation id="TextAnnotation_1cled7l">
       <bpmn:text>downloads up to maxDownloadSizeBytes</bpmn:text>
     </bpmn:textAnnotation>
@@ -419,14 +419,14 @@
     <bpmn:association id="Association_18psz8j" sourceRef="Activity_095j2gg" targetRef="TextAnnotation_1cled7l" />
     <bpmn:association id="Association_1py3u4x" sourceRef="Activity_005ywv2" targetRef="TextAnnotation_1o7v81w" />
     <bpmn:association id="Association_05fync1" sourceRef="Activity_0otptjn" targetRef="TextAnnotation_17fzn7d" />
-    <bpmn:association id="Association_0wskzb7" sourceRef="Activity_0xcqxjs" targetRef="TextAnnotation_1bv3jri" />
-    <bpmn:association id="Association_1thj094" sourceRef="TextAnnotation_1mo7foe" targetRef="Activity_1m4wavi" />
     <bpmn:textAnnotation id="TextAnnotation_14ea4yc">
       <bpmn:text>Process Parameters
 - downloadResourceSize read from Input Paramater (no default, value from message expected)
 - maxDownloadSizeBytes read from environment variable (default tbd)
 - maxUpdloadSizeBytes read from environment variables (default tbd)</bpmn:text>
     </bpmn:textAnnotation>
+    <bpmn:association id="Association_0wskzb7" sourceRef="Activity_0xcqxjs" targetRef="TextAnnotation_1bv3jri" />
+    <bpmn:association id="Association_1thj094" sourceRef="TextAnnotation_1mo7foe" targetRef="Activity_1m4wavi" />
   </bpmn:process>
   <bpmn:message id="Message_1pklz6t" name="startPing" />
   <bpmn:message id="Message_10o3b8y" name="pong" />
@@ -729,6 +729,10 @@
         <di:waypoint x="2950" y="510" />
         <di:waypoint x="3010" y="510" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fpikty_di" bpmnElement="Flow_0fpikty">
+        <di:waypoint x="248" y="500" />
+        <di:waypoint x="415" y="500" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1f86scd_di" bpmnElement="Association_1f86scd">
         <di:waypoint x="3103" y="630" />
         <di:waypoint x="3074" y="550" />
@@ -741,16 +745,8 @@
         <di:waypoint x="3169" y="470" />
         <di:waypoint x="3148" y="428" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0fpikty_di" bpmnElement="Flow_0fpikty">
-        <di:waypoint x="248" y="500" />
-        <di:waypoint x="415" y="500" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0eb6dp7_di" bpmnElement="Participant_0eb6dp7" isHorizontal="true">
         <dc:Bounds x="160" y="1020" width="2710" height="517" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1bdbmbf" bpmnElement="TextAnnotation_14ea4yc">
-        <dc:Bounds x="330" y="1040" width="584.9987257236971" height="68.9655172413793" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="StartEvent_1qh431z_di" bpmnElement="PingMessageStartEvent">
@@ -859,6 +855,10 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0yki05n" bpmnElement="TextAnnotation_1mo7foe">
         <dc:Bounds x="970" y="1401" width="170" height="40" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1bdbmbf" bpmnElement="TextAnnotation_14ea4yc">
+        <dc:Bounds x="330" y="1040" width="584.9987257236971" height="68.9655172413793" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_14ee8kb" bpmnElement="Event_0olr5yw">
@@ -990,6 +990,10 @@
         <di:waypoint x="2510" y="1267" />
         <di:waypoint x="2570" y="1267" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0huy3o3_di" bpmnElement="Flow_0huy3o3">
+        <di:waypoint x="258" y="1167" />
+        <di:waypoint x="505" y="1167" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_18psz8j_di" bpmnElement="Association_18psz8j">
         <di:waypoint x="652" y="1277" />
         <di:waypoint x="668" y="1247" />
@@ -1009,10 +1013,6 @@
       <bpmndi:BPMNEdge id="Association_1thj094_di" bpmnElement="Association_1thj094">
         <di:waypoint x="1048" y="1401" />
         <di:waypoint x="1033" y="1357" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0huy3o3_di" bpmnElement="Flow_0huy3o3">
-        <di:waypoint x="258" y="1167" />
-        <di:waypoint x="505" y="1167" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_16l0acs_di" bpmnElement="Participant_16l0acs" isHorizontal="true" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
         <dc:Bounds x="160" y="80" width="540" height="160" />
