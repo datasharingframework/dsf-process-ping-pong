@@ -1,0 +1,44 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
+            <code value="ALL" />
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units" />
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="DSF_Ping_Units" />
+    <title value="DSF Ping Units" />
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+    <date value="#{date}" />
+    <publisher value="DSF" />
+    <description value="CodeSystem with ping/pong download speed units" />
+    <caseSensitive value="true" />
+    <hierarchyMeaning value="grouped-by" />
+    <versionNeeded value="false" />
+    <content value="complete" />
+    <concept>
+        <code value="bits-per-second"/>
+        <display value="bps"/>
+        <definition value="Download speed unit in bits per second" />
+    </concept>
+    <concept>
+        <code value="bytes-per-second"/>
+        <display value="Bps"/>
+        <definition value="Download speed unit in bytes per second" />
+    </concept>
+    <concept>
+        <code value="megabits-per-second"/>
+        <display value="mbps"/>
+        <definition value="Download speed unit in megabits per second" />
+    </concept>
+    <concept>
+        <code value="megabits-per-second"/>
+        <display value="mbps"/>
+        <definition value="Download speed unit in megabits per second" />
+    </concept>
+</CodeSystem>
