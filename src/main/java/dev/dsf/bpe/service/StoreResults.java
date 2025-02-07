@@ -17,12 +17,12 @@ import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Targets;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SaveResults extends AbstractServiceDelegate implements InitializingBean
+public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
 	private final PingStatusGenerator statusGenerator;
 	private final ErrorMailService errorMailService;
 
-	public SaveResults(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
+	public StoreResults(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
 	{
 		super(api);
 
