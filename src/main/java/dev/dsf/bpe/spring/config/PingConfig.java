@@ -16,7 +16,7 @@ import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
 import dev.dsf.bpe.service.LogPong;
 import dev.dsf.bpe.service.LogSendError;
-import dev.dsf.bpe.service.SaveResults;
+import dev.dsf.bpe.service.StoreResults;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
 import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
@@ -117,9 +117,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SaveResults savePingResults()
+	public StoreResults savePingResults()
 	{
-		return new SaveResults(api, responseGenerator(), errorLogger());
+		return new StoreResults(api, responseGenerator(), errorLogger());
 	}
 
 	@Bean
