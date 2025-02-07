@@ -92,6 +92,19 @@
         <code value="string" />
       </type>
     </element>
+    <element id="Task.input:download-resource-size-bytes">
+      <path value="Task.input" />
+      <sliceName value="download-resource-size-bytes" />
+      <min value="1" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type">
+      <path value="Task.input.type" />
+      <binding>
+        <strength value="required" />
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}" />
+      </binding>
+    </element>
     <element id="Task.output:ping-status">
       <path value="Task.output"/>
       <sliceName value="ping-status"/>
