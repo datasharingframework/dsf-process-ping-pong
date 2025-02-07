@@ -46,4 +46,9 @@
 		<display value="Timer Interval" />
 		<definition value="Interval between two autostarts of the ping process" />
 	</concept>
+	<concept>
+		<code value="download-resource-size-bytes"/>
+		<display value="Download Resource Size Bytes"/>
+		<definition value="Size of the resource to download for speed measurements in bytes"/>
+	</concept>
 </CodeSystem> 
