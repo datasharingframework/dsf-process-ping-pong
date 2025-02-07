@@ -30,11 +30,11 @@ public class PingConfig
 	@Autowired
 	private ProcessPluginApi api;
 
-	@ProcessDocumentation(description = "To enable a mail being send if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_ping")
+	@ProcessDocumentation(description = "To enable a mail being sent if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_ping")
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPingProcessFailed:false}")
 	private boolean sendPingProcessFailedMail;
 
-	@ProcessDocumentation(description = "To enable a mail being send if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_pong")
+	@ProcessDocumentation(description = "To enable a mail being sent if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_pong")
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPongProcessFailed:false}")
 	private boolean sendPongProcessFailedMail;
 
