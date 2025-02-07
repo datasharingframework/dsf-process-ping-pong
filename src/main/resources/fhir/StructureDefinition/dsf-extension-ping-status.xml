@@ -122,6 +122,70 @@
         <code value="string"/>
       </type>
     </element>
+    <element id="Extension.extension:download-speed">
+      <path value="Extension.extension"/>
+      <sliceName value="download-speed"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed.unit">
+      <path value="Extension.extension.unit"/>
+      <type>
+        <code value="Coding"/>
+      </type>
+    </element>
+    <element id="Extension.extension:download-speed.unit.system">
+      <path value="Extension.extension.coding.system"/>
+      <min value="1"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+    </element>
+    <element id="Extension.extension:download-speed.unit.code">
+      <path value="Extension.extension.coding.code"/>
+      <min value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+      </binding>
+    </element>
+    <element id="Extension.extension:download-speed.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <type>
+        <code value="Decimal"/>
+      </type>
+    </element>
+
+    <element id="Extension.extension:upload-speed">
+      <path value="Extension.extension"/>
+      <sliceName value="upload-speed"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed.unit">
+      <path value="Extension.extension.unit"/>
+      <type>
+        <code value="Coding"/>
+      </type>
+    </element>
+    <element id="Extension.extension:upload-speed.unit.system">
+      <path value="Extension.extension.coding.system"/>
+      <min value="1"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+    </element>
+    <element id="Extension.extension:upload-speed.unit.code">
+      <path value="Extension.extension.coding.code"/>
+      <min value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+      </binding>
+    </element>
+    <element id="Extension.extension:upload-speed.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <type>
+        <code value="Decimal"/>
+      </type>
+    </element>
+
     <element id="Extension.url">
       <path value="Extension.url"/>
       <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status"/>
