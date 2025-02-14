@@ -34,7 +34,6 @@
         </discriminator>
         <rules value="open"/>
       </slicing>
-      <min value="3"/>
     </element>
     <element id="Extension.extension:correlation-key">
       <path value="Extension.extension"/>
