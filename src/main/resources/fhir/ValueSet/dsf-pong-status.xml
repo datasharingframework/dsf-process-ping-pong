@@ -31,8 +31,8 @@
 				<display value="Not reachable" />
 			</concept>
 			<concept>
-				<code value="pong-send" />
-				<display value="Pong send" />
+				<code value="pong-sent" />
+				<display value="Pong sent" />
 			</concept>
 		</include>
 	</compose>
