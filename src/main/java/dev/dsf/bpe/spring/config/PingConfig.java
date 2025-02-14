@@ -14,7 +14,6 @@ import dev.dsf.bpe.message.SendPong;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
-import dev.dsf.bpe.service.LogPong;
 import dev.dsf.bpe.service.LogSendError;
 import dev.dsf.bpe.service.StoreResults;
 import dev.dsf.bpe.service.SelectPingTargets;
@@ -92,13 +91,6 @@ public class PingConfig
 	public SetCorrelationKeyListener setCorrelationKeyListener()
 	{
 		return new SetCorrelationKeyListener(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogPong logPong()
-	{
-		return new LogPong(api);
 	}
 
 	@Bean
