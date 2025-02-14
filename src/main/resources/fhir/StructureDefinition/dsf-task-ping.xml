@@ -60,41 +60,6 @@
       <sliceName value="correlation-key" />
       <min value="1" />
     </element>
-    <element id="Task.input:download-resource-size-bytes">
-      <path value="Task.input" />
-      <sliceName value="download-resource-size-bytes" />
-      <min value="1" />
-      <max value="1" />
-    </element>
-    <element id="Task.input:download-resource-size-bytes.type">
-      <path value="Task.input.type" />
-      <binding>
-        <strength value="required" />
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}" />
-      </binding>
-    </element>
-    <element id="Task.input:endpoint-identifier.type.coding">
-      <path value="Task.input.type.coding" />
-      <min value="1" />
-      <max value="1" />
-    </element>
-    <element id="Task.input:endpoint-identifier.type.coding.system">
-      <path value="Task.input.type.coding.system" />
-      <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
-    </element>
-    <element id="Task.input:endpoint-identifier.type.coding.code">
-      <path value="Task.input.type.coding.code" />
-      <min value="1" />
-      <fixedCode value="download-resource-size-bytes" />
-    </element>
-    <element id="Task.input:endpoint-identifier.value[x]">
-      <path value="Task.input.value[x]" />
-      <type>
-        <code value="Reference" />
-        <targetProfile value="http://dsf.dev/fhir/StructureDefinition/endpoint" />
-      </type>
-    </element>
     <element id="Task.input:endpoint-identifier">
       <path value="Task.input" />
       <sliceName value="endpoint-identifier" />
@@ -126,8 +91,70 @@
     <element id="Task.input:endpoint-identifier.value[x]">
       <path value="Task.input.value[x]" />
       <type>
-        <code value="Integer" />
+        <code value="Reference" />
         <targetProfile value="http://dsf.dev/fhir/StructureDefinition/endpoint" />
+      </type>
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].reference">
+      <path value="Task.input.value[x].reference" />
+      <min value="0" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].type">
+      <path value="Task.input.value[x].type" />
+      <max value="1" />
+      <fixedUri value="Endpoint" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier">
+      <path value="Task.input.value[x].identifier" />
+      <max value="1" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier.system">
+      <path value="Task.input.value[x].identifier.system" />
+      <min value="1" />
+      <fixedUri value="http://dsf.dev/sid/endpoint-identifier" />
+    </element>
+    <element id="Task.input:endpoint-identifier.value[x].identifier.value">
+      <path value="Task.input.value[x].identifier.value" />
+      <min value="1" />
+    </element>
+    <element id="Task.input:download-resource-size-bytes">
+      <path value="Task.input"/>
+      <sliceName value="download-resource-size-bytes"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type">
+      <path value="Task.input.type"/>
+      <min value="1"/>
+      <max value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
+      </binding>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type.coding">
+      <path value="Task.input.type.coding"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type.coding.system">
+      <path value="Task.input.type.coding.system"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type.coding.code">
+      <path value="Task.input.type.coding.code"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedCode value="download-resource-size-bytes"/>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.value[x]">
+      <path value="Task.input.value[x]"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="Integer"/>
       </type>
     </element>
     <element id="Task.output:pong-status">
