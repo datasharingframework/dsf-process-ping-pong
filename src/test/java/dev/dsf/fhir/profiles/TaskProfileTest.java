@@ -386,6 +386,10 @@ public class TaskProfileTest
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
 				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
+		task.addInput()
+				.setValue(new IntegerType(1))
+				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;
 	}
