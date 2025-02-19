@@ -93,6 +93,9 @@
       </type>
     </element>
     <element id="Task.input:download-resource-size-bytes">
+      <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
+        <valueString value="Parameter" />
+      </extension>
       <path value="Task.input" />
       <sliceName value="download-resource-size-bytes" />
       <min value="1" />
