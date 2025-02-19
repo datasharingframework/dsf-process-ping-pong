@@ -183,10 +183,6 @@ public class TaskProfileTest
 						"Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|endpoint.target.org"))
 				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
-		task.addInput()
-				.setValue(new IntegerType(1))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -306,6 +302,10 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
+		task.addInput()
+				.setValue(new IntegerType(1))
+				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;
 	}
