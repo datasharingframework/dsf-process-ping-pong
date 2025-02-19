@@ -127,19 +127,26 @@
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.unit">
-      <path value="Extension.extension.unit"/>
+    <element id="Extension.extension:download-speed.extension:unit">
+      <path value="Extension.extension.extension"/>
+      <sliceName value="unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed.extension:unit.value[x]">
+      <path value="Extension.extension.extension.value[x]"/>
+      <min value="1"/>
       <type>
         <code value="Coding"/>
       </type>
     </element>
-    <element id="Extension.extension:download-speed.unit.system">
-      <path value="Extension.extension.coding.system"/>
+    <element id="Extension.extension:download-speed.extension:unit.value[x].system">
+      <path value="Extension.extension.extension.value[x].system"/>
       <min value="1"/>
       <fixedUri value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
     </element>
-    <element id="Extension.extension:download-speed.unit.code">
-      <path value="Extension.extension.coding.code"/>
+    <element id="Extension.extension:download-speed.extension:unit.value[x].code">
+      <path value="Extension.extension.extension.value[x].code"/>
       <min value="1"/>
       <binding>
         <strength value="required"/>
@@ -152,26 +159,32 @@
         <code value="decimal"/>
       </type>
     </element>
-
     <element id="Extension.extension:upload-speed">
       <path value="Extension.extension"/>
       <sliceName value="upload-speed"/>
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.unit">
-      <path value="Extension.extension.unit"/>
+    <element id="Extension.extension:upload-speed.extension:unit">
+      <path value="Extension.extension.extension"/>
+      <sliceName value="unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed.extension:unit.value[x]">
+      <path value="Extension.extension.extension.value[x]"/>
+      <min value="1"/>
       <type>
         <code value="Coding"/>
       </type>
     </element>
-    <element id="Extension.extension:upload-speed.unit.system">
-      <path value="Extension.extension.coding.system"/>
+    <element id="Extension.extension:upload-speed.extension:unit.value[x].system">
+      <path value="Extension.extension.extension.value[x].system"/>
       <min value="1"/>
       <fixedUri value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
     </element>
-    <element id="Extension.extension:upload-speed.unit.code">
-      <path value="Extension.extension.coding.code"/>
+    <element id="Extension.extension:upload-speed.extension:unit.value[x].code">
+      <path value="Extension.extension.extension.value[x].code"/>
       <min value="1"/>
       <binding>
         <strength value="required"/>
@@ -184,7 +197,6 @@
         <code value="decimal"/>
       </type>
     </element>
-
     <element id="Extension.url">
       <path value="Extension.url"/>
       <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status"/>
