@@ -33,12 +33,12 @@
     </concept>
     <concept>
         <code value="megabits-per-second"/>
-        <display value="mbps"/>
+        <display value="Mbps"/>
         <definition value="Download speed unit in megabits per second" />
     </concept>
     <concept>
-        <code value="megabits-per-second"/>
-        <display value="mbps"/>
-        <definition value="Download speed unit in megabits per second" />
+        <code value="megabytes-per-second"/>
+        <display value="MBps"/>
+        <definition value="Download speed unit in megabytes per second" />
     </concept>
 </CodeSystem>
