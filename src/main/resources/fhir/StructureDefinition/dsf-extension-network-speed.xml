@@ -1,0 +1,111 @@
+<StructureDefinition xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag"/>
+            <code value="ALL"/>
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/StructureDefinition/network-speed"/>
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="NetworkSpeed"/>
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+
+    <fhirVersion value="4.0.1"/>
+    <kind value="complex-type"/>
+    <abstract value="false"/>
+    <context>
+        <type value="element"/>
+        <expression value="Extension.extension"/>
+    </context>
+    <type value="Extension"/>
+    <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension"/>
+    <derivation value="constraint"/>
+    <differential>
+        <element id="Extension.extension">
+            <path value="Extension.extension"/>
+            <slicing>
+                <discriminator>
+                    <type value="value"/>
+                    <path value="url"/>
+                </discriminator>
+                <rules value="open"/>
+            </slicing>
+            <min value="3"/>
+            <max value="3"/>
+        </element>
+        <element id="Extension.extension:download-speed">
+            <path value="Extension.extension"/>
+            <sliceName value="download-speed"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:download-speed.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="download-speed"/>
+        </element>
+        <element id="Extension.extension:download-speed.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <type>
+                <code value="decimal"/>
+            </type>
+        </element>
+        <element id="Extension.extension:upload-speed">
+            <path value="Extension.extension"/>
+            <sliceName value="upload-speed"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:upload-speed.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="upload-speed"/>
+        </element>
+        <element id="Extension.extension:upload-speed.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <type>
+                <code value="decimal"/>
+            </type>
+        </element>
+        <element id="Extension.extension:unit">
+            <path value="Extension.extension"/>
+            <sliceName value="unit"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:unit.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="unit"/>
+        </element>
+        <element id="Extension.extension:unit.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <type>
+                <code value="Coding"/>
+            </type>
+        </element>
+        <element id="Extension.extension:unit.value[x].system">
+            <path value="Extension.extension.value[x].system"/>
+            <min value="1"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+        </element>
+        <element id="Extension.extension:unit.value[x].code">
+            <path value="Extension.extension.value[x].code"/>
+            <min value="1"/>
+            <binding>
+                <strength value="required"/>
+                <valueSet value="http://dsf.dev/fhir/CodeSystem/dsf-ping-units"/>
+            </binding>
+        </element>
+        <element id="Extension.url">
+            <path value="Extension.url"/>
+            <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-network-speed"/>
+        </element>
+        <element id="Extension.value[x]">
+            <path value="Extension.value[x]"/>
+            <max value="0"/>
+        </element>
+    </differential>
+</StructureDefinition>
