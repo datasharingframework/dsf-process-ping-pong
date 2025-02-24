@@ -47,6 +47,11 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
 
+	String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
+	String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
+	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
+	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
+
 	String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
 	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
