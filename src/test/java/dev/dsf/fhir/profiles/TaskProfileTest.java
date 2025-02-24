@@ -353,7 +353,7 @@ public class TaskProfileTest
 		};
 		Task task = createValidTaskPing();
 		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SEND));
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);

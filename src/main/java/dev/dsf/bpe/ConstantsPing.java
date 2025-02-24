@@ -45,7 +45,7 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SEND = "pong-send";
+	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
 
 	String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
 	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
