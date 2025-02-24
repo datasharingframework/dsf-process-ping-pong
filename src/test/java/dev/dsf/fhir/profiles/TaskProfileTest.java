@@ -42,7 +42,7 @@ public class TaskProfileTest
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
 					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
-					"dsf-task-stop-ping-autostart.xml"),
+					"dsf-task-stop-ping-autostart.xml", "dsf-extension-network-speed.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
