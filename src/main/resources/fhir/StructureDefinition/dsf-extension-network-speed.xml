@@ -5,7 +5,7 @@
             <code value="ALL"/>
         </tag>
     </meta>
-    <url value="http://dsf.dev/fhir/StructureDefinition/network-speed"/>
+    <url value="http://dsf.dev/fhir/StructureDefinition/extension-network-speed"/>
     <!-- version managed by bpe -->
     <version value="#{version}" />
     <name value="NetworkSpeed"/>
