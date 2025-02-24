@@ -37,33 +37,17 @@
             <min value="3"/>
             <max value="3"/>
         </element>
-        <element id="Extension.extension:download-speed">
+        <element id="Extension.extension:network-speed">
             <path value="Extension.extension"/>
-            <sliceName value="download-speed"/>
+            <sliceName value="network-speed"/>
             <min value="1"/>
             <max value="1"/>
         </element>
-        <element id="Extension.extension:download-speed.url">
+        <element id="Extension.extension:network-speed.url">
             <path value="Extension.extension.url"/>
-            <fixedUri value="download-speed"/>
+            <fixedUri value="network-speed"/>
         </element>
-        <element id="Extension.extension:download-speed.value[x]">
-            <path value="Extension.extension.value[x]"/>
-            <type>
-                <code value="decimal"/>
-            </type>
-        </element>
-        <element id="Extension.extension:upload-speed">
-            <path value="Extension.extension"/>
-            <sliceName value="upload-speed"/>
-            <min value="1"/>
-            <max value="1"/>
-        </element>
-        <element id="Extension.extension:upload-speed.url">
-            <path value="Extension.extension.url"/>
-            <fixedUri value="upload-speed"/>
-        </element>
-        <element id="Extension.extension:upload-speed.value[x]">
+        <element id="Extension.extension:network-speed.value[x]">
             <path value="Extension.extension.value[x]"/>
             <type>
                 <code value="decimal"/>
