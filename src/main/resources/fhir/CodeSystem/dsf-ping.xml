@@ -51,4 +51,9 @@
 		<display value="Download Resource Size Bytes"/>
 		<definition value="Size of the resource to download for speed measurements in bytes"/>
 	</concept>
+	<concept>
+		<code value="network-speed"/>
+		<display value="Network Speed"/>
+		<definition value="Network speed in both upload and download of a specific endpoint"/>
+	</concept>
 </CodeSystem> 
