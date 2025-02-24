@@ -42,8 +42,8 @@
 		<definition value="Pong received from target organization" />
 	</concept>
 	<concept>
-		<code value="pong-send" />
-		<display value="Pong send" />
+		<code value="pong-sent" />
+		<display value="Pong sent" />
 		<definition value="Pong successfully sent to target organization" />
 	</concept>
 </CodeSystem> 
