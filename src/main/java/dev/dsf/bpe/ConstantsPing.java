@@ -47,6 +47,7 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
 
+	String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
