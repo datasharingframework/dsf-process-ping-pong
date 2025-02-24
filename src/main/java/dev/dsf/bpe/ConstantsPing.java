@@ -53,6 +53,7 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
 
 	String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
+	String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
 	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
 	String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
