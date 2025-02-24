@@ -13,7 +13,7 @@
     <status value="unknown" />
     <experimental value="false" />
     <!-- date managed by bpe -->
-
+    <date value="#{date}" />
     <fhirVersion value="4.0.1"/>
     <kind value="complex-type"/>
     <abstract value="false"/>
