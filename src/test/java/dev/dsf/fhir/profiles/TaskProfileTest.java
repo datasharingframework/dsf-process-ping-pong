@@ -249,6 +249,49 @@ public class TaskProfileTest
 	}
 
 	@Test
+	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingStatusOutputWithDownloadAndUploadSpeeds() throws Exception
+	{
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
+
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
+
+		Task task = createValidTaskStartPingProcess();
+		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, 0,0, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
 	public void testTaskStartPingProcessProfileNotValid1() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
