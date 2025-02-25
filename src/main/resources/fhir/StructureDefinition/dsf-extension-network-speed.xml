@@ -34,8 +34,8 @@
                 </discriminator>
                 <rules value="open"/>
             </slicing>
-            <min value="3"/>
-            <max value="3"/>
+            <min value="2"/>
+            <max value="2"/>
         </element>
         <element id="Extension.extension:network-speed">
             <path value="Extension.extension"/>
