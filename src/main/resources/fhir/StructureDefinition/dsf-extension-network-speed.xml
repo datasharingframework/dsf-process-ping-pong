@@ -80,7 +80,7 @@
             <min value="1"/>
             <binding>
                 <strength value="required"/>
-                <valueSet value="http://dsf.dev/fhir/CodeSystem/ping-units"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-units"/>
             </binding>
         </element>
         <element id="Extension.url">
