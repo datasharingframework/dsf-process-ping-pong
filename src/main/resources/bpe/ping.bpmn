@@ -139,7 +139,7 @@
       <bpmn:textAnnotation id="TextAnnotation_0smygq5">
         <bpmn:text>Information in message:
 - downloadDurationMillis: long
-- bytesDownloaded: long</bpmn:text>
+- downloadedBytes: long</bpmn:text>
       </bpmn:textAnnotation>
       <bpmn:textAnnotation id="TextAnnotation_08ic0l2">
         <bpmn:text>downloads up to maxDownloadSizeBytes</bpmn:text>
@@ -296,7 +296,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1h13c04" bpmnElement="TextAnnotation_0smygq5">
-        <dc:Bounds x="2590" y="612" width="239.99152587125295" height="54.858934169278996" />
+        <dc:Bounds x="2590" y="612" width="239.98257839721254" height="54.98693379790941" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_084zno2" bpmnElement="TextAnnotation_08ic0l2">
