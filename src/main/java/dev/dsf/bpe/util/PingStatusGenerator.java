@@ -77,21 +77,21 @@ public class PingStatusGenerator
 
 		if(downloadSpeed >= 0 && unit != null)
 		{
-			Extension downloadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED)
-					.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
-			downloadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED)
+			Extension downloadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
+			Extension networkSpeed = downloadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
+			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 					.setValue(new DecimalType(downloadSpeed));
-			downloadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
+			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
 
 		if(uploadSpeed >= 0 && unit != null)
 		{
-			Extension uploadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED)
-					.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
-			uploadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED)
-					.setValue(new DecimalType(uploadSpeed));
-			uploadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
+			Extension uploadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED);
+			Extension networkSpeed = uploadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
+			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
+					.setValue(new DecimalType(downloadSpeed));
+			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
 
