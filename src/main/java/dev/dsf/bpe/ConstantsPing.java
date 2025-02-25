@@ -62,6 +62,7 @@ public interface ConstantsPing
 	String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed";
 	String EXTENSION_URL_UPLOAD_SPEED = "upload-speed";
 	String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
+	String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
 
 	String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
 	String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
