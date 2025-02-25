@@ -120,7 +120,7 @@
     <element id="Task.input:download-resource-size-bytes">
       <path value="Task.input"/>
       <sliceName value="download-resource-size-bytes"/>
-      <min value="1"/>
+      <min value="0"/>
       <max value="1"/>
     </element>
     <element id="Task.input:download-resource-size-bytes.type">
