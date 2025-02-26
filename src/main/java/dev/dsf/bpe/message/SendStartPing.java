@@ -23,23 +23,24 @@ public class SendStartPing extends AbstractTaskMessageSend
 	@Override
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		return Stream.concat(variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType)
-						.filter(i -> i.getType().getCoding().stream().anyMatch(
-								c -> ConstantsPing.CODESYSTEM_DSF_PING.equals(c.getSystem())
-										&& ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS.equals(c.getCode()))),
+		return Stream.concat(
+				variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType).filter(i -> i
+						.getType().getCoding().stream()
+						.anyMatch(c -> ConstantsPing.CODESYSTEM_DSF_PING.equals(c.getSystem())
+								&& ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS.equals(c.getCode()))),
 				Stream.of(getDownloadResourceSizeInputParameter(variables)));
 	}
 
 	private ParameterComponent getDownloadResourceSizeInputParameter(Variables variables)
 	{
-		return variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter).findFirst().orElseThrow();
+		return variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter).findFirst()
+				.orElseThrow();
 	}
 
 	private boolean isDownloadResourceSizeParameter(ParameterComponent parameterComponent)
 	{
 		return parameterComponent.getType().getCoding().stream()
-				.anyMatch(t ->
-						ConstantsPing.CODESYSTEM_DSF_PING.equals(t.getSystem())
+				.anyMatch(t -> ConstantsPing.CODESYSTEM_DSF_PING.equals(t.getSystem())
 						&& ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES.equals(t.getCode()));
 	}
 

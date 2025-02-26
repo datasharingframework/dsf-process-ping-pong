@@ -18,7 +18,8 @@ public class DownloadResourceReferenceGenerator
 	public static Task.ParameterComponent create(Reference reference)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
-		param.setValue(reference).getType().addCoding(new Coding(ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, null));
+		param.setValue(reference).getType().addCoding(new Coding(ConstantsPing.CODESYSTEM_DSF_PING,
+				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, null));
 		return param;
 	}
 }

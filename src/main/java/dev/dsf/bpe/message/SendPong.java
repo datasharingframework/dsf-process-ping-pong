@@ -47,8 +47,7 @@ public class SendPong extends AbstractTaskMessageSend
 			Variables variables)
 	{
 		return Stream.of(DownloadedBytesGenerator.create(0), DownloadedDurationMillisGenerator.create(0),
-				DownloadResourceReferenceGenerator.create("http://example.org/fhir/Binary/bar")
-		);
+				DownloadResourceReferenceGenerator.create("http://example.org/fhir/Binary/bar"));
 	}
 
 	@Override

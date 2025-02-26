@@ -412,7 +412,8 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference() throws Exception
+	public void testTaskPingValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
+			throws Exception
 	{
 		Target target = new Target()
 		{

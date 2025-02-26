@@ -29,10 +29,13 @@ public class SendPing extends AbstractTaskMessageSend
 	@Override
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		return Stream.of(api.getTaskHelper().createInput(
-				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER),
-				DownloadResourceSizeGenerator.create(0), DownloadResourceReferenceGenerator.create("https://test.org/fhir/Binary/foo"));
+		return Stream.of(
+				api.getTaskHelper().createInput(
+						new Reference().setIdentifier(getLocalEndpointIdentifier())
+								.setType(ResourceType.Endpoint.name()),
+						ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER),
+				DownloadResourceSizeGenerator.create(0),
+				DownloadResourceReferenceGenerator.create("https://test.org/fhir/Binary/foo"));
 	}
 
 	@Override
