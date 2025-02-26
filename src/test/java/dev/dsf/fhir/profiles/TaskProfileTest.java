@@ -22,6 +22,7 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
+import dev.dsf.bpe.util.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
@@ -42,7 +43,7 @@ public class TaskProfileTest
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-network-speed.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
 					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
-					"dsf-task-stop-ping-autostart.xml"),
+					"dsf-task-stop-ping-autostart.xml", "dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml", "dsf-ping-units.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
@@ -449,6 +450,34 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
+	@Test
+	public void testTaskPongValidWithDownloadedDurationMillisAndDownloadedBytesPresent()
+	{
+		Task task = createValidTaskPong();
+
+		NetworkSpeedMetricGenerator networkSpeedMetricGenerator = new NetworkSpeedMetricGenerator();
+		task.addInput(networkSpeedMetricGenerator.createDownloadedBytes(1000));
+		task.addInput(networkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskCleanupPongValid()
+	{
+		Task task = createValidTaskCleanupPong();
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
 	private Task createValidTaskPong()
 	{
 		Task task = new Task();
@@ -469,6 +498,33 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.correlationKey());
 
+		return task;
+	}
+
+	private Task createValidTaskCleanupPong()
+	{
+		NetworkSpeedMetricGenerator networkSpeedMetricGenerator = new NetworkSpeedMetricGenerator();
+
+		Task task = new Task();
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI + "|" + def.getResourceVersion());
+		task.setStatus(TaskStatus.REQUESTED);
+		task.setIntent(TaskIntent.ORDER);
+		task.setAuthoredOn(new Date());
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME)).getType()
+				.addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
+
+		task.addInput(networkSpeedMetricGenerator.createDownloadedBytes(1000));
+		task.addInput(networkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
 		return task;
 	}
 }
