@@ -32,6 +32,10 @@ public interface ConstantsPing
 	String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
 	String PROFILE_DSF_TASK_PONG_MESSAGE_NAME = "pong";
 
+	String PROFILE_DSF_TASK_CLEANUP_PONG = "http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong";
+	String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
+	String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
+
 	String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping";
 	String CODESYSTEM_DSF_PING_VALUE_PING_STATUS = "ping-status";
 	String CODESYSTEM_DSF_PING_VALUE_PONG_STATUS = "pong-status";
