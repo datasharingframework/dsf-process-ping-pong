@@ -21,8 +21,7 @@ public class CleanupPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		NetworkSpeedMetricGenerator networkSpeedMetricGenerator = new NetworkSpeedMetricGenerator();
-		return Stream.of(networkSpeedMetricGenerator.createDownloadedBytes(0),
-				networkSpeedMetricGenerator.createDownloadedDurationMillis(0));
+		return Stream.of(NetworkSpeedMetricGenerator.createDownloadedBytes(0),
+				NetworkSpeedMetricGenerator.createDownloadedDurationMillis(0));
 	}
 }

@@ -500,9 +500,8 @@ public class TaskProfileTest
 	{
 		Task task = createValidTaskPong();
 
-		NetworkSpeedMetricGenerator networkSpeedMetricGenerator = new NetworkSpeedMetricGenerator();
-		task.addInput(networkSpeedMetricGenerator.createDownloadedBytes(1000));
-		task.addInput(networkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);

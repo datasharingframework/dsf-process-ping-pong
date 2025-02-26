@@ -9,7 +9,7 @@ import dev.dsf.bpe.ConstantsPing;
 
 public class NetworkSpeedMetricGenerator
 {
-	public Task.ParameterComponent createDownloadedDurationMillis(long duration)
+	public static Task.ParameterComponent createDownloadedDurationMillis(long duration)
 	{
 		Task.ParameterComponent downloadedDuration = new Task.ParameterComponent();
 		downloadedDuration.setValue(new DecimalType(duration)).getType()
@@ -18,7 +18,7 @@ public class NetworkSpeedMetricGenerator
 		return downloadedDuration;
 	}
 
-	public Task.ParameterComponent createDownloadedBytes(int bytes)
+	public static Task.ParameterComponent createDownloadedBytes(int bytes)
 	{
 		Task.ParameterComponent downloadedBytes = new Task.ParameterComponent();
 		downloadedBytes.setValue(new IntegerType(bytes)).getType().addCoding(new Coding(
