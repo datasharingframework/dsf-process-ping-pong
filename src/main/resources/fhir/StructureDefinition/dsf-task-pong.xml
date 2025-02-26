@@ -184,5 +184,41 @@
         <code value="decimal"/>
       </type>
     </element>
+    <element id="Task.input:error-message">
+      <path value="Task.input"/>
+      <sliceName value="error-message"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.input:error-message.type">
+      <path value="Task.input.type"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.input:error-message.type.coding">
+      <path value="Task.input.type.coding"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.input:error-message.type.coding.system">
+      <path value="Task.input.type.coding.system"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.input:error-message.type.coding.code">
+      <path value="Task.input.type.coding.code"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedCode value="error-message"/>
+    </element>
+    <element id="Task.input:error-message.value[x]">
+      <path value="Task.input.value[x]"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="string"/>
+      </type>
+    </element>
   </differential>
 </StructureDefinition>
