@@ -53,4 +53,13 @@
       </type>
       <valueString value="PT24H"></valueString>
    </input>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<code value="download-resource-size-bytes"/>
+			</coding>
+		</type>
+		<valueInteger value="10000000"/>
+	</input>
 </Task>
