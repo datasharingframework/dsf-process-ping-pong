@@ -10,8 +10,8 @@ import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.DownloadResourceReferenceGenerator;
-import dev.dsf.bpe.util.DownloadResourceSizeGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Variables;

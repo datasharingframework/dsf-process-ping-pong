@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
-import dev.dsf.bpe.util.NetworkSpeedMetricGenerator;
+import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Variables;

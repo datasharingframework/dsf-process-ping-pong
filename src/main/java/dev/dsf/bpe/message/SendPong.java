@@ -8,9 +8,9 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
-import dev.dsf.bpe.util.DownloadResourceReferenceGenerator;
-import dev.dsf.bpe.util.DownloadedBytesGenerator;
-import dev.dsf.bpe.util.DownloadedDurationMillisGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
