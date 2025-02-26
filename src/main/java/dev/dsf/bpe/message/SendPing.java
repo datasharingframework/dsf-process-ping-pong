@@ -10,6 +10,8 @@ import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -29,7 +31,8 @@ public class SendPing extends AbstractTaskMessageSend
 	{
 		return Stream.of(api.getTaskHelper().createInput(
 				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER));
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER),
+				DownloadResourceSizeGenerator.create(0), DownloadResourceReferenceGenerator.create("https://test.org/fhir/Binary/foo"));
 	}
 
 	@Override
