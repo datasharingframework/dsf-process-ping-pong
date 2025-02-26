@@ -133,7 +133,7 @@
       <bpmn:sequenceFlow id="Flow_16ssf4a" sourceRef="LogSendError" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
       <bpmn:sequenceFlow id="Flow_13u1nzy" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSize &lt; 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="Activity_0h9o9u7" />
       <bpmn:sequenceFlow id="Flow_1v37fff" sourceRef="Activity_0h9o9u7" targetRef="Activity_0vw65a2" />
