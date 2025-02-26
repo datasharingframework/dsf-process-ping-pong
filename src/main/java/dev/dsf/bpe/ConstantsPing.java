@@ -39,6 +39,8 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS = "target-endpoints";
 	String CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL = "timer-interval";
 	String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES = "download-resource-size-bytes";
+	String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
+	String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
 
 	String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
