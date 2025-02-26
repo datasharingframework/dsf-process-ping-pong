@@ -1,12 +1,16 @@
 package dev.dsf.bpe.message;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
+import dev.dsf.bpe.util.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.DownloadedBytesGenerator;
+import dev.dsf.bpe.util.DownloadedDurationMillisGenerator;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
@@ -36,6 +40,15 @@ public class SendPong extends AbstractTaskMessageSend
 
 		Objects.requireNonNull(statusGenerator, "statusGenerator");
 		Objects.requireNonNull(errorMailService, "errorMailService");
+	}
+
+	@Override
+	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
+			Variables variables)
+	{
+		return Stream.of(DownloadedBytesGenerator.create(0), DownloadedDurationMillisGenerator.create(0),
+				DownloadResourceReferenceGenerator.create("http://example.org/fhir/Binary/bar")
+		);
 	}
 
 	@Override
