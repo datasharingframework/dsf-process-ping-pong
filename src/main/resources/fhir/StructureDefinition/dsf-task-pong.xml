@@ -60,46 +60,6 @@
       <sliceName value="correlation-key" />
       <min value="1" />
     </element>
-    <element id="Task.input:download-resource-size-bytes">
-      <path value="Task.input"/>
-      <sliceName value="download-resource-size-bytes"/>
-      <min value="0"/>
-      <max value="1"/>
-    </element>
-    <element id="Task.input:download-resource-size-bytes.type">
-      <path value="Task.input.type"/>
-      <min value="1"/>
-      <max value="1"/>
-      <binding>
-        <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
-      </binding>
-    </element>
-    <element id="Task.input:download-resource-size-bytes.type.coding">
-      <path value="Task.input.type.coding"/>
-      <min value="1"/>
-      <max value="1"/>
-    </element>
-    <element id="Task.input:download-resource-size-bytes.type.coding.system">
-      <path value="Task.input.type.coding.system"/>
-      <min value="1"/>
-      <max value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
-    </element>
-    <element id="Task.input:download-resource-size-bytes.type.coding.code">
-      <path value="Task.input.type.coding.code"/>
-      <min value="1"/>
-      <max value="1"/>
-      <fixedCode value="download-resource-size-bytes"/>
-    </element>
-    <element id="Task.input:download-resource-size-bytes.value[x]">
-      <path value="Task.input.value[x]"/>
-      <min value="1"/>
-      <max value="1"/>
-      <type>
-        <code value="integer"/>
-      </type>
-    </element>
     <element id="Task.input:download-resource-reference">
       <path value="Task.input"/>
       <sliceName value="download-resource-reference"/>
