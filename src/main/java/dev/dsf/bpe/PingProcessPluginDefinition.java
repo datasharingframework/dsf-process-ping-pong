@@ -71,13 +71,13 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPingStatus = "fhir/ValueSet/dsf-ping-status.xml";
 		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
 
-		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
-				Arrays.asList(
-						aPing, cPing, cPingStatus, cPingUnits, sPingStatus, sStartPing, sPong, sCleanupPong, tStartPing, vPing, vPingStatus, vPingUnits),
+		return Map.of(
+				ConstantsPing.PROCESS_NAME_FULL_PING, Arrays.asList(aPing, cPing, cPingStatus, cPingUnits, sPingStatus,
+						sStartPing, sPong, sCleanupPong, tStartPing, vPing, vPingStatus, vPingUnits),
 				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
-				ConstantsPing.PROCESS_NAME_FULL_PONG,
-				Arrays.asList(aPong, cPing, cPingStatus, cPingUnits, sPingStatus, sPing, vPing, vPongStatus, vPingUnits));
+				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingUnits, sPingStatus,
+						sPing, vPing, vPongStatus, vPingUnits));
 	}
 }

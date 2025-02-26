@@ -18,21 +18,23 @@ public class PingStatusGenerator
 		return createPingStatusOutput(target, statusCode, null);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, int downloadSpeed, int uploadSpeed, String unit)
+	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, int downloadSpeed,
+			int uploadSpeed, String unit)
 	{
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
 	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, String errorMessage)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
-				errorMessage, -1, -1, null);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessage,
+				-1, -1, null);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, String errorMessage, int downloadSpeed, int uploadSpeed, String unit)
+	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, String errorMessage,
+			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
-				errorMessage, downloadSpeed, uploadSpeed, unit);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessage,
+				downloadSpeed, uploadSpeed, unit);
 	}
 
 	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode)
@@ -40,21 +42,23 @@ public class PingStatusGenerator
 		return createPongStatusOutput(target, statusCode, null);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, int downloadSpeed, int uploadSpeed, String unit)
+	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, int downloadSpeed,
+			int uploadSpeed, String unit)
 	{
 		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
 	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, String errorMessage)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
-				errorMessage, -1, -1, null);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessage,
+				-1, -1, null);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, String errorMessage, int downloadSpeed, int uploadSpeed, String unit)
+	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, String errorMessage,
+			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
-				errorMessage, downloadSpeed, uploadSpeed, unit);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessage,
+				downloadSpeed, uploadSpeed, unit);
 	}
 
 	private TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
@@ -75,20 +79,23 @@ public class PingStatusGenerator
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
 					.setValue(new StringType(errorMessage));
 
-		if(downloadSpeed >= 0 && unit != null)
+		if (downloadSpeed >= 0 && unit != null)
 		{
-			Extension downloadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
-			Extension networkSpeed = downloadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
+			Extension downloadSpeedExtension = extension.addExtension()
+					.setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
+			Extension networkSpeed = downloadSpeedExtension.addExtension()
+					.setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 					.setValue(new DecimalType(downloadSpeed));
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
 
-		if(uploadSpeed >= 0 && unit != null)
+		if (uploadSpeed >= 0 && unit != null)
 		{
 			Extension uploadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED);
-			Extension networkSpeed = uploadSpeedExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
+			Extension networkSpeed = uploadSpeedExtension.addExtension()
+					.setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED);
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 					.setValue(new DecimalType(downloadSpeed));
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
