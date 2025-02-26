@@ -1,4 +1,4 @@
-package dev.dsf.bpe.util;
+package dev.dsf.bpe.util.task.input.generator;
 
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
