@@ -84,6 +84,17 @@
         <bpmn:outgoing>Flow_1v37fff</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sendTask id="Activity_0vw65a2" name="Cleanup Pong" camunda:class="dev.dsf.bpe.message.CleanupPong">
+        <bpmn:extensionElements>
+          <camunda:field name="profile">
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong|#{version}</camunda:string>
+          </camunda:field>
+          <camunda:field name="messageName">
+            <camunda:string>cleanup-pong</camunda:string>
+          </camunda:field>
+          <camunda:field name="instantiatesCanonical">
+            <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
+          </camunda:field>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_1v37fff</bpmn:incoming>
         <bpmn:incoming>Flow_0jcfur3</bpmn:incoming>
         <bpmn:outgoing>Flow_0pj6d62</bpmn:outgoing>
