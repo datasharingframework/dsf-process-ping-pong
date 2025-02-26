@@ -31,7 +31,7 @@
       </extension>
       <path value="Task.input" />
       <min value="3" />
-      <max value="3" />
+      <max value="5" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
