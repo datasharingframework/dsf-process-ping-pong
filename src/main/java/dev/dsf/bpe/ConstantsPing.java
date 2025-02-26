@@ -73,6 +73,7 @@ public interface ConstantsPing
 
 	String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
 	String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
+	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
 
 	String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 }
