@@ -26,6 +26,7 @@ import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
 import dev.dsf.bpe.service.LogSendError;
 import dev.dsf.bpe.service.SaveDownloadSpeeds;
+import dev.dsf.bpe.service.SavePong;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
@@ -245,5 +246,12 @@ public class PingConfig
 	public SetDownloadResourceSize setDownloadResourceSize()
 	{
 		return new SetDownloadResourceSize(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SavePong savePong()
+	{
+		return new SavePong(api);
 	}
 }
