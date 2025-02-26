@@ -41,9 +41,10 @@ public class TaskProfileTest
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
-			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-network-speed.xml", "dsf-extension-ping-status.xml", "dsf-task-ping.xml",
-					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
-					"dsf-task-stop-ping-autostart.xml", "dsf-task-cleanup-pong.xml"),
+			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-network-speed.xml", "dsf-extension-ping-status.xml",
+					"dsf-task-ping.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
+					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
+					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
 					"dsf-ping-status.xml", "dsf-ping-units.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
@@ -250,7 +251,8 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingStatusOutputWithDownloadAndUploadSpeeds() throws Exception
+	public void testTaskStartPingProcessProfileValidWithBusinessKeyAndPingStatusOutputWithDownloadAndUploadSpeeds()
+			throws Exception
 	{
 		Target target = new Target()
 		{
@@ -283,7 +285,8 @@ public class TaskProfileTest
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, 0,0, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, 0, 0,
+				ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -346,9 +349,7 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
-		task.addInput()
-				.setValue(new IntegerType(1))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+		task.addInput().setValue(new IntegerType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;
@@ -430,9 +431,7 @@ public class TaskProfileTest
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
 				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
-		task.addInput()
-				.setValue(new IntegerType(1))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+		task.addInput().setValue(new IntegerType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;
@@ -507,7 +506,8 @@ public class TaskProfileTest
 
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG);
-		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI + "|" + def.getResourceVersion());
+		task.setInstantiatesCanonical(
+				ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
 		task.setAuthoredOn(new Date());

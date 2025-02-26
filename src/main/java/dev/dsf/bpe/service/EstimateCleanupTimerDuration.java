@@ -12,6 +12,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(EstimateCleanupTimerDuration.class);
+
 	public EstimateCleanupTimerDuration(ProcessPluginApi api)
 	{
 		super(api);
