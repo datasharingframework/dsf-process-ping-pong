@@ -28,6 +28,7 @@ import dev.dsf.bpe.service.LogSendError;
 import dev.dsf.bpe.service.SaveDownloadSpeeds;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
+import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.StoreDownloadSpeeds;
 import dev.dsf.bpe.service.StoreResource;
@@ -237,5 +238,12 @@ public class PingConfig
 	public EstimateCleanupTimerDuration estimateCleanupTimerDuration()
 	{
 		return new EstimateCleanupTimerDuration(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SetDownloadResourceSize setDownloadResourceSize()
+	{
+		return new SetDownloadResourceSize(api);
 	}
 }
