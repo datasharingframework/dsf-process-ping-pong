@@ -60,7 +60,7 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var sStartPing = "fhir/StructureDefinition/dsf-task-start-ping.xml";
 		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
-		var sCleanupPong = "fhir/StructureDefinition/dsf-task-pong-cleanup-pong.xml";
+		var sCleanupPong = "fhir/StructureDefinition/dsf-task-cleanup-pong.xml";
 
 		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 		var tStartPingAutoStart = "fhir/Task/dsf-task-start-ping-autostart.xml";
