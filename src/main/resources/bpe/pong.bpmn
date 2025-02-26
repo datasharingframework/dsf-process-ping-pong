@@ -42,7 +42,7 @@
       <bpmn:incoming>Flow_1eass2g</bpmn:incoming>
       <bpmn:outgoing>Flow_0fzmjzb</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Gateway_0eiy9fm" default="Flow_00t1ck1">
+    <bpmn:exclusiveGateway id="Gateway_0eiy9fm" default="Flow_1bzjspe">
       <bpmn:incoming>Flow_0fzmjzb</bpmn:incoming>
       <bpmn:outgoing>Flow_0h8flp6</bpmn:outgoing>
       <bpmn:outgoing>Flow_1bzjspe</bpmn:outgoing>
@@ -132,10 +132,10 @@
     <bpmn:sequenceFlow id="Flow_0h8flp6" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0t0ex36">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  statusCode == 'not-reachable'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1bzjspe" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1l5dkpz">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bidirectionalResourceDownload == true}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_1bzjspe" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1l5dkpz" />
+    <bpmn:sequenceFlow id="Flow_00t1ck1" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1uvkqh3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_00t1ck1" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1uvkqh3" />
     <bpmn:sequenceFlow id="Flow_05ucfds" sourceRef="Activity_0t0ex36" targetRef="Gateway_1uvkqh3" />
     <bpmn:sequenceFlow id="Flow_0rj915n" sourceRef="Gateway_1l5dkpz" targetRef="Event_1xvd4tr" />
     <bpmn:sequenceFlow id="Flow_17x98wg" sourceRef="Gateway_1l5dkpz" targetRef="Event_0o4l2t4" />
@@ -288,7 +288,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1o7v81w_di" bpmnElement="TextAnnotation_1o7v81w">
-        <dc:Bounds x="1790" y="439" width="250.00000000000003" height="83.6707152496626" />
+        <dc:Bounds x="1790" y="439" width="250" height="84" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_17fzn7d_di" bpmnElement="TextAnnotation_17fzn7d">
