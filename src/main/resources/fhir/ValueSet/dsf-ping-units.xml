@@ -2,7 +2,7 @@
     <meta>
         <tag>
             <system
-                    value="http://dsf.dev/fhir/ValueSet/read-access-tag" />
+                    value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
             <code value="ALL" />
         </tag>
     </meta>
