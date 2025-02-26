@@ -19,7 +19,8 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES, getDownloadResourceSize(variables));
+		variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
+				getDownloadResourceSize(variables));
 	}
 
 	private int getDownloadResourceSize(Variables variables)
