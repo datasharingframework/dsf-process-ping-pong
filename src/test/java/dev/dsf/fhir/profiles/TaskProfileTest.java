@@ -22,6 +22,8 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
+import dev.dsf.bpe.util.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
@@ -407,6 +409,49 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
+	@Test
+	public void testTaskPingValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference() throws Exception
+	{
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
+
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
+		Task task = createValidTaskPing();
+		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
+
+		task.addInput(DownloadResourceSizeGenerator.create(1000));
+		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
 	private Task createValidTaskPing()
 	{
 		Task task = new Task();
@@ -431,8 +476,6 @@ public class TaskProfileTest
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
 				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
-		task.addInput().setValue(new IntegerType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;
 	}
