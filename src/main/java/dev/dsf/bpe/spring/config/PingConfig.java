@@ -38,11 +38,11 @@ public class PingConfig
 	private boolean sendPongProcessFailedMail;
 
 	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.")
-	@Value("{dev.dsf.bpe.ping.maxDownloadSize:10000000}")
+	@Value("${dev.dsf.bpe.ping.maxDownloadSize:10000000}")
 	private long maxDownloadSizeBytes;
 
 	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.")
-	@Value("{dev.dsf.bpe.ping.maxUploadSize:10000000}")
+	@Value("${dev.dsf.bpe.ping.maxUploadSize:10000000}")
 	private long maxUploadSizeBytes;
 
 	@Bean
