@@ -496,10 +496,11 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongValidWithDownloadedDurationMillisAndDownloadedBytesPresent()
+	public void testTaskPongValidWithReferenceAndDownloadedDurationMillisAndDownloadedBytesPresent()
 	{
 		Task task = createValidTaskPong();
 
+		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
 
