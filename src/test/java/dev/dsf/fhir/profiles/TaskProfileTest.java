@@ -131,6 +131,8 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME))
 				.getType().addCoding(BpmnMessage.messageName());
 
+		task.addInput(DownloadResourceSizeGenerator.create(0));
+
 		return task;
 	}
 
