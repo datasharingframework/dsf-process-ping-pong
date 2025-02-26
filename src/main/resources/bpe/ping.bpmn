@@ -89,7 +89,7 @@
             <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="messageName">
-            <camunda:string>cleanup-pong</camunda:string>
+            <camunda:string>cleanupPong</camunda:string>
           </camunda:field>
           <camunda:field name="instantiatesCanonical">
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
