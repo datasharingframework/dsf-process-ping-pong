@@ -548,8 +548,6 @@ public class TaskProfileTest
 
 	private Task createValidTaskCleanupPong()
 	{
-		NetworkSpeedMetricGenerator networkSpeedMetricGenerator = new NetworkSpeedMetricGenerator();
-
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_CLEANUP_PONG);
 		task.setInstantiatesCanonical(
@@ -566,11 +564,9 @@ public class TaskProfileTest
 				.addCoding(BpmnMessage.messageName());
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
-				.addCoding(BpmnMessage.correlationKey());
 
-		task.addInput(networkSpeedMetricGenerator.createDownloadedBytes(1000));
-		task.addInput(networkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
 		return task;
 	}
 }

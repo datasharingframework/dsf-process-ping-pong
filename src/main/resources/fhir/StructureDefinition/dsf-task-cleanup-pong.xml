@@ -58,7 +58,7 @@
             </extension>
             <path value="Task.input" />
             <sliceName value="correlation-key" />
-            <min value="1" />
+            <max value="0"/>
         </element>
         <element id="Task.input:downloaded-bytes">
             <path value="Task.input"/>
