@@ -19,10 +19,12 @@ import dev.dsf.bpe.v1.variables.Variables;
 public class GenerateResource extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(GenerateResource.class);
+	private final int maxUploadSizeBytes;
 
-	public GenerateResource(ProcessPluginApi api)
+	public GenerateResource(ProcessPluginApi api, int maxUploadSizeBytes)
 	{
 		super(api);
+		this.maxUploadSizeBytes = maxUploadSizeBytes;
 	}
 
 	@Override
@@ -36,12 +38,13 @@ public class GenerateResource extends AbstractServiceDelegate
 		logger.info("Generated binary resource content for network speed measurement");
 	}
 
-	private byte[] generateRandomBinaryContent(int sizeBytes)
+	private byte[] generateRandomBinaryContent(int desiredSizeBytes)
 	{
+		int sizeBytes = Math.min(maxUploadSizeBytes, desiredSizeBytes);
 		byte[] bytes = base64Encode(generateRandomByteArray((sizeBytes / 4) * 3));
 		logger.info(
 				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size was : {}",
-				sizeBytes, bytes.length);
+				desiredSizeBytes, bytes.length);
 		return bytes;
 	}
 
