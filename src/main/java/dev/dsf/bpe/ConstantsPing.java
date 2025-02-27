@@ -1,5 +1,6 @@
 package dev.dsf.bpe;
 
+import jakarta.ws.rs.core.MediaType;
 
 public interface ConstantsPing
 {
@@ -60,6 +61,10 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
 
+
+	String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
+	String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
+
 	String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
 	String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
 	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
@@ -74,6 +79,10 @@ public interface ConstantsPing
 	String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
 	String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
 	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
+	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
+	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
+
+	MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
 	String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 }
