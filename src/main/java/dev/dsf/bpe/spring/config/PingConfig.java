@@ -183,7 +183,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public GenerateResource generateResource()
 	{
-		return new GenerateResource(api);
+		return new GenerateResource(api, (int) maxUploadSizeBytes);
 	}
 
 	@Bean
