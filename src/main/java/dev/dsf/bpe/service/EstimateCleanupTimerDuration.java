@@ -22,6 +22,6 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		logger.info("Estimated cleanup timer duration");
-		variables.setString("cleanupTimerDuration","PT20S");
+		variables.setString("cleanupTimerDuration", "PT20S");
 	}
 }
