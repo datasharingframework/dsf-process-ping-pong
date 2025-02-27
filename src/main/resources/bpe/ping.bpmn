@@ -108,7 +108,10 @@
         <bpmn:incoming>Flow_0n0yrky</bpmn:incoming>
         <bpmn:outgoing>Flow_03nx6rk</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:endEvent id="Event_1foycg9">
+      <bpmn:endEvent id="Event_1foycg9" camunda:asyncAfter="true">
+        <bpmn:extensionElements>
+          <camunda:failedJobRetryTimeCycle>R3/PT5S</camunda:failedJobRetryTimeCycle>
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_03nx6rk</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:boundaryEvent id="Event_0i4slcz" name="Invalid Resource Reference" attachedToRef="Activity_0h9o9u7">
