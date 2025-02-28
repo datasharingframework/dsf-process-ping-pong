@@ -34,10 +34,8 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		String webserviceUrl = target.getEndpointUrl();
-
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(webserviceUrl,
-				variables, api, task, maxDownloadSizeBytes);
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(variables, api,
+				task, maxDownloadSizeBytes);
 
 		if (downloadResult.getErrorMessage() != null)
 		{
