@@ -34,7 +34,7 @@ public class StoreResource extends AbstractServiceDelegate
 		Binary downloadResource = storeBinary(
 				variables.getByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE));
 
-		String reference = localEndpointAddress + "/Binary/" + downloadResource.getId();
+		String reference = localEndpointAddress + "/" + downloadResource.getId();
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID,
