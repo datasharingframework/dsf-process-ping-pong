@@ -31,7 +31,6 @@
       </extension>
       <path value="Task.input" />
       <min value="3" />
-      <max value="6" />
     </element>
     <element id="Task.input:message-name">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
@@ -188,7 +187,6 @@
       <path value="Task.input"/>
       <sliceName value="error-message"/>
       <min value="0"/>
-      <max value="1"/>
     </element>
     <element id="Task.input:error-message.type">
       <path value="Task.input.type"/>

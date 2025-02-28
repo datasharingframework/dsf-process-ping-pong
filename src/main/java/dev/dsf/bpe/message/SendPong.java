@@ -1,5 +1,6 @@
 package dev.dsf.bpe.message;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -78,7 +79,7 @@ public class SendPong extends AbstractTaskMessageSend
 
 			String specialErrorMessage = createErrorMessage(exception);
 
-			mainTask.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, specialErrorMessage));
+			mainTask.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, List.of(specialErrorMessage)));
 			variables.updateTask(mainTask);
 
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))

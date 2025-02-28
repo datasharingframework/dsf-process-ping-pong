@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.hl7.fhir.r4.model.IntegerType;
@@ -25,6 +26,7 @@ import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
+import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;
 import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
@@ -245,7 +247,7 @@ public class TaskProfileTest
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, "some error message"));
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, List.of("some error message")));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -503,6 +505,24 @@ public class TaskProfileTest
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskPongValidWithMultipleErrorMessages()
+	{
+		Task task = createValidTaskPong();
+
+		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
+		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(ErrorMessageGenerator.create("Something went wrong"));
+		task.addInput(ErrorMessageGenerator.create("Something went wrong really badly"));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);

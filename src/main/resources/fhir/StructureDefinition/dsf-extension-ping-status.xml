@@ -35,7 +35,6 @@
         <rules value="open"/>
       </slicing>
       <min value="3"/>
-      <max value="5"/>
     </element>
     <element id="Extension.extension:correlation-key">
       <path value="Extension.extension"/>
@@ -110,7 +109,6 @@
       <path value="Extension.extension"/>
       <sliceName value="error-message"/>
       <min value="0"/>
-      <max value="1"/>
     </element>
     <element id="Extension.extension:error-message.url">
       <path value="Extension.extension.url"/>
