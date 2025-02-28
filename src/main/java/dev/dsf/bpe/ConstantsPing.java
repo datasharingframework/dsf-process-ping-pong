@@ -89,10 +89,9 @@ public interface ConstantsPing
 	String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
 	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
 	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
+	String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
 
 	MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
 	String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
-
-	Pattern WEBSERVICE_URL_PATTERN = Pattern.compile("http(s?)://(\\w+)(\\.\\w+)*/fhir");
 }

@@ -32,6 +32,7 @@ import dev.dsf.bpe.service.SavePong;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
+import dev.dsf.bpe.service.SetEndpointIdentifier;
 import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.StoreDownloadSpeeds;
 import dev.dsf.bpe.service.StoreResource;
@@ -270,5 +271,12 @@ public class PingConfig
 	public RemoveCorrelationKeyListener removeCorrelationKeyListener()
 	{
 		return new RemoveCorrelationKeyListener(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SetEndpointIdentifier setEndpointIdentifier()
+	{
+		return new SetEndpointIdentifier(api);
 	}
 }
