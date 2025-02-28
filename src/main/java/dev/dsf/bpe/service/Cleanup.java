@@ -31,7 +31,9 @@ public class Cleanup extends AbstractServiceDelegate
 			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().deletePermanently(Binary.class,
 					downloadResourceId);
 			logger.info("Deleted Binary resource with ID {}", downloadResourceId);
-		} else {
+		}
+		else
+		{
 			logger.info("Nothing to do");
 		}
 		logger.info("Cleanup complete.");
