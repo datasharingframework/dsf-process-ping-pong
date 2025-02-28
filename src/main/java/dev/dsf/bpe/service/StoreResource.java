@@ -1,13 +1,11 @@
 package dev.dsf.bpe.service;
 
-import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,19 +27,17 @@ public class StoreResource extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		Binary downloadResource = storeBinary(
+		IdType downloadResource = storeBinary(
 				variables.getByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE));
 
-		String reference = downloadResource.getIdElement().toString();
+		String reference = downloadResource.getValueAsString();
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
-		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID,
-				downloadResource.getIdElement().getIdPart());
 
 		logger.info("Stored binary resource for PING targets to download");
 	}
 
-	private Binary storeBinary(byte[] downloadResourceContent)
+	private IdType storeBinary(byte[] downloadResourceContent)
 	{
 		Binary downloadResource = new Binary();
 		downloadResource.setContent(downloadResourceContent);
@@ -50,6 +46,7 @@ public class StoreResource extends AbstractServiceDelegate
 		downloadResource.getMeta()
 				.addTag(ReadAccessTagGenerator.create(ConstantsPing.CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL));
 
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().create(downloadResource);
+		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn()
+				.create(downloadResource);
 	}
 }
