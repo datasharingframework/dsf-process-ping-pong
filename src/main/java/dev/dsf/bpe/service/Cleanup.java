@@ -24,7 +24,8 @@ public class Cleanup extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		logger.info("Cleaning up...");
-		String downloadResourceId = variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID);
+		String downloadResourceId = variables
+				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
 		if (downloadResourceId != null)
 		{
 			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class, downloadResourceId);
