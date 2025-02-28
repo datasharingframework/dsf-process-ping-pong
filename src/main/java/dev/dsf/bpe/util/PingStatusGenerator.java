@@ -1,5 +1,7 @@
 package dev.dsf.bpe.util;
 
+import java.util.List;
+
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Extension;
@@ -24,16 +26,16 @@ public class PingStatusGenerator
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, String errorMessage)
+	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessage,
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessages,
 				-1, -1, null);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, String errorMessage,
+	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessage,
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessages,
 				downloadSpeed, uploadSpeed, unit);
 	}
 
@@ -48,21 +50,21 @@ public class PingStatusGenerator
 		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, String errorMessage)
+	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessage,
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessages,
 				-1, -1, null);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, String errorMessage,
+	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessage,
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessages,
 				downloadSpeed, uploadSpeed, unit);
 	}
 
 	private TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
-			String errorMessage, int downloadSpeed, int uploadSpeed, String unit)
+			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
 	{
 		TaskOutputComponent output = new TaskOutputComponent();
 		output.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
@@ -75,9 +77,12 @@ public class PingStatusGenerator
 				.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
 				.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
-		if (errorMessage != null)
-			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
-					.setValue(new StringType(errorMessage));
+		if (errorMessages != null)
+			for (String errorMessage : errorMessages)
+			{
+				extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
+						.setValue(new StringType(errorMessage));
+			}
 
 		if (downloadSpeed >= 0 && unit != null)
 		{

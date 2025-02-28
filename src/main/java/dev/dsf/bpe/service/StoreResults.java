@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -54,7 +55,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 			{
 				String errorMessage = variables.getString("errorMessage_" + correlationKey);
-				task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, errorMessage));
+				task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, List.of(errorMessage)));
 
 				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
 					errorMailService.endpointNotReachableForPing(task.getIdElement(), target, errorMessage);
