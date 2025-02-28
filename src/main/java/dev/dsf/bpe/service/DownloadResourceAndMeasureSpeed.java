@@ -32,12 +32,9 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		Task task = variables.getStartTask();
-		String endpointIdentifier = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER);
-		String webserviceUrl = api.getEndpointProvider().getEndpointAddress(endpointIdentifier).orElseThrow();
 
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(webserviceUrl,
-				variables, api, task, maxDownloadSizeBytes);
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(variables, api,
+				task, maxDownloadSizeBytes);
 
 		if (downloadResult.getErrorMessage() != null)
 		{
