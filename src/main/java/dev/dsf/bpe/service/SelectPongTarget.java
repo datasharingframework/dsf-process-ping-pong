@@ -32,7 +32,8 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 		String correlationKey = api.getTaskHelper()
 				.getFirstInputParameterStringValue(task, BpmnMessage.URL, BpmnMessage.Codes.CORRELATION_KEY).get();
 		String targetOrganizationIdentifierValue = task.getRequester().getIdentifier().getValue();
-		String targetEndpointIdentifierValue = getEndpointIdentifierValue(task);
+		String targetEndpointIdentifierValue = variables
+				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER);
 
 		String targetEndpointAddress = api.getEndpointProvider().getEndpointAddress(targetEndpointIdentifierValue)
 				.orElseThrow(() ->
@@ -45,13 +46,5 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 
 		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,
 				targetEndpointAddress, correlationKey));
-	}
-
-	private String getEndpointIdentifierValue(Task task)
-	{
-		return api.getTaskHelper()
-				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER, Reference.class)
-				.map(Reference::getIdentifier).map(Identifier::getValue).get();
 	}
 }
