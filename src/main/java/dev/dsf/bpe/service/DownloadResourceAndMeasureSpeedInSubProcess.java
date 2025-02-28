@@ -37,7 +37,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(variables, api,
 				task, maxDownloadSizeBytes);
 
-		if (downloadResult.getErrorMessage() != null)
+		if (downloadResult.getErrorMessage() == null)
 		{
 			variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES,
 					downloadResult.getDownloadedBytes());
