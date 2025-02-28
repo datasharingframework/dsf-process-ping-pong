@@ -29,12 +29,10 @@ public class StoreResource extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		String localEndpointAddress = api.getEndpointProvider().getLocalEndpoint().orElseThrow().getAddress();
-
 		Binary downloadResource = storeBinary(
 				variables.getByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE));
 
-		String reference = localEndpointAddress + "/" + downloadResource.getId();
+		String reference = downloadResource.getIdElement().toString();
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID,
