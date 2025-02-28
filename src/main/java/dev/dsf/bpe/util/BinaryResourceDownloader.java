@@ -3,6 +3,7 @@ package dev.dsf.bpe.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
@@ -16,8 +17,7 @@ public class BinaryResourceDownloader
 {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
 
-	public DownloadResult download(String webserviceUrl, Variables variables, ProcessPluginApi api, Task task,
-			int maxDownloadSizeBytes)
+	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, int maxDownloadSizeBytes)
 	{
 		DownloadResult downloadResult;
 
@@ -29,16 +29,18 @@ public class BinaryResourceDownloader
 						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, Reference.class)
 				.orElseThrow();
 
+		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
+		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
+		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
+
 		InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider().getWebserviceClient(webserviceUrl)
-				.readBinary(getDownloadResourceId(downloadResourceReference),
-						ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
+				.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
 		try (binaryResourceInputStream)
 		{
 			logger.info(
 					"Starting resource download for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes",
-					webserviceUrl + "/" + getDownloadResourceId(downloadResourceReference), downloadResourceSizeBytes,
-					maxDownloadSizeBytes);
+					downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
 			long downloadStartTime = System.currentTimeMillis();
 			int bufferSize = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
 			byte[] buffer = new byte[bufferSize];
@@ -55,12 +57,6 @@ public class BinaryResourceDownloader
 			downloadResult = new DownloadResult(e.getMessage());
 		}
 		return downloadResult;
-	}
-
-	private String getDownloadResourceId(Reference downloadResourceReference)
-	{
-		String[] split = downloadResourceReference.getReference().split("/");
-		return split[1];
 	}
 
 	private String toHoursMinutesSecondsMilliseconds(long millis)
