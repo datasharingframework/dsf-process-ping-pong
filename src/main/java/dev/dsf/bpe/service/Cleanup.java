@@ -23,10 +23,17 @@ public class Cleanup extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		logger.info("Cleaning up...");
 		String downloadResourceId = variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID);
-		api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class, downloadResourceId);
-		api.getFhirWebserviceClientProvider().getLocalWebserviceClient().deletePermanently(Binary.class,
-				downloadResourceId);
-		logger.info("Cleanup completed. Deleted Binary resource with ID {}", downloadResourceId);
+		if (downloadResourceId != null)
+		{
+			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class, downloadResourceId);
+			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().deletePermanently(Binary.class,
+					downloadResourceId);
+			logger.info("Deleted Binary resource with ID {}", downloadResourceId);
+		} else {
+			logger.info("Nothing to do");
+		}
+		logger.info("Cleanup complete.");
 	}
 }
