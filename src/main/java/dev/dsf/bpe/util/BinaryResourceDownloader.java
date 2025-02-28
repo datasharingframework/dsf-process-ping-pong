@@ -3,26 +3,46 @@ package dev.dsf.bpe.util;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.variables.Variables;
 
 public class BinaryResourceDownloader
 {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
 
-	public DownloadResult download(InputStream inputStream, String reference, int downloadResourceSizeBytes,
+	public DownloadResult download(String webserviceUrl, Variables variables, ProcessPluginApi api, Task task,
 			int maxDownloadSizeBytes)
 	{
 		DownloadResult downloadResult;
-		try (inputStream)
+
+		int downloadResourceSizeBytes = variables
+				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+
+		Reference downloadResourceReference = api.getTaskHelper()
+				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
+						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, Reference.class)
+				.orElseThrow();
+
+		InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider().getWebserviceClient(webserviceUrl)
+				.readBinary(getDownloadResourceId(downloadResourceReference),
+						ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
+
+		try (binaryResourceInputStream)
 		{
 			logger.info(
 					"Starting resource download for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes",
-					reference, downloadResourceSizeBytes, maxDownloadSizeBytes);
+					webserviceUrl + "/" + getDownloadResourceId(downloadResourceReference), downloadResourceSizeBytes,
+					maxDownloadSizeBytes);
 			long downloadStartTime = System.currentTimeMillis();
 			int bufferSize = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
 			byte[] buffer = new byte[bufferSize];
-			int bytesRead = inputStream.read(buffer);
+			int bytesRead = binaryResourceInputStream.read(buffer);
 			long downloadEndTime = System.currentTimeMillis();
 			long downloadedDurationMillis = downloadEndTime - downloadStartTime;
 			downloadResult = new DownloadResult(bytesRead, downloadedDurationMillis);
@@ -37,6 +57,11 @@ public class BinaryResourceDownloader
 		return downloadResult;
 	}
 
+	private String getDownloadResourceId(Reference downloadResourceReference)
+	{
+		String[] split = downloadResourceReference.getReference().split("/");
+		return split[1];
+	}
 
 	private String toHoursMinutesSecondsMilliseconds(long millis)
 	{
