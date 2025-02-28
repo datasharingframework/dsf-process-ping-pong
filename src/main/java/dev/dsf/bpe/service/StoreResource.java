@@ -34,7 +34,7 @@ public class StoreResource extends AbstractServiceDelegate
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 
-		logger.info("Stored binary resource for PING targets to download");
+		logger.info("Stored binary resource for download");
 	}
 
 	private IdType storeBinary(byte[] downloadResourceContent)
