@@ -3,7 +3,6 @@ package dev.dsf.bpe.util.task.input.generator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
