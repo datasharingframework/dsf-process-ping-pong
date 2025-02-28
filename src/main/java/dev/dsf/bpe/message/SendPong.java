@@ -64,9 +64,9 @@ public class SendPong extends AbstractTaskMessageSend
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws Exception
 	{
+		Target target = variables.getTarget();
 		super.doExecute(execution, variables);
 
-		Target target = variables.getTarget();
 		Task mainTask = variables.getStartTask();
 		mainTask.addOutput(statusGenerator.createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
