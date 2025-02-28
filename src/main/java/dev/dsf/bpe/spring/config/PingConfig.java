@@ -16,6 +16,7 @@ import dev.dsf.bpe.message.SendPong;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
 import dev.dsf.bpe.service.DownloadResourceAndMeasureSpeed;
+import dev.dsf.bpe.service.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.GenerateResource;
 import dev.dsf.bpe.service.LogAndSaveAndStoreError;
@@ -176,8 +177,16 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DownloadResourceAndMeasureSpeed downloadResourceAndMeasureSpeed()
 	{
-		return new DownloadResourceAndMeasureSpeed(api);
+		return new DownloadResourceAndMeasureSpeed(api, (int) maxDownloadSizeBytes);
 	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
+	{
+		return new DownloadResourceAndMeasureSpeedInSubProcess(api, (int) maxDownloadSizeBytes);
+	}
+
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
