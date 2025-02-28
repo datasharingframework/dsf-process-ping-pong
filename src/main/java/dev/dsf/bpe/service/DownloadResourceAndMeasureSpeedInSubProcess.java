@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
+import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -39,8 +39,8 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		int downloadResourceSizeBytes = variables.getInteger(
-				ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		int downloadResourceSizeBytes = variables
+				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		Reference downloadResourceReference = api.getTaskHelper()
 				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,

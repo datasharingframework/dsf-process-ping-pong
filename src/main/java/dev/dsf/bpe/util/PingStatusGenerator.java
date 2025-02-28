@@ -28,15 +28,15 @@ public class PingStatusGenerator
 
 	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessages,
-				-1, -1, null);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
+				errorMessages, -1, -1, null);
 	}
 
 	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errorMessages,
-				downloadSpeed, uploadSpeed, unit);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
+				errorMessages, downloadSpeed, uploadSpeed, unit);
 	}
 
 	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode)
@@ -52,15 +52,15 @@ public class PingStatusGenerator
 
 	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessages,
-				-1, -1, null);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
+				errorMessages, -1, -1, null);
 	}
 
 	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errorMessages,
-				downloadSpeed, uploadSpeed, unit);
+		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
+				errorMessages, downloadSpeed, uploadSpeed, unit);
 	}
 
 	private TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,

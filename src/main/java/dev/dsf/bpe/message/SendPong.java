@@ -79,7 +79,8 @@ public class SendPong extends AbstractTaskMessageSend
 
 			String specialErrorMessage = createErrorMessage(exception);
 
-			mainTask.addOutput(statusGenerator.createPongStatusOutput(target, statusCode, List.of(specialErrorMessage)));
+			mainTask.addOutput(
+					statusGenerator.createPongStatusOutput(target, statusCode, List.of(specialErrorMessage)));
 			variables.updateTask(mainTask);
 
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
