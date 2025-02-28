@@ -3,6 +3,7 @@ package dev.dsf.bpe.service;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Binary;
+import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +25,8 @@ public class Cleanup extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		logger.info("Cleaning up...");
-		String downloadResourceId = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+		String downloadResourceId = new IdType(
+				variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE)).getIdPart();
 		if (downloadResourceId != null)
 		{
 			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class, downloadResourceId);
