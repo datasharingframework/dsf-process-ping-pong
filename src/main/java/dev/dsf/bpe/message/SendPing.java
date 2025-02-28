@@ -34,13 +34,16 @@ public class SendPing extends AbstractTaskMessageSend
 		int downloadResourceSizeBytes = variables
 				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
-		return Stream.of(
-				api.getTaskHelper().createInput(
-						new Reference().setIdentifier(getLocalEndpointIdentifier())
-								.setType(ResourceType.Endpoint.name()),
-						ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER),
-				DownloadResourceSizeGenerator.create(downloadResourceSizeBytes),
-				DownloadResourceReferenceGenerator.create(downloadResourceReference));
+		Stream<ParameterComponent> downloadResourceReferenceStream = downloadResourceReference == null ? Stream.empty()
+				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
+		Stream<ParameterComponent> downloadResourceSizeBytesStream = Stream
+				.of(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes));
+		Stream<ParameterComponent> endpointIdentifierStream = Stream.of(api.getTaskHelper().createInput(
+				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER));
+
+		return Stream.concat(endpointIdentifierStream,
+				Stream.concat(downloadResourceReferenceStream, downloadResourceSizeBytesStream));
 	}
 
 	@Override
