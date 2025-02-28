@@ -5,12 +5,15 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.hl7.fhir.r4.model.Reference;
+import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.PingStatusGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -47,8 +50,15 @@ public class SendPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		return Stream.of(DownloadedBytesGenerator.create(0), DownloadedDurationMillisGenerator.create(0),
-				DownloadResourceReferenceGenerator.create("http://example.org/fhir/Binary/bar"));
+		int downloadedBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES);
+		long downloadedDurationMillis = variables
+				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
+		String downloadResourceReference = variables
+				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+
+		return Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
+				DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
+				DownloadResourceReferenceGenerator.create(downloadResourceReference));
 	}
 
 	@Override
