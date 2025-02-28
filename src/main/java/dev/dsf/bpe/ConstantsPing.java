@@ -1,5 +1,7 @@
 package dev.dsf.bpe;
 
+import java.util.regex.Pattern;
+
 import jakarta.ws.rs.core.MediaType;
 
 public interface ConstantsPing
@@ -54,6 +56,7 @@ public interface ConstantsPing
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
 	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
+	String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
 
 	String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
 	String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
@@ -82,8 +85,14 @@ public interface ConstantsPing
 	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
 	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
 	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_ID = "downloadResourceId";
+	String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
+	String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
+	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
+	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
 
 	MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
 	String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
+
+	Pattern WEBSERVICE_URL_PATTERN = Pattern.compile("http(s?)://(\\w+)(\\.\\w+)*/fhir");
 }

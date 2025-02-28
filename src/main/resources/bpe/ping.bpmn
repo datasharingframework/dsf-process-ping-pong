@@ -79,7 +79,7 @@
         <bpmn:outgoing>Flow_13u1nzy</bpmn:outgoing>
         <bpmn:outgoing>Flow_1yt9547</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeed">
+      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeedInSubProcess">
         <bpmn:incoming>Flow_1yt9547</bpmn:incoming>
         <bpmn:outgoing>Flow_1v37fff</bpmn:outgoing>
       </bpmn:serviceTask>
