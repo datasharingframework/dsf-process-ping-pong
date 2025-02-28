@@ -29,12 +29,15 @@ public class SendPing extends AbstractTaskMessageSend
 	@Override
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		String downloadResourceReference = variables.getString(
-				ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
-		int downloadResourceSizeBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		String downloadResourceReference = variables
+				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+		int downloadResourceSizeBytes = variables
+				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
-		return Stream.of(api.getTaskHelper().createInput(
-						new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
+		return Stream.of(
+				api.getTaskHelper().createInput(
+						new Reference().setIdentifier(getLocalEndpointIdentifier())
+								.setType(ResourceType.Endpoint.name()),
 						ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER),
 				DownloadResourceSizeGenerator.create(downloadResourceSizeBytes),
 				DownloadResourceReferenceGenerator.create(downloadResourceReference));
@@ -45,9 +48,9 @@ public class SendPing extends AbstractTaskMessageSend
 			Exception exception, String errorMessage)
 	{
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode() ?
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED :
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
+						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
+						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
 		execution.setVariableLocal("statusCode", statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);
@@ -62,8 +65,8 @@ public class SendPing extends AbstractTaskMessageSend
 
 	private String createErrorMessage(Exception exception)
 	{
-		if (exception instanceof WebApplicationException w && (exception.getMessage() == null || exception.getMessage()
-				.isBlank()))
+		if (exception instanceof WebApplicationException w
+				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
 		{
 			StatusType statusInfo = w.getResponse().getStatusInfo();
 			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();

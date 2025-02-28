@@ -10,7 +10,8 @@ public class BinaryResourceDownloader
 {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
 
-	public DownloadResult download(InputStream inputStream, String reference, int downloadResourceSizeBytes, int maxDownloadSizeBytes)
+	public DownloadResult download(InputStream inputStream, String reference, int downloadResourceSizeBytes,
+			int maxDownloadSizeBytes)
 	{
 		DownloadResult downloadResult;
 		try (inputStream)
@@ -25,9 +26,11 @@ public class BinaryResourceDownloader
 			long downloadEndTime = System.currentTimeMillis();
 			long downloadedDurationMillis = downloadEndTime - downloadStartTime;
 			downloadResult = new DownloadResult(bytesRead, downloadedDurationMillis);
-			logger.info("Finished downloading {} bytes. Took {}", bytesRead, toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
+			logger.info("Finished downloading {} bytes. Took {}", bytesRead,
+					toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
 
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			downloadResult = new DownloadResult(e.getMessage());
 		}
@@ -44,7 +47,8 @@ public class BinaryResourceDownloader
 		return String.format("%02d:%02d:%02d:%02dms", hours, minutes, seconds, milliSeconds);
 	}
 
-	public static class DownloadResult {
+	public static class DownloadResult
+	{
 		private final int downloadedBytes;
 		private final long downloadedDurationMillis;
 		private final String errorMessage;

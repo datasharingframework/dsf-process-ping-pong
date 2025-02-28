@@ -40,8 +40,8 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 	{
 		Task task = variables.getStartTask();
 
-		int downloadResourceSizeBytes = variables.getInteger(
-				ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		int downloadResourceSizeBytes = variables
+				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		Reference downloadResourceReference = api.getTaskHelper()
 				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
@@ -65,14 +65,13 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 			{
 				variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES,
 						downloadResult.getDownloadedBytes());
-				variables.setLong(
-						ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS ,
+				variables.setLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS,
 						downloadResult.getDownloadedDurationMillis());
 			}
 			else
 			{
-				ErrorMessageListUtils.add(downloadResult.getErrorMessage(),
-						BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST, delegateExecution);
+				ErrorMessageListUtils.add(downloadResult.getErrorMessage(), BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST,
+						delegateExecution);
 			}
 		}
 		else
