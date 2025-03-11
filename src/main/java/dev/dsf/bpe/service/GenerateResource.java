@@ -43,7 +43,7 @@ public class GenerateResource extends AbstractServiceDelegate
 		int sizeBytes = Math.min(maxUploadSizeBytes, desiredSizeBytes);
 		byte[] bytes = base64Encode(generateRandomByteArray((sizeBytes / 4) * 3));
 		logger.info(
-				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size was : {}",
+				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size (base64 encoded) was : {}",
 				desiredSizeBytes, bytes.length);
 		return bytes;
 	}
