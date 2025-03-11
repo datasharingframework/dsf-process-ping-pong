@@ -50,15 +50,24 @@ public class SendPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		int downloadedBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES);
-		long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
-		String downloadResourceReference = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+		int downloadResourceSizeBytes = variables
+				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		if (downloadResourceSizeBytes >= 0)
+		{
+			int downloadedBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES);
+			long downloadedDurationMillis = variables
+					.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
+			String downloadResourceReference = variables
+					.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
 
-		return Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
-				DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
-				DownloadResourceReferenceGenerator.create(downloadResourceReference));
+			return Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
+					DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
+					DownloadResourceReferenceGenerator.create(downloadResourceReference));
+		}
+		else
+		{
+			return Stream.empty();
+		}
 	}
 
 	@Override
