@@ -94,7 +94,6 @@
           <camunda:field name="instantiatesCanonical">
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
           </camunda:field>
-          <camunda:executionListener class="dev.dsf.bpe.listener.RemoveCorrelationKeyListener" event="start" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1v37fff</bpmn:incoming>
         <bpmn:incoming>Flow_0jcfur3</bpmn:incoming>
@@ -325,7 +324,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1h13c04" bpmnElement="TextAnnotation_0smygq5">
-        <dc:Bounds x="2660" y="612" width="239.98257839721254" height="54.98693379790941" />
+        <dc:Bounds x="2660" y="612" width="240" height="55" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_084zno2" bpmnElement="TextAnnotation_08ic0l2">
