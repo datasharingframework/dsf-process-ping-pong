@@ -83,32 +83,17 @@ public class SendPong extends AbstractTaskMessageSend
 	}
 
 	@Override
-	protected void handleEndEventError(DelegateExecution execution, Variables variables, Exception exception,
-			String errorMessage)
+	protected void handleIntermediateThrowEventError(DelegateExecution execution, Variables variables,
+			Exception exception, String errorMessage)
 	{
-		Target target = variables.getTarget();
-		Task mainTask = variables.getStartTask();
+		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
+				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
+						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
+						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+		execution.setVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_STATUS_CODE, statusCode);
 
-		if (mainTask != null)
-		{
-			String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
-					&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
-							? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
-							: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
-
-			String specialErrorMessage = createErrorMessage(exception);
-
-			mainTask.addOutput(
-					statusGenerator.createPongStatusOutput(target, statusCode, List.of(specialErrorMessage)));
-			variables.updateTask(mainTask);
-
-			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
-				errorMailService.endpointNotReachableForPong(mainTask.getIdElement(), target, specialErrorMessage);
-			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
-				errorMailService.endpointReachablePongForbidden(mainTask.getIdElement(), target, specialErrorMessage);
-		}
-
-		super.handleEndEventError(execution, variables, exception, errorMessage);
+		String specialErrorMessage = createErrorMessage(exception);
+		execution.setVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE, specialErrorMessage);
 	}
 
 	private String createErrorMessage(Exception exception)
