@@ -54,10 +54,10 @@ public class SendPing extends AbstractTaskMessageSend
 				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
 						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
 						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
-		execution.setVariableLocal("statusCode", statusCode);
+		execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_STATUS_CODE, statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);
-		execution.setVariableLocal("errorMessage", specialErrorMessage);
+		execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE, specialErrorMessage);
 	}
 
 	@Override
