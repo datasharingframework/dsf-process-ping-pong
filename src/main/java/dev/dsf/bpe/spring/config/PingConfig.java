@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import dev.dsf.bpe.listener.RemoveCorrelationKeyListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.message.CleanupPong;
@@ -264,13 +263,6 @@ public class PingConfig
 	public SavePong savePong()
 	{
 		return new SavePong(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public RemoveCorrelationKeyListener removeCorrelationKeyListener()
-	{
-		return new RemoveCorrelationKeyListener(api);
 	}
 
 	@Bean
