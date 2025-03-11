@@ -1,5 +1,6 @@
 package dev.dsf.bpe.util;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -42,13 +43,12 @@ public class BinaryResourceDownloader
 					"Starting resource download for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes",
 					downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
 			long downloadStartTime = System.currentTimeMillis();
-			int bufferSize = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
-			byte[] buffer = new byte[bufferSize];
-			int bytesRead = binaryResourceInputStream.read(buffer);
+			int numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
+			binaryResourceInputStream.skipNBytes(numBytes);
 			long downloadEndTime = System.currentTimeMillis();
 			long downloadedDurationMillis = downloadEndTime - downloadStartTime;
-			downloadResult = new DownloadResult(bytesRead, downloadedDurationMillis);
-			logger.info("Finished downloading {} bytes. Took {}", bytesRead,
+			downloadResult = new DownloadResult(numBytes, downloadedDurationMillis);
+			logger.info("Finished downloading {} bytes. Took {}", numBytes,
 					toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
 
 		}
@@ -65,7 +65,7 @@ public class BinaryResourceDownloader
 		long minutes = (millis / 1000) / 60 % 60;
 		long seconds = (millis / 1000) % 60;
 		long milliSeconds = millis % 1000;
-		return String.format("%02d:%02d:%02d:%02dms", hours, minutes, seconds, milliSeconds);
+		return String.format("%02d:%02d:%02d:%03d (h:m:s:ms)", hours, minutes, seconds, milliSeconds);
 	}
 
 	public static class DownloadResult
