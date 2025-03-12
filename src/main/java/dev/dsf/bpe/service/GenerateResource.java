@@ -34,8 +34,6 @@ public class GenerateResource extends AbstractServiceDelegate
 
 		variables.setByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE,
 				generateRandomBinaryContent(downloadResourceSizeBytes));
-
-		logger.info("Generated binary resource content for network speed measurement");
 	}
 
 	private byte[] generateRandomBinaryContent(int desiredSizeBytes)
