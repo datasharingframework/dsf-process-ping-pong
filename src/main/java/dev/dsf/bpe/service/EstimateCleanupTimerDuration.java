@@ -25,7 +25,7 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
+				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 		long timerDurationMillis = downloadedDurationMillis > Long.MAX_VALUE / 10 ? Long.MAX_VALUE
 				: downloadedDurationMillis * 10;
 
