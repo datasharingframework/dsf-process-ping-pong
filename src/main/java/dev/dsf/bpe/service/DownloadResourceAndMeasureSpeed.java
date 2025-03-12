@@ -1,11 +1,7 @@
 package dev.dsf.bpe.service;
 
-import static dev.dsf.bpe.ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST;
-
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.Identifier;
-import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +41,7 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		}
 		else
 		{
-			ErrorMessageListUtils.add(downloadResult.getErrorMessage(),
-					delegateExecution);
+			ErrorMessageListUtils.add(downloadResult.getErrorMessage(), delegateExecution);
 		}
 	}
 }
