@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import dev.dsf.bpe.listener.PingPongDeploymentStateListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.message.CleanupPong;
@@ -25,8 +26,7 @@ import dev.dsf.bpe.service.LogAndSaveSendError;
 import dev.dsf.bpe.service.LogAndStoreSendError;
 import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
-import dev.dsf.bpe.service.LogSendError;
-import dev.dsf.bpe.service.SaveDownloadSpeeds;
+import dev.dsf.bpe.service.SaveDownloadSpeedsPing;
 import dev.dsf.bpe.service.SavePong;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
@@ -57,9 +57,23 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.maxDownloadSize:10000000}")
 	private long maxDownloadSizeBytes;
 
-	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = "dsfdev_ping, dsfdev_pong")
+	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {"dsfdev_ping", "dsfdev_pong"})
 	@Value("${dev.dsf.bpe.ping.maxUploadSize:10000000}")
 	private long maxUploadSizeBytes;
+
+	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {"dsfdev_ping", "dsfdev_pong"})
+	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabytes-per-second}")
+	private String networkSpeedUnit;
+
+	public String getNetworkSpeedUnit()
+	{
+		return networkSpeedUnit;
+	}
+
+	public void setNetworkSpeedUnit(String networkSpeedUnit)
+	{
+		this.networkSpeedUnit = networkSpeedUnit;
+	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -112,16 +126,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogSendError logSendError()
-	{
-		return new LogSendError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreResults savePingResults()
 	{
-		return new StoreResults(api, errorLogger());
+		return new StoreResults(api, errorLogger(), networkSpeedUnit);
 	}
 
 	@Bean
@@ -225,9 +232,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SaveDownloadSpeeds saveDownloadSpeeds()
+	public SaveDownloadSpeedsPing saveDownloadSpeeds()
 	{
-		return new SaveDownloadSpeeds(api);
+		return new SaveDownloadSpeedsPing(api);
 	}
 
 	@Bean
@@ -263,5 +270,12 @@ public class PingConfig
 	public SetEndpointIdentifier setEndpointIdentifier()
 	{
 		return new SetEndpointIdentifier(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public PingPongDeploymentStateListener pingPongDeploymentStateListener()
+	{
+		return new PingPongDeploymentStateListener( this);
 	}
 }
