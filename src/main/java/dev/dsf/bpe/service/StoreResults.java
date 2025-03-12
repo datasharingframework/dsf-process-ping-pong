@@ -47,11 +47,12 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		{
 			String correlationKey = target.getCorrelationKey();
 
-			String statusCode = variables.getString("statusCode_" + correlationKey);
+			String statusCode = variables.getString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey));
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode)
 					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 			{
-				String errorMessage = variables.getString("errorMessage_" + correlationKey);
+				String errorMessage = variables
+						.getString(ConstantsPing.getBpmnExecutionVariableErrorMessage(correlationKey));
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, List.of(errorMessage)));
 
 				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
