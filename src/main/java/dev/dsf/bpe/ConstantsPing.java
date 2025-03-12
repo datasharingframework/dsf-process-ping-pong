@@ -85,8 +85,8 @@ public final class ConstantsPing
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
-	public static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
-	public static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
+	private static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
+	private static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
 	public static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
@@ -95,4 +95,24 @@ public final class ConstantsPing
 	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
+
+	public static String getBpmnExecutionVariableStatusCode()
+	{
+		return BPMN_EXECUTION_VARIABLE_STATUS_CODE;
+	}
+
+	public static String getBpmnExecutionVariableStatusCode(String correlationKey)
+	{
+		return BPMN_EXECUTION_VARIABLE_STATUS_CODE + "_" + correlationKey;
+	}
+
+	public static String getBpmnExecutionVariableErrorMessage()
+	{
+		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE;
+	}
+
+	public static String getBpmnExecutionVariableErrorMessage(String correlationKey)
+	{
+		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE + "_" + correlationKey;
+	}
 }
