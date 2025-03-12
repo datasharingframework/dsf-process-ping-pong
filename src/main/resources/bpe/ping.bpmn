@@ -44,13 +44,9 @@
         <bpmn:outgoing>Flow_1j54c2s</bpmn:outgoing>
         <bpmn:outgoing>Flow_101sqed</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="LogSendError" name="Log and Save Send Error" camunda:class="dev.dsf.bpe.service.LogAndSaveSendError">
-        <bpmn:incoming>Flow_101sqed</bpmn:incoming>
-        <bpmn:outgoing>Flow_16ssf4a</bpmn:outgoing>
-      </bpmn:serviceTask>
       <bpmn:exclusiveGateway id="Gateway_09z7b0z">
         <bpmn:incoming>Flow_136htek</bpmn:incoming>
-        <bpmn:incoming>Flow_16ssf4a</bpmn:incoming>
+        <bpmn:incoming>Flow_101sqed</bpmn:incoming>
         <bpmn:outgoing>Flow_1ho1hys</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:endEvent id="SubProcessEndEvent" camunda:asyncAfter="true">
@@ -125,10 +121,9 @@
       <bpmn:sequenceFlow id="Flow_1j54c2s" sourceRef="Gateway_0z5gz96" targetRef="EventBasedGateway" />
       <bpmn:sequenceFlow id="Flow_136htek" sourceRef="LogNoResponse" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="Activity_0ri6fnv" targetRef="Gateway_0z5gz96" />
-      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="LogSendError">
+      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Gateway_09z7b0z">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp; (statusCode == 'not-allowed' || statusCode == 'not-reachable')}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_16ssf4a" sourceRef="LogSendError" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
       <bpmn:sequenceFlow id="Flow_13u1nzy" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
@@ -137,8 +132,7 @@
       <bpmn:sequenceFlow id="Flow_1v37fff" sourceRef="Activity_0h9o9u7" targetRef="Activity_0vw65a2" />
       <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="Activity_0akr23c" targetRef="Activity_0vw65a2" />
       <bpmn:sequenceFlow id="Flow_10h6pqh" sourceRef="Event_0i4slcz" targetRef="Activity_0akr23c" />
-      <bpmn:sequenceFlow id="Flow_03nx6rk" sourceRef="Gateway_02orad4" targetRef="Event_1foycg9" />
-      <bpmn:serviceTask id="Activity_0i9uqk0" name="Save Download Speeds" camunda:class="dev.dsf.bpe.service.SaveDownloadSpeeds">
+      <bpmn:serviceTask id="Activity_0i9uqk0" name="Save Download Speeds" camunda:class="dev.dsf.bpe.service.SaveDownloadSpeedsPing">
         <bpmn:incoming>Flow_0klalf8</bpmn:incoming>
         <bpmn:outgoing>Flow_0n0yrky</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -150,6 +144,7 @@
         <bpmn:outgoing>Flow_1jwekqw</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_1jwekqw" sourceRef="Activity_081me01" targetRef="Gateway_0p0be0a" />
+      <bpmn:sequenceFlow id="Flow_03nx6rk" sourceRef="Gateway_02orad4" targetRef="Event_1foycg9" />
       <bpmn:textAnnotation id="TextAnnotation_0uc8utt">
         <bpmn:text>Information in message:
 - dowloadResourceSize: long
@@ -215,12 +210,12 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1c15ef2" sourceRef="Gateway_0bifi5h" targetRef="SelectPingTargets" />
-    <bpmn:sequenceFlow id="Flow_0e35w2m" sourceRef="StartPingMessageStartEvent" targetRef="Activity_1wdftvk" />
     <bpmn:sequenceFlow id="Flow_0fxlsv3" sourceRef="Activity_1wdftvk" targetRef="Gateway_0xw5i5v" />
     <bpmn:serviceTask id="Activity_1wdftvk" name="Set Download Resource Size" camunda:class="dev.dsf.bpe.service.SetDownloadResourceSize">
       <bpmn:incoming>Flow_0e35w2m</bpmn:incoming>
       <bpmn:outgoing>Flow_0fxlsv3</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0e35w2m" sourceRef="StartPingMessageStartEvent" targetRef="Activity_1wdftvk" />
     <bpmn:textAnnotation id="TextAnnotation_1ig0151">
       <bpmn:text>Includes download speeds and errors of all pongs</bpmn:text>
     </bpmn:textAnnotation>
@@ -275,10 +270,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1ipvtcp" bpmnElement="Gateway_0z5gz96" isMarkerVisible="true">
         <dc:Bounds x="1315" y="335" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_06ufst4" bpmnElement="LogSendError">
-        <dc:Bounds x="1600" y="500" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0zk1xt7" bpmnElement="Gateway_09z7b0z" isMarkerVisible="true">
         <dc:Bounds x="1755" y="425" width="50" height="50" />
@@ -368,16 +359,12 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0ffsn0i" bpmnElement="Flow_101sqed">
         <di:waypoint x="1340" y="385" />
-        <di:waypoint x="1340" y="540" />
-        <di:waypoint x="1600" y="540" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1265" y="506" width="70" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1va7dmx" bpmnElement="Flow_16ssf4a">
-        <di:waypoint x="1700" y="540" />
-        <di:waypoint x="1780" y="540" />
+        <di:waypoint x="1340" y="560" />
+        <di:waypoint x="1780" y="560" />
         <di:waypoint x="1780" y="475" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1265" y="524" width="70" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1ce9w6g" bpmnElement="Flow_1ho1hys">
         <di:waypoint x="1805" y="450" />
@@ -486,7 +473,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0ne04k7" bpmnElement="TextAnnotation_0dhecha">
-        <dc:Bounds x="400" y="220" width="419.98765969802554" height="69.68641114982579" />
+        <dc:Bounds x="400" y="220" width="420" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0t4el3i" bpmnElement="TextAnnotation_1plclrb">
