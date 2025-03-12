@@ -24,14 +24,16 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		final long minTimerDurationMillis = 20000;
 		long downloadedDurationMillis = variables
 				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
-		long timerDurationMillis = downloadedDurationMillis > Long.MAX_VALUE / 10 ? Long.MAX_VALUE
-				: downloadedDurationMillis * 10;
+		long timerDurationMillis = downloadedDurationMillis > Long.MAX_VALUE / 10 - minTimerDurationMillis
+				? Long.MAX_VALUE
+				: downloadedDurationMillis * 10 + minTimerDurationMillis;
 
 		String cleanUpTimerDuration = Duration.ofMillis(timerDurationMillis).toString();
 		variables.setString("cleanupTimerDuration", cleanUpTimerDuration);
 
-		logger.info("Estimated cleanup timer duration");
+		logger.info("Estimated cleanup timer duration as {}", cleanUpTimerDuration);
 	}
 }
