@@ -36,7 +36,6 @@ import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.StoreDownloadSpeeds;
 import dev.dsf.bpe.service.StoreResource;
 import dev.dsf.bpe.service.StoreResults;
-import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 
@@ -54,11 +53,11 @@ public class PingConfig
 	@Value("${dev.dsf.dsf.bpe.ping.mail.onPongProcessFailed:false}")
 	private boolean sendPongProcessFailedMail;
 
-	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.")
+	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
 	@Value("${dev.dsf.bpe.ping.maxDownloadSize:10000000}")
 	private long maxDownloadSizeBytes;
 
-	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.")
+	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = "dsfdev_ping, dsfdev_pong")
 	@Value("${dev.dsf.bpe.ping.maxUploadSize:10000000}")
 	private long maxUploadSizeBytes;
 
