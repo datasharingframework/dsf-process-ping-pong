@@ -26,7 +26,7 @@ public class SavePong extends AbstractServiceDelegate
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 		delegateExecution.removeVariable("statusCode");
-		variables.setString("statusCode_" + correlationKey,
+		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey),
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED);
 		logger.info("Pong received from {}, saving pong information", target.getEndpointUrl());
 
