@@ -1,5 +1,7 @@
 package dev.dsf.bpe;
 
+import java.util.List;
+
 import jakarta.ws.rs.core.MediaType;
 
 public final class ConstantsPing
@@ -68,6 +70,8 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
 
+	public static final List<String> CODESYSTEM_DSF_PING_UNITS_VALUES = List.of(CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND, CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND, CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND, CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
+
 	public static final String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
 	public static final String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
 
@@ -93,6 +97,8 @@ public final class ConstantsPing
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
 	public static final String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
+	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
+	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
 
 	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
@@ -136,5 +142,25 @@ public final class ConstantsPing
 	public static String getBpmnExecutionVariableDownloadedDurationMillis(String correlationKey)
 	{
 		return BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS + "_" + correlationKey;
+	}
+
+	public static String getBpmnExecutionVariableUploadedBytes()
+	{
+		return BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES;
+	}
+
+	public static String getBpmnExecutionVariableUploadedBytes(String correlationKey)
+	{
+		return BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES + "_" + correlationKey;
+	}
+
+	public static String getBpmnExecutionVariableUploadedDurationMillis()
+	{
+		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS;
+	}
+
+	public static String getBpmnExecutionVariableUploadedDurationMillis(String correlationKey)
+	{
+		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS + "_" + correlationKey;
 	}
 }
