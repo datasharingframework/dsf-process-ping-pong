@@ -16,6 +16,12 @@ public class ErrorMessageListUtils
 	}
 
 	@SuppressWarnings("unchecked")
+	public static List<String> getErrorMessageList(DelegateExecution execution)
+	{
+		return (List<String>) execution.getVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST);
+	}
+
+	@SuppressWarnings("unchecked")
 	public static List<String> add(String error, String variableName, DelegateExecution execution)
 	{
 		List<String> errorMessages = (List<String>) execution.getVariable(variableName);
