@@ -1,19 +1,15 @@
 package dev.dsf.bpe.message;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
-import dev.dsf.bpe.util.PingStatusGenerator;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
-import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -26,14 +22,12 @@ import jakarta.ws.rs.core.Response.StatusType;
 
 public class SendPong extends AbstractTaskMessageSend
 {
-	private final PingStatusGenerator statusGenerator;
 	private final ErrorMailService errorMailService;
 
-	public SendPong(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
+	public SendPong(ProcessPluginApi api, ErrorMailService errorMailService)
 	{
 		super(api);
 
-		this.statusGenerator = statusGenerator;
 		this.errorMailService = errorMailService;
 	}
 
@@ -42,7 +36,6 @@ public class SendPong extends AbstractTaskMessageSend
 	{
 		super.afterPropertiesSet();
 
-		Objects.requireNonNull(statusGenerator, "statusGenerator");
 		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
@@ -77,7 +70,7 @@ public class SendPong extends AbstractTaskMessageSend
 		super.doExecute(execution, variables);
 
 		Task mainTask = variables.getStartTask();
-		mainTask.addOutput(statusGenerator.createPongStatusOutput(target,
+		mainTask.addOutput(PingStatusGenerator.createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
 		variables.updateTask(mainTask);
 	}

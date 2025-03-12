@@ -1,4 +1,4 @@
-package dev.dsf.bpe.util;
+package dev.dsf.bpe.util.task.output.generator;
 
 import java.util.List;
 
@@ -15,55 +15,55 @@ import dev.dsf.bpe.v1.variables.Target;
 
 public class PingStatusGenerator
 {
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode)
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode)
 	{
 		return createPingStatusOutput(target, statusCode, null);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, int downloadSpeed,
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, int downloadSpeed,
 			int uploadSpeed, String unit)
 	{
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages)
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
 				errorMessages, -1, -1, null);
 	}
 
-	public TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages,
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode)
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode)
 	{
 		return createPongStatusOutput(target, statusCode, null);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, int downloadSpeed,
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, int downloadSpeed,
 			int uploadSpeed, String unit)
 	{
 		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages)
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
 				errorMessages, -1, -1, null);
 	}
 
-	public TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages,
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages,
 			int downloadSpeed, int uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);
 	}
 
-	private TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
+	private static TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
 			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
 	{
 		TaskOutputComponent output = new TaskOutputComponent();
