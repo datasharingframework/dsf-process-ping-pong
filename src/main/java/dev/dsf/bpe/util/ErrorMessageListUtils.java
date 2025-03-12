@@ -2,6 +2,7 @@ package dev.dsf.bpe.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
@@ -27,7 +28,7 @@ public class ErrorMessageListUtils
 		List<String> errorMessages = (List<String>) execution.getVariable(variableName);
 		if (errorMessages == null)
 		{
-			errorMessages = new ArrayList<>();
+			errorMessages = new Vector<>();
 			execution.setVariable(variableName, errorMessages);
 		}
 		errorMessages.add(error);
