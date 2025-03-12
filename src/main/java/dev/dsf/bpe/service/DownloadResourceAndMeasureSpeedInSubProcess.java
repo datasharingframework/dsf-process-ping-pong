@@ -39,9 +39,9 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 		if (downloadResult.getErrorMessage() == null)
 		{
-			variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES + "_" + correlationKey,
+			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey),
 					downloadResult.getDownloadedBytes());
-			variables.setLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS + "_" + correlationKey,
+			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey),
 					downloadResult.getDownloadedDurationMillis());
 		}
 		else

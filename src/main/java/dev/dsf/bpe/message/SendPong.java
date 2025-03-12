@@ -51,9 +51,9 @@ public class SendPong extends AbstractTaskMessageSend
 				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 		if (downloadResourceSizeBytes >= 0)
 		{
-			int downloadedBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES);
+			int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
 			long downloadedDurationMillis = variables
-					.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
+					.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 			String downloadResourceReference = variables
 					.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
 
