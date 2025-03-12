@@ -9,11 +9,11 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SaveDownloadSpeeds extends AbstractServiceDelegate
+public class SaveDownloadSpeedsPing extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(SaveDownloadSpeeds.class);
+	private static final Logger logger = LoggerFactory.getLogger(SaveDownloadSpeedsPing.class);
 
-	public SaveDownloadSpeeds(ProcessPluginApi api)
+	public SaveDownloadSpeedsPing(ProcessPluginApi api)
 	{
 		super(api);
 	}
