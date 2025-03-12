@@ -10,6 +10,13 @@ import dev.dsf.bpe.ConstantsPing;
 
 public class ErrorMessageListUtils
 {
+	public static List<String> addAll(List<String> errors, DelegateExecution execution)
+	{
+		List<String> errorList = getErrorMessageList(execution);
+		errorList.addAll(errors);
+		return errorList;
+	}
+
 	public static List<String> add(String error, DelegateExecution execution)
 	{
 		return add(error, ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST, execution);
