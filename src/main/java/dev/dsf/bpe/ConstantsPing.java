@@ -1,97 +1,98 @@
 package dev.dsf.bpe;
 
-import java.util.regex.Pattern;
-
 import jakarta.ws.rs.core.MediaType;
 
-public interface ConstantsPing
+public final class ConstantsPing
 {
-	String PROCESS_NAME_PING_AUTOSTART = "pingAutostart";
-	String PROCESS_NAME_PING = "ping";
-	String PROCESS_NAME_PONG = "pong";
+	private ConstantsPing()
+	{
+	}
 
-	String PROCESS_NAME_FULL_PING_AUTOSTART = "dsfdev_" + PROCESS_NAME_PING_AUTOSTART;
-	String PROCESS_NAME_FULL_PING = "dsfdev_" + PROCESS_NAME_PING;
-	String PROCESS_NAME_FULL_PONG = "dsfdev_" + PROCESS_NAME_PONG;
+	public static final String PROCESS_NAME_PING_AUTOSTART = "pingAutostart";
+	public static final String PROCESS_NAME_PING = "ping";
+	public static final String PROCESS_NAME_PONG = "pong";
 
-	String PROCESS_DSF_URI_BASE = "http://dsf.dev/bpe/Process/";
+	public static final String PROCESS_NAME_FULL_PING_AUTOSTART = "dsfdev_" + PROCESS_NAME_PING_AUTOSTART;
+	public static final String PROCESS_NAME_FULL_PING = "dsfdev_" + PROCESS_NAME_PING;
+	public static final String PROCESS_NAME_FULL_PONG = "dsfdev_" + PROCESS_NAME_PONG;
 
-	String PROFILE_DSF_TASK_START_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-start-ping-autostart";
-	String PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
-	String PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME = "startPingAutostart";
+	public static final String PROCESS_DSF_URI_BASE = "http://dsf.dev/bpe/Process/";
 
-	String PROFILE_DSF_TASK_STOP_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-stop-ping-autostart";
-	String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
-	String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME = "stopPingAutostart";
+	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-start-ping-autostart";
+	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
+	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME = "startPingAutostart";
 
-	String PROFILE_DSF_TASK_START_PING = "http://dsf.dev/fhir/StructureDefinition/task-start-ping";
-	String PROFILE_DSF_TASK_START_PING_MESSAGE_NAME = "startPing";
+	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-stop-ping-autostart";
+	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
+	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME = "stopPingAutostart";
 
-	String PROFILE_DSF_TASK_PING = "http://dsf.dev/fhir/StructureDefinition/task-ping";
-	String PROFILE_DSF_TASK_PING_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING;
-	String PROFILE_DSF_TASK_PING_MESSAGE_NAME = "ping";
+	public static final String PROFILE_DSF_TASK_START_PING = "http://dsf.dev/fhir/StructureDefinition/task-start-ping";
+	public static final String PROFILE_DSF_TASK_START_PING_MESSAGE_NAME = "startPing";
 
-	String PROFILE_DSF_TASK_PONG_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong";
-	String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
-	String PROFILE_DSF_TASK_PONG_MESSAGE_NAME = "pong";
+	public static final String PROFILE_DSF_TASK_PING = "http://dsf.dev/fhir/StructureDefinition/task-ping";
+	public static final String PROFILE_DSF_TASK_PING_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING;
+	public static final String PROFILE_DSF_TASK_PING_MESSAGE_NAME = "ping";
 
-	String PROFILE_DSF_TASK_CLEANUP_PONG = "http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong";
-	String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
-	String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
+	public static final String PROFILE_DSF_TASK_PONG_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong";
+	public static final String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
+	public static final String PROFILE_DSF_TASK_PONG_MESSAGE_NAME = "pong";
 
-	String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping";
-	String CODESYSTEM_DSF_PING_VALUE_PING_STATUS = "ping-status";
-	String CODESYSTEM_DSF_PING_VALUE_PONG_STATUS = "pong-status";
-	String CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER = "endpoint-identifier";
-	String CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS = "target-endpoints";
-	String CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL = "timer-interval";
-	String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES = "download-resource-size-bytes";
-	String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
-	String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
-	String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
+	public static final String PROFILE_DSF_TASK_CLEANUP_PONG = "http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong";
+	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
+	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
 
-	String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
-	String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
+	public static final String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping";
+	public static final String CODESYSTEM_DSF_PING_VALUE_PING_STATUS = "ping-status";
+	public static final String CODESYSTEM_DSF_PING_VALUE_PONG_STATUS = "pong-status";
+	public static final String CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER = "endpoint-identifier";
+	public static final String CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS = "target-endpoints";
+	public static final String CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL = "timer-interval";
+	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES = "download-resource-size-bytes";
+	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
+	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
+	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
 
-	String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
-	String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
-	String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
-	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
-	String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
+	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
 
+	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
+	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
+	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
+	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
+	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
 
-	String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
-	String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
+	public static final String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
+	public static final String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
 
-	String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
-	String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
-	String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
-	String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
-	String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
-	String EXTENSION_URL_ERROR_MESSAGE = "error-message";
-	String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed";
-	String EXTENSION_URL_UPLOAD_SPEED = "upload-speed";
-	String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
-	String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
+	public static final String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
+	public static final String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
+	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
+	public static final String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
+	public static final String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
+	public static final String EXTENSION_URL_ERROR_MESSAGE = "error-message";
+	public static final String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed";
+	public static final String EXTENSION_URL_UPLOAD_SPEED = "upload-speed";
+	public static final String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
+	public static final String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
 
-	String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
-	String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
-	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
-	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
-	String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
-	String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
-	String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
-	String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
-	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
-	String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
-	String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
+	public static final String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
+	public static final String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
+	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
+	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
+	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
+	public static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
+	public static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
+	public static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
+	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
+	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
+	public static final String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
 
-	MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
+	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
-	String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
+	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 }
