@@ -10,7 +10,6 @@ import dev.dsf.bpe.ConstantsPing;
 
 public class ErrorMessageListUtils
 {
-	@SuppressWarnings("unchecked")
 	public static List<String> add(String error, DelegateExecution execution)
 	{
 		return add(error, ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST, execution);
