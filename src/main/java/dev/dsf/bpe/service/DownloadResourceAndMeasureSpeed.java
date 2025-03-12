@@ -45,7 +45,7 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		}
 		else
 		{
-			ErrorMessageListUtils.add(downloadResult.getErrorMessage(), BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST,
+			ErrorMessageListUtils.add(downloadResult.getErrorMessage(),
 					delegateExecution);
 		}
 	}
