@@ -1,5 +1,6 @@
 package dev.dsf.bpe.message;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -8,6 +9,8 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
+import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
@@ -43,23 +46,25 @@ public class SendPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		int downloadResourceSizeBytes = variables
-				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		List<String> errorList = ErrorMessageListUtils.getErrorMessageList(execution);
+		int downloadResourceSizeBytes = variables.getInteger(
+				ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 		if (downloadResourceSizeBytes >= 0)
 		{
 			int downloadedBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES);
-			long downloadedDurationMillis = variables
-					.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
-			String downloadResourceReference = variables
-					.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+			long downloadedDurationMillis = variables.getLong(
+					ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS);
+			String downloadResourceReference = variables.getString(
+					ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
 
-			return Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
-					DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
-					DownloadResourceReferenceGenerator.create(downloadResourceReference));
+			return Stream.concat(Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
+							DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
+							DownloadResourceReferenceGenerator.create(downloadResourceReference)),
+					ErrorMessageGenerator.create(errorList).stream());
 		}
 		else
 		{
-			return Stream.empty();
+			return ErrorMessageGenerator.create(errorList).stream();
 		}
 	}
 
@@ -80,9 +85,9 @@ public class SendPong extends AbstractTaskMessageSend
 			Exception exception, String errorMessage)
 	{
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
-						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
-						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode() ?
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED :
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
 		execution.setVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_STATUS_CODE, statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);
@@ -91,8 +96,8 @@ public class SendPong extends AbstractTaskMessageSend
 
 	private String createErrorMessage(Exception exception)
 	{
-		if (exception instanceof WebApplicationException w
-				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
+		if (exception instanceof WebApplicationException w && (exception.getMessage() == null || exception.getMessage()
+				.isBlank()))
 		{
 			StatusType statusInfo = w.getResponse().getStatusInfo();
 			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
