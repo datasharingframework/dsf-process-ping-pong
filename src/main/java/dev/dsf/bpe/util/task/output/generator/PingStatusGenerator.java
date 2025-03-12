@@ -26,14 +26,15 @@ public class PingStatusGenerator
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages)
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode,
+			List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
 				errorMessages, -1, -1, null);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, List<String> errorMessages,
-			int downloadSpeed, int uploadSpeed, String unit)
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode,
+			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);
@@ -50,14 +51,15 @@ public class PingStatusGenerator
 		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages)
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
+			List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
 				errorMessages, -1, -1, null);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, List<String> errorMessages,
-			int downloadSpeed, int uploadSpeed, String unit)
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
+			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);

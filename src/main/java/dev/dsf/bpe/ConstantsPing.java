@@ -19,11 +19,13 @@ public final class ConstantsPing
 	public static final String PROCESS_DSF_URI_BASE = "http://dsf.dev/bpe/Process/";
 
 	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-start-ping-autostart";
-	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
+	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE
+			+ PROCESS_NAME_PING_AUTOSTART;
 	public static final String PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME = "startPingAutostart";
 
 	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART = "http://dsf.dev/fhir/StructureDefinition/task-stop-ping-autostart";
-	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING_AUTOSTART;
+	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_PROCESS_URI = PROCESS_DSF_URI_BASE
+			+ PROCESS_NAME_PING_AUTOSTART;
 	public static final String PROFILE_DSF_TASK_STOP_PING_AUTOSTART_MESSAGE_NAME = "stopPingAutostart";
 
 	public static final String PROFILE_DSF_TASK_START_PING = "http://dsf.dev/fhir/StructureDefinition/task-start-ping";
