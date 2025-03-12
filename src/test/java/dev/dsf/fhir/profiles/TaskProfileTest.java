@@ -2,6 +2,7 @@ package dev.dsf.fhir.profiles;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -246,7 +247,7 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
+		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, List.of("some error message")));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -290,8 +291,8 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(new PingStatusGenerator().createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, 0, 0,
+		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, BigDecimal.ZERO, BigDecimal.ZERO,
 				ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
 
 		ValidationResult result = resourceValidator.validate(task);
