@@ -12,6 +12,8 @@ public class ErrorMessageGenerator
 {
 	public static List<Task.ParameterComponent> create(List<String> errorMessages)
 	{
+		if (errorMessages == null || errorMessages.isEmpty())
+			return List.of();
 		return errorMessages.stream().map(ErrorMessageGenerator::create).collect(Collectors.toList());
 	}
 
