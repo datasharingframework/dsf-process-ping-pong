@@ -1,5 +1,6 @@
 package dev.dsf.bpe.util.task.output.generator;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Coding;
@@ -20,8 +21,8 @@ public class PingStatusGenerator
 		return createPingStatusOutput(target, statusCode, null);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, int downloadSpeed,
-			int uploadSpeed, String unit)
+	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, BigDecimal downloadSpeed,
+			BigDecimal uploadSpeed, String unit)
 	{
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
@@ -30,11 +31,11 @@ public class PingStatusGenerator
 			List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
-				errorMessages, -1, -1, null);
+				errorMessages, null, null, null);
 	}
 
 	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode,
-			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
+			List<String> errorMessages, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);
@@ -45,8 +46,8 @@ public class PingStatusGenerator
 		return createPongStatusOutput(target, statusCode, null);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, int downloadSpeed,
-			int uploadSpeed, String unit)
+	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, BigDecimal downloadSpeed,
+			BigDecimal uploadSpeed, String unit)
 	{
 		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
@@ -55,18 +56,18 @@ public class PingStatusGenerator
 			List<String> errorMessages)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
-				errorMessages, -1, -1, null);
+				errorMessages, null, null, null);
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
-			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
+			List<String> errorMessages, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode,
 				errorMessages, downloadSpeed, uploadSpeed, unit);
 	}
 
 	private static TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
-			List<String> errorMessages, int downloadSpeed, int uploadSpeed, String unit)
+			List<String> errorMessages, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit)
 	{
 		TaskOutputComponent output = new TaskOutputComponent();
 		output.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
@@ -86,7 +87,7 @@ public class PingStatusGenerator
 						.setValue(new StringType(errorMessage));
 			}
 
-		if (downloadSpeed >= 0 && unit != null)
+		if (downloadSpeed != null && unit != null)
 		{
 			Extension downloadSpeedExtension = extension.addExtension()
 					.setUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
@@ -98,7 +99,7 @@ public class PingStatusGenerator
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
 
-		if (uploadSpeed >= 0 && unit != null)
+		if (uploadSpeed != null && unit != null)
 		{
 			Extension uploadSpeedExtension = extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED);
 			Extension networkSpeed = uploadSpeedExtension.addExtension()
