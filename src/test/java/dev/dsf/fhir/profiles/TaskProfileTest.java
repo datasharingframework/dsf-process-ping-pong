@@ -23,7 +23,7 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
-import dev.dsf.bpe.util.PingStatusGenerator;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;

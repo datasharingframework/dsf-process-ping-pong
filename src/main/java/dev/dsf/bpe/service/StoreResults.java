@@ -11,7 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
-import dev.dsf.bpe.util.PingStatusGenerator;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -20,14 +20,12 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private final PingStatusGenerator statusGenerator;
 	private final ErrorMailService errorMailService;
 
-	public StoreResults(ProcessPluginApi api, PingStatusGenerator statusGenerator, ErrorMailService errorMailService)
+	public StoreResults(ProcessPluginApi api, ErrorMailService errorMailService)
 	{
 		super(api);
 
-		this.statusGenerator = statusGenerator;
 		this.errorMailService = errorMailService;
 	}
 
@@ -36,7 +34,6 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	{
 		super.afterPropertiesSet();
 
-		Objects.requireNonNull(statusGenerator, "statusGenerator");
 		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
@@ -55,7 +52,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 			{
 				String errorMessage = variables.getString("errorMessage_" + correlationKey);
-				task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode, List.of(errorMessage)));
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, List.of(errorMessage)));
 
 				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
 					errorMailService.endpointNotReachableForPing(task.getIdElement(), target, errorMessage);
@@ -64,7 +61,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			}
 			else
 			{
-				task.addOutput(statusGenerator.createPingStatusOutput(target, statusCode));
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
 
 				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING.equals(statusCode))
 					errorMailService.pongMessageNotReceived(task.getIdElement(), target);

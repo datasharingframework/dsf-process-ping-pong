@@ -36,7 +36,7 @@ import dev.dsf.bpe.service.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.StoreDownloadSpeeds;
 import dev.dsf.bpe.service.StoreResource;
 import dev.dsf.bpe.service.StoreResults;
-import dev.dsf.bpe.util.PingStatusGenerator;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 
@@ -74,12 +74,6 @@ public class PingConfig
 	public SendStartPing sendStartPing()
 	{
 		return new SendStartPing(api);
-	}
-
-	@Bean
-	public PingStatusGenerator responseGenerator()
-	{
-		return new PingStatusGenerator();
 	}
 
 	@Bean
@@ -128,7 +122,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreResults savePingResults()
 	{
-		return new StoreResults(api, responseGenerator(), errorLogger());
+		return new StoreResults(api, errorLogger());
 	}
 
 	@Bean
@@ -149,7 +143,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendPong sendPong()
 	{
-		return new SendPong(api, responseGenerator(), errorLogger());
+		return new SendPong(api, errorLogger());
 	}
 
 	@Bean
