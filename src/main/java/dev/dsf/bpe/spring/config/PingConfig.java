@@ -22,7 +22,6 @@ import dev.dsf.bpe.service.GenerateResource;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
-import dev.dsf.bpe.service.LogAndSaveSendError;
 import dev.dsf.bpe.service.pong.LogAndStoreSendError;
 import dev.dsf.bpe.service.ping.LogNoResponse;
 import dev.dsf.bpe.service.ping.LogPing;
@@ -192,13 +191,6 @@ public class PingConfig
 	public GenerateResource generateResource()
 	{
 		return new GenerateResource(api, (int) maxUploadSizeBytes);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveSendError logAndSaveSendError()
-	{
-		return new LogAndSaveSendError(api);
 	}
 
 	@Bean
