@@ -66,21 +66,29 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			}
 			else
 			{
-				int downloadResourceSizeBytes = variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+				int downloadResourceSizeBytes = variables
+						.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution);
 				if (downloadResourceSizeBytes >= 0)
 				{
-					int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
-					long downloadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
+					int downloadedBytes = variables
+							.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+					long downloadedDurationMillis = variables
+							.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
-					BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis, networkSpeedUnit);
+					BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes,
+							downloadedDurationMillis, networkSpeedUnit);
 
-					int uploadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
-					long uploadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
+					int uploadedBytes = variables
+							.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
+					long uploadedDurationMillis = variables
+							.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
 
-					BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit);
+					BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
+							networkSpeedUnit);
 
-					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList, downloadSpeed, uploadSpeed, networkSpeedUnit));
+					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
+							downloadSpeed, uploadSpeed, networkSpeedUnit));
 				}
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
