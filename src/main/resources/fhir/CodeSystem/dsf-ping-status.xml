@@ -46,4 +46,9 @@
 		<display value="Pong sent" />
 		<definition value="Pong successfully sent to target organization" />
 	</concept>
+	<concept>
+		<code value="resource-downloaded"/>
+		<display value="Resource downloaded"/>
+		<definition value="Resource was downloaded successfully"/>
+	</concept>
 </CodeSystem> 

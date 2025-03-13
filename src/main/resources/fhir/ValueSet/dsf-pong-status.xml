@@ -34,6 +34,10 @@
 				<code value="pong-sent" />
 				<display value="Pong sent" />
 			</concept>
+			<concept>
+				<code value="resource-downloaded"/>
+				<display value="Resource downloaded"/>
+			</concept>
 		</include>
 	</compose>
 </ValueSet> 
