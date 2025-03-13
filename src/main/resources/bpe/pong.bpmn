@@ -161,7 +161,7 @@
     <bpmn:sequenceFlow id="Flow_1xfk4ds" sourceRef="Event_0o4l2t4" targetRef="Gateway_1wktaap" />
     <bpmn:sequenceFlow id="Flow_1i7f29l" sourceRef="Gateway_1wktaap" targetRef="Activity_0mwyelp" />
     <bpmn:sequenceFlow id="Flow_1ttsk1o" sourceRef="Event_1xvd4tr" targetRef="Activity_1gd1tfz" />
-    <bpmn:serviceTask id="Activity_1gd1tfz" name="Save Download Speeds" camunda:class="dev.dsf.bpe.service.SaveDownloadSpeedsPong">
+    <bpmn:serviceTask id="Activity_1gd1tfz" name="Save Upload Speeds" camunda:class="dev.dsf.bpe.service.SaveUploadSpeeds">
       <bpmn:incoming>Flow_1ttsk1o</bpmn:incoming>
       <bpmn:outgoing>Flow_1eh8lho</bpmn:outgoing>
     </bpmn:serviceTask>
