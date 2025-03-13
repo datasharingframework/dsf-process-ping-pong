@@ -39,7 +39,7 @@ public class PingStatusGenerator
 		}
 	}
 
-	public static void updatePingStatusOutput(TaskOutputComponent outputComponent, Target target)
+	public static void updateStatusOutput(TaskOutputComponent outputComponent, Target target)
 	{
 		if (hasTargetSet(outputComponent))
 		{
