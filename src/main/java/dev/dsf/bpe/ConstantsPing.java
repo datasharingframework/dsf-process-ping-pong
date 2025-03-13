@@ -63,6 +63,7 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_RESOURCE_DOWNLOADED = "resource-downloaded";
 
 	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
