@@ -228,7 +228,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreUploadSpeed storeDownloadSpeeds()
 	{
-		return new StoreUploadSpeed(api);
+		return new StoreUploadSpeed(api, networkSpeedUnit);
 	}
 
 	@Bean
