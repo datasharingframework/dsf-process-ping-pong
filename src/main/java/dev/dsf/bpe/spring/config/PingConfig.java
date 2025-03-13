@@ -15,25 +15,25 @@ import dev.dsf.bpe.message.SendPing;
 import dev.dsf.bpe.message.SendPong;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
-import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
-import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
-import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.GenerateResource;
-import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
+import dev.dsf.bpe.service.SetDownloadResourceSize;
+import dev.dsf.bpe.service.StoreResource;
+import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
+import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
-import dev.dsf.bpe.service.pong.LogAndStoreSendError;
 import dev.dsf.bpe.service.ping.LogNoResponse;
 import dev.dsf.bpe.service.ping.LogPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
-import dev.dsf.bpe.service.pong.SelectPongTarget;
-import dev.dsf.bpe.service.SetDownloadResourceSize;
-import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
-import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
-import dev.dsf.bpe.service.pong.StoreUploadSpeed;
-import dev.dsf.bpe.service.StoreResource;
 import dev.dsf.bpe.service.ping.StoreResults;
+import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
+import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
+import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
+import dev.dsf.bpe.service.pong.LogAndStoreSendError;
+import dev.dsf.bpe.service.pong.SelectPongTarget;
+import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
+import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 
@@ -55,11 +55,13 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.maxDownloadSize:10000000}")
 	private long maxDownloadSizeBytes;
 
-	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {"dsfdev_ping", "dsfdev_pong"})
+	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {
+			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.maxUploadSize:10000000}")
 	private long maxUploadSizeBytes;
 
-	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {"dsfdev_ping", "dsfdev_pong"})
+	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
+			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabytes-per-second}")
 	private String networkSpeedUnit;
 
@@ -260,6 +262,6 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public PingPongDeploymentStateListener pingPongDeploymentStateListener()
 	{
-		return new PingPongDeploymentStateListener( this);
+		return new PingPongDeploymentStateListener(this);
 	}
 }
