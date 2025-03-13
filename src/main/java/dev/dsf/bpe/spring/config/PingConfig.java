@@ -31,7 +31,7 @@ import dev.dsf.bpe.service.pong.SelectPongTarget;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
-import dev.dsf.bpe.service.pong.StoreDownloadSpeeds;
+import dev.dsf.bpe.service.pong.StoreNetworkSpeeds;
 import dev.dsf.bpe.service.StoreResource;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -223,9 +223,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreDownloadSpeeds storeDownloadSpeeds()
+	public StoreNetworkSpeeds storeDownloadSpeeds()
 	{
-		return new StoreDownloadSpeeds(api);
+		return new StoreNetworkSpeeds(api);
 	}
 
 	@Bean
