@@ -28,8 +28,6 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
-		// TODO: add to spring config
-
 		Task startTask = variables.getStartTask();
 
 		int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
