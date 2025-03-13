@@ -101,7 +101,7 @@
       </bpmn:serviceTask>
       <bpmn:exclusiveGateway id="Gateway_02orad4">
         <bpmn:incoming>Flow_13u1nzy</bpmn:incoming>
-        <bpmn:incoming>Flow_0n0yrky</bpmn:incoming>
+        <bpmn:incoming>Flow_0klalf8</bpmn:incoming>
         <bpmn:outgoing>Flow_03nx6rk</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:endEvent id="Event_1foycg9" camunda:asyncAfter="true">
@@ -132,12 +132,7 @@
       <bpmn:sequenceFlow id="Flow_1v37fff" sourceRef="Activity_0h9o9u7" targetRef="Activity_0vw65a2" />
       <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="Activity_0akr23c" targetRef="Activity_0vw65a2" />
       <bpmn:sequenceFlow id="Flow_10h6pqh" sourceRef="Event_0i4slcz" targetRef="Activity_0akr23c" />
-      <bpmn:serviceTask id="Activity_0i9uqk0" name="Save Download Speeds" camunda:class="dev.dsf.bpe.service.SaveDownloadSpeedsPing">
-        <bpmn:incoming>Flow_0klalf8</bpmn:incoming>
-        <bpmn:outgoing>Flow_0n0yrky</bpmn:outgoing>
-      </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="Activity_0vw65a2" targetRef="Activity_0i9uqk0" />
-      <bpmn:sequenceFlow id="Flow_0n0yrky" sourceRef="Activity_0i9uqk0" targetRef="Gateway_02orad4" />
+      <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="Activity_0vw65a2" targetRef="Gateway_02orad4" />
       <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongCatchEvent" targetRef="Activity_081me01" />
       <bpmn:serviceTask id="Activity_081me01" name="Save Pong" camunda:class="dev.dsf.bpe.service.SavePong">
         <bpmn:incoming>Flow_1ewmc79</bpmn:incoming>
@@ -243,8 +238,30 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
+      <bpmndi:BPMNShape id="BPMNShape_0diib78" bpmnElement="TextAnnotation_1ig0151">
+        <dc:Bounds x="2990" y="239" width="160" height="49" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0t4el3i" bpmnElement="TextAnnotation_1plclrb">
+        <dc:Bounds x="2920" y="490" width="200" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0zyba7l" bpmnElement="Activity_0802w0b">
+        <dc:Bounds x="2920" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_19d4kn6" bpmnElement="SaveResults">
+        <dc:Bounds x="3050" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0gw8z00" bpmnElement="EndEvent">
+        <dc:Bounds x="3172" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">
-        <dc:Bounds x="1040" y="180" width="1930" height="560" />
+        <dc:Bounds x="1040" y="180" width="1820" height="560" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1h13c04" bpmnElement="TextAnnotation_0smygq5">
+        <dc:Bounds x="2580" y="612" width="240" height="55" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0qz7nye" bpmnElement="SubProcessStartEvent">
         <dc:Bounds x="1062" y="342" width="36" height="36" />
@@ -296,16 +313,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="2210" y="600" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0n6ry0u" bpmnElement="Gateway_02orad4" isMarkerVisible="true">
-        <dc:Bounds x="2815" y="335" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1pe00wg" bpmnElement="Event_1foycg9">
-        <dc:Bounds x="2912" y="342" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1p3zvup" bpmnElement="Activity_0i9uqk0">
-        <dc:Bounds x="2700" y="480" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_187dy31_di" bpmnElement="Activity_081me01">
         <dc:Bounds x="1820" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -314,14 +321,20 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="1270" y="220" width="250" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1h13c04" bpmnElement="TextAnnotation_0smygq5">
-        <dc:Bounds x="2660" y="612" width="240" height="55" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_084zno2" bpmnElement="TextAnnotation_08ic0l2">
         <dc:Bounds x="1980" y="622" width="170" height="37" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0n6ry0u" bpmnElement="Gateway_02orad4" isMarkerVisible="true">
+        <dc:Bounds x="2685" y="335" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1pe00wg" bpmnElement="Event_1foycg9">
+        <dc:Bounds x="2772" y="342" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_1xojob2" bpmnElement="Association_14iteoh">
+        <di:waypoint x="2602" y="559" />
+        <di:waypoint x="2660" y="612" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_0968qvb" bpmnElement="Event_0i4slcz">
         <dc:Bounds x="2152" y="542" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -372,7 +385,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1iq5cwe" bpmnElement="Flow_13u1nzy">
         <di:waypoint x="2015" y="360" />
-        <di:waypoint x="2815" y="360" />
+        <di:waypoint x="2685" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1skpxus" bpmnElement="Flow_1yt9547">
         <di:waypoint x="1990" y="385" />
@@ -395,17 +408,13 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="2210" y="640" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0v8dcpi" bpmnElement="Flow_03nx6rk">
-        <di:waypoint x="2865" y="360" />
-        <di:waypoint x="2912" y="360" />
+        <di:waypoint x="2735" y="360" />
+        <di:waypoint x="2772" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0klalf8_di" bpmnElement="Flow_0klalf8">
         <di:waypoint x="2610" y="520" />
-        <di:waypoint x="2700" y="520" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0n0yrky_di" bpmnElement="Flow_0n0yrky">
-        <di:waypoint x="2800" y="520" />
-        <di:waypoint x="2840" y="520" />
-        <di:waypoint x="2840" y="385" />
+        <di:waypoint x="2710" y="520" />
+        <di:waypoint x="2710" y="385" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ewmc79_di" bpmnElement="Flow_1ewmc79">
         <di:waypoint x="1748" y="360" />
@@ -419,10 +428,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="1252" y="320" />
         <di:waypoint x="1276" y="290" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1xojob2" bpmnElement="Association_14iteoh">
-        <di:waypoint x="2610" y="550" />
-        <di:waypoint x="2716" y="612" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_07aga42" bpmnElement="Association_0l3n1oc">
         <di:waypoint x="2074" y="622" />
         <di:waypoint x="2102" y="560" />
@@ -433,16 +438,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_0fhb8wi" bpmnElement="Activity_0nwtf8o">
         <dc:Bounds x="530" y="460" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0zyba7l" bpmnElement="Activity_0802w0b">
-        <dc:Bounds x="3030" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_19d4kn6" bpmnElement="SaveResults">
-        <dc:Bounds x="3160" y="330" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0gw8z00" bpmnElement="EndEvent">
-        <dc:Bounds x="3282" y="352" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0ob9la3" bpmnElement="Gateway_0bifi5h" isMarkerVisible="true">
         <dc:Bounds x="815" y="335" width="50" height="50" />
@@ -464,10 +459,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="260" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0diib78" bpmnElement="TextAnnotation_1ig0151">
-        <dc:Bounds x="3100" y="239" width="160" height="49" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0o5toqz" bpmnElement="TextAnnotation_1j1ytqy">
         <dc:Bounds x="430" y="580" width="170" height="40" />
         <bpmndi:BPMNLabel />
@@ -476,21 +467,25 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="400" y="220" width="420" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0t4el3i" bpmnElement="TextAnnotation_1plclrb">
-        <dc:Bounds x="3030" y="490" width="200" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_19d2657" bpmnElement="TextAnnotation_02e4h2c" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
         <dc:Bounds x="230" y="80" width="420" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_0yofzg9" bpmnElement="Association_1f86scd">
+        <di:waypoint x="3013" y="490" />
+        <di:waypoint x="2984" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
+        <di:waypoint x="3079" y="330" />
+        <di:waypoint x="3058" y="288" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_09zmq8d" bpmnElement="Flow_0j92st0">
         <di:waypoint x="1000" y="360" />
         <di:waypoint x="1040" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_036wiw0" bpmnElement="Flow_1bfs68o">
-        <di:waypoint x="2970" y="370" />
-        <di:waypoint x="3030" y="370" />
+        <di:waypoint x="2860" y="370" />
+        <di:waypoint x="2920" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1ttfs4u" bpmnElement="Flow_1qz7z39">
         <di:waypoint x="630" y="500" />
@@ -505,14 +500,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="460" y="385" />
         <di:waypoint x="460" y="500" />
         <di:waypoint x="530" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1fbz0br" bpmnElement="Flow_0gubpgz">
-        <di:waypoint x="3130" y="370" />
-        <di:waypoint x="3160" y="370" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_00ieeud" bpmnElement="Flow_1du5wys">
-        <di:waypoint x="3260" y="370" />
-        <di:waypoint x="3282" y="370" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0t4fqb7" bpmnElement="Flow_0iuuyo1">
         <di:waypoint x="485" y="360" />
@@ -534,13 +521,13 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="539" y="540" />
         <di:waypoint x="498" y="580" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0yofzg9" bpmnElement="Association_1f86scd">
-        <di:waypoint x="3123" y="490" />
-        <di:waypoint x="3094" y="410" />
+      <bpmndi:BPMNEdge id="BPMNEdge_1fbz0br" bpmnElement="Flow_0gubpgz">
+        <di:waypoint x="3020" y="370" />
+        <di:waypoint x="3050" y="370" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
-        <di:waypoint x="3189" y="330" />
-        <di:waypoint x="3168" y="288" />
+      <bpmndi:BPMNEdge id="BPMNEdge_00ieeud" bpmnElement="Flow_1du5wys">
+        <di:waypoint x="3150" y="370" />
+        <di:waypoint x="3172" y="370" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
