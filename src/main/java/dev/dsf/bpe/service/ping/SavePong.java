@@ -41,8 +41,8 @@ public class SavePong extends AbstractServiceDelegate
 
 		long downloadedDurationMillis = api.getTaskHelper()
 				.getFirstInputParameterValue(pong, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS, DecimalType.class).get()
-				.getValue().longValue();
+						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS, DecimalType.class)
+				.get().getValue().longValue();
 		variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey),
 				downloadedDurationMillis);
 
@@ -50,10 +50,10 @@ public class SavePong extends AbstractServiceDelegate
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, IntegerType.class).get().getValue();
 		variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), downloadedBytes);
 
-		List<String> errorList = api.getTaskHelper().getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
+		List<String> errorList = api.getTaskHelper()
+				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE, StringType.class)
-				.map(PrimitiveType::getValue)
-				.toList();
+				.map(PrimitiveType::getValue).toList();
 		ErrorMessageListUtils.addAll(errorList, delegateExecution);
 
 		logger.info("Pong received from {}, saved pong information", target.getEndpointUrl());

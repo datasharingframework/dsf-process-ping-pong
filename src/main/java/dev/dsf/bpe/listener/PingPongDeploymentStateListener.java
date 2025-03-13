@@ -30,10 +30,13 @@ public class PingPongDeploymentStateListener implements ProcessPluginDeploymentS
 		if (ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES.contains(networkSpeedUnit))
 		{
 			logger.info("Network speed unit is valid: {}", networkSpeedUnit);
-		} else
+		}
+		else
 		{
 			pingConfig.setNetworkSpeedUnit(ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
-			logger.info("Network speed unit \"{}\" is not valid. Valid values are: {}. Defaulting to \"{}\"", networkSpeedUnit, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
+			logger.info("Network speed unit \"{}\" is not valid. Valid values are: {}. Defaulting to \"{}\"",
+					networkSpeedUnit, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES,
+					ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
 		}
 	}
 
