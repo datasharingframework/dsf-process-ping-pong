@@ -33,6 +33,7 @@ import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
 import dev.dsf.bpe.service.pong.LogAndStoreSendError;
 import dev.dsf.bpe.service.pong.SelectPongTarget;
 import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
+import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
@@ -263,5 +264,12 @@ public class PingConfig
 	public PingPongDeploymentStateListener pingPongDeploymentStateListener()
 	{
 		return new PingPongDeploymentStateListener(this);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public StoreDownloadSpeed storeDownloadSpeed()
+	{
+		return new StoreDownloadSpeed(api, networkSpeedUnit);
 	}
 }
