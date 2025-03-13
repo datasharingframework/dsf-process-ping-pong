@@ -1,4 +1,4 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.ping;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -9,11 +9,11 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class StoreDownloadSpeeds extends AbstractServiceDelegate
+public class LogAndSaveError extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(StoreDownloadSpeeds.class);
+	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveError.class);
 
-	public StoreDownloadSpeeds(ProcessPluginApi api)
+	public LogAndSaveError(ProcessPluginApi api)
 	{
 		super(api);
 	}
@@ -21,6 +21,6 @@ public class StoreDownloadSpeeds extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		logger.info("Storing download speeds as input parameter");
+		logger.info("Logging and saving error");
 	}
 }

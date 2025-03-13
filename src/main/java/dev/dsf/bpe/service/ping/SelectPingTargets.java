@@ -1,4 +1,4 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.ping;
 
 import java.util.Collections;
 import java.util.HashMap;

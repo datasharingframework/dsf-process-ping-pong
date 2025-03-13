@@ -1,10 +1,6 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.ping;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;

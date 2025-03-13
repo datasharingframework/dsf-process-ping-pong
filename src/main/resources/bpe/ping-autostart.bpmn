@@ -100,7 +100,7 @@
     <bpmn:sequenceFlow id="Flow_10ocr9f" sourceRef="Gateway_1ndxuiu" targetRef="StopIntermediateSignalCatchEvent" />
     <bpmn:sequenceFlow id="Flow_096pj3d" name="stop" sourceRef="StopIntermediateSignalCatchEvent" targetRef="Gateway_1xqxerc" />
     <bpmn:sequenceFlow id="Flow_15y3sqm" sourceRef="SetTargetAndConfigureTimer" targetRef="Gateway_1xqxerc" />
-    <bpmn:serviceTask id="SetTargetAndConfigureTimer" name="set target and configure timer" camunda:class="dev.dsf.bpe.service.SetTargetAndConfigureTimer">
+    <bpmn:serviceTask id="SetTargetAndConfigureTimer" name="set target and configure timer" camunda:class="dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer">
       <bpmn:extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="stop">no</camunda:outputParameter>

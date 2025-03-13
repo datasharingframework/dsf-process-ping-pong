@@ -1,4 +1,4 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.ping;
 
 import java.math.BigDecimal;
 import java.util.Comparator;

@@ -1,4 +1,4 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.pong;
 
 import java.util.List;
 
