@@ -9,11 +9,11 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class StoreNetworkSpeeds extends AbstractServiceDelegate
+public class StoreUploadSpeed extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(StoreNetworkSpeeds.class);
+	private static final Logger logger = LoggerFactory.getLogger(StoreUploadSpeed.class);
 
-	public StoreNetworkSpeeds(ProcessPluginApi api)
+	public StoreUploadSpeed(ProcessPluginApi api)
 	{
 		super(api);
 	}
