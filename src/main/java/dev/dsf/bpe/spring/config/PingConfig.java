@@ -26,7 +26,6 @@ import dev.dsf.bpe.service.LogAndSaveSendError;
 import dev.dsf.bpe.service.LogAndStoreSendError;
 import dev.dsf.bpe.service.LogNoResponse;
 import dev.dsf.bpe.service.LogPing;
-import dev.dsf.bpe.service.SaveDownloadSpeedsPing;
 import dev.dsf.bpe.service.SavePong;
 import dev.dsf.bpe.service.SelectPingTargets;
 import dev.dsf.bpe.service.SelectPongTarget;
@@ -228,13 +227,6 @@ public class PingConfig
 	public LogAndSaveError logAndSaveError()
 	{
 		return new LogAndSaveError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SaveDownloadSpeedsPing saveDownloadSpeeds()
-	{
-		return new SaveDownloadSpeedsPing(api);
 	}
 
 	@Bean
