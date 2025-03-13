@@ -1,6 +1,4 @@
-package dev.dsf.bpe.service;
-
-import static dev.dsf.bpe.ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST;
+package dev.dsf.bpe.service.pong;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -13,15 +11,14 @@ import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
-import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractServiceDelegate
+public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 {
-	public static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeedInSubProcess.class);
+	public static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeed.class);
 	private final int maxDownloadSizeBytes;
 
-	public DownloadResourceAndMeasureSpeedInSubProcess(ProcessPluginApi api, int maxDownloadSizeBytes)
+	public DownloadResourceAndMeasureSpeed(ProcessPluginApi api, int maxDownloadSizeBytes)
 	{
 		super(api);
 		this.maxDownloadSizeBytes = maxDownloadSizeBytes;
@@ -30,24 +27,21 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		Task task = variables.getLatestTask();
-		Target target = variables.getTarget();
-		String correlationKey = target.getCorrelationKey();
+		Task task = variables.getStartTask();
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader().download(variables, api,
 				task, maxDownloadSizeBytes);
 
 		if (downloadResult.getErrorMessage() == null)
 		{
-			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey),
+			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
 					downloadResult.getDownloadedBytes());
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey),
+			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
 					downloadResult.getDownloadedDurationMillis());
 		}
 		else
 		{
-			ErrorMessageListUtils.add(downloadResult.getErrorMessage(),
-					BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST + "_" + correlationKey, delegateExecution);
+			ErrorMessageListUtils.add(downloadResult.getErrorMessage(), delegateExecution);
 		}
 	}
 }

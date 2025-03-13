@@ -1,8 +1,7 @@
-package dev.dsf.bpe.service;
+package dev.dsf.bpe.service.ping;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

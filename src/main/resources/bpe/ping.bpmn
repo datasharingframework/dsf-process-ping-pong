@@ -35,7 +35,7 @@
         <bpmn:outgoing>Flow_0y9usku</bpmn:outgoing>
         <bpmn:outgoing>Flow_1lghrxh</bpmn:outgoing>
       </bpmn:eventBasedGateway>
-      <bpmn:serviceTask id="LogNoResponse" name="Log and Save No Response" camunda:class="dev.dsf.bpe.service.LogAndSaveNoResponse">
+      <bpmn:serviceTask id="LogNoResponse" name="Log and Save No Response" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveNoResponse">
         <bpmn:incoming>Flow_1fjeq2h</bpmn:incoming>
         <bpmn:outgoing>Flow_136htek</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -75,7 +75,7 @@
         <bpmn:outgoing>Flow_13u1nzy</bpmn:outgoing>
         <bpmn:outgoing>Flow_1yt9547</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeedInSubProcess">
+      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess">
         <bpmn:incoming>Flow_1yt9547</bpmn:incoming>
         <bpmn:outgoing>Flow_1v37fff</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -95,7 +95,7 @@
         <bpmn:incoming>Flow_0jcfur3</bpmn:incoming>
         <bpmn:outgoing>Flow_0klalf8</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:serviceTask id="Activity_0akr23c" name="Log and Save Error" camunda:class="dev.dsf.bpe.service.LogAndSaveError">
+      <bpmn:serviceTask id="Activity_0akr23c" name="Log and Save Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveError">
         <bpmn:incoming>Flow_10h6pqh</bpmn:incoming>
         <bpmn:outgoing>Flow_0jcfur3</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -134,7 +134,7 @@
       <bpmn:sequenceFlow id="Flow_10h6pqh" sourceRef="Event_0i4slcz" targetRef="Activity_0akr23c" />
       <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="Activity_0vw65a2" targetRef="Gateway_02orad4" />
       <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongCatchEvent" targetRef="Activity_081me01" />
-      <bpmn:serviceTask id="Activity_081me01" name="Save Pong" camunda:class="dev.dsf.bpe.service.SavePong">
+      <bpmn:serviceTask id="Activity_081me01" name="Save Pong" camunda:class="dev.dsf.bpe.service.ping.SavePong">
         <bpmn:incoming>Flow_1ewmc79</bpmn:incoming>
         <bpmn:outgoing>Flow_1jwekqw</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -169,7 +169,7 @@
       <bpmn:incoming>Flow_1bfs68o</bpmn:incoming>
       <bpmn:outgoing>Flow_0gubpgz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="SaveResults" name="Store Results" camunda:class="dev.dsf.bpe.service.StoreResults">
+    <bpmn:serviceTask id="SaveResults" name="Store Results" camunda:class="dev.dsf.bpe.service.ping.StoreResults">
       <bpmn:incoming>Flow_0gubpgz</bpmn:incoming>
       <bpmn:outgoing>Flow_1du5wys</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -181,7 +181,7 @@
       <bpmn:incoming>Flow_0iuuyo1</bpmn:incoming>
       <bpmn:outgoing>Flow_1c15ef2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="SelectPingTargets" name="Select Targets" camunda:class="dev.dsf.bpe.service.SelectPingTargets">
+    <bpmn:serviceTask id="SelectPingTargets" name="Select Targets" camunda:class="dev.dsf.bpe.service.ping.SelectPingTargets">
       <bpmn:incoming>Flow_1c15ef2</bpmn:incoming>
       <bpmn:outgoing>Flow_0j92st0</bpmn:outgoing>
     </bpmn:serviceTask>

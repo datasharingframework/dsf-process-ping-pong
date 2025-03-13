@@ -10,11 +10,11 @@
       <bpmn:outgoing>Flow_10z0d4x</bpmn:outgoing>
       <bpmn:outgoing>Flow_08gidyv</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_095j2gg" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.DownloadResourceAndMeasureSpeed">
+    <bpmn:serviceTask id="Activity_095j2gg" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed">
       <bpmn:incoming>Flow_10z0d4x</bpmn:incoming>
       <bpmn:outgoing>Flow_0zphif7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="SelectPongTarget" name="Select Pong Target" camunda:class="dev.dsf.bpe.service.SelectPongTarget">
+    <bpmn:serviceTask id="SelectPongTarget" name="Select Pong Target" camunda:class="dev.dsf.bpe.service.pong.SelectPongTarget">
       <bpmn:incoming>Flow_061qpt4</bpmn:incoming>
       <bpmn:outgoing>Flow_1eass2g</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -23,7 +23,7 @@
       <bpmn:incoming>Flow_0gvrnxd</bpmn:incoming>
       <bpmn:outgoing>Flow_1o3n9u6</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="LogPing" name="Log Ping" camunda:class="dev.dsf.bpe.service.LogPing">
+    <bpmn:serviceTask id="LogPing" name="Log Ping" camunda:class="dev.dsf.bpe.service.ping.LogPing">
       <bpmn:incoming>Flow_1o3n9u6</bpmn:incoming>
       <bpmn:outgoing>Flow_061qpt4</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -48,7 +48,7 @@
       <bpmn:outgoing>Flow_1bzjspe</bpmn:outgoing>
       <bpmn:outgoing>Flow_00t1ck1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0t0ex36" name="Log And Store Send Error" camunda:class="dev.dsf.bpe.service.LogAndStoreSendError">
+    <bpmn:serviceTask id="Activity_0t0ex36" name="Log And Store Send Error" camunda:class="dev.dsf.bpe.service.pong.LogAndStoreSendError">
       <bpmn:incoming>Flow_0h8flp6</bpmn:incoming>
       <bpmn:outgoing>Flow_0n07rwm</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -74,7 +74,7 @@
       <bpmn:incoming>Flow_1jehvly</bpmn:incoming>
       <bpmn:outgoing>Flow_0x7t1ii</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_1umihbr" name="Log and Save And Store Error" camunda:class="dev.dsf.bpe.service.LogAndSaveAndStoreError">
+    <bpmn:serviceTask id="Activity_1umihbr" name="Log and Save And Store Error" camunda:class="dev.dsf.bpe.service.pong.LogAndSaveAndStoreError">
       <bpmn:incoming>Flow_0uj7rm3</bpmn:incoming>
       <bpmn:outgoing>Flow_1jehvly</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -86,7 +86,7 @@
       <bpmn:incoming>Flow_00t1ck1</bpmn:incoming>
       <bpmn:outgoing>Flow_0zib7wr</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0mwyelp" name="Store Download Speeds" camunda:class="dev.dsf.bpe.service.StoreDownloadSpeeds">
+    <bpmn:serviceTask id="Activity_0mwyelp" name="Store Download Speeds" camunda:class="dev.dsf.bpe.service.pong.StoreDownloadSpeeds">
       <bpmn:incoming>Flow_0n07rwm</bpmn:incoming>
       <bpmn:incoming>Flow_1i7f29l</bpmn:incoming>
       <bpmn:outgoing>Flow_165e73u</bpmn:outgoing>
@@ -99,7 +99,7 @@
       <bpmn:incoming>Flow_0x7t1ii</bpmn:incoming>
       <bpmn:outgoing>Flow_1w09zt7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0xcqxjs" name="Estimate Cleanup Timer Duration" camunda:class="dev.dsf.bpe.service.EstimateCleanupTimerDuration">
+    <bpmn:serviceTask id="Activity_0xcqxjs" name="Estimate Cleanup Timer Duration" camunda:class="dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration">
       <bpmn:incoming>Flow_03hviat</bpmn:incoming>
       <bpmn:outgoing>Flow_0gvrnxd</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -141,7 +141,7 @@
       <bpmn:incoming>Flow_19b3cp4</bpmn:incoming>
       <bpmn:outgoing>Flow_1oo1n55</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_13ypt7i" name="Set Endpoint Identifier" camunda:class="dev.dsf.bpe.service.SetEndpointIdentifier">
+    <bpmn:serviceTask id="Activity_13ypt7i" name="Set Endpoint Identifier" camunda:class="dev.dsf.bpe.service.pong.SetEndpointIdentifier">
       <bpmn:incoming>Flow_1oo1n55</bpmn:incoming>
       <bpmn:outgoing>Flow_0i7mizy</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -161,7 +161,7 @@
     <bpmn:sequenceFlow id="Flow_1xfk4ds" sourceRef="Event_0o4l2t4" targetRef="Gateway_1wktaap" />
     <bpmn:sequenceFlow id="Flow_1i7f29l" sourceRef="Gateway_1wktaap" targetRef="Activity_0mwyelp" />
     <bpmn:sequenceFlow id="Flow_1ttsk1o" sourceRef="Event_1xvd4tr" targetRef="Activity_1gd1tfz" />
-    <bpmn:serviceTask id="Activity_1gd1tfz" name="Save Upload Speeds" camunda:class="dev.dsf.bpe.service.SaveUploadSpeeds">
+    <bpmn:serviceTask id="Activity_1gd1tfz" name="Save Upload Speeds" camunda:class="dev.dsf.bpe.service.pong.SaveUploadSpeeds">
       <bpmn:incoming>Flow_1ttsk1o</bpmn:incoming>
       <bpmn:outgoing>Flow_1eh8lho</bpmn:outgoing>
     </bpmn:serviceTask>
