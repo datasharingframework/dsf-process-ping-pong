@@ -119,13 +119,6 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogNoResponse logNoResponse()
-	{
-		return new LogNoResponse(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreResults savePingResults()
 	{
 		return new StoreResults(api, errorLogger(), networkSpeedUnit);
@@ -186,7 +179,6 @@ public class PingConfig
 	{
 		return new DownloadResourceAndMeasureSpeedInSubProcess(api, (int) maxDownloadSizeBytes);
 	}
-
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
