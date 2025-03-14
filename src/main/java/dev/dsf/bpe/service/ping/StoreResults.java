@@ -55,14 +55,19 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode)
 					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 			{
-				String errorMessage = variables
-						.getString(ConstantsPing.getBpmnExecutionVariableErrorMessage(correlationKey));
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, List.of(errorMessage)));
+				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution);
+				String errorMessage = errorMessages.get(0);
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
 
 				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
 					errorMailService.endpointNotReachableForPing(task.getIdElement(), target, errorMessage);
 				else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 					errorMailService.endpointReachablePingForbidden(task.getIdElement(), target, errorMessage);
+			}
+			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING.equals(statusCode))
+			{
+				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution);
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
 			}
 			else
 			{
