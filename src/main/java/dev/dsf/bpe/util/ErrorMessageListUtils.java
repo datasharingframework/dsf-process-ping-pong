@@ -13,6 +13,8 @@ public class ErrorMessageListUtils
 	public static List<String> addAll(List<String> errors, DelegateExecution execution)
 	{
 		List<String> errorList = getErrorMessageList(execution);
+		if (errors == null)
+			return errorList;
 		errorList.addAll(errors);
 		return errorList;
 	}
@@ -25,7 +27,14 @@ public class ErrorMessageListUtils
 	@SuppressWarnings("unchecked")
 	public static List<String> getErrorMessageList(DelegateExecution execution)
 	{
-		return (List<String>) execution.getVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST);
+		List<String> errorMessages = (List<String>) execution
+				.getVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST);
+		if (errorMessages == null)
+		{
+			errorMessages = new Vector<>();
+			execution.setVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST, errorMessages);
+		}
+		return errorMessages;
 	}
 
 	@SuppressWarnings("unchecked")
