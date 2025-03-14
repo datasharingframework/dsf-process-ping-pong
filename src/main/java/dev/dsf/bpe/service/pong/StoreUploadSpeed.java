@@ -32,8 +32,7 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 
 		int uploadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
-		long uploadedDurationMillis = variables
-				.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis());
+		long uploadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis());
 
 		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
 				networkSpeedUnit);
