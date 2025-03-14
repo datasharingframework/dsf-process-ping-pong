@@ -79,7 +79,7 @@
     <element id="Task.input:target-endpoints.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}" />
     </element>
     <element id="Task.input:target-endpoints.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -114,7 +114,7 @@
     <element id="Task.input:download-resource-size-bytes.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}" />
     </element>
     <element id="Task.input:download-resource-size-bytes.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -159,7 +159,7 @@
     <element id="Task.output:ping-status.type.coding.system">
       <path value="Task.output.type.coding.system"/>
       <min value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}"/>
     </element>
     <element id="Task.output:ping-status.type.coding.code">
       <path value="Task.output.type.coding.code"/>
@@ -175,7 +175,7 @@
     <element id="Task.output:ping-status.value[x].system">
       <path value="Task.output.value[x].system"/>
       <min value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-status"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-status|#{version}"/>
     </element>
     <element id="Task.output:ping-status.value[x].code">
       <path value="Task.output.value[x].code"/>
