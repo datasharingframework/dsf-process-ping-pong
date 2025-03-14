@@ -76,7 +76,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				int downloadResourceSizeBytes = variables
 						.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution);
-				if (downloadResourceSizeBytes >= 0)
+				if (downloadResourceSizeBytes >= 0) // if fat-ping
 				{
 					int downloadedBytes = variables
 							.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
@@ -97,8 +97,10 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
 							downloadSpeed, uploadSpeed, networkSpeedUnit));
 				}
-
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
+				else // if slim-ping
+				{
+					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
+				}
 			}
 		});
 
