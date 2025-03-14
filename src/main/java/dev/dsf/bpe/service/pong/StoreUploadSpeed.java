@@ -1,9 +1,13 @@
 package dev.dsf.bpe.service.pong;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.hl7.fhir.r4.model.DecimalType;
+import org.hl7.fhir.r4.model.IntegerType;
+import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +34,31 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
 		Task startTask = variables.getStartTask();
+		Task cleanup = variables.getLatestTask();
 
-		int uploadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
-		long uploadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis());
+		Optional<IntegerType> uploadedBytesTaskInput = getUploadedBytes(cleanup);
+		Optional<DecimalType> uploadedDurationMillisTaskInput = getUploadedDurationMillis(cleanup);
+		int uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(0);
+		long uploadedDurationMillis = uploadedDurationMillisTaskInput
+				.map(decimalType -> decimalType.getValue().longValue()).orElse(0L);
 
 		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
 				networkSpeedUnit);
 
-		PingStatusGenerator.updateStatusOutputDownloadSpeed(startTask, uploadSpeed, networkSpeedUnit);
+		PingStatusGenerator.updateStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);
+	}
+
+	private Optional<IntegerType> getUploadedBytes(Task task)
+	{
+		return api.getTaskHelper().getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
+				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, IntegerType.class);
+	}
+
+	private Optional<DecimalType> getUploadedDurationMillis(Task task)
+	{
+		return api.getTaskHelper().getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
+				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS, DecimalType.class);
 	}
 }
