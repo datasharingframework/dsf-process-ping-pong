@@ -22,7 +22,7 @@ import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
-import dev.dsf.bpe.service.ping.LogPing;
+import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;

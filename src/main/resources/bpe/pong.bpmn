@@ -23,7 +23,7 @@
       <bpmn:incoming>Flow_0gvrnxd</bpmn:incoming>
       <bpmn:outgoing>Flow_1o3n9u6</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="LogPing" name="Log Ping" camunda:class="dev.dsf.bpe.service.ping.LogPing">
+    <bpmn:serviceTask id="LogPing" name="Log Ping" camunda:class="dev.dsf.bpe.service.pong.LogPing">
       <bpmn:incoming>Flow_1o3n9u6</bpmn:incoming>
       <bpmn:outgoing>Flow_061qpt4</bpmn:outgoing>
     </bpmn:serviceTask>
