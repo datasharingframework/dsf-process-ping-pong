@@ -67,6 +67,8 @@ public class SendPing extends AbstractTaskMessageSend
 		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey), statusCode);
 		String specialErrorMessage = createErrorMessage(exception);
 		ErrorMessageListUtils.add(specialErrorMessage, execution);
+		variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0);
+		variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey), 0L);
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
 	}
 
