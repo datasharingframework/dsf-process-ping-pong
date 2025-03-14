@@ -64,13 +64,13 @@ public class PingStatusGenerator
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (pingStatusOutputs.isEmpty())
 		{
-			task.addOutput(updatePingStatusOutput(new TaskOutputComponent(), statusCode));
+			task.addOutput(updatePongStatusOutput(new TaskOutputComponent(), statusCode));
 		}
 		else
 		{
 			if (pingStatusOutputs.size() == 1)
 			{
-				updatePingStatusOutput(pingStatusOutputs.get(0), statusCode);
+				updatePongStatusOutput(pingStatusOutputs.get(0), statusCode);
 			}
 			else
 			{
