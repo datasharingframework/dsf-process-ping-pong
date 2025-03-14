@@ -79,7 +79,7 @@
     <element id="Task.input:target-endpoints.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}" />
     </element>
     <element id="Task.input:target-endpoints.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -119,7 +119,7 @@
     <element id="Task.input:timer-interval.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}" />
     </element>
     <element id="Task.input:timer-interval.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -160,7 +160,7 @@
     <element id="Task.input:download-resource-size-bytes.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping|#{version}" />
     </element>
     <element id="Task.input:download-resource-size-bytes.type.coding.code">
       <path value="Task.input.type.coding.code" />

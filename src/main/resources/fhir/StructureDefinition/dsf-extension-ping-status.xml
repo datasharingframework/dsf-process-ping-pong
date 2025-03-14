@@ -193,7 +193,7 @@
     </element>
     <element id="Extension.url">
       <path value="Extension.url"/>
-      <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status"/>
+      <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status|#{version}"/>
     </element>
     <element id="Extension.value[x]">
       <path value="Extension.value[x]"/>
