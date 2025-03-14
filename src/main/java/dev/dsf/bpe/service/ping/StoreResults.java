@@ -68,6 +68,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			{
 				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution);
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
+
+				errorMailService.pongMessageNotReceived(task.getIdElement(), target);
 			}
 			else
 			{
@@ -97,9 +99,6 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				}
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
-
-				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING.equals(statusCode))
-					errorMailService.pongMessageNotReceived(task.getIdElement(), target);
 			}
 		});
 
