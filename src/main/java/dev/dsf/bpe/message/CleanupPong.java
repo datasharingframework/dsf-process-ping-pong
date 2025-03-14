@@ -25,8 +25,10 @@ public class CleanupPong extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
-		int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
-		long downloadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
+		int downloadedBytes = variables
+				.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+		long downloadedDurationMillis = variables
+				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
 		return Stream.of(NetworkSpeedMetricGenerator.createDownloadedBytes(downloadedBytes),
 				NetworkSpeedMetricGenerator.createDownloadedDurationMillis(downloadedDurationMillis));
