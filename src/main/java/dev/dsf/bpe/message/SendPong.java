@@ -76,8 +76,8 @@ public class SendPong extends AbstractTaskMessageSend
 		super.doExecute(execution, variables);
 
 		Task mainTask = variables.getStartTask();
-		mainTask.addOutput(PingStatusGenerator.createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
+		PingStatusGenerator.updateStatusOutput(mainTask, target);
+		PingStatusGenerator.updatePongStatusOutput(mainTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT);
 		variables.updateTask(mainTask);
 	}
 
