@@ -60,17 +60,17 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutput(Task task, String statusCode)
 	{
-		List<Task.TaskOutputComponent> pingStatusOutputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
-		if (pingStatusOutputs.isEmpty())
+		if (pongStatusOutputs.isEmpty())
 		{
 			task.addOutput(updatePongStatusOutput(new TaskOutputComponent(), statusCode));
 		}
 		else
 		{
-			if (pingStatusOutputs.size() == 1)
+			if (pongStatusOutputs.size() == 1)
 			{
-				updatePongStatusOutput(pingStatusOutputs.get(0), statusCode);
+				updatePongStatusOutput(pongStatusOutputs.get(0), statusCode);
 			}
 			else
 			{
