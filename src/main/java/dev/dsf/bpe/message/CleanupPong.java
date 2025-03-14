@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
@@ -22,8 +23,13 @@ public class CleanupPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		return Stream.of(NetworkSpeedMetricGenerator.createDownloadedBytes(0),
-				NetworkSpeedMetricGenerator.createDownloadedDurationMillis(0));
+		Target target = variables.getTarget();
+		String correlationKey = target.getCorrelationKey();
+		int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+		long downloadedDurationMillis = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
+
+		return Stream.of(NetworkSpeedMetricGenerator.createDownloadedBytes(downloadedBytes),
+				NetworkSpeedMetricGenerator.createDownloadedDurationMillis(downloadedDurationMillis));
 	}
 
 	@Override
