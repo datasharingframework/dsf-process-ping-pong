@@ -9,6 +9,9 @@ public class NetworkSpeedCalculator
 {
 	public static BigDecimal calculate(int bytes, long duration, String unit)
 	{
+		if (bytes == 0) return BigDecimal.ZERO;
+		if (duration == 0) return BigDecimal.valueOf(Long.MAX_VALUE);
+
 		MathContext mathContext = new MathContext(4);
 		return switch (unit)
 		{
