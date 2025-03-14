@@ -1,7 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import static dev.dsf.bpe.ConstantsPing.BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST;
-
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
