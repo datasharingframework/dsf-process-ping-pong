@@ -61,6 +61,7 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
 		var sCleanupPong = "fhir/StructureDefinition/dsf-task-cleanup-pong.xml";
+		var sNetworkSpeedExtension = "fhir/StructureDefinition/dsf-extension-network-speed.xml";
 
 		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 		var tStartPingAutoStart = "fhir/Task/dsf-task-start-ping-autostart.xml";
@@ -71,13 +72,13 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPingStatus = "fhir/ValueSet/dsf-ping-status.xml";
 		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
 
-		return Map.of(
-				ConstantsPing.PROCESS_NAME_FULL_PING, Arrays.asList(aPing, cPing, cPingStatus, cPingUnits, sPingStatus,
-						sStartPing, sPong, sCleanupPong, tStartPing, vPing, vPingStatus, vPingUnits),
+		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
+				Arrays.asList(aPing, cPing, cPingStatus, cPingUnits, sPingStatus, sStartPing, sPong, sCleanupPong,
+						sNetworkSpeedExtension, tStartPing, vPing, vPingStatus, vPingUnits),
 				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
 				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingUnits, sPingStatus,
-						sPing, vPing, vPongStatus, vPingUnits));
+						sPing, sNetworkSpeedExtension, vPing, vPongStatus, vPingUnits));
 	}
 }
