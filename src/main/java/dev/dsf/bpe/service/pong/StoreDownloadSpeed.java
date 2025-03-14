@@ -32,7 +32,7 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 
 		int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
 		long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis());
+				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 
 		BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis,
 				networkSpeedUnit);
