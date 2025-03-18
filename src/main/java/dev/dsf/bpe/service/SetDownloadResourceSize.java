@@ -7,7 +7,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IntegerType;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
