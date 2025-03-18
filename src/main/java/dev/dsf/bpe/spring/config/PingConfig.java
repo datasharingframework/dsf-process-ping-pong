@@ -22,6 +22,7 @@ import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
+import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
@@ -262,5 +263,12 @@ public class PingConfig
 	public StoreDownloadSpeed storeDownloadSpeed()
 	{
 		return new StoreDownloadSpeed(api, networkSpeedUnit);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogAndSaveSendError logAndSaveSendError()
+	{
+		return new LogAndSaveSendError(api);
 	}
 }

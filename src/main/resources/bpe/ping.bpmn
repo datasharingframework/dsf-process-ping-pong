@@ -49,7 +49,7 @@
       </bpmn:exclusiveGateway>
       <bpmn:exclusiveGateway id="Gateway_09z7b0z">
         <bpmn:incoming>Flow_136htek</bpmn:incoming>
-        <bpmn:incoming>Flow_101sqed</bpmn:incoming>
+        <bpmn:incoming>Flow_0upu487</bpmn:incoming>
         <bpmn:outgoing>Flow_1ho1hys</bpmn:outgoing>
       </bpmn:exclusiveGateway>
       <bpmn:endEvent id="SubProcessEndEvent" camunda:asyncAfter="true">
@@ -124,7 +124,7 @@
       <bpmn:sequenceFlow id="Flow_1j54c2s" sourceRef="Gateway_0z5gz96" targetRef="EventBasedGateway" />
       <bpmn:sequenceFlow id="Flow_136htek" sourceRef="LogNoResponse" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="Activity_0ri6fnv" targetRef="Gateway_0z5gz96" />
-      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Gateway_09z7b0z">
+      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Activity_0p5edt9">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp; (statusCode == 'not-allowed' || statusCode == 'not-reachable')}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
@@ -143,6 +143,11 @@
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_1jwekqw" sourceRef="Activity_081me01" targetRef="Gateway_0p0be0a" />
       <bpmn:sequenceFlow id="Flow_03nx6rk" sourceRef="Gateway_02orad4" targetRef="Event_1foycg9" />
+      <bpmn:sequenceFlow id="Flow_0upu487" sourceRef="Activity_0p5edt9" targetRef="Gateway_09z7b0z" />
+      <bpmn:serviceTask id="Activity_0p5edt9" name="Log And Save Send Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveSendError">
+        <bpmn:incoming>Flow_101sqed</bpmn:incoming>
+        <bpmn:outgoing>Flow_0upu487</bpmn:outgoing>
+      </bpmn:serviceTask>
       <bpmn:textAnnotation id="TextAnnotation_0uc8utt">
         <bpmn:text>Information in message:
 - dowloadResourceSize: long
@@ -316,6 +321,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="1980" y="622" width="170" height="37" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0p0eucz_di" bpmnElement="Activity_0p5edt9">
+        <dc:Bounds x="1520" y="520" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0968qvb" bpmnElement="Event_0i4slcz">
         <dc:Bounds x="2152" y="542" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -354,8 +362,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNEdge id="BPMNEdge_0ffsn0i" bpmnElement="Flow_101sqed">
         <di:waypoint x="1340" y="385" />
         <di:waypoint x="1340" y="560" />
-        <di:waypoint x="1780" y="560" />
-        <di:waypoint x="1780" y="475" />
+        <di:waypoint x="1520" y="560" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1265" y="524" width="70" height="27" />
         </bpmndi:BPMNLabel>
@@ -416,6 +423,11 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNEdge id="BPMNEdge_07aga42" bpmnElement="Association_0l3n1oc">
         <di:waypoint x="2074" y="622" />
         <di:waypoint x="2102" y="560" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0upu487_di" bpmnElement="Flow_0upu487">
+        <di:waypoint x="1620" y="560" />
+        <di:waypoint x="1780" y="560" />
+        <di:waypoint x="1780" y="475" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_06i4ly8" bpmnElement="Activity_16rb6hc">
         <dc:Bounds x="690" y="460" width="100" height="80" />
