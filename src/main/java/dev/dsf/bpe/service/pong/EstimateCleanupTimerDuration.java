@@ -8,14 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(EstimateCleanupTimerDuration.class);
-
 	public EstimateCleanupTimerDuration(ProcessPluginApi api)
 	{
 		super(api);
@@ -24,6 +23,9 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(EstimateCleanupTimerDuration.class, variables.getStartTask());
+
+		logger.debug("Estimating cleanup timer duration...");
 		final long minTimerDurationMillis = 20000;
 		long downloadedDurationMillis = variables
 				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
@@ -34,6 +36,6 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 		String cleanUpTimerDuration = Duration.ofMillis(timerDurationMillis).toString();
 		variables.setString("cleanupTimerDuration", cleanUpTimerDuration);
 
-		logger.info("Estimated cleanup timer duration as {}", cleanUpTimerDuration);
+		logger.debug("Estimated cleanup timer duration as {}", cleanUpTimerDuration);
 	}
 }

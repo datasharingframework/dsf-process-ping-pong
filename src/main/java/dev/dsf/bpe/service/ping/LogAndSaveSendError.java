@@ -2,9 +2,12 @@ package dev.dsf.bpe.service.ping;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -20,6 +23,8 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(LogAndSaveSendError.class, variables.getStartTask());
+
 		String correlationKey = variables.getTarget().getCorrelationKey();
 		String statusCode = (String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode());
 		String errorMessage = (String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableErrorMessage());
@@ -28,5 +33,7 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		ErrorMessageListUtils.add(errorMessage, execution);
 		variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0);
 		variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey), 0L);
+		logger.debug("Saved error when trying to send ping message. Status: {}, error message: {}", statusCode,
+				errorMessage);
 	}
 }

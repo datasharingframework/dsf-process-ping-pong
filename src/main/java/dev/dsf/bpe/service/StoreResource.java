@@ -10,15 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.util.ReadAccessTagGenerator;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreResource extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(StoreResource.class);
-
 	public StoreResource(ProcessPluginApi api)
 	{
 		super(api);
@@ -27,6 +27,9 @@ public class StoreResource extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(StoreResource.class, variables.getStartTask());
+		logger.debug("Storing binary resource for download...");
+
 		IdType downloadResource = storeBinary(
 				variables.getByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE));
 
@@ -34,7 +37,7 @@ public class StoreResource extends AbstractServiceDelegate
 
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 
-		logger.info("Stored binary resource for download");
+		logger.debug("Stored binary resource for download");
 	}
 
 	private IdType storeBinary(byte[] downloadResourceContent)

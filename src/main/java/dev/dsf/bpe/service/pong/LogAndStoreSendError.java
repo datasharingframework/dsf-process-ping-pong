@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -17,8 +18,6 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class LogAndStoreSendError extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(LogAndStoreSendError.class);
-
 	public LogAndStoreSendError(ProcessPluginApi api)
 	{
 		super(api);
@@ -27,6 +26,8 @@ public class LogAndStoreSendError extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(LogAndSaveAndStoreError.class, variables.getStartTask());
+
 		String statusCode = variables.getString(ConstantsPing.getBpmnExecutionVariableStatusCode());
 		String errorMessage = variables.getString(ConstantsPing.getBpmnExecutionVariableErrorMessage());
 		Target target = variables.getTarget();

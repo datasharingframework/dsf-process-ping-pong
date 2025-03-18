@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -21,8 +22,6 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class SavePong extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(SavePong.class);
-
 	public SavePong(ProcessPluginApi api)
 	{
 		super(api);
@@ -31,7 +30,10 @@ public class SavePong extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(SavePong.class, variables.getStartTask());
+
 		Target target = variables.getTarget();
+		logger.debug("Pong received from {}. Saving pong information...", target.getEndpointUrl());
 		String correlationKey = target.getCorrelationKey();
 		delegateExecution.removeVariable("statusCode");
 		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey),
@@ -56,6 +58,6 @@ public class SavePong extends AbstractServiceDelegate
 				.map(PrimitiveType::getValue).toList();
 		ErrorMessageListUtils.addAll(errorList, delegateExecution);
 
-		logger.info("Pong received from {}, saved pong information", target.getEndpointUrl());
+		logger.debug("Saved pong information.");
 	}
 }

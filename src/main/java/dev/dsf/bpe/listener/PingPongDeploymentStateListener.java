@@ -27,17 +27,19 @@ public class PingPongDeploymentStateListener implements ProcessPluginDeploymentS
 	@Override
 	public void onProcessesDeployed(List<String> processes)
 	{
+		logger.debug("Validating plugin configuration...");
 		if (ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES.contains(networkSpeedUnit))
 		{
-			logger.info("Network speed unit is valid: {}", networkSpeedUnit);
+			logger.debug("Network speed unit is valid: {}", networkSpeedUnit);
 		}
 		else
 		{
 			pingConfig.setNetworkSpeedUnit(ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
-			logger.info("Network speed unit \"{}\" is not valid. Valid values are: {}. Defaulting to \"{}\"",
+			logger.debug("Network speed unit \"{}\" is not valid. Valid values are: {}. Defaulting to \"{}\"",
 					networkSpeedUnit, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES,
 					ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
 		}
+		logger.debug("Configuration validation complete.");
 	}
 
 	@Override

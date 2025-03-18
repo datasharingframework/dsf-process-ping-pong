@@ -3,11 +3,11 @@ package dev.dsf.bpe.service.pong;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.service.ping.SelectPingTargets;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
@@ -15,8 +15,6 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class SelectPongTarget extends AbstractServiceDelegate implements InitializingBean
 {
-	private static final Logger logger = LoggerFactory.getLogger(SelectPongTarget.class);
-
 	public SelectPongTarget(ProcessPluginApi api)
 	{
 		super(api);
@@ -25,6 +23,9 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(SelectPingTargets.class, variables.getStartTask());
+		logger.debug("Selecting pong targets...");
+
 		Task task = variables.getStartTask();
 
 		String correlationKey = api.getTaskHelper()
@@ -44,5 +45,6 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 
 		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,
 				targetEndpointAddress, correlationKey));
+		logger.debug("Selected pong targets.");
 	}
 }
