@@ -1,5 +1,7 @@
 package dev.dsf.bpe.util.task.output.generator;
 
+import static dev.dsf.bpe.util.VersionUtils.appendFhirResourceVersion;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -634,12 +636,13 @@ public class PingStatusGenerator
 	private static Extension getOrCreatePingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
-				.filter(extension -> ConstantsPing.EXTENSION_URL_PING_STATUS.equals(extension.getUrl())).toList();
+				.filter(extension -> appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS).equals(extension.getUrl()))
+				.toList();
 		Extension extension;
 		if (pingStatusExtensions.isEmpty())
 		{
 			extension = outputComponent.addExtension();
-			extension.setUrl(ConstantsPing.EXTENSION_URL_PING_STATUS);
+			extension.setUrl(appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS));
 		}
 		else
 		{
