@@ -256,7 +256,7 @@ public class TaskProfileTest
 		};
 
 		Task task = createValidTaskStartPingProcess();
-		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, List.of("some error message")));
@@ -300,7 +300,7 @@ public class TaskProfileTest
 		};
 
 		Task task = createValidTaskStartPingProcess();
-		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, BigDecimal.ZERO, BigDecimal.ZERO,
