@@ -229,7 +229,7 @@
       <min value="1" />
       <type>
         <code value="Extension" />
-        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status|#{version}" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2|#{version}" />
       </type>
     </element>
     <element id="Task.output:pong-status.type">
