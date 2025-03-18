@@ -103,6 +103,8 @@ public final class ConstantsPing
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
 
+	public static final int DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT = 10000000;
+
 	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";

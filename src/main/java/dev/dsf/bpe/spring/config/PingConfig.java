@@ -233,7 +233,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetDownloadResourceSize setDownloadResourceSize()
 	{
-		return new SetDownloadResourceSize(api);
+		return new SetDownloadResourceSize(api, (int) maxDownloadSizeBytes);
 	}
 
 	@Bean
