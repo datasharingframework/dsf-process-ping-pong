@@ -2,10 +2,18 @@ package dev.dsf.fhir.profiles;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.hl7.fhir.r4.model.IntegerType;
@@ -20,6 +28,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
@@ -589,5 +599,74 @@ public class TaskProfileTest
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
 		return task;
+	}
+
+	@Test
+	public void testDraftTaskStartPingValid() throws IOException
+	{
+		FhirContext ctx = FhirContext.forR4();
+		InputStream fileInputStream = getClass().getClassLoader()
+				.getResourceAsStream("fhir/Task/dsf-task-start-ping.xml");
+		String xml = new String(fileInputStream.readAllBytes());
+		xml = fillPlaceholders(xml);
+		fileInputStream.close();
+
+		IParser parser = ctx.newXmlParser();
+		Task task = parser.parseResource(Task.class, xml);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testDraftTaskStartPingAutostartValid() throws IOException
+	{
+		FhirContext ctx = FhirContext.forR4();
+		InputStream fileInputStream = getClass().getClassLoader()
+				.getResourceAsStream("fhir/Task/dsf-task-start-ping-autostart.xml");
+		String xml = new String(fileInputStream.readAllBytes());
+		xml = fillPlaceholders(xml);
+		fileInputStream.close();
+
+		IParser parser = ctx.newXmlParser();
+		Task task = parser.parseResource(Task.class, xml);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testDraftTaskStopPingAutostartValid() throws IOException
+	{
+		FhirContext ctx = FhirContext.forR4();
+		InputStream fileInputStream = getClass().getClassLoader()
+				.getResourceAsStream("fhir/Task/dsf-task-stop-ping-autostart.xml");
+		String xml = new String(fileInputStream.readAllBytes());
+		xml = fillPlaceholders(xml);
+		fileInputStream.close();
+
+		IParser parser = ctx.newXmlParser();
+		Task task = parser.parseResource(Task.class, xml);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	private String fillPlaceholders(String xml)
+	{
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		xml = xml.replaceAll("#\\{version}", def.getResourceVersion());
+		xml = xml.replaceAll("#\\{date}",
+				dtf.format(LocalDate.ofInstant(Instant.now(), TimeZone.getDefault().toZoneId())));
+		return xml;
 	}
 }
