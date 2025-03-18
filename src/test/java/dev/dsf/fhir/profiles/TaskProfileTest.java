@@ -60,10 +60,11 @@ public class TaskProfileTest
 					"dsf-task-ping.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
 					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml"),
-			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml", "dsf-ping.xml",
-					"dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-units.xml"),
-			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml", "dsf-ping-1_0.xml",
-					"dsf-ping-status.xml", "dsf-ping-status-1_0.xml", "dsf-pong-status.xml", "dsf-pong-status-1_0.xml", "dsf-ping-units.xml"));
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
+					"dsf-ping-1_0.xml", "dsf-ping-status.xml", "dsf-ping-status-1_0.xml", "dsf-ping-units.xml"),
+			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping.xml",
+					"dsf-ping-1_0.xml", "dsf-ping-status.xml", "dsf-ping-status-1_0.xml", "dsf-pong-status.xml",
+					"dsf-pong-status-1_0.xml", "dsf-ping-units.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
