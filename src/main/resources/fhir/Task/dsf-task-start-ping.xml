@@ -38,7 +38,7 @@
 	<input>
 		<type>
 			<coding>
-				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
 				<code value="download-resource-size-bytes" />
 			</coding>
 		</type>
@@ -47,7 +47,7 @@
 	<input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
             <code value="target-endpoints"/>
          </coding>
       </type>

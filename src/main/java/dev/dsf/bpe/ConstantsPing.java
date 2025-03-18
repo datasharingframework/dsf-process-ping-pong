@@ -45,7 +45,7 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
 
-	public static final String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping";
+	public static final String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping-v2";
 	public static final String CODESYSTEM_DSF_PING_VALUE_PING_STATUS = "ping-status";
 	public static final String CODESYSTEM_DSF_PING_VALUE_PONG_STATUS = "pong-status";
 	public static final String CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER = "endpoint-identifier";
@@ -56,7 +56,7 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
 
-	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status";
+	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status-v2";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
@@ -65,7 +65,7 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_RESOURCE_DOWNLOADED = "resource-downloaded";
 
-	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units";
+	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
