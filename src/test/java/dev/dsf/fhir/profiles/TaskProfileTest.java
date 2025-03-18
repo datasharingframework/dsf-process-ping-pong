@@ -24,7 +24,6 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
-import dev.dsf.bpe.util.VersionUtils;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;
@@ -405,7 +404,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
+		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -446,7 +445,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
+		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000));
@@ -462,7 +461,7 @@ public class TaskProfileTest
 	private Task createValidTaskPing()
 	{
 		Task task = new Task();
-		task.getMeta().addProfile(VersionUtils.appendFhirResourceVersion(ConstantsPing.PROFILE_DSF_TASK_PING));
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING);
 		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PONG_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);
@@ -481,7 +480,7 @@ public class TaskProfileTest
 		task.addInput()
 				.setValue(new Reference().setType(ResourceType.Endpoint.name())
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
-				.getType().addCoding().setSystem(VersionUtils.appendFhirResourceVersion(ConstantsPing.CODESYSTEM_DSF_PING))
+				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
 
 		return task;
