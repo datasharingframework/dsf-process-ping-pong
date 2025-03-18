@@ -73,14 +73,14 @@
         <element id="Extension.extension:unit.value[x].system">
             <path value="Extension.extension.value[x].system"/>
             <min value="1"/>
-            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-units"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-units-v2"/>
         </element>
         <element id="Extension.extension:unit.value[x].code">
             <path value="Extension.extension.value[x].code"/>
             <min value="1"/>
             <binding>
                 <strength value="required"/>
-                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-units"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-units-v2"/>
             </binding>
         </element>
         <element id="Extension.url">

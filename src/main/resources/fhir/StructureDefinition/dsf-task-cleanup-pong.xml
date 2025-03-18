@@ -80,7 +80,7 @@
             <path value="Task.input.type.coding.system"/>
             <min value="1"/>
             <max value="1"/>
-            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
         </element>
         <element id="Task.input:downloaded-bytes.type.coding.code">
             <path value="Task.input.type.coding.code"/>
@@ -116,7 +116,7 @@
             <path value="Task.input.type.coding.system"/>
             <min value="1"/>
             <max value="1"/>
-            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
         </element>
         <element id="Task.input:downloaded-duration-millis.type.coding.code">
             <path value="Task.input.type.coding.code"/>
