@@ -2,17 +2,11 @@ package dev.dsf.bpe.service;
 
 import java.util.Base64;
 import java.util.Random;
-import java.util.UUID;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.Binary;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.service.pong.LogPing;
-import dev.dsf.bpe.util.ReadAccessTagGenerator;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
