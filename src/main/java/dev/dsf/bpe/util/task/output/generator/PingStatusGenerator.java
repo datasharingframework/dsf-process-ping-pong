@@ -636,7 +636,8 @@ public class PingStatusGenerator
 	private static Extension getOrCreatePingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
-				.filter(extension -> appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS).equals(extension.getUrl()))
+				.filter(extension -> appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS)
+						.equals(extension.getUrl()))
 				.toList();
 		Extension extension;
 		if (pingStatusExtensions.isEmpty())
