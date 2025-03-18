@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -21,10 +22,15 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(SetEndpointIdentifier.class, variables.getStartTask());
+		logger.debug("Setting endpoint identifier...");
+
 		Task task = variables.getStartTask();
 		String endpointIdentifierValue = getEndpointIdentifierValue(task);
 		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER,
 				endpointIdentifierValue);
+
+		logger.debug("Set endpoint identifier to " + endpointIdentifierValue);
 	}
 
 	private String getEndpointIdentifierValue(Task task)

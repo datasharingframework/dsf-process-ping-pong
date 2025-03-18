@@ -5,14 +5,13 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveAndStoreError.class);
-
 	public LogAndSaveAndStoreError(ProcessPluginApi api)
 	{
 		super(api);
@@ -21,6 +20,8 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		logger.info("Logging and saving and storing error");
+		PingPongLogger logger = new PingPongLogger(LogAndSaveAndStoreError.class, variables.getStartTask());
+
+		logger.debug("Logging and saving and storing error");
 	}
 }

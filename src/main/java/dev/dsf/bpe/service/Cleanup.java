@@ -8,14 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.service.pong.LogPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class Cleanup extends AbstractServiceDelegate
 {
-	private final static Logger logger = LoggerFactory.getLogger(Cleanup.class);
-
 	public Cleanup(ProcessPluginApi api)
 	{
 		super(api);
@@ -24,7 +24,8 @@ public class Cleanup extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		logger.info("Cleaning up...");
+		PingPongLogger logger = new PingPongLogger(Cleanup.class, variables.getStartTask());
+		logger.debug("Cleaning up...");
 		String downloadResourceId = new IdType(
 				variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE)).getIdPart();
 		if (downloadResourceId != null)
@@ -32,12 +33,12 @@ public class Cleanup extends AbstractServiceDelegate
 			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class, downloadResourceId);
 			api.getFhirWebserviceClientProvider().getLocalWebserviceClient().deletePermanently(Binary.class,
 					downloadResourceId);
-			logger.info("Deleted Binary resource with ID {}", downloadResourceId);
+			logger.debug("Deleted Binary resource with ID {}", downloadResourceId);
 		}
 		else
 		{
-			logger.info("Nothing to do");
+			logger.debug("Nothing to do");
 		}
-		logger.info("Cleanup complete.");
+		logger.debug("Cleanup complete.");
 	}
 }

@@ -6,10 +6,13 @@ import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
@@ -85,6 +88,9 @@ public class SendPong extends AbstractTaskMessageSend
 	protected void handleIntermediateThrowEventError(DelegateExecution execution, Variables variables,
 			Exception exception, String errorMessage)
 	{
+		PingPongLogger logger = new PingPongLogger(SendPong.class, variables.getStartTask());
+		Target target = variables.getTarget();
+
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
 				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
 						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
@@ -93,6 +99,7 @@ public class SendPong extends AbstractTaskMessageSend
 
 		String specialErrorMessage = createErrorMessage(exception);
 		execution.setVariable(ConstantsPing.getBpmnExecutionVariableErrorMessage(), specialErrorMessage);
+		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
 	}
 
 	private String createErrorMessage(Exception exception)

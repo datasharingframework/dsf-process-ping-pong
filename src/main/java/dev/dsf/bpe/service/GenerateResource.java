@@ -11,14 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.util.ReadAccessTagGenerator;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class GenerateResource extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(GenerateResource.class);
 	private final int maxUploadSizeBytes;
 
 	public GenerateResource(ProcessPluginApi api, int maxUploadSizeBytes)
@@ -30,13 +31,16 @@ public class GenerateResource extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(GenerateResource.class, variables.getStartTask());
+		logger.debug("Generating resource...");
 		int downloadResourceSizeBytes = getDownloadResourceSize(variables);
 
 		variables.setByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE,
-				generateRandomBinaryContent(downloadResourceSizeBytes));
+				generateRandomBinaryContent(downloadResourceSizeBytes, logger));
+		logger.debug("Generated resource.");
 	}
 
-	private byte[] generateRandomBinaryContent(int desiredSizeBytes)
+	private byte[] generateRandomBinaryContent(int desiredSizeBytes, PingPongLogger logger)
 	{
 		int sizeBytes = Math.min(maxUploadSizeBytes, desiredSizeBytes);
 		byte[] bytes = base64Encode(generateRandomByteArray((sizeBytes / 4) * 3));

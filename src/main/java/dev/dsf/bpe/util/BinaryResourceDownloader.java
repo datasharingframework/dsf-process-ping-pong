@@ -1,22 +1,25 @@
 package dev.dsf.bpe.util;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class BinaryResourceDownloader
 {
-	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
+	private final PingPongLogger logger;
+
+	public BinaryResourceDownloader(PingPongLogger logger)
+	{
+		this.logger = logger;
+	}
 
 	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, int maxDownloadSizeBytes)
 	{
@@ -40,7 +43,7 @@ public class BinaryResourceDownloader
 		try (binaryResourceInputStream)
 		{
 			logger.info(
-					"Starting resource download for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes",
+					"Downloading resource for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes...",
 					downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
 			long downloadStartTime = System.currentTimeMillis();
 			int numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
@@ -54,6 +57,7 @@ public class BinaryResourceDownloader
 		}
 		catch (IOException e)
 		{
+			logger.error("Encountered an error while downloading resource: {}", e.getMessage());
 			downloadResult = new DownloadResult(e.getMessage());
 		}
 		return downloadResult;

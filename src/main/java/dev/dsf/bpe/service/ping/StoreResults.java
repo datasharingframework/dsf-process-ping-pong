@@ -8,11 +8,14 @@ import java.util.Objects;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -44,6 +47,10 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(StoreResults.class, variables.getStartTask());
+
+		logger.debug("Storing results for process started with Task {}",
+				variables.getStartTask().getIdElement().getValue());
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 
@@ -107,5 +114,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		// TODO only send one combined status mail
 
 		variables.updateTask(task);
+
+		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
 	}
 }

@@ -9,14 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class LogPing extends AbstractServiceDelegate
 {
-	private static final Logger logger = LoggerFactory.getLogger(LogPing.class);
-
 	public LogPing(ProcessPluginApi api)
 	{
 		super(api);
@@ -25,6 +24,8 @@ public class LogPing extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
+		PingPongLogger logger = new PingPongLogger(LogPing.class, variables.getStartTask());
+
 		Task task = variables.getLatestTask();
 
 		logger.info("PING from {} (endpoint: {})", task.getRequester().getIdentifier().getValue(),
