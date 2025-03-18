@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -66,7 +65,7 @@ public class SendPing extends AbstractTaskMessageSend
 
 		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey), statusCode);
 		String specialErrorMessage = createErrorMessage(exception);
-		ErrorMessageListUtils.add(specialErrorMessage, execution);
+		variables.setString(ConstantsPing.getBpmnExecutionVariableErrorMessage(correlationKey), specialErrorMessage);
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
 	}
 
