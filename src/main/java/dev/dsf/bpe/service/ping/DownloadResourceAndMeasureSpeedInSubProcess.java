@@ -29,15 +29,16 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
 	{
-		PingPongLogger logger = new PingPongLogger(DownloadResourceAndMeasureSpeedInSubProcess.class, variables.getStartTask());
+		PingPongLogger logger = new PingPongLogger(DownloadResourceAndMeasureSpeedInSubProcess.class,
+				variables.getStartTask());
 		logger.debug("Starting resource download to measure speed...");
 
 		Task task = variables.getLatestTask();
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger).download(variables, api,
-				task, maxDownloadSizeBytes);
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
+				.download(variables, api, task, maxDownloadSizeBytes);
 
 		if (downloadResult.getErrorMessage() == null)
 		{

@@ -32,8 +32,8 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 
 		Task task = variables.getStartTask();
 
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger).download(variables, api,
-				task, maxDownloadSizeBytes);
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
+				.download(variables, api, task, maxDownloadSizeBytes);
 
 		if (downloadResult.getErrorMessage() == null)
 		{
