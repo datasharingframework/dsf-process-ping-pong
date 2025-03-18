@@ -78,7 +78,7 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
 	public static final String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
 
-	public static final String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
+	public static final String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2";
 	public static final String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
 	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	public static final String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
