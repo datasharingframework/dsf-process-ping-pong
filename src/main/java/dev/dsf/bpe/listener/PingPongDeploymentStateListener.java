@@ -39,6 +39,24 @@ public class PingPongDeploymentStateListener implements ProcessPluginDeploymentS
 					networkSpeedUnit, ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUES,
 					ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
 		}
+
+		//TODO: fixme
+		int maxDownloadSizeBytes = pingConfig.getMaxDownloadSizeBytes();
+		int maxDownloadSizeBytesHeapFix = 100000000;
+		if (maxDownloadSizeBytes > maxDownloadSizeBytesHeapFix)
+		{
+			pingConfig.setMaxDownloadSizeBytes(maxDownloadSizeBytesHeapFix);
+			logger.debug("MaxDownloadSizeBytes is too large. Setting maxDownloadSizeBytes to {}. This avoids Java running out of memory and will be fixed in a future release", maxDownloadSizeBytesHeapFix);
+		}
+
+		int maxUploadSizeBytes = pingConfig.getMaxUploadSizeBytes();
+		int maxUploadSizeBytesHeapFix = 100000000;
+		if (maxUploadSizeBytes > maxUploadSizeBytesHeapFix)
+		{
+			pingConfig.setMaxUploadSizeBytes(maxUploadSizeBytesHeapFix);
+			logger.debug("MaxUploadSizeBytes is too large. Setting maxUploadSizeBytes to {}. This avoids Java running out of memory and will be fixed in a future release", maxUploadSizeBytesHeapFix);
+		}
+
 		logger.debug("Configuration validation complete.");
 	}
 
@@ -46,5 +64,6 @@ public class PingPongDeploymentStateListener implements ProcessPluginDeploymentS
 	public void afterPropertiesSet() throws Exception
 	{
 		Objects.requireNonNull(networkSpeedUnit);
+		Objects.requireNonNull(pingConfig);
 	}
 }
