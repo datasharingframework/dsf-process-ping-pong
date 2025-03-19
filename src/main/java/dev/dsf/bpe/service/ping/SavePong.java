@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service.ping;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -39,16 +40,19 @@ public class SavePong extends AbstractServiceDelegate
 
 		Task pong = variables.getLatestTask();
 
-		long downloadedDurationMillis = api.getTaskHelper()
-				.getFirstInputParameterValue(pong, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS, DecimalType.class)
-				.get().getValue().longValue();
-		variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey),
-				downloadedDurationMillis);
+		Optional<DecimalType> optDownloadedDurationMillis = api.getTaskHelper().getFirstInputParameterValue(pong,
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS,
+				DecimalType.class);
+		optDownloadedDurationMillis.ifPresent(decimalType -> variables.setLong(
+				ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey),
+				decimalType.getValue().longValue()));
 
-		int downloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong, ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, IntegerType.class).get().getValue();
-		variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), downloadedBytes);
+		Optional<IntegerType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES,
+				IntegerType.class);
+		optDownloadedBytes.ifPresent(integerType -> variables.setInteger(
+				ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), integerType.getValue()));
+
 
 		List<String> errorList = api.getTaskHelper()
 				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
