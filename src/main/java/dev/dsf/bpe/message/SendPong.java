@@ -114,6 +114,6 @@ public class SendPong extends AbstractTaskMessageSend
 					+ statusInfo.getReasonPhrase();
 		}
 		else
-			return exception.getMessage();
+			return "Error when sending ping message: " + exception.getMessage();
 	}
 }
