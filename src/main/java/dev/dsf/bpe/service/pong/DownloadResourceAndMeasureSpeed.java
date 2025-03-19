@@ -42,7 +42,8 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		}
 		else
 		{
-			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR, downloadResult.getErrorMessage());
+			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR,
+					downloadResult.getErrorMessage());
 		}
 
 		logger.debug("Completed resource download and measured speed.");
