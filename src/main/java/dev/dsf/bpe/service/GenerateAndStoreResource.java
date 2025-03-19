@@ -78,6 +78,6 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate
 	{
 		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().createBinary(
 				new ByteArrayInputStream(downloadResourceContent), ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
-				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getIdPart());
+				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 }
