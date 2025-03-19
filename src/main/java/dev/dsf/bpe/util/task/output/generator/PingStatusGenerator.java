@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -545,6 +546,7 @@ public class PingStatusGenerator
 	{
 		outputComponent.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
 		outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -582,6 +584,7 @@ public class PingStatusGenerator
 						.setCode(outputParameter);
 			}
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -595,6 +598,7 @@ public class PingStatusGenerator
 				.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
 				.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -636,6 +640,7 @@ public class PingStatusGenerator
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
 					.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -651,7 +656,7 @@ public class PingStatusGenerator
 						.setValue(new StringType(errorMessage));
 			}
 		}
-
+		sortStatusOutputExtensions(outputComponent);
 		return outputComponent;
 	}
 
@@ -676,6 +681,7 @@ public class PingStatusGenerator
 		{
 			extension.setExtension(nonErrorExtensions);
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -712,6 +718,7 @@ public class PingStatusGenerator
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -748,6 +755,7 @@ public class PingStatusGenerator
 						.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 			}
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -766,6 +774,7 @@ public class PingStatusGenerator
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
 					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
@@ -802,27 +811,57 @@ public class PingStatusGenerator
 						.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
 			}
 		}
+		sortStatusOutputExtensions(outputComponent);
 
 		return outputComponent;
 	}
 
 	private static Extension getOrCreatePingStatusExtension(TaskOutputComponent outputComponent)
 	{
+		Optional<Extension> optionalExtension = getPingStatusExtension(outputComponent);
+		if (optionalExtension.isPresent())
+		{
+			return optionalExtension.get();
+		}
+		else
+		{
+			Extension extension = outputComponent.addExtension();
+			extension.setUrl(appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS));
+			return extension;
+		}
+	}
+
+	private static Optional<Extension> getPingStatusExtension(Task task)
+	{
+		Optional<TaskOutputComponent> optPingStatusOutput = task.getOutput().stream()
+				.filter(outputComponent -> outputComponent.getExtension().stream()
+						.anyMatch(extension -> ConstantsPing.EXTENSION_URL_PING_STATUS.equals(extension.getUrl())))
+				.findFirst();
+		if (optPingStatusOutput.isPresent())
+		{
+			return getPingStatusExtension(optPingStatusOutput.get());
+		}
+		else
+		{
+			return Optional.empty();
+		}
+	}
+
+	private static Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
+	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
 				.filter(extension -> appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS)
 						.equals(extension.getUrl()))
 				.toList();
-		Extension extension;
 		if (pingStatusExtensions.isEmpty())
 		{
-			extension = outputComponent.addExtension();
-			extension.setUrl(appendFhirResourceVersion(ConstantsPing.EXTENSION_URL_PING_STATUS));
+			return Optional.empty();
 		}
 		else
 		{
 			if (pingStatusExtensions.size() == 1)
 			{
-				extension = pingStatusExtensions.get(0);
+				return Optional.of(pingStatusExtensions.get(0));
 			}
 			else
 			{
@@ -830,7 +869,6 @@ public class PingStatusGenerator
 						"Only one ping status extension is allowed but found " + pingStatusExtensions.size());
 			}
 		}
-		return extension;
 	}
 
 	private static List<Task.TaskOutputComponent> getOutputsByCodes(Task task, String... codes)
@@ -872,5 +910,82 @@ public class PingStatusGenerator
 								+ extensionsMatchingCorrelationKey.size());
 			}
 		}).collect(Collectors.toCollection(ArrayList::new));
+	}
+
+	private static void sortStatusOutputExtensions(Task task)
+	{
+		List<TaskOutputComponent> outputs = task.getOutput().stream()
+				.filter(outputComponent -> ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS
+						.equals(outputComponent.getType().getCodingFirstRep().getCode())
+						|| ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS
+								.equals(outputComponent.getType().getCodingFirstRep().getCode()))
+				.toList();
+		outputs.forEach(PingStatusGenerator::sortStatusOutputExtensions);
+	}
+
+	private static void sortStatusOutputExtensions(TaskOutputComponent outputComponent)
+	{
+		Optional<Extension> optPingStatusExtension = getPingStatusExtension(outputComponent);
+		if (optPingStatusExtension.isPresent())
+		{
+			Extension pingStatusExtension = optPingStatusExtension.get();
+			List<Extension> extensions = pingStatusExtension.getExtension();
+			List<Extension> sortedExtensions = new ArrayList<>();
+
+			// Extensions representing Target
+			Optional<Extension> correlationKeyExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_CORRELATION_KEY.equals(extension.getUrl()))
+					.findFirst();
+			Optional<Extension> organizationIdentifierExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER.equals(extension.getUrl()))
+					.findFirst();
+			Optional<Extension> endpointIdentifierExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER.equals(extension.getUrl()))
+					.findFirst();
+			if (correlationKeyExtension.isPresent())
+			{
+				extensions.remove(correlationKeyExtension.get());
+				sortedExtensions.add(correlationKeyExtension.get());
+			}
+			if (organizationIdentifierExtension.isPresent())
+			{
+				extensions.remove(organizationIdentifierExtension.get());
+				sortedExtensions.add(organizationIdentifierExtension.get());
+			}
+			if (endpointIdentifierExtension.isPresent())
+			{
+				extensions.remove(endpointIdentifierExtension.get());
+				sortedExtensions.add(endpointIdentifierExtension.get());
+			}
+
+			Optional<Extension> downloadSpeedExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED.equals(extension.getUrl()))
+					.findFirst();
+			if (downloadSpeedExtension.isPresent())
+			{
+				extensions.remove(downloadSpeedExtension.get());
+				sortedExtensions.add(downloadSpeedExtension.get());
+			}
+
+			Optional<Extension> uploadSpeedExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_UPLOAD_SPEED.equals(extension.getUrl()))
+					.findFirst();
+			if (uploadSpeedExtension.isPresent())
+			{
+				extensions.remove(uploadSpeedExtension.get());
+				sortedExtensions.add(uploadSpeedExtension.get());
+			}
+
+			List<Extension> errorMessageExtensions = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ERROR_MESSAGE.equals(extension.getUrl())).toList();
+			if (!errorMessageExtensions.isEmpty())
+			{
+				extensions.removeAll(errorMessageExtensions);
+				sortedExtensions.addAll(errorMessageExtensions);
+			}
+
+			sortedExtensions.addAll(extensions);
+			pingStatusExtension.setExtension(sortedExtensions);
+		}
 	}
 }
