@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.DecimalType;
@@ -28,7 +29,8 @@ public class PingStatusGenerator
 	public static Task updatePingStatusOutput(Task task, String correlationKey, List<String> errorMessages)
 	{
 		List<TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				correlationKey);
 
 		if (outputs.isEmpty())
 		{
@@ -51,7 +53,7 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutput(Task task, List<String> errorMessages)
 	{
-		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (pongStatusOutputs.isEmpty())
 		{
@@ -106,7 +108,8 @@ public class PingStatusGenerator
 	public static Task updatePingStatusOutput(Task task, String correlationKey, String statusCode)
 	{
 		List<Task.TaskOutputComponent> pingStatusOutputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				correlationKey);
 		if (pingStatusOutputs.isEmpty())
 		{
 			task.addOutput(updatePingStatusOutput(new TaskOutputComponent(), statusCode));
@@ -143,7 +146,7 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutput(Task task, String statusCode)
 	{
-		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (pongStatusOutputs.isEmpty())
 		{
@@ -181,7 +184,7 @@ public class PingStatusGenerator
 	public static Task updatePingStatusOutput(Task task, Target target)
 	{
 		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
 				target.getCorrelationKey());
 		if (outputs.isEmpty())
 		{
@@ -204,7 +207,7 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutput(Task task, Target target)
 	{
-		List<Task.TaskOutputComponent> outputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (outputs.isEmpty())
 		{
@@ -242,7 +245,8 @@ public class PingStatusGenerator
 			BigDecimal uploadSpeed, String statusCode)
 	{
 		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), downloadSpeed, uploadSpeed, statusCode));
@@ -265,7 +269,7 @@ public class PingStatusGenerator
 	public static Task updatePongStatusOutput(Task task, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
 			String statusCode)
 	{
-		List<Task.TaskOutputComponent> outputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (outputs.isEmpty())
 		{
@@ -314,7 +318,8 @@ public class PingStatusGenerator
 			String networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputDownloadSpeed(new TaskOutputComponent(), downloadSpeed, networkSpeedUnit));
@@ -336,7 +341,7 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed, String networkSpeedUnit)
 	{
-		List<Task.TaskOutputComponent> outputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (outputs.isEmpty())
 		{
@@ -376,7 +381,8 @@ public class PingStatusGenerator
 			String networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputUploadSpeed(new TaskOutputComponent(), uploadSpeed, networkSpeedUnit));
@@ -399,7 +405,7 @@ public class PingStatusGenerator
 
 	public static Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed, String networkSpeedUnit)
 	{
-		List<Task.TaskOutputComponent> outputs = getOutputsByCodes(task,
+		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
 				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
 		if (outputs.isEmpty())
 		{
@@ -871,12 +877,16 @@ public class PingStatusGenerator
 		}
 	}
 
-	private static List<Task.TaskOutputComponent> getOutputsByCodes(Task task, String... codes)
+	private static List<Task.TaskOutputComponent> getOutputsByExtensionUrlAndCodes(Task task, String... codes)
 	{
-		return task.getOutput().stream().filter(outputComponent -> !outputComponent.getType().getCoding().isEmpty())
-				.filter(outputComponent -> outputComponent.getType().getCoding().stream()
-						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem())
-								&& Arrays.stream(codes).anyMatch(code -> code.equals(coding.getCode()))))
+		return task
+				.getOutput().stream().filter(
+						outputComponent -> outputComponent.getType().getCoding().stream()
+								.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem())
+										&& Stream.of(codes).anyMatch(code -> code.equals(coding.getCode())))
+								|| outputComponent.getExtension().stream()
+										.anyMatch(extension -> appendFhirResourceVersion(
+												ConstantsPing.EXTENSION_URL_PING_STATUS).equals(extension.getUrl())))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
