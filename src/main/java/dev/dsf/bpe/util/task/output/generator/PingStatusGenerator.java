@@ -4,7 +4,6 @@ import static dev.dsf.bpe.util.VersionUtils.appendFhirResourceVersion;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

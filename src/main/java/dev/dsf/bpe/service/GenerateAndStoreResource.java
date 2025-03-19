@@ -1,7 +1,6 @@
 package dev.dsf.bpe.service;
 
 import java.io.ByteArrayInputStream;
-import java.util.Base64;
 import java.util.Random;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
