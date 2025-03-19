@@ -77,17 +77,18 @@ public class SendPong extends AbstractTaskMessageSend
 		super.doExecute(execution, variables);
 
 		Task mainTask = variables.getStartTask();
-		PingStatusGenerator.updateStatusOutput(mainTask, target);
+		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
 		PingStatusGenerator.updatePongStatusOutput(mainTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT);
 		variables.updateTask(mainTask);
 	}
 
 	@Override
-	protected void handleIntermediateThrowEventError(DelegateExecution execution, Variables variables,
+	protected void handleSendTaskError(DelegateExecution execution, Variables variables,
 			Exception exception, String errorMessage)
 	{
 		PingPongLogger logger = new PingPongLogger(SendPong.class, variables.getStartTask());
 		Target target = variables.getTarget();
+		Task startTask = variables.getStartTask();
 
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
 				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
@@ -96,7 +97,9 @@ public class SendPong extends AbstractTaskMessageSend
 		execution.setVariable(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);
-		execution.setVariable(ConstantsPing.getBpmnExecutionVariableErrorMessage(), specialErrorMessage);
+		ErrorMessageListUtils.add(specialErrorMessage, execution);
+		PingStatusGenerator.updatePongStatusOutput(startTask, ErrorMessageListUtils.getErrorMessageList(execution));
+		variables.updateTask(startTask);
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
 	}
 
