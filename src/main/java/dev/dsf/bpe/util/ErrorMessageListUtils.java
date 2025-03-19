@@ -20,7 +20,8 @@ public class ErrorMessageListUtils
 
 	public static List<String> addAll(List<String> errors, DelegateExecution execution, String correlationKey)
 	{
-		List<String> errorList = correlationKey != null ? getErrorMessageList(execution, correlationKey) : getErrorMessageList(execution);
+		List<String> errorList = correlationKey != null ? getErrorMessageList(execution, correlationKey)
+				: getErrorMessageList(execution);
 		if (errors == null)
 			return errorList;
 		errorList.addAll(errors);
@@ -37,7 +38,8 @@ public class ErrorMessageListUtils
 		if (correlationKey != null)
 		{
 			return add(error, ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey), execution);
-		} else
+		}
+		else
 		{
 			return add(error, ConstantsPing.getBpmnExecutionVariableErrorMessageList(), execution);
 		}
@@ -51,16 +53,19 @@ public class ErrorMessageListUtils
 	@SuppressWarnings("unchecked")
 	public static List<String> getErrorMessageList(DelegateExecution execution, String correlationKey)
 	{
-		List<String> errorMessages = correlationKey != null ?(List<String>) execution
-				.getVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey)) :(List<String>) execution
-				.getVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList());
+		List<String> errorMessages = correlationKey != null
+				? (List<String>) execution
+						.getVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey))
+				: (List<String>) execution.getVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList());
 		if (errorMessages == null)
 		{
 			errorMessages = new Vector<>();
 			if (correlationKey != null)
 			{
-				execution.setVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey), errorMessages);
-			} else
+				execution.setVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey),
+						errorMessages);
+			}
+			else
 			{
 				execution.setVariable(ConstantsPing.getBpmnExecutionVariableErrorMessageList(), errorMessages);
 			}

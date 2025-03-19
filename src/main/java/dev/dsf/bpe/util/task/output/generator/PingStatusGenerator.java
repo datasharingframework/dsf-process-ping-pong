@@ -32,7 +32,8 @@ public class PingStatusGenerator
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), errorMessages));
-		} else
+		}
+		else
 		{
 			if (outputs.size() == 1)
 			{
@@ -40,7 +41,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId() + " with correlation key " + correlationKey);
+				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
+						+ " with correlation key " + correlationKey);
 			}
 		}
 		return task;
@@ -74,17 +76,24 @@ public class PingStatusGenerator
 		if (output != null)
 		{
 			Extension pingStatusExtension = getOrCreatePingStatusExtension(output);
-			List<Extension> errorMessageExtensions = pingStatusExtension.getExtension().stream().filter(extension -> ConstantsPing.EXTENSION_URL_ERROR_MESSAGE.equals(extension.getUrl())).toList();
-			if(errorMessageExtensions.isEmpty())
+			List<Extension> errorMessageExtensions = pingStatusExtension.getExtension().stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ERROR_MESSAGE.equals(extension.getUrl())).toList();
+			if (errorMessageExtensions.isEmpty())
 			{
 				addErrorMessages(output, errorMessages);
-			} else {
-				Set<String> existingErrors = errorMessageExtensions.stream().map(extension -> ((StringType) extension.getValue()).getValue()).collect(
-						Collectors.toSet());
+			}
+			else
+			{
+				Set<String> existingErrors = errorMessageExtensions.stream()
+						.map(extension -> ((StringType) extension.getValue()).getValue()).collect(Collectors.toSet());
 				existingErrors.addAll(errorMessages);
-				List<Extension> nonErrorMessageExtensions = pingStatusExtension.getExtension().stream().filter(extension -> !ConstantsPing.EXTENSION_URL_ERROR_MESSAGE.equals(extension.getUrl())).toList();
-				List<Extension> updatedErrorMessageExtensions = existingErrors.stream().map(errorMessage -> new Extension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
-						.setValue(new StringType(errorMessage))).collect(Collectors.toCollection(ArrayList::new));
+				List<Extension> nonErrorMessageExtensions = pingStatusExtension.getExtension().stream()
+						.filter(extension -> !ConstantsPing.EXTENSION_URL_ERROR_MESSAGE.equals(extension.getUrl()))
+						.toList();
+				List<Extension> updatedErrorMessageExtensions = existingErrors.stream()
+						.map(errorMessage -> new Extension().setUrl(ConstantsPing.EXTENSION_URL_ERROR_MESSAGE)
+								.setValue(new StringType(errorMessage)))
+						.collect(Collectors.toCollection(ArrayList::new));
 				updatedErrorMessageExtensions.addAll(nonErrorMessageExtensions);
 				pingStatusExtension.setExtension(updatedErrorMessageExtensions);
 			}
@@ -95,8 +104,8 @@ public class PingStatusGenerator
 
 	public static Task updatePingStatusOutput(Task task, String correlationKey, String statusCode)
 	{
-		List<Task.TaskOutputComponent> pingStatusOutputs = filterByCorrelationKey(getOutputsByCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+		List<Task.TaskOutputComponent> pingStatusOutputs = filterByCorrelationKey(
+				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
 		if (pingStatusOutputs.isEmpty())
 		{
 			task.addOutput(updatePingStatusOutput(new TaskOutputComponent(), statusCode));
@@ -109,7 +118,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping status output for task " + task.getId() + " with correlation key " + correlationKey);
+				throw new RuntimeException("There is more than one ping status output for task " + task.getId()
+						+ " with correlation key " + correlationKey);
 			}
 		}
 
@@ -169,11 +179,14 @@ public class PingStatusGenerator
 
 	public static Task updatePingStatusOutput(Task task, Target target)
 	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), target.getCorrelationKey());
+		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
+				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
+				target.getCorrelationKey());
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), target));
-		} else
+		}
+		else
 		{
 			if (outputs.size() == 1)
 			{
@@ -181,7 +194,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId() + " with correlation key " + target.getCorrelationKey());
+				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
+						+ " with correlation key " + target.getCorrelationKey());
 			}
 		}
 		return task;
@@ -223,14 +237,16 @@ public class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePingStatusOutput(Task task, String correlationKey, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
-			String statusCode)
+	public static Task updatePingStatusOutput(Task task, String correlationKey, BigDecimal downloadSpeed,
+			BigDecimal uploadSpeed, String statusCode)
 	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
+				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), downloadSpeed, uploadSpeed, statusCode));
-		} else
+		}
+		else
 		{
 			if (outputs.size() == 1)
 			{
@@ -238,7 +254,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId() + " with correlation key " + correlationKey);
+				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
+						+ " with correlation key " + correlationKey);
 			}
 		}
 		return task;
@@ -292,13 +309,16 @@ public class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePingStatusOutputDownloadSpeed(Task task, String correlationKey, BigDecimal downloadSpeed, String networkSpeedUnit)
+	public static Task updatePingStatusOutputDownloadSpeed(Task task, String correlationKey, BigDecimal downloadSpeed,
+			String networkSpeedUnit)
 	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
+				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputDownloadSpeed(new TaskOutputComponent(), downloadSpeed, networkSpeedUnit));
-		} else
+		}
+		else
 		{
 			if (outputs.size() == 1)
 			{
@@ -306,7 +326,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId() + " with correlation key " + correlationKey);
+				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
+						+ " with correlation key " + correlationKey);
 			}
 		}
 		return task;
@@ -350,10 +371,11 @@ public class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePingStatusOutputUploadSpeed(Task task, String correlationKey, BigDecimal uploadSpeed, String networkSpeedUnit)
+	public static Task updatePingStatusOutputUploadSpeed(Task task, String correlationKey, BigDecimal uploadSpeed,
+			String networkSpeedUnit)
 	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(getOutputsByCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
+		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
+				getOutputsByCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS), correlationKey);
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputUploadSpeed(new TaskOutputComponent(), uploadSpeed, networkSpeedUnit));
@@ -366,7 +388,8 @@ public class PingStatusGenerator
 			}
 			else
 			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId() + " with correlation key " + correlationKey);
+				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
+						+ " with correlation key " + correlationKey);
 			}
 		}
 
@@ -819,25 +842,34 @@ public class PingStatusGenerator
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	private static List<Task.TaskOutputComponent> filterByCorrelationKey(List<TaskOutputComponent> outputs, String correlationKey)
+	private static List<Task.TaskOutputComponent> filterByCorrelationKey(List<TaskOutputComponent> outputs,
+			String correlationKey)
 	{
-		return outputs.stream().filter(outputComponent -> {
+		return outputs.stream().filter(outputComponent ->
+		{
 			List<Extension> outputExtensions = outputComponent.getExtension();
-			if (outputExtensions.isEmpty()) return false;
-			List<Extension> pingStatusExtensions = outputExtensions.stream().filter(extension -> ConstantsPing.EXTENSION_URL_PING_STATUS.equals(extension.getUrl())).toList();
-			if (pingStatusExtensions.isEmpty()) return false;
+			if (outputExtensions.isEmpty())
+				return false;
+			List<Extension> pingStatusExtensions = outputExtensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_PING_STATUS.equals(extension.getUrl())).toList();
+			if (pingStatusExtensions.isEmpty())
+				return false;
 			List<Extension> extensionsMatchingCorrelationKey = pingStatusExtensions.stream()
-					.filter(extension -> extension.getExtension().stream()
-							.anyMatch(extension1 -> ConstantsPing.EXTENSION_URL_CORRELATION_KEY.equals(extension1.getUrl())
-							&& correlationKey.equals(((StringType) extension1.getValue()).getValue())))
+					.filter(extension -> extension.getExtension().stream().anyMatch(
+							extension1 -> ConstantsPing.EXTENSION_URL_CORRELATION_KEY.equals(extension1.getUrl())
+									&& correlationKey.equals(((StringType) extension1.getValue()).getValue())))
 					.toList();
-			if (extensionsMatchingCorrelationKey.isEmpty()) return false;
+			if (extensionsMatchingCorrelationKey.isEmpty())
+				return false;
 			if (extensionsMatchingCorrelationKey.size() == 1)
 			{
 				return true;
-			} else
+			}
+			else
 			{
-				throw new RuntimeException("Only one Task.output.extension.extension with correlationKey is allowed but found " + extensionsMatchingCorrelationKey.size());
+				throw new RuntimeException(
+						"Only one Task.output.extension.extension with correlationKey is allowed but found "
+								+ extensionsMatchingCorrelationKey.size());
 			}
 		}).collect(Collectors.toCollection(ArrayList::new));
 	}

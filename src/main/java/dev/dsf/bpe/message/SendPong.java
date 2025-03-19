@@ -83,8 +83,8 @@ public class SendPong extends AbstractTaskMessageSend
 	}
 
 	@Override
-	protected void handleSendTaskError(DelegateExecution execution, Variables variables,
-			Exception exception, String errorMessage)
+	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
+			String errorMessage)
 	{
 		PingPongLogger logger = new PingPongLogger(SendPong.class, variables.getStartTask());
 		Target target = variables.getTarget();
