@@ -75,6 +75,26 @@ public class PingConfig
 		this.networkSpeedUnit = networkSpeedUnit;
 	}
 
+	public int getMaxDownloadSizeBytes()
+	{
+		return maxDownloadSizeBytes;
+	}
+
+	public void setMaxDownloadSizeBytes(int maxDownloadSizeBytes)
+	{
+		this.maxDownloadSizeBytes = maxDownloadSizeBytes;
+	}
+
+	public int getMaxUploadSizeBytes()
+	{
+		return maxUploadSizeBytes;
+	}
+
+	public void setMaxUploadSizeBytes(int maxUploadSizeBytes)
+	{
+		this.maxUploadSizeBytes = maxUploadSizeBytes;
+	}
+
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
