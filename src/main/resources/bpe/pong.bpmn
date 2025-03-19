@@ -95,7 +95,7 @@
       <bpmn:incoming>Flow_1w09zt7</bpmn:incoming>
       <bpmn:outgoing>Flow_0gvrnxd</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_0olr5yw" name="Invalid Resource Reference" attachedToRef="Activity_095j2gg">
+    <bpmn:boundaryEvent id="Event_0olr5yw" attachedToRef="Activity_095j2gg">
       <bpmn:outgoing>Flow_0uj7rm3</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" />
     </bpmn:boundaryEvent>

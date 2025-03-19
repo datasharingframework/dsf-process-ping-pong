@@ -113,7 +113,7 @@
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_03nx6rk</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:boundaryEvent id="Event_0i4slcz" name="Invalid Resource Reference" attachedToRef="Activity_0h9o9u7">
+      <bpmn:boundaryEvent id="Event_0i4slcz" attachedToRef="Activity_0h9o9u7">
         <bpmn:outgoing>Flow_10h6pqh</bpmn:outgoing>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0f1pn8k" errorRef="Error_1jmenbm" />
       </bpmn:boundaryEvent>
