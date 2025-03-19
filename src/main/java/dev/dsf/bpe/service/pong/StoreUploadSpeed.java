@@ -45,7 +45,7 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
 				networkSpeedUnit);
 
-		PingStatusGenerator.updateStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
+		PingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);
 		logger.debug("Stored upload speed: " + uploadSpeed + " " + networkSpeedUnit);

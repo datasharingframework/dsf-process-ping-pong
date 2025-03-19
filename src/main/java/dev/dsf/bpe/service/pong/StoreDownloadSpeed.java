@@ -40,7 +40,7 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 
 		PingStatusGenerator.updatePongStatusOutput(startTask,
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_RESOURCE_DOWNLOADED);
-		PingStatusGenerator.updateStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
+		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);
 		logger.debug("Stored download speed: " + downloadSpeed + " " + networkSpeedUnit);
