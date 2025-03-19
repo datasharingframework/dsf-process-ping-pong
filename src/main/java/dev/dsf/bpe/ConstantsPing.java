@@ -96,12 +96,15 @@ public final class ConstantsPing
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
 	private static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
 	private static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
-	public static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
+	private static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
 	public static final String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
+	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR_MESSAGE = "resourceDownloadErrorMessage";
+
+	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
 
 	public static final int DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT = 10000000;
 
@@ -167,5 +170,15 @@ public final class ConstantsPing
 	public static String getBpmnExecutionVariableUploadedDurationMillis(String correlationKey)
 	{
 		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS + "_" + correlationKey;
+	}
+
+	public static String getBpmnExecutionVariableErrorMessageList()
+	{
+		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST;
+	}
+
+	public static String getBpmnExecutionVariableErrorMessageList(String correlationKey)
+	{
+		return getBpmnExecutionVariableErrorMessageList() + "_" + correlationKey;
 	}
 }

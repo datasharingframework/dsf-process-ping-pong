@@ -97,7 +97,7 @@
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0olr5yw" attachedToRef="Activity_095j2gg">
       <bpmn:outgoing>Flow_0uj7rm3</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" camunda:errorMessageVariable="resourceDownloadErrorMessage" />
     </bpmn:boundaryEvent>
     <bpmn:boundaryEvent id="SelectPongTargetErrorBoundaryEvent" name="target not allowed" attachedToRef="SelectPongTarget">
       <bpmn:outgoing>Flow_0yr2pmf</bpmn:outgoing>
@@ -200,7 +200,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   </bpmn:process>
   <bpmn:message id="Message_0u91abp" name="ping" />
   <bpmn:message id="Message_2m36ftq" name="cleanupPong" />
-  <bpmn:error id="Error_1jmenbm" name="invalid_resource_refernece" errorCode="invalid_resource_refernece" />
+  <bpmn:error id="Error_1jmenbm" name="resourceDownloadError" errorCode="resourceDownloadError" />
   <bpmn:error id="Error_1j0t9ud" name="target_not_allowed" errorCode="target_not_allowed" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_pong">
