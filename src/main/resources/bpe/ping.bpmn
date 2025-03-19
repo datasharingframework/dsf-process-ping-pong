@@ -15,7 +15,7 @@
       <bpmn:startEvent id="SubProcessStartEvent">
         <bpmn:outgoing>Flow_10epxa2</bpmn:outgoing>
       </bpmn:startEvent>
-      <bpmn:intermediateCatchEvent id="PongTimer" name="PT20S">
+      <bpmn:intermediateCatchEvent id="PongTimer" name="PT200S">
         <bpmn:incoming>Flow_0y9usku</bpmn:incoming>
         <bpmn:outgoing>Flow_1fjeq2h</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1mgy0vi">
@@ -250,7 +250,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_13ugi24" bpmnElement="PongTimer">
         <dc:Bounds x="1512" y="432" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1513" y="475" width="34" height="14" />
+          <dc:Bounds x="1510" y="475" width="40" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1xv73wh" bpmnElement="PongCatchEvent">
