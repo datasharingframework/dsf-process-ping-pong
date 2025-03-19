@@ -84,7 +84,7 @@ public class SendPing extends AbstractTaskMessageSend
 					+ statusInfo.getReasonPhrase();
 		}
 		else
-			return exception.getMessage();
+			return "Error when sending ping message: " + exception.getMessage();
 	}
 
 	private Identifier getLocalEndpointIdentifier()
