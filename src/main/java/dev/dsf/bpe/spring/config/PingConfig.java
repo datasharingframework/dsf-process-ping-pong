@@ -53,12 +53,12 @@ public class PingConfig
 
 	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
 	@Value("${dev.dsf.bpe.ping.maxDownloadSizeBytes:10000000}")
-	private long maxDownloadSizeBytes;
+	private int maxDownloadSizeBytes;
 
 	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.maxUploadSizeBytes:10000000}")
-	private long maxUploadSizeBytes;
+	private int maxUploadSizeBytes;
 
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
@@ -219,7 +219,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetDownloadResourceSize setDownloadResourceSize()
 	{
-		return new SetDownloadResourceSize(api, (int) maxDownloadSizeBytes);
+		return new SetDownloadResourceSize(api, maxDownloadSizeBytes);
 	}
 
 	@Bean
@@ -261,6 +261,6 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public GenerateAndStoreResource generateAndStoreResource()
 	{
-		return new GenerateAndStoreResource(api, (int) maxUploadSizeBytes);
+		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
 	}
 }
