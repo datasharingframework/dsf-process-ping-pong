@@ -31,13 +31,13 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate
 		logger.debug("Generating resource...");
 		int downloadResourceSizeBytes = getDownloadResourceSize(variables);
 
-		variables.setByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE,
-				generateRandomBinaryContent(downloadResourceSizeBytes, logger));
+		byte[] resourceContent = generateRandomBinaryContent(downloadResourceSizeBytes, logger);
+		variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
+				resourceContent.length);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
-		IdType downloadResource = storeBinary(
-				variables.getByteArray(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE));
+		IdType downloadResource = storeBinary(resourceContent);
 
 		String reference = downloadResource.getValueAsString();
 
@@ -49,9 +49,9 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate
 	private byte[] generateRandomBinaryContent(int desiredSizeBytes, PingPongLogger logger)
 	{
 		int sizeBytes = Math.min(maxUploadSizeBytes, desiredSizeBytes);
-		byte[] bytes = base64Encode(generateRandomByteArray((sizeBytes / 4) * 3));
+		byte[] bytes = generateRandomByteArray(sizeBytes);
 		logger.info(
-				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size (base64 encoded) was : {}",
+				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size was : {}",
 				desiredSizeBytes, bytes.length);
 		return bytes;
 	}
@@ -62,11 +62,6 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate
 		byte[] randomBytes = new byte[sizeBytes];
 		rand.nextBytes(randomBytes);
 		return randomBytes;
-	}
-
-	private byte[] base64Encode(byte[] content)
-	{
-		return Base64.getEncoder().encode(content);
 	}
 
 	private int getDownloadResourceSize(Variables variables)
