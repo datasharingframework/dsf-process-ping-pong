@@ -80,7 +80,7 @@ public class SendPing extends AbstractTaskMessageSend
 				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
 		{
 			StatusType statusInfo = w.getResponse().getStatusInfo();
-			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
+			return "Error when sending ping message: " + statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
 		}
 		else
 			return exception.getMessage();
