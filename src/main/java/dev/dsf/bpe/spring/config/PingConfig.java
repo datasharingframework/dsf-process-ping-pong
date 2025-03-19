@@ -21,18 +21,18 @@ import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
-import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
-import dev.dsf.bpe.service.pong.LogAndStoreSendError;
 import dev.dsf.bpe.service.pong.LogPing;
+import dev.dsf.bpe.service.pong.SaveTimeoutError;
 import dev.dsf.bpe.service.pong.SelectPongTarget;
 import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
+import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
@@ -175,13 +175,6 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndStoreSendError logAndStoreSendError()
-	{
-		return new LogAndStoreSendError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public Cleanup cleanup()
 	{
 		return new Cleanup(api);
@@ -252,9 +245,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveSendError logAndSaveSendError()
+	public dev.dsf.bpe.service.ping.LogAndSaveSendError logAndSaveSendError()
 	{
-		return new LogAndSaveSendError(api);
+		return new dev.dsf.bpe.service.ping.LogAndSaveSendError(api);
 	}
 
 	@Bean
@@ -262,5 +255,19 @@ public class PingConfig
 	public GenerateAndStoreResource generateAndStoreResource()
 	{
 		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SaveTimeoutError saveTimeoutError()
+	{
+		return new SaveTimeoutError(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public StoreErrors storeErrors()
+	{
+		return new StoreErrors(api);
 	}
 }

@@ -74,12 +74,11 @@ public class SendPong extends AbstractTaskMessageSend
 	protected void doExecute(DelegateExecution execution, Variables variables) throws Exception
 	{
 		Target target = variables.getTarget();
-		super.doExecute(execution, variables);
-
 		Task mainTask = variables.getStartTask();
 		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
 		PingStatusGenerator.updatePongStatusOutput(mainTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT);
 		variables.updateTask(mainTask);
+		super.doExecute(execution, variables);
 	}
 
 	@Override
@@ -98,9 +97,11 @@ public class SendPong extends AbstractTaskMessageSend
 
 		String specialErrorMessage = createErrorMessage(exception);
 		ErrorMessageListUtils.add(specialErrorMessage, execution);
-		PingStatusGenerator.updatePongStatusOutput(startTask, ErrorMessageListUtils.getErrorMessageList(execution));
-		variables.updateTask(startTask);
+		PingStatusGenerator.updatePongStatusOutput(startTask, statusCode);
+		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
+
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
+		variables.updateTask(startTask);
 	}
 
 	private String createErrorMessage(Exception exception)

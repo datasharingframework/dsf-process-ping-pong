@@ -106,6 +106,8 @@ public final class ConstantsPing
 
 	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
 
+	public static final String PONG_ERROR_MESSAGE_CLEANUP_TIMEOUT = "Timeout while waiting for cleanup message";
+
 	public static final int DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT = 10000000;
 
 	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
