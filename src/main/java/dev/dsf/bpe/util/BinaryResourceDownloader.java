@@ -36,28 +36,36 @@ public class BinaryResourceDownloader
 		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
-
-		InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider().getWebserviceClient(webserviceUrl)
-				.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
-
-		try (binaryResourceInputStream)
+		try
 		{
-			logger.info(
-					"Downloading resource for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes...",
-					downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
-			long downloadStartTime = System.currentTimeMillis();
-			int numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
-			binaryResourceInputStream.skipNBytes(numBytes);
-			long downloadEndTime = System.currentTimeMillis();
-			long downloadedDurationMillis = downloadEndTime - downloadStartTime;
-			downloadResult = new DownloadResult(numBytes, downloadedDurationMillis);
-			logger.info("Finished downloading {} bytes. Took {}", numBytes,
-					toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
+			InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider()
+					.getWebserviceClient(webserviceUrl)
+					.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
+			try (binaryResourceInputStream)
+			{
+				logger.info(
+						"Downloading resource for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes...",
+						downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
+				long downloadStartTime = System.currentTimeMillis();
+				int numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
+				binaryResourceInputStream.skipNBytes(numBytes);
+				long downloadEndTime = System.currentTimeMillis();
+				long downloadedDurationMillis = downloadEndTime - downloadStartTime;
+				downloadResult = new DownloadResult(numBytes, downloadedDurationMillis);
+				logger.info("Finished downloading {} bytes. Took {}", numBytes,
+						toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
+
+			}
+			catch (IOException e)
+			{
+				logger.error("Encountered an error while downloading resource: {}", e.getMessage());
+				downloadResult = new DownloadResult(e.getMessage());
+			}
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
-			logger.error("Encountered an error while downloading resource: {}", e.getMessage());
+			logger.error("Encountered an error while trying to download resource: {}", e.getMessage());
 			downloadResult = new DownloadResult(e.getMessage());
 		}
 		return downloadResult;
