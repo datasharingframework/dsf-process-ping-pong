@@ -60,7 +60,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode)
 					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
 			{
-				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution);
+				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
 				String errorMessage = errorMessages.get(0);
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
 
@@ -71,7 +71,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			}
 			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING.equals(statusCode))
 			{
-				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution);
+				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
 
 				errorMailService.pongMessageNotReceived(task.getIdElement(), target);
@@ -80,7 +80,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			{
 				int downloadResourceSizeBytes = variables
 						.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
-				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution);
+				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
 				if (downloadResourceSizeBytes >= 0) // if fat-ping
 				{
 					int downloadedBytes = variables
