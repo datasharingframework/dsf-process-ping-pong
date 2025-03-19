@@ -54,7 +54,7 @@ public class SavePong extends AbstractServiceDelegate
 				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE, StringType.class)
 				.map(PrimitiveType::getValue).toList();
-		ErrorMessageListUtils.addAll(errorList, delegateExecution);
+		ErrorMessageListUtils.addAll(errorList, delegateExecution, correlationKey);
 
 		logger.debug("Saved pong information.");
 	}
