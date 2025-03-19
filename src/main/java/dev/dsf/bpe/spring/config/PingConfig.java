@@ -15,9 +15,8 @@ import dev.dsf.bpe.message.SendPing;
 import dev.dsf.bpe.message.SendPong;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
-import dev.dsf.bpe.service.GenerateResource;
+import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
-import dev.dsf.bpe.service.StoreResource;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
@@ -148,13 +147,6 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreResource storeResource()
-	{
-		return new StoreResource(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public LogAndSaveNoResponse logAndSaveNoResponse()
 	{
 		return new LogAndSaveNoResponse(api);
@@ -179,13 +171,6 @@ public class PingConfig
 	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
 	{
 		return new DownloadResourceAndMeasureSpeedInSubProcess(api, (int) maxDownloadSizeBytes);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public GenerateResource generateResource()
-	{
-		return new GenerateResource(api, (int) maxUploadSizeBytes);
 	}
 
 	@Bean
@@ -270,5 +255,12 @@ public class PingConfig
 	public LogAndSaveSendError logAndSaveSendError()
 	{
 		return new LogAndSaveSendError(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public GenerateAndStoreResource generateAndStoreResource()
+	{
+		return new GenerateAndStoreResource(api, (int) maxUploadSizeBytes);
 	}
 }

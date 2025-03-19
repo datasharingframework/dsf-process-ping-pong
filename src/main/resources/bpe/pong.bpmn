@@ -87,16 +87,12 @@
       <bpmn:incoming>Flow_148beur</bpmn:incoming>
       <bpmn:outgoing>Flow_0zib7wr</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_04mv5cn" name="Store Resource" camunda:class="dev.dsf.bpe.service.StoreResource">
-      <bpmn:incoming>Flow_1w09zt7</bpmn:incoming>
-      <bpmn:outgoing>Flow_03hviat</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate Resource" camunda:class="dev.dsf.bpe.service.GenerateResource">
+    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
       <bpmn:incoming>Flow_0x7t1ii</bpmn:incoming>
       <bpmn:outgoing>Flow_1w09zt7</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="Activity_0xcqxjs" name="Estimate Cleanup Timer Duration" camunda:class="dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration">
-      <bpmn:incoming>Flow_03hviat</bpmn:incoming>
+      <bpmn:incoming>Flow_1w09zt7</bpmn:incoming>
       <bpmn:outgoing>Flow_0gvrnxd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0olr5yw" name="Invalid Resource Reference" attachedToRef="Activity_095j2gg">
@@ -129,8 +125,7 @@
     <bpmn:sequenceFlow id="Flow_0x7t1ii" sourceRef="Gateway_0fvmtve" targetRef="Activity_1m4wavi" />
     <bpmn:sequenceFlow id="Flow_0uj7rm3" sourceRef="Event_0olr5yw" targetRef="Activity_1umihbr" />
     <bpmn:sequenceFlow id="Flow_0yr2pmf" sourceRef="SelectPongTargetErrorBoundaryEvent" targetRef="Event_1qh25on" />
-    <bpmn:sequenceFlow id="Flow_1w09zt7" sourceRef="Activity_1m4wavi" targetRef="Activity_04mv5cn" />
-    <bpmn:sequenceFlow id="Flow_03hviat" sourceRef="Activity_04mv5cn" targetRef="Activity_0xcqxjs" />
+    <bpmn:sequenceFlow id="Flow_1w09zt7" sourceRef="Activity_1m4wavi" targetRef="Activity_0xcqxjs" />
     <bpmn:serviceTask id="Activity_1wdftvk" name="Set Download Resource Size" camunda:class="dev.dsf.bpe.service.SetDownloadResourceSize">
       <bpmn:incoming>Flow_19b3cp4</bpmn:incoming>
       <bpmn:outgoing>Flow_1oo1n55</bpmn:outgoing>
@@ -268,9 +263,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0pmiy6i_di" bpmnElement="Activity_0otptjn">
         <dc:Bounds x="2660" y="270" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ouj7x3_di" bpmnElement="Activity_04mv5cn">
-        <dc:Bounds x="1250" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1m4wavi_di" bpmnElement="Activity_1m4wavi">
         <dc:Bounds x="1090" y="420" width="100" height="80" />
@@ -413,10 +405,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1w09zt7_di" bpmnElement="Flow_1w09zt7">
         <di:waypoint x="1190" y="460" />
-        <di:waypoint x="1250" y="460" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03hviat_di" bpmnElement="Flow_03hviat">
-        <di:waypoint x="1350" y="460" />
         <di:waypoint x="1410" y="460" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1oo1n55_di" bpmnElement="Flow_1oo1n55">
