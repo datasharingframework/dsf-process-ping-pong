@@ -19,7 +19,7 @@
         <bpmn:incoming>Flow_0y9usku</bpmn:incoming>
         <bpmn:outgoing>Flow_1fjeq2h</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_1mgy0vi">
-          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT20S</bpmn:timeDuration>
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT200S</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:intermediateCatchEvent id="PongCatchEvent" name="Pong" camunda:asyncAfter="true">
@@ -165,11 +165,7 @@
       <bpmn:association id="Association_14iteoh" sourceRef="Activity_0vw65a2" targetRef="TextAnnotation_0smygq5" />
       <bpmn:association id="Association_0l3n1oc" sourceRef="TextAnnotation_08ic0l2" targetRef="Activity_0h9o9u7" />
     </bpmn:subProcess>
-    <bpmn:serviceTask id="Activity_16rb6hc" name="Store Resource" camunda:class="dev.dsf.bpe.service.StoreResource">
-      <bpmn:incoming>Flow_1qz7z39</bpmn:incoming>
-      <bpmn:outgoing>Flow_0m0hq4h</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate Resource" camunda:class="dev.dsf.bpe.service.GenerateResource">
+    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
       <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1qz7z39</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -185,8 +181,8 @@
       <bpmn:incoming>Flow_1du5wys</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0bifi5h">
-      <bpmn:incoming>Flow_0m0hq4h</bpmn:incoming>
       <bpmn:incoming>Flow_0iuuyo1</bpmn:incoming>
+      <bpmn:incoming>Flow_1qz7z39</bpmn:incoming>
       <bpmn:outgoing>Flow_1c15ef2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="SelectPingTargets" name="Select Targets" camunda:class="dev.dsf.bpe.service.ping.SelectPingTargets">
@@ -204,8 +200,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0j92st0" sourceRef="SelectPingTargets" targetRef="SubProcess" />
     <bpmn:sequenceFlow id="Flow_1bfs68o" sourceRef="SubProcess" targetRef="Activity_0802w0b" />
-    <bpmn:sequenceFlow id="Flow_1qz7z39" sourceRef="Activity_0nwtf8o" targetRef="Activity_16rb6hc" />
-    <bpmn:sequenceFlow id="Flow_0m0hq4h" sourceRef="Activity_16rb6hc" targetRef="Gateway_0bifi5h" />
+    <bpmn:sequenceFlow id="Flow_1qz7z39" sourceRef="Activity_0nwtf8o" targetRef="Gateway_0bifi5h" />
     <bpmn:sequenceFlow id="Flow_152nb9r" sourceRef="Gateway_0xw5i5v" targetRef="Activity_0nwtf8o" />
     <bpmn:sequenceFlow id="Flow_0gubpgz" sourceRef="Activity_0802w0b" targetRef="SaveResults" />
     <bpmn:sequenceFlow id="Flow_1du5wys" sourceRef="SaveResults" targetRef="EndEvent" />
@@ -429,9 +424,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="1780" y="560" />
         <di:waypoint x="1780" y="475" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_06i4ly8" bpmnElement="Activity_16rb6hc">
-        <dc:Bounds x="690" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0fhb8wi" bpmnElement="Activity_0nwtf8o">
         <dc:Bounds x="530" y="460" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -496,10 +488,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_1ttfs4u" bpmnElement="Flow_1qz7z39">
         <di:waypoint x="630" y="500" />
-        <di:waypoint x="690" y="500" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_172mwqu" bpmnElement="Flow_0m0hq4h">
-        <di:waypoint x="790" y="500" />
         <di:waypoint x="840" y="500" />
         <di:waypoint x="840" y="385" />
       </bpmndi:BPMNEdge>
