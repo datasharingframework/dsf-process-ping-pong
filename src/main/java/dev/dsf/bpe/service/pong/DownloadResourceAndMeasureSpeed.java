@@ -1,5 +1,7 @@
 package dev.dsf.bpe.service.pong;
 
+import java.util.NoSuchElementException;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
@@ -29,22 +31,27 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 
 		Task task = variables.getStartTask();
 
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
-				.download(variables, api, task, maxDownloadSizeBytes);
+		try {
+			BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
+					.download(variables, api, task, maxDownloadSizeBytes);
 
-		if (downloadResult.getErrorMessage() == null)
-		{
-			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
-					downloadResult.getDownloadedBytes());
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
-					downloadResult.getDownloadedDurationMillis());
-		}
-		else
-		{
-			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR,
-					downloadResult.getErrorMessage());
-		}
+			if (downloadResult.getErrorMessage() == null)
+			{
+				variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
+						downloadResult.getDownloadedBytes());
+				variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
+						downloadResult.getDownloadedDurationMillis());
+			}
+			else
+			{
+				throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR,
+						downloadResult.getErrorMessage());
+			}
 
-		logger.debug("Completed resource download and measured speed.");
+			logger.debug("Completed resource download and measured speed.");
+		} catch (Exception e)
+		{
+			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR, e.getMessage());
+		}
 	}
 }

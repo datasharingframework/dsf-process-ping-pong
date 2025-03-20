@@ -31,7 +31,7 @@ public class BinaryResourceDownloader
 		Reference downloadResourceReference = api.getTaskHelper()
 				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, Reference.class)
-				.orElseThrow();
+				.orElseThrow(() -> new RuntimeException("Unable to download resource. No reference provided in message."));
 
 		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
