@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service.pong;
 
 import java.time.Duration;
+import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -25,8 +26,9 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 
 		logger.debug("Estimating cleanup timer duration...");
 		final long minTimerDurationMillis = 20000;
-		long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
+		long downloadedDurationMillis = Optional
+				.ofNullable(variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis()))
+				.orElse(0L);
 		long timerDurationMillis = downloadedDurationMillis > Long.MAX_VALUE / 10 - minTimerDurationMillis
 				? Long.MAX_VALUE
 				: downloadedDurationMillis * 10 + minTimerDurationMillis;
