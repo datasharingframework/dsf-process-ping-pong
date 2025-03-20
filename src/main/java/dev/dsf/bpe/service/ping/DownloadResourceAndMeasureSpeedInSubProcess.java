@@ -35,8 +35,8 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 		try
 		{
-			BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger).download(
-					variables, api, task, maxDownloadSizeBytes);
+			BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
+					.download(variables, api, task, maxDownloadSizeBytes);
 
 			if (downloadResult.getErrorMessage() == null)
 			{
@@ -52,7 +52,8 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 			}
 
 			logger.debug("Completed resource download and measured speed.");
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR, e.getMessage());
 		}

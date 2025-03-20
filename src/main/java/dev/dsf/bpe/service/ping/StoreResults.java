@@ -15,6 +15,7 @@ import dev.dsf.bpe.mail.ErrorMailService;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
+import dev.dsf.bpe.util.task.output.generator.ErrorMessageGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -52,6 +53,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 
+		ErrorMessageGenerator.create(ErrorMessageListUtils.getErrorMessageList(execution)).forEach(task::addOutput);
+
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
 			String correlationKey = target.getCorrelationKey();
@@ -83,21 +86,24 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
 				if (downloadResourceSizeBytes >= 0) // if fat-ping
 				{
-					int downloadedBytes = variables
+					Integer downloadedBytes = variables
 							.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
-					long downloadedDurationMillis = variables
+					Long downloadedDurationMillis = variables
 							.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
-					BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes,
-							downloadedDurationMillis, networkSpeedUnit);
+					BigDecimal downloadSpeed = downloadedBytes != null && downloadedDurationMillis != null
+							? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis,
+									networkSpeedUnit)
+							: null;
 
-					int uploadedBytes = variables
+					Integer uploadedBytes = variables
 							.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
-					long uploadedDurationMillis = variables
+					Long uploadedDurationMillis = variables
 							.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
 
-					BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
-							networkSpeedUnit);
+					BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
+							? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
+							: null;
 
 					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
 							downloadSpeed, uploadSpeed, networkSpeedUnit));

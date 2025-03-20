@@ -6,6 +6,8 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
 import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
@@ -25,13 +27,19 @@ public class CleanupPong extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
-		int downloadedBytes = variables
+		Integer downloadedBytes = variables
 				.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
-		long downloadedDurationMillis = variables
+		Long downloadedDurationMillis = variables
 				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
-		return Stream.of(NetworkSpeedMetricGenerator.createDownloadedBytes(downloadedBytes),
-				NetworkSpeedMetricGenerator.createDownloadedDurationMillis(downloadedDurationMillis));
+		Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
+				? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
+				: Stream.empty();
+		Stream<Task.ParameterComponent> downloadedDurationMillisParameter = downloadedDurationMillis != null
+				? Stream.of(DownloadedDurationMillisGenerator.create(downloadedDurationMillis))
+				: Stream.empty();
+
+		return Stream.of(downloadedBytesParameter, downloadedDurationMillisParameter).flatMap(s -> s);
 	}
 
 	@Override

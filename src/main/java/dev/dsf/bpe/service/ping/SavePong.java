@@ -57,7 +57,8 @@ public class SavePong extends AbstractServiceDelegate
 		List<String> errorList = api.getTaskHelper()
 				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE, StringType.class)
-				.map(PrimitiveType::getValue).toList();
+				.map(PrimitiveType::getValue).map(string -> "Pong error: " + string).toList();
+
 		ErrorMessageListUtils.addAll(errorList, delegateExecution, correlationKey);
 
 		logger.debug("Saved pong information.");

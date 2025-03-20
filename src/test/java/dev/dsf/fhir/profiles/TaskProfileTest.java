@@ -193,6 +193,21 @@ public class TaskProfileTest
 	}
 
 	@Test
+	public void testTaskStartPingProcessProfileValidWithErrorMessages() throws Exception
+	{
+		Task task = createValidTaskStartPingProcess();
+
+		dev.dsf.bpe.util.task.output.generator.ErrorMessageGenerator.create(List.of("Foo", "Bar"))
+				.forEach(task::addOutput);
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
 	public void testTaskStartPingProcessProfileValidWithTargetEndpoints() throws Exception
 	{
 		Task task = createValidTaskStartPingProcess();
