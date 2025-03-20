@@ -103,8 +103,10 @@ public final class ConstantsPing
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
 	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR_MESSAGE = "resourceDownloadErrorMessage";
+	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR_MESSAGE = "resourceUploadErrorMessage";
 
 	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
+	public static final String BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
 
 	public static final String PONG_ERROR_MESSAGE_CLEANUP_TIMEOUT = "Timeout while waiting for cleanup message";
 

@@ -549,9 +549,13 @@ public class PingStatusGenerator
 	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent, String outputParameter,
 			String statusCode)
 	{
-		outputComponent.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
-		outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
-		sortStatusOutputExtensions(outputComponent);
+		if (outputParameter != null && statusCode != null)
+		{
+			outputComponent
+					.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
+			outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
+			sortStatusOutputExtensions(outputComponent);
+		}
 
 		return outputComponent;
 	}
@@ -596,14 +600,18 @@ public class PingStatusGenerator
 
 	private static TaskOutputComponent addTarget(TaskOutputComponent outputComponent, Target target)
 	{
-		Extension extension = getOrCreatePingStatusExtension(outputComponent);
+		if (target != null)
+		{
+			Extension extension = getOrCreatePingStatusExtension(outputComponent);
 
-		extension.addExtension(ConstantsPing.EXTENSION_URL_CORRELATION_KEY, new StringType(target.getCorrelationKey()));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER)
-				.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
-				.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
-		sortStatusOutputExtensions(outputComponent);
+			extension.addExtension(ConstantsPing.EXTENSION_URL_CORRELATION_KEY,
+					new StringType(target.getCorrelationKey()));
+			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER)
+					.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
+			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
+					.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
+			sortStatusOutputExtensions(outputComponent);
+		}
 
 		return outputComponent;
 	}

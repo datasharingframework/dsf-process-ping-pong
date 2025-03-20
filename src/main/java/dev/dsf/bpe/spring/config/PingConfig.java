@@ -21,12 +21,14 @@ import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
+import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
+import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
 import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.service.pong.SaveTimeoutError;
 import dev.dsf.bpe.service.pong.SelectPongTarget;
@@ -289,5 +291,19 @@ public class PingConfig
 	public StoreErrors storeErrors()
 	{
 		return new StoreErrors(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogAndSaveUploadErrorPing logAndSaveUploadErrorPing()
+	{
+		return new LogAndSaveUploadErrorPing(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public LogAndSaveUploadErrorPong logAndSaveUploadErrorPong()
+	{
+		return new LogAndSaveUploadErrorPong(api);
 	}
 }

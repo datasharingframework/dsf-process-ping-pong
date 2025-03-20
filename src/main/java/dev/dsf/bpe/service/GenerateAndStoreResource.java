@@ -12,6 +12,7 @@ import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
+import jakarta.ws.rs.WebApplicationException;
 
 public class GenerateAndStoreResource extends AbstractServiceDelegate
 {
@@ -36,13 +37,20 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
-		IdType downloadResource = storeBinary(resourceContent);
+		try
+		{
+			IdType downloadResource = storeBinary(resourceContent);
 
-		String reference = downloadResource.getValueAsString();
+			String reference = downloadResource.getValueAsString();
 
-		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
+			variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 
-		logger.debug("Stored binary resource for download");
+			logger.debug("Stored binary resource for download");
+		}
+		catch (Exception e)
+		{
+			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR, e.getMessage());
+		}
 	}
 
 	private byte[] generateRandomBinaryContent(int desiredSizeBytes, PingPongLogger logger)

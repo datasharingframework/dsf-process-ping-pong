@@ -52,17 +52,26 @@ public class SendPong extends AbstractTaskMessageSend
 				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 		if (downloadResourceSizeBytes >= 0)
 		{
-			int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
-			long downloadedDurationMillis = variables
+			Integer downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
+			Long downloadedDurationMillis = variables
 					.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 			String downloadResourceReference = variables
 					.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
 
-			return Stream.concat(
-					Stream.of(DownloadedBytesGenerator.create(downloadedBytes),
-							DownloadedDurationMillisGenerator.create(downloadedDurationMillis),
-							DownloadResourceReferenceGenerator.create(downloadResourceReference)),
-					ErrorMessageGenerator.create(errorList).stream());
+			Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
+					? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
+					: Stream.empty();
+			Stream<Task.ParameterComponent> downloadedDurationMillisParameter = downloadedDurationMillis != null
+					? Stream.of(DownloadedDurationMillisGenerator.create(downloadedDurationMillis))
+					: Stream.empty();
+			Stream<Task.ParameterComponent> downloadedResourceReferenceParameter = downloadResourceReference != null
+					? Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference))
+					: Stream.empty();
+
+			return Stream
+					.of(downloadedBytesParameter, downloadedDurationMillisParameter,
+							downloadedResourceReferenceParameter, ErrorMessageGenerator.create(errorList).stream())
+					.flatMap(stream -> stream);
 		}
 		else
 		{
