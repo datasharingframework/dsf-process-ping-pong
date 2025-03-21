@@ -11,6 +11,7 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
+import jakarta.ws.rs.WebApplicationException;
 
 public class BinaryResourceDownloader
 {
@@ -60,14 +61,23 @@ public class BinaryResourceDownloader
 			}
 			catch (IOException e)
 			{
-				logger.error("Encountered an error while downloading resource: {}", e.getMessage());
-				downloadResult = new DownloadResult(e.getMessage());
+				String error = "Encountered an error while downloading resource: " + e.getMessage();
+				logger.error(error);
+				downloadResult = new DownloadResult(error);
 			}
+		}
+		catch (WebApplicationException e)
+		{
+			String error = "Encountered an error while trying to download resource: "
+					+ e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage();
+			logger.error(error);
+			downloadResult = new DownloadResult(error);
 		}
 		catch (Exception e)
 		{
-			logger.error("Encountered an error while trying to download resource: {}", e.getMessage());
-			downloadResult = new DownloadResult(e.getMessage());
+			String error = "Encountered an error while trying to download resource: " + e.getMessage();
+			logger.error(error);
+			downloadResult = new DownloadResult(error);
 		}
 		return downloadResult;
 	}
