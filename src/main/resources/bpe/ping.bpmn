@@ -250,12 +250,9 @@ Save = save as execution variable
 Store = store on DSF FHIR server either as separate resource or output parameter</bpmn:text>
     </bpmn:textAnnotation>
   </bpmn:process>
-  <bpmn:error id="Error_0tkfq65" name="resourceUploadError" />
+  <bpmn:error id="Error_0tkfq65" name="resourceUploadError" errorCode="resourceUploadError" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
-      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="Activity_1ddl5dm">
-        <dc:Bounds x="700" y="580" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">
         <dc:Bounds x="1040" y="180" width="1820" height="560" />
       </bpmndi:BPMNShape>
@@ -473,6 +470,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="260" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="Activity_1ddl5dm">
+        <dc:Bounds x="700" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0diib78" bpmnElement="TextAnnotation_1ig0151">
         <dc:Bounds x="2990" y="239" width="160" height="49" />
         <bpmndi:BPMNLabel />
@@ -541,6 +541,16 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="188" y="360" />
         <di:waypoint x="260" y="360" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ql2dtr_di" bpmnElement="Flow_0ql2dtr">
+        <di:waypoint x="630" y="558" />
+        <di:waypoint x="630" y="620" />
+        <di:waypoint x="700" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ejw9k5_di" bpmnElement="Flow_0ejw9k5">
+        <di:waypoint x="800" y="620" />
+        <di:waypoint x="840" y="620" />
+        <di:waypoint x="840" y="385" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_149mrr9" bpmnElement="Association_0xonsp5">
         <di:waypoint x="539" y="540" />
         <di:waypoint x="498" y="580" />
@@ -552,16 +562,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
         <di:waypoint x="3079" y="330" />
         <di:waypoint x="3058" y="288" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ql2dtr_di" bpmnElement="Flow_0ql2dtr">
-        <di:waypoint x="630" y="558" />
-        <di:waypoint x="630" y="620" />
-        <di:waypoint x="700" y="620" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ejw9k5_di" bpmnElement="Flow_0ejw9k5">
-        <di:waypoint x="800" y="620" />
-        <di:waypoint x="840" y="620" />
-        <di:waypoint x="840" y="385" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
