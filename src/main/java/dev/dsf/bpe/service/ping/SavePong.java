@@ -35,8 +35,6 @@ public class SavePong extends AbstractServiceDelegate
 		logger.debug("Pong received from {}. Saving pong information...", target.getEndpointUrl());
 		String correlationKey = target.getCorrelationKey();
 		delegateExecution.removeVariable("statusCode");
-		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey),
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED);
 
 		Task pong = variables.getLatestTask();
 
@@ -56,7 +54,7 @@ public class SavePong extends AbstractServiceDelegate
 
 		List<String> errorList = api.getTaskHelper()
 				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE, StringType.class)
+						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR_MESSAGE, StringType.class)
 				.map(PrimitiveType::getValue).map(string -> "Pong error: " + string).toList();
 
 		ErrorMessageListUtils.addAll(errorList, delegateExecution, correlationKey);

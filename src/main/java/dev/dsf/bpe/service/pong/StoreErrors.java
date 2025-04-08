@@ -1,9 +1,12 @@
 package dev.dsf.bpe.service.pong;
 
+import java.util.List;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
@@ -25,7 +28,18 @@ public class StoreErrors extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(StoreErrors.class, startTask);
 		logger.debug("Storing errors...");
 
-		PingStatusGenerator.updatePongStatusOutput(startTask, ErrorMessageListUtils.getErrorMessageList(execution));
+		List<String> errors = ErrorMessageListUtils.getErrorMessageList(execution);
+		PingStatusGenerator.updatePongStatusOutput(startTask, errors);
+
+		if (!errors.isEmpty())
+		{
+			PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
+		}
+		else
+		{
+			PingStatusGenerator.updatePongStatusOutput(startTask,
+					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED);
+		}
 
 		variables.updateTask(startTask);
 		logger.debug("Stored errors in task: " + startTask.getIdElement().getValue());

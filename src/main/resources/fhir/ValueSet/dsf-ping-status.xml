@@ -23,22 +23,6 @@
 		<include>
 			<system value="http://dsf.dev/fhir/CodeSystem/ping-status-v2" />
 			<version value="#{version}" />
-			<concept>
-				<code value="not-allowed" />
-				<display value="Not allowed" />
-			</concept>
-			<concept>
-				<code value="not-reachable" />
-				<display value="Not reachable" />
-			</concept>
-			<concept>
-				<code value="pong-missing" />
-				<display value="Pong missing" />
-			</concept>
-			<concept>
-				<code value="pong-received" />
-				<display value="Pong received" />
-			</concept>
 		</include>
 	</compose>
 </ValueSet> 

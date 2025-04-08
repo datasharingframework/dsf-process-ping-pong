@@ -29,9 +29,9 @@ public class LogAndSaveNoResponse extends AbstractServiceDelegate
 		String correlationKey = target.getCorrelationKey();
 		delegateExecution.removeVariable("statusCode");
 		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey),
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING);
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 
 		logger.debug("Saved '{}' to process execution for correlation key '{}'",
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING, correlationKey);
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR, correlationKey);
 	}
 }

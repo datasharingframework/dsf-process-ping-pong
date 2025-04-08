@@ -272,7 +272,7 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE, List.of("some error message")));
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR, List.of("some error message")));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -316,7 +316,7 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED, BigDecimal.ZERO, BigDecimal.ZERO,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED, BigDecimal.ZERO, BigDecimal.ZERO,
 				ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -428,8 +428,8 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
+		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -469,8 +469,8 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(new PingStatusGenerator().createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT));
+		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000));
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));

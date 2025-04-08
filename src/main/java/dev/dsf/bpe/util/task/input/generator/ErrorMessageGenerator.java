@@ -21,7 +21,7 @@ public class ErrorMessageGenerator
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
 		param.setValue(new StringType(errorMessage)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE);
+				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR_MESSAGE);
 		return param;
 	}
 }

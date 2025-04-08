@@ -85,7 +85,6 @@ public class SendPong extends AbstractTaskMessageSend
 		Target target = variables.getTarget();
 		Task mainTask = variables.getStartTask();
 		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
-		PingStatusGenerator.updatePongStatusOutput(mainTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT);
 		variables.updateTask(mainTask);
 		super.doExecute(execution, variables);
 	}
@@ -99,9 +98,8 @@ public class SendPong extends AbstractTaskMessageSend
 		Task startTask = variables.getStartTask();
 
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
-						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
-						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+				? Response.Status.fromStatusCode(w.getResponse().getStatus()).toString()
+				: "unknown";
 		execution.setVariable(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);

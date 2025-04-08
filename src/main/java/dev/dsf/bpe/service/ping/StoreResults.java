@@ -11,7 +11,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.mail.ErrorMailService;
+import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorMessageListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
@@ -25,10 +25,10 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
-	private final ErrorMailService errorMailService;
+	private final AggregateErrorMailService errorMailService;
 	private final String networkSpeedUnit;
 
-	public StoreResults(ProcessPluginApi api, ErrorMailService errorMailService, String networkSpeedUnit)
+	public StoreResults(ProcessPluginApi api, AggregateErrorMailService errorMailService, String networkSpeedUnit)
 	{
 		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
@@ -59,65 +59,47 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		{
 			String correlationKey = target.getCorrelationKey();
 
-			String statusCode = variables.getString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey));
-			if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode)
-					|| ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
+			List<String> errors = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
+			String statusCode = errors.isEmpty() ? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED
+					: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
+			int downloadResourceSizeBytes = variables
+					.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+			List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
+			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
-				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
-				String errorMessage = errorMessages.get(0);
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
+				Integer downloadedBytes = variables
+						.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+				Long downloadedDurationMillis = variables
+						.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
-				if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE.equals(statusCode))
-					errorMailService.endpointNotReachableForPing(task.getIdElement(), target, errorMessage);
-				else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED.equals(statusCode))
-					errorMailService.endpointReachablePingForbidden(task.getIdElement(), target, errorMessage);
+				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDurationMillis != null
+						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis, networkSpeedUnit)
+						: null;
+
+				Integer uploadedBytes = variables
+						.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
+				Long uploadedDurationMillis = variables
+						.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
+
+				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
+						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
+						: null;
+
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
+						downloadSpeed, uploadSpeed, networkSpeedUnit));
 			}
-			else if (ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING.equals(statusCode))
+			else // if slim-ping
 			{
-				List<String> errorMessages = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessages));
-
-				errorMailService.pongMessageNotReceived(task.getIdElement(), target);
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList));
 			}
-			else
-			{
-				int downloadResourceSizeBytes = variables
-						.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
-				List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
-				if (downloadResourceSizeBytes >= 0) // if fat-ping
-				{
-					Integer downloadedBytes = variables
-							.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
-					Long downloadedDurationMillis = variables
-							.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
-
-					BigDecimal downloadSpeed = downloadedBytes != null && downloadedDurationMillis != null
-							? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis,
-									networkSpeedUnit)
-							: null;
-
-					Integer uploadedBytes = variables
-							.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
-					Long uploadedDurationMillis = variables
-							.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
-
-					BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
-							? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
-							: null;
-
-					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
-							downloadSpeed, uploadSpeed, networkSpeedUnit));
-				}
-				else // if slim-ping
-				{
-					task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode));
-				}
-			}
+			errors.forEach(error -> errorMailService.addMessagePing(target, error));
 		});
 
 		// TODO only send one combined status mail
 
 		variables.updateTask(task);
+
+		errorMailService.send(task.getIdElement());
 
 		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
 	}

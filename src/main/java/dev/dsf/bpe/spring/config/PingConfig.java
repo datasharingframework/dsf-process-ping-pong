@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 
 import dev.dsf.bpe.listener.PingPongDeploymentStateListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
-import dev.dsf.bpe.mail.ErrorMailService;
+import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPong;
 import dev.dsf.bpe.message.SendPing;
 import dev.dsf.bpe.message.SendPong;
@@ -46,11 +46,11 @@ public class PingConfig
 	private ProcessPluginApi api;
 
 	@ProcessDocumentation(description = "To enable a mail being sent if the ping process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_ping")
-	@Value("${dev.dsf.dsf.bpe.ping.mail.onPingProcessFailed:false}")
+	@Value("${dev.dsf.bpe.ping.mail.onPingProcessFailed:false}")
 	private boolean sendPingProcessFailedMail;
 
 	@ProcessDocumentation(description = "To enable a mail being sent if the pong process fails, set to 'true'. This requires the SMPT mail service client to be configured in the DSF", processNames = "dsfdev_pong")
-	@Value("${dev.dsf.dsf.bpe.ping.mail.onPongProcessFailed:false}")
+	@Value("${dev.dsf.bpe.ping.mail.onPongProcessFailed:false}")
 	private boolean sendPongProcessFailedMail;
 
 	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
@@ -112,9 +112,9 @@ public class PingConfig
 	}
 
 	@Bean
-	public ErrorMailService errorLogger()
+	public AggregateErrorMailService errorLogger()
 	{
-		return new ErrorMailService(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
+		return new AggregateErrorMailService(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
 	}
 
 

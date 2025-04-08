@@ -12,16 +12,16 @@ import dev.dsf.bpe.v1.variables.Target;
 
 public class ErrorMailService implements InitializingBean
 {
-	private static final Logger pingProcessErrorLogger = LoggerFactory.getLogger("ping-process-error-logger");
-	private static final Logger pongProcessErrorLogger = LoggerFactory.getLogger("pong-process-error-logger");
+	protected static final Logger pingProcessErrorLogger = LoggerFactory.getLogger("ping-process-error-logger");
+	protected static final Logger pongProcessErrorLogger = LoggerFactory.getLogger("pong-process-error-logger");
 
-	private static final String SUBJECT_PING_PROCESS_FAILED = "Ping Process Failed";
-	private static final String SUBJECT_PONG_PROCESS_FAILED = "Pong Process Failed";
+	protected static final String SUBJECT_PING_PROCESS_FAILED = "Ping Process Failed";
+	protected static final String SUBJECT_PONG_PROCESS_FAILED = "Pong Process Failed";
 
-	private final ProcessPluginApi api;
+	protected final ProcessPluginApi api;
 
-	private final boolean sendPingProcessFailedMail;
-	private final boolean sendPongProcessFailedMail;
+	protected final boolean sendPingProcessFailedMail;
+	protected final boolean sendPongProcessFailedMail;
 
 	public ErrorMailService(ProcessPluginApi api, boolean sendPingProcessFailedMail, boolean sendPongProcessFailedMail)
 	{

@@ -125,7 +125,7 @@
       <bpmn:sequenceFlow id="Flow_136htek" sourceRef="LogNoResponse" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="Activity_0ri6fnv" targetRef="Gateway_0z5gz96" />
       <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Activity_0p5edt9">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp; (statusCode == 'not-allowed' || statusCode == 'not-reachable')}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp; statusCode == 'error'}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
       <bpmn:sequenceFlow id="Flow_13u1nzy" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">

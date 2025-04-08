@@ -23,14 +23,11 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogAndSaveSendError.class, variables.getStartTask());
 
 		String correlationKey = variables.getTarget().getCorrelationKey();
-		String statusCode = (String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode());
 		String errorMessage = (String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableErrorMessage());
 
-		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(correlationKey), statusCode);
 		ErrorMessageListUtils.add(errorMessage, execution, correlationKey);
 		variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0);
 		variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey), 0L);
-		logger.debug("Saved error when trying to send ping message. Status: {}, error message: {}", statusCode,
-				errorMessage);
+		logger.debug("Saved error when trying to send ping message. Error message: {}", errorMessage);
 	}
 }

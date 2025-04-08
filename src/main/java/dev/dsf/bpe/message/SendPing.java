@@ -57,15 +57,15 @@ public class SendPing extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 
-		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				&& w.getResponse().getStatus() == Response.Status.FORBIDDEN.getStatusCode()
-						? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED
-						: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE;
+		String responseCode = exception instanceof WebApplicationException w && w.getResponse() != null
+				? Response.Status.fromStatusCode(w.getResponse().getStatus()).toString()
+				: "unknown";
+		String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
 
 		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
 		String specialErrorMessage = createErrorMessage(exception);
 		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableErrorMessage(), specialErrorMessage);
-		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
+		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), responseCode);
 	}
 
 	@Override

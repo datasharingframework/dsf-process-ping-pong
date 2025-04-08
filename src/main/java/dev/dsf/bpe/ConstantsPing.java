@@ -55,15 +55,12 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
+	public static final String CODESYSTEM_DSF_PING_VALUE_ERROR_MESSAGE = "error-message";
 
 	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status-v2";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_ALLOWED = "not-allowed";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_NOT_REACHABLE = "not-reachable";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_MISSING = "pong-missing";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_RECEIVED = "pong-received";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PONG_SENT = "pong-sent";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR_MESSAGE = "error-message";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_RESOURCE_DOWNLOADED = "resource-downloaded";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED = "completed";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PENDING = "pending";
+	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR = "error";
 
 	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
