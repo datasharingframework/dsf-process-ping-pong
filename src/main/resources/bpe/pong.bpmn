@@ -93,7 +93,7 @@
     <bpmn:sequenceFlow id="Flow_1o3n9u6" sourceRef="Gateway_1ggdr8l" targetRef="Activity_005ywv2" />
     <bpmn:sequenceFlow id="Flow_0fzmjzb" sourceRef="Activity_005ywv2" targetRef="Gateway_0eiy9fm" />
     <bpmn:sequenceFlow id="Flow_0h8flp6" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  statusCode == 'not-reachable'}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  statusCode == 'error'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1bzjspe" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1l5dkpz" />
     <bpmn:sequenceFlow id="Flow_00t1ck1" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">
@@ -155,7 +155,7 @@
     <bpmn:sequenceFlow id="Flow_1j5lf0u" sourceRef="Activity_02rqshk" targetRef="Activity_1wdftvk" />
     <bpmn:boundaryEvent id="Event_0c5a0v4" name="Failed to create resource" attachedToRef="Activity_1m4wavi">
       <bpmn:outgoing>Flow_0mgrru4</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0rltnl2" errorRef="Error_0y0cd8c" camunda:errorMessageVariable="resourceUploadErrorMessage" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0rltnl2" errorRef="Error_0y0cd8c" camunda:errorMessageVariable="resourceUploadError" />
     </bpmn:boundaryEvent>
     <bpmn:serviceTask id="Activity_1kb1v81" name="Log And Save Error" camunda:class="dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong">
       <bpmn:incoming>Flow_0mgrru4</bpmn:incoming>
