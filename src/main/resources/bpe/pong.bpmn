@@ -83,7 +83,7 @@
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0olr5yw" attachedToRef="Activity_095j2gg">
       <bpmn:outgoing>Flow_0uj7rm3</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" camunda:errorMessageVariable="resourceDownloadErrorMessage" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0h8zmzk" errorRef="Error_1jmenbm" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_10z0d4x" sourceRef="Gateway_1jwjxzn" targetRef="Activity_095j2gg" />
     <bpmn:sequenceFlow id="Flow_08gidyv" sourceRef="Gateway_1jwjxzn" targetRef="Gateway_1ggdr8l">

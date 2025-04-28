@@ -4,50 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.IdType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Target;
 
-public class AggregateErrorMailService extends ErrorMailService
+public class AggregateErrorMailService
 {
+	private static final Logger errorMailServiceLogger = LoggerFactory.getLogger("error-mail-service-logger");
 	private static final String MAIL_MESSAGE_INTRO = "Error(s) while executing ping-pong process:";
 	private static final String PING_PROCESS_HAS_ERRORS = "Ping process has errors";
 
+	private final ProcessPluginApi api;
+	private final boolean sendProcessFailedMail;
+
 	private List<String> errorMessages;
 
-	public AggregateErrorMailService(ProcessPluginApi api, boolean sendPingProcessFailedMail,
-			boolean sendPongProcessFailedMail)
+	public AggregateErrorMailService(ProcessPluginApi api, boolean sendProcessFailedMail)
 	{
-		super(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
+		this.api = api;
+		this.sendProcessFailedMail = sendProcessFailedMail;
 		errorMessages = new ArrayList<>();
 	}
 
-	public void addMessagePing(Target target, String message)
+	public void addError(Target target, ProcessError error)
 	{
-		pingProcessErrorLogger.info("Ping process error: {}", message);
-
-		if (sendPingProcessFailedMail)
-		{
-			errorMessages.add(createMessage(target, message, null));
-		}
-	}
-
-	public void addMessagePong(Target target, String message)
-	{
-		pongProcessErrorLogger.info("Pong process error: {}", message);
-
-		if (sendPongProcessFailedMail)
-		{
-			errorMessages.add(createMessage(target, message, null));
-		}
+		errorMessages.add(createMessage(target, error));
 	}
 
 	public void send(IdType taskId)
 	{
-		if (!errorMessages.isEmpty())
+		if (sendProcessFailedMail)
 		{
 			api.getMailService().send(PING_PROCESS_HAS_ERRORS, buildMailMessage(taskId));
 			errorMessages = new ArrayList<>();
+			errorMailServiceLogger.info("Sent e-mail with process errors");
 		}
 	}
 
@@ -64,34 +58,61 @@ public class AggregateErrorMailService extends ErrorMailService
 			mailMessage.append("\n\n");
 		});
 
-		mailMessage.append("\nProcess started by: ");
+		mailMessage.append("Process started by: ");
 		mailMessage.append(taskId.toVersionless()
 				.withServerBase(api.getEndpointProvider().getLocalEndpointAddress(), "Task").getValue());
 
 		return mailMessage.toString();
 	}
 
-	protected String createMessage(Target target, String message, String messageDetails)
+	protected String createMessage(Target target, ProcessError error)
 	{
 		StringBuilder b = new StringBuilder();
 
-		b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
-		b.append('/');
-		b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
-
-		b.append(" -> ");
-
-		b.append(target.getOrganizationIdentifierValue());
-		b.append('/');
-		b.append(target.getEndpointIdentifierValue());
-
-		b.append(": ");
-		b.append(message);
-
-		if (messageDetails != null)
+		if (error != null && error.process() != null)
 		{
+			if (ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING.equals(error.process()))
+			{
+				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
+				b.append('/');
+				b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
+
+				b.append(" -> ");
+
+				b.append(target.getOrganizationIdentifierValue());
+				b.append('/');
+				b.append(target.getEndpointIdentifierValue());
+
+				b.append(":");
+
+			}
+			else
+			{
+				b.append(target.getOrganizationIdentifierValue());
+				b.append('/');
+				b.append(target.getEndpointIdentifierValue());
+
+				b.append(" -> ");
+
+				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
+				b.append('/');
+				b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
+
+				b.append(": ");
+			}
+
 			b.append("\n\t");
-			b.append(messageDetails);
+			b.append("Process: ").append(error.process());
+			b.append("\n\t");
+			b.append("Process step: ").append(error.processStep());
+			b.append("\n\t");
+			b.append("Action: ").append(error.action());
+			b.append("\n\t");
+			b.append("Message: ").append(error.message());
+		}
+		else
+		{
+			b.append("Unable to display error because error is null or process is neither of 'ping' or 'pong'");
 		}
 
 		return b.toString();

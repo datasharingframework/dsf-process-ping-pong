@@ -72,8 +72,8 @@
 		<definition value="Duration it took for the resource to be downloaded to measure network speed"/>
 	</concept>
 	<concept>
-		<code value="error-message"/>
-		<display value="Error Message"/>
-		<definition value="Error message to be added as an output parameter in the Start Ping Task"/>
+		<code value="error"/>
+		<display value="Error"/>
+		<definition value="Error to be added as an output parameter in the Start Ping Task"/>
 	</concept>
 </CodeSystem> 

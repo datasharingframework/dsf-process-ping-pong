@@ -105,22 +105,6 @@
       <path value="Extension.extension.value[x].value"/>
       <min value="1"/>
     </element>
-    <element id="Extension.extension:error-message">
-      <path value="Extension.extension"/>
-      <sliceName value="error-message"/>
-      <min value="0"/>
-    </element>
-    <element id="Extension.extension:error-message.url">
-      <path value="Extension.extension.url"/>
-      <fixedUri value="error-message"/>
-    </element>
-    <element id="Extension.extension:error-message.value[x]">
-      <path value="Extension.extension.value[x]"/>
-      <min value="1"/>
-      <type>
-        <code value="string"/>
-      </type>
-    </element>
     <element id="Extension.extension:download-speed">
       <path value="Extension.extension"/>
       <sliceName value="download-speed"/>
@@ -188,6 +172,40 @@
       <fixedUri value="upload-speed"/>
     </element>
     <element id="Extension.extension:upload-speed.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <max value="0"/>
+    </element>
+    <element id="Extension.extension:error">
+      <path value="Extension.extension"/>
+      <sliceName value="error"/>
+      <min value="0"/>
+    </element>
+    <element id="Extension.extension:error.extension">
+      <path value="Extension.extension.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:error.extension:error-extension">
+      <path value="Extension.extension.extension" />
+      <sliceName value="error-extension" />
+      <min value="1" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-extension-error|#{version}" />
+      </type>
+    </element>
+    <element id="Extension.extension:error.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="error"/>
+    </element>
+    <element id="Extension.extension:error.value[x]">
       <path value="Extension.extension.value[x]"/>
       <max value="0"/>
     </element>

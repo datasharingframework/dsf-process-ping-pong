@@ -7,13 +7,13 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.IntegerType;
-import org.hl7.fhir.r4.model.PrimitiveType;
-import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
+import dev.dsf.bpe.util.task.input.ErrorInputParser;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -52,12 +52,9 @@ public class SavePong extends AbstractServiceDelegate
 				ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), integerType.getValue()));
 
 
-		List<String> errorList = api.getTaskHelper()
-				.getInputParameterValues(pong, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR_MESSAGE, StringType.class)
-				.map(PrimitiveType::getValue).map(string -> "Pong error: " + string).toList();
+		List<ProcessError> errorList = ErrorInputParser.parseInputs(pong);
 
-		ErrorMessageListUtils.addAll(errorList, delegateExecution, correlationKey);
+		ErrorListUtils.addAll(errorList, delegateExecution, correlationKey);
 
 		logger.debug("Saved pong information.");
 	}

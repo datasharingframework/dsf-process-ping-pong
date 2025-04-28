@@ -5,10 +5,12 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
+import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class SaveTimeoutError extends AbstractServiceDelegate
@@ -22,13 +24,17 @@ public class SaveTimeoutError extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
 		Task startTask = variables.getStartTask();
+		Target target = variables.getTarget();
 		PingPongLogger logger = new PingPongLogger(SaveTimeoutError.class, startTask);
 		logger.debug("Storing timeout error...");
 
-		String errorMessage = ConstantsPing.PONG_ERROR_MESSAGE_CLEANUP_TIMEOUT;
+		ProcessError error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG,
+				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_TIMER_CATCH_EVENT,
+				"Waiting for cleanup message from " + target.getOrganizationIdentifierValue(),
+				ConstantsPing.POTENTIAL_FIX_URL_DUMMY, "Timeout while waiting for cleanup message");
 
-		ErrorMessageListUtils.add(errorMessage, execution);
+		ErrorListUtils.add(error, execution);
 
-		logger.debug("Stored timeout error: {}", errorMessage);
+		logger.debug("Stored timeout error: {}", error.message());
 	}
 }

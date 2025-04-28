@@ -8,9 +8,11 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -32,10 +34,12 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
-import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;
+import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
 import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
+import dev.dsf.bpe.util.task.output.generator.ErrorOutputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
@@ -54,15 +58,19 @@ public class TaskProfileTest
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
-			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-network-speed.xml", "dsf-extension-ping-status.xml",
+			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-extension-error.xml",
+					"dsf-input-extension-error.xml", "dsf-output-extension-error.xml",
+					"dsf-extension-network-speed.xml", "dsf-extension-ping-status.xml",
 					"dsf-extension-ping-status-1_0.xml", "dsf-task-ping.xml", "dsf-task-pong.xml",
 					"dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
-					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-units.xml"),
+					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-units.xml",
+					"dsf-ping-process-steps.xml", "dsf-ping-processes.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-pong-status-1_0.xml",
-					"dsf-pong-status.xml", "dsf-ping-units.xml"));
+					"dsf-pong-status.xml", "dsf-ping-units.xml", "dsf-ping-process-steps.xml",
+					"dsf-ping-processes.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
@@ -197,14 +205,25 @@ public class TaskProfileTest
 	{
 		Task task = createValidTaskStartPingProcess();
 
-		dev.dsf.bpe.util.task.output.generator.ErrorMessageGenerator.create(List.of("Foo", "Bar"))
-				.forEach(task::addOutput);
+		ErrorOutputComponentGenerator.create(processErrors(4)).forEach(task::addOutput);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
 
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	private List<ProcessError> processErrors(int amount)
+	{
+		List<ProcessError> errors = new ArrayList<>();
+		for (int i = 0; i < amount; i++)
+		{
+			errors.add(new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, UUID.randomUUID().toString(),
+					ConstantsPing.POTENTIAL_FIX_URL_DUMMY, UUID.randomUUID().toString()));
+		}
+		return errors;
 	}
 
 	@Test
@@ -272,7 +291,7 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR, List.of("some error message")));
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR, processErrors(5)));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -546,8 +565,8 @@ public class TaskProfileTest
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
 		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
-		task.addInput(ErrorMessageGenerator.create("Something went wrong"));
-		task.addInput(ErrorMessageGenerator.create("Something went wrong really badly"));
+		task.addInput(ErrorInputComponentGenerator.create(processErrors(1).get(0)));
+		task.addInput(ErrorInputComponentGenerator.create(processErrors(1).get(0)));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);

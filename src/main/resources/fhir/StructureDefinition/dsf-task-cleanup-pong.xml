@@ -70,6 +70,10 @@
             <path value="Task.input.type"/>
             <min value="1"/>
             <max value="1"/>
+            <binding>
+                <strength value="required"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+            </binding>
         </element>
         <element id="Task.input:downloaded-bytes.type.coding">
             <path value="Task.input.type.coding"/>
@@ -106,6 +110,10 @@
             <path value="Task.input.type"/>
             <min value="1"/>
             <max value="1"/>
+            <binding>
+                <strength value="required"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+            </binding>
         </element>
         <element id="Task.input:downloaded-duration-millis.type.coding">
             <path value="Task.input.type.coding"/>

@@ -8,13 +8,14 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.mail.ErrorMailService;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.mail.AggregateErrorMailService;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
-import dev.dsf.bpe.util.task.input.generator.ErrorMessageGenerator;
+import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
@@ -26,9 +27,9 @@ import jakarta.ws.rs.core.Response.StatusType;
 
 public class SendPong extends AbstractTaskMessageSend
 {
-	private final ErrorMailService errorMailService;
+	private final AggregateErrorMailService errorMailService;
 
-	public SendPong(ProcessPluginApi api, ErrorMailService errorMailService)
+	public SendPong(ProcessPluginApi api, AggregateErrorMailService errorMailService)
 	{
 		super(api);
 
@@ -47,7 +48,7 @@ public class SendPong extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		List<String> errorList = ErrorMessageListUtils.getErrorMessageList(execution);
+		List<ProcessError> errorList = ErrorListUtils.getErrorMessageList(execution);
 		int downloadResourceSizeBytes = variables
 				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 		if (downloadResourceSizeBytes >= 0)
@@ -68,14 +69,13 @@ public class SendPong extends AbstractTaskMessageSend
 					? Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference))
 					: Stream.empty();
 
-			return Stream
-					.of(downloadedBytesParameter, downloadedDurationMillisParameter,
-							downloadedResourceReferenceParameter, ErrorMessageGenerator.create(errorList).stream())
+			return Stream.of(downloadedBytesParameter, downloadedDurationMillisParameter,
+					downloadedResourceReferenceParameter, ErrorInputComponentGenerator.create(errorList).stream())
 					.flatMap(stream -> stream);
 		}
 		else
 		{
-			return ErrorMessageGenerator.create(errorList).stream();
+			return ErrorInputComponentGenerator.create(errorList).stream();
 		}
 	}
 
@@ -100,12 +100,16 @@ public class SendPong extends AbstractTaskMessageSend
 		String statusCode = exception instanceof WebApplicationException w && w.getResponse() != null
 				? Response.Status.fromStatusCode(w.getResponse().getStatus()).toString()
 				: "unknown";
-		execution.setVariable(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
 
 		String specialErrorMessage = createErrorMessage(exception);
-		ErrorMessageListUtils.add(specialErrorMessage, execution);
-		PingStatusGenerator.updatePongStatusOutput(startTask, statusCode);
-		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
+		ProcessError pongSendError = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG,
+				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG,
+				"Sending pong message to " + target.getEndpointUrl(), ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
+				specialErrorMessage);
+		ErrorListUtils.add(pongSendError, execution);
+		PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
+		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), statusCode);
 		variables.updateTask(startTask);
@@ -117,10 +121,9 @@ public class SendPong extends AbstractTaskMessageSend
 				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
 		{
 			StatusType statusInfo = w.getResponse().getStatusInfo();
-			return "Error when sending pong message: " + statusInfo.getStatusCode() + " "
-					+ statusInfo.getReasonPhrase();
+			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
 		}
 		else
-			return "Error when sending ping message: " + exception.getMessage();
+			return exception.getMessage();
 	}
 }

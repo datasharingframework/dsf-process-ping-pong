@@ -55,12 +55,42 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
 	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
-	public static final String CODESYSTEM_DSF_PING_VALUE_ERROR_MESSAGE = "error-message";
+	public static final String CODESYSTEM_DSF_PING_VALUE_ERROR = "error";
 
 	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status-v2";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED = "completed";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PENDING = "pending";
 	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR = "error";
+
+	public static final String CODESYSTEM_DSF_PING_PROCESSES = "http://dsf.dev/fhir/CodeSystem/ping-processes-v2";
+	public static final String CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING = "ping";
+	public static final String CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG = "pong";
+
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS = "http://dsf.dev/fhir/CodeSystem/ping-process-steps-v2";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SET_DOWNLOAD_RESOURCE_SIZE = "set-download-resource-size";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE = "generate-and-store-resource";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_ERROR = "log-and-save-error";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SELECT_TARGETS = "select-targets";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING = "ping";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_SEND_ERROR = "log-and-save-send-error";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_NO_RESPONSE = "log-and-save-no-response";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SAVE_PONG = "save-pong";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED = "download-resource-and-measure-speed";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_PONG = "cleanup-pong";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP = "cleanup";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_RESULTS = "store-results";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_PING = "log-ping";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SET_ENDPOINT_IDENTIFIER = "set-endpoint-identifier";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SELECT_PONG_TARGET = "select-pong-target";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_DOWNLOAD_SPEED = "store-download-speed";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_AND_STORE_ERROR = "log-and-save-and-store-error";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_ESTIMATE_CLEANUP_TIMER_DURATION = "estimate-cleanup-timer-duration";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG = "pong";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_UPLOAD_SPEED = "store-upload-speed";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SAVE_TIMEOUT_ERROR = "save-timeout-error";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_ERRORS = "store-errors";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_TIMER_CATCH_EVENT = "cleanup-timer-catch-event";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG_MESSAGE_TIMEOUT_TIMER_CATCH_EVENT = "pong-timer-catch-event";
 
 	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
@@ -75,16 +105,25 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
 	public static final String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
 
-	public static final String EXTENSION_URL_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2";
-	public static final String EXTENSION_URL_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
+	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2";
+	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
+	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-extension-error";
+	public static final String STRUCTURE_DEFINITION_URL_INPUT_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/input-extension-error";
+	public static final String STRUCTURE_DEFINITION_URL_OUTPUT_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/output-extension-error";
+
 	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	public static final String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
 	public static final String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
-	public static final String EXTENSION_URL_ERROR_MESSAGE = "error-message";
 	public static final String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed";
 	public static final String EXTENSION_URL_UPLOAD_SPEED = "upload-speed";
 	public static final String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
 	public static final String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
+	public static final String EXTENSION_URL_ERROR = "error";
+	public static final String EXTENSION_URL_PROCESS = "process";
+	public static final String EXTENSION_URL_PROCESS_STEP = "process-step";
+	public static final String EXTENSION_URL_ACTION = "action";
+	public static final String EXTENSION_URL_POTENTIAL_FIX = "potential-fix";
+	public static final String EXTENSION_URL_MESSAGE = "message";
 
 	public static final String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
 	public static final String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
@@ -92,15 +131,15 @@ public final class ConstantsPing
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
 	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
 	private static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
-	private static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE = "errorMessage";
-	private static final String BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST = "errorMessages";
+	private static final String BPMN_EXECUTION_VARIABLE_ERROR = "error";
+	private static final String BPMN_EXECUTION_VARIABLE_ERROR_LIST = "errors";
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
 	public static final String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
-	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR_MESSAGE = "resourceDownloadErrorMessage";
-	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR_MESSAGE = "resourceUploadErrorMessage";
+	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
+	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
 
 	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
 	public static final String BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
@@ -113,6 +152,8 @@ public final class ConstantsPing
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 
+	public static final String POTENTIAL_FIX_URL_DUMMY = "dsf.dev";
+
 	public static String getBpmnExecutionVariableStatusCode()
 	{
 		return BPMN_EXECUTION_VARIABLE_STATUS_CODE;
@@ -123,14 +164,14 @@ public final class ConstantsPing
 		return BPMN_EXECUTION_VARIABLE_STATUS_CODE + "_" + correlationKey;
 	}
 
-	public static String getBpmnExecutionVariableErrorMessage()
+	public static String getBpmnExecutionVariableError()
 	{
-		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE;
+		return BPMN_EXECUTION_VARIABLE_ERROR;
 	}
 
 	public static String getBpmnExecutionVariableErrorMessage(String correlationKey)
 	{
-		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE + "_" + correlationKey;
+		return BPMN_EXECUTION_VARIABLE_ERROR + "_" + correlationKey;
 	}
 
 	public static String getBpmnExecutionVariableDownloadedBytes()
@@ -173,13 +214,13 @@ public final class ConstantsPing
 		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS + "_" + correlationKey;
 	}
 
-	public static String getBpmnExecutionVariableErrorMessageList()
+	public static String getBpmnExecutionVariableErrorList()
 	{
-		return BPMN_EXECUTION_VARIABLE_ERROR_MESSAGE_LIST;
+		return BPMN_EXECUTION_VARIABLE_ERROR_LIST;
 	}
 
 	public static String getBpmnExecutionVariableErrorMessageList(String correlationKey)
 	{
-		return getBpmnExecutionVariableErrorMessageList() + "_" + correlationKey;
+		return getBpmnExecutionVariableErrorList() + "_" + correlationKey;
 	}
 }

@@ -121,6 +121,10 @@
       <path value="Task.input.type"/>
       <min value="1"/>
       <max value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+      </binding>
     </element>
     <element id="Task.input:downloaded-bytes.type.coding">
       <path value="Task.input.type.coding"/>
@@ -157,6 +161,10 @@
       <path value="Task.input.type"/>
       <min value="1"/>
       <max value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+      </binding>
     </element>
     <element id="Task.input:downloaded-duration-millis.type.coding">
       <path value="Task.input.type.coding"/>
@@ -183,37 +191,61 @@
         <code value="decimal"/>
       </type>
     </element>
-    <element id="Task.input:error-message">
+    <element id="Task.input:process-error">
       <path value="Task.input"/>
-      <sliceName value="error-message"/>
+      <sliceName value="process-error"/>
       <min value="0"/>
     </element>
-    <element id="Task.input:error-message.type">
-      <path value="Task.input.type"/>
+    <element id="Task.input:process-error.extension">
+      <path value="Task.input.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Task.input:error-message.type.coding">
+    <element id="Task.input:process-error.extension:error-extension">
+      <path value="Task.input.extension" />
+      <sliceName value="process-error-extension" />
+      <min value="1" />
+      <max value="1"/>
+      <type>
+        <code value="Extension" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/input-extension-error|#{version}" />
+      </type>
+    </element>
+    <element id="Task.input:process-error.type">
+      <path value="Task.input.type"/>
+      <min value="1"/>
+      <max value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}"/>
+      </binding>
+    </element>
+    <element id="Task.input:process-error.type.coding">
       <path value="Task.input.type.coding"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Task.input:error-message.type.coding.system">
+    <element id="Task.input:process-error.type.coding.system">
       <path value="Task.input.type.coding.system"/>
       <min value="1"/>
       <max value="1"/>
       <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
     </element>
-    <element id="Task.input:error-message.type.coding.code">
+    <element id="Task.input:process-error.type.coding.code">
       <path value="Task.input.type.coding.code"/>
       <min value="1"/>
       <max value="1"/>
-      <fixedCode value="error-message"/>
+      <fixedCode value="error"/>
     </element>
-    <element id="Task.input:error-message.value[x]">
+    <element id="Task.input:process-error.value[x]">
       <path value="Task.input.value[x]"/>
-      <min value="1"/>
-      <max value="1"/>
       <type>
         <code value="string"/>
       </type>

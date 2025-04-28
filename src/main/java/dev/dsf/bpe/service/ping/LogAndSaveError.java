@@ -4,7 +4,8 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -24,10 +25,11 @@ public class LogAndSaveError extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogAndSaveError.class, variables.getStartTask());
 		Target target = variables.getTarget();
 
-		String errorMessage = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR_MESSAGE);
-		ErrorMessageListUtils.add(errorMessage, delegateExecution, target.getCorrelationKey());
+		ProcessError error = (ProcessError) delegateExecution
+				.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR);
 
-		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(), errorMessage);
+		ErrorListUtils.add(error, delegateExecution, target.getCorrelationKey());
+
+		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(), error.message());
 	}
 }

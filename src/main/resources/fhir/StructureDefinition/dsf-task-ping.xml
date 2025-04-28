@@ -209,6 +209,65 @@
       <path value="Task.input.value[x].identifier"/>
       <max value="0"/>
     </element>
+    <element id="Task.output:process-error">
+      <path value="Task.output"/>
+      <sliceName value="process-error"/>
+      <min value="0"/>
+    </element>
+    <element id="Task.output:process-error.extension">
+      <path value="Task.output.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.output:process-error.extension:error-extension">
+      <path value="Task.output.extension" />
+      <sliceName value="error-extension" />
+      <min value="1" />
+      <max value="1"/>
+      <type>
+        <code value="Extension" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/output-extension-error|#{version}" />
+      </type>
+    </element>
+    <element id="Task.output:process-error.type">
+      <path value="Task.output.type"/>
+      <min value="1"/>
+      <max value="1"/>
+      <binding>
+        <strength value="required"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}"/>
+      </binding>
+    </element>
+    <element id="Task.output:process-error.type.coding">
+      <path value="Task.output.type.coding"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Task.output:process-error.type.coding.system">
+      <path value="Task.output.type.coding.system"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+    </element>
+    <element id="Task.output:process-error.type.coding.code">
+      <path value="Task.output.type.coding.code"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedCode value="error"/>
+    </element>
+    <element id="Task.output:process-error.value[x]">
+      <path value="Task.output.value[x]"/>
+      <type>
+        <code value="string"/>
+      </type>
+    </element>
     <element id="Task.output:pong-status">
       <path value="Task.output"/>
       <sliceName value="pong-status"/>

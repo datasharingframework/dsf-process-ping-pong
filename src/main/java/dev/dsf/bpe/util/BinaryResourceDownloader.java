@@ -2,12 +2,14 @@ package dev.dsf.bpe.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -16,25 +18,36 @@ import jakarta.ws.rs.WebApplicationException;
 public class BinaryResourceDownloader
 {
 	private final PingPongLogger logger;
+	private final String process;
 
-	public BinaryResourceDownloader(PingPongLogger logger)
+	public BinaryResourceDownloader(PingPongLogger logger, String process)
 	{
 		this.logger = logger;
+		this.process = process;
 	}
 
 	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, int maxDownloadSizeBytes)
-			throws Exception
 	{
 		DownloadResult downloadResult;
 
 		int downloadResourceSizeBytes = variables
 				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
-		Reference downloadResourceReference = api.getTaskHelper()
-				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, Reference.class)
-				.orElseThrow(() -> new Exception("Unable to download resource. No reference provided in message."));
+		Optional<Reference> optDownloadResourceReference = api.getTaskHelper().getFirstInputParameterValue(task,
+				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE,
+				Reference.class);
 
+		if (optDownloadResourceReference.isEmpty())
+		{
+			ProcessError error = new ProcessError(process,
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+					"Extracting binary resource reference from task " + task.getIdElement().getValue(),
+					ConstantsPing.POTENTIAL_FIX_URL_DUMMY, "No reference provided in task");
+			downloadResult = new DownloadResult(error);
+			return downloadResult;
+		}
+
+		Reference downloadResourceReference = optDownloadResourceReference.get();
 		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
@@ -61,22 +74,34 @@ public class BinaryResourceDownloader
 			}
 			catch (IOException e)
 			{
-				String error = "Encountered an error while downloading resource: " + e.getMessage();
-				logger.error(error);
+				binaryResourceInputStream.close();
+				String errorMessage = e.getMessage();
+				ProcessError error = new ProcessError(process,
+						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+						"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
+						errorMessage);
+				logger.error("Encountered an error while downloading resource: {}", errorMessage);
 				downloadResult = new DownloadResult(error);
 			}
 		}
 		catch (WebApplicationException e)
 		{
-			String error = "Encountered an error while trying to download resource: "
-					+ e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage();
-			logger.error(error);
+			String errorMessage = e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage();
+			ProcessError error = new ProcessError(process,
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+					"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
+					errorMessage);
+			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
 		}
 		catch (Exception e)
 		{
-			String error = "Encountered an error while trying to download resource: " + e.getMessage();
-			logger.error(error);
+			String errorMessage = e.getMessage();
+			ProcessError error = new ProcessError(process,
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+					"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
+					errorMessage);
+			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
 		}
 		return downloadResult;
@@ -95,20 +120,20 @@ public class BinaryResourceDownloader
 	{
 		private final int downloadedBytes;
 		private final long downloadedDurationMillis;
-		private final String errorMessage;
+		private final ProcessError error;
 
 		public DownloadResult(int downloadedBytes, long downloadedDurationMillis)
 		{
 			this.downloadedBytes = downloadedBytes;
 			this.downloadedDurationMillis = downloadedDurationMillis;
-			errorMessage = null;
+			error = null;
 		}
 
-		public DownloadResult(String errorMessage)
+		public DownloadResult(ProcessError error)
 		{
 			downloadedBytes = 0;
 			downloadedDurationMillis = 0;
-			this.errorMessage = errorMessage;
+			this.error = error;
 		}
 
 		public int getDownloadedBytes()
@@ -121,9 +146,17 @@ public class BinaryResourceDownloader
 			return downloadedDurationMillis;
 		}
 
-		public String getErrorMessage()
+		public ProcessError getError()
 		{
-			return errorMessage;
+			return error;
+		}
+	}
+
+	public static class MissingReferenceException extends Exception
+	{
+		public MissingReferenceException(String message)
+		{
+			super(message);
 		}
 	}
 }

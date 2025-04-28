@@ -11,11 +11,12 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
-import dev.dsf.bpe.util.ErrorMessageListUtils;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
-import dev.dsf.bpe.util.task.output.generator.ErrorMessageGenerator;
+import dev.dsf.bpe.util.task.output.generator.ErrorOutputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -53,18 +54,18 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 
-		ErrorMessageGenerator.create(ErrorMessageListUtils.getErrorMessageList(execution)).forEach(task::addOutput);
+		ErrorOutputComponentGenerator.create(ErrorListUtils.getErrorMessageList(execution)).forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
 			String correlationKey = target.getCorrelationKey();
 
-			List<String> errors = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
+			List<ProcessError> errors = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			String statusCode = errors.isEmpty() ? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED
 					: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
 			int downloadResourceSizeBytes = variables
 					.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
-			List<String> errorMessageList = ErrorMessageListUtils.getErrorMessageList(execution, correlationKey);
+			List<ProcessError> errorMessageList = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
 				Integer downloadedBytes = variables
@@ -92,7 +93,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			{
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList));
 			}
-			errors.forEach(error -> errorMailService.addMessagePing(target, error));
+			errors.forEach(error -> errorMailService.addError(target, error));
 		});
 
 		// TODO only send one combined status mail

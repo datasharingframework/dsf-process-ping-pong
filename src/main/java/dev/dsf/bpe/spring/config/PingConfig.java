@@ -112,9 +112,15 @@ public class PingConfig
 	}
 
 	@Bean
-	public AggregateErrorMailService errorLogger()
+	public AggregateErrorMailService pingErrorLogger()
 	{
-		return new AggregateErrorMailService(api, sendPingProcessFailedMail, sendPongProcessFailedMail);
+		return new AggregateErrorMailService(api, sendPingProcessFailedMail);
+	}
+
+	@Bean
+	public AggregateErrorMailService pongErrorLogger()
+	{
+		return new AggregateErrorMailService(api, sendPongProcessFailedMail);
 	}
 
 
@@ -143,7 +149,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreResults savePingResults()
 	{
-		return new StoreResults(api, errorLogger(), networkSpeedUnit);
+		return new StoreResults(api, pingErrorLogger(), networkSpeedUnit);
 	}
 
 	@Bean
@@ -164,7 +170,7 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendPong sendPong()
 	{
-		return new SendPong(api, errorLogger());
+		return new SendPong(api, pongErrorLogger());
 	}
 
 	@Bean

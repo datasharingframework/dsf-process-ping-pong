@@ -11,7 +11,10 @@ import org.hl7.fhir.r4.model.Task.ParameterComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -64,7 +67,19 @@ public class SendPing extends AbstractTaskMessageSend
 
 		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
 		String specialErrorMessage = createErrorMessage(exception);
-		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableErrorMessage(), specialErrorMessage);
+		ProcessError pingSendError = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
+				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING,
+				"Sending ping message to " + target.getEndpointUrl(), ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
+				specialErrorMessage);
+		try
+		{
+			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(),
+					ProcessError.toString(pingSendError));
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new RuntimeException(e);
+		}
 		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), responseCode);
 	}
 
@@ -80,11 +95,10 @@ public class SendPing extends AbstractTaskMessageSend
 				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
 		{
 			StatusType statusInfo = w.getResponse().getStatusInfo();
-			return "Error when sending ping message: " + statusInfo.getStatusCode() + " "
-					+ statusInfo.getReasonPhrase();
+			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
 		}
 		else
-			return "Error when sending ping message: " + exception.getMessage();
+			return exception.getMessage();
 	}
 
 	private Identifier getLocalEndpointIdentifier()

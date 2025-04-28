@@ -115,7 +115,7 @@
       </bpmn:endEvent>
       <bpmn:boundaryEvent id="Event_0i4slcz" attachedToRef="Activity_0h9o9u7">
         <bpmn:outgoing>Flow_10h6pqh</bpmn:outgoing>
-        <bpmn:errorEventDefinition id="ErrorEventDefinition_0f1pn8k" errorRef="Error_1jmenbm" camunda:errorMessageVariable="resourceDownloadErrorMessage" />
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0f1pn8k" errorRef="Error_1jmenbm" camunda:errorMessageVariable="resourceDownloadError" />
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_10epxa2" sourceRef="SubProcessStartEvent" targetRef="Activity_0ri6fnv" />
       <bpmn:sequenceFlow id="Flow_0y9usku" sourceRef="EventBasedGateway" targetRef="PongTimer" />
@@ -217,7 +217,7 @@
     <bpmn:sequenceFlow id="Flow_0e35w2m" sourceRef="StartPingMessageStartEvent" targetRef="Activity_1wdftvk" />
     <bpmn:boundaryEvent id="Event_159rcwi" name="Failed to create resource" attachedToRef="Activity_0nwtf8o">
       <bpmn:outgoing>Flow_0ql2dtr</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1f41ql6" errorRef="Error_0tkfq65" camunda:errorMessageVariable="resourceUploadErrorMessage" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1f41ql6" errorRef="Error_0tkfq65" camunda:errorMessageVariable="resourceUploadError" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0ql2dtr" sourceRef="Event_159rcwi" targetRef="Activity_1ddl5dm" />
     <bpmn:sequenceFlow id="Flow_0ejw9k5" sourceRef="Activity_1ddl5dm" targetRef="Gateway_0bifi5h" />

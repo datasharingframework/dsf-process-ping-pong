@@ -5,10 +5,12 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
+import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
@@ -28,30 +30,25 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		logger.debug("Starting resource download to measure speed...");
 
 		Task task = variables.getStartTask();
+		Target target = variables.getTarget();
 
-		try
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger,
+				ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG)
+				.download(variables, api, task, maxDownloadSizeBytes);
+
+		if (downloadResult.getError() == null)
 		{
-			BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger)
-					.download(variables, api, task, maxDownloadSizeBytes);
-
-			if (downloadResult.getErrorMessage() == null)
-			{
-				variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
-						downloadResult.getDownloadedBytes());
-				variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
-						downloadResult.getDownloadedDurationMillis());
-			}
-			else
-			{
-				throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR,
-						downloadResult.getErrorMessage());
-			}
-
-			logger.debug("Completed resource download and measured speed.");
+			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
+					downloadResult.getDownloadedBytes());
+			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
+					downloadResult.getDownloadedDurationMillis());
 		}
-		catch (Exception e)
+		else
 		{
-			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR, e.getMessage());
+			delegateExecution.setVariable(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR,
+					downloadResult.getError());
+			throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR);
 		}
+		logger.debug("Completed resource download and measured speed.");
 	}
 }

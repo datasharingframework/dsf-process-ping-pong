@@ -1,0 +1,139 @@
+<CodeSystem xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
+            <code value="ALL" />
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/CodeSystem/ping-process-steps-v2" />
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="DSF_Ping_Process_Steps" />
+    <title value="DSF Ping Process Steps" />
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+    <date value="#{date}" />
+    <publisher value="DSF" />
+    <description value="CodeSystem with ping/pong process steps" />
+    <caseSensitive value="true" />
+    <hierarchyMeaning value="grouped-by" />
+    <versionNeeded value="false" />
+    <content value="complete" />
+    <concept>
+        <code value="set-download-resource-size"/>
+        <display value="Set Download Resource Size"/>
+        <definition value="Sets the size of the resource to be downloaded" />
+    </concept>
+    <concept>
+        <code value="generate-and-store-resource"/>
+        <display value="Generate And Store Resource"/>
+        <definition value="Generates the resource for download and posts it to the local DSF FHIR server" />
+    </concept>
+    <concept>
+        <code value="log-and-save-error"/>
+        <display value="Log And Save Error"/>
+        <definition value="Logs an error and saves it as an execution variable" />
+    </concept>
+    <concept>
+        <code value="select-targets"/>
+        <display value="Select Targets"/>
+        <definition value="Selects targets to be pinged" />
+    </concept>
+    <concept>
+        <code value="ping"/>
+        <display value="Ping"/>
+        <definition value="Sends a ping message" />
+    </concept>
+    <concept>
+        <code value="log-and-save-send-error"/>
+        <display value="Log And Save Send Error"/>
+        <definition value="Logs a send error and saves it as an execution variable" />
+    </concept>
+    <concept>
+        <code value="log-and-save-no-response"/>
+        <display value="Log And Save No Response"/>
+        <definition value="Logs and saves that a pong message is missing" />
+    </concept>
+    <concept>
+        <code value="save-pong"/>
+        <display value="Save Pong"/>
+        <definition value="Saves the input parameters of the pong message as execution variables" />
+    </concept>
+    <concept>
+        <code value="download-resource-and-measure-speed"/>
+        <display value="Download Resource And Measure Speed"/>
+        <definition value="Downloads the resource referenced by the input parameter of the previously received message and measures the network speed" />
+    </concept>
+    <concept>
+        <code value="cleanup-pong"/>
+        <display value="Cleanup Pong"/>
+        <definition value="Sends a cleanup message to the pong process" />
+    </concept>
+    <concept>
+        <code value="cleanup"/>
+        <display value="cleanup"/>
+        <definition value="Cleans up the process e.g. by deleting the binary resource that was created to test connections and measure network speed" />
+    </concept>
+    <concept>
+        <code value="store-results"/>
+        <display value="Store Results"/>
+        <definition value="Stores results of the process as output parameters of the start task" />
+    </concept>
+    <concept>
+        <code value="log-ping"/>
+        <display value="Log Ping"/>
+        <definition value="Logs that a ping message was received" />
+    </concept>
+    <concept>
+        <code value="set-endpoint-identifier"/>
+        <display value="Set Endpoint Identifier"/>
+        <definition value="Sets the endpoint identifier from the ping message" />
+    </concept>
+    <concept>
+        <code value="select-pong-target"/>
+        <display value="Select Pong Target"/>
+        <definition value="Selects the target to reply to with a pong message" />
+    </concept>
+    <concept>
+        <code value="store-download-speed"/>
+        <display value="Store Download Speed"/>
+        <definition value="Stores the measured download speed" />
+    </concept>
+    <concept>
+        <code value="log-and-save-and-store-error"/>
+        <display value="Log And Save And Store Error"/>
+        <definition value="Logs and error and saves it as an execution variable and stores it as an output parameter in the start task" />
+    </concept>
+    <concept>
+        <code value="estimate-cleanup-timer-duration"/>
+        <display value="Estimate Cleanup Timer Duration"/>
+        <definition value="Estimates the duration of the cleanup timer" />
+    </concept>
+    <concept>
+        <code value="pong"/>
+        <display value="Pong"/>
+        <definition value="Sends a pong message to the target" />
+    </concept>
+    <concept>
+        <code value="store-upload-speed"/>
+        <display value="Store Upload Speed"/>
+        <definition value="Stores the measured upload speed" />
+    </concept>
+    <concept>
+        <code value="save-timeout-error"/>
+        <display value="Save Timeout Error"/>
+        <definition value="Saves the timeout error while waiting for cleanup message in an execution variable" />
+    </concept>
+    <concept>
+        <code value="store-errors"/>
+        <display value="Store Errors"/>
+        <definition value="Stores all error that are present as execution variables as output parameters of the start task" />
+    </concept>
+    <concept>
+        <code value="cleanup-timer-catch-event"/>
+        <display value="Cleanup Timer Catch Event"/>
+        <definition value="Timeout event while waiting for cleanup message"/>
+    </concept>
+</CodeSystem>

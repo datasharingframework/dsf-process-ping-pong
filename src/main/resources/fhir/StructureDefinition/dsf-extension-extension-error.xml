@@ -1,0 +1,169 @@
+<StructureDefinition xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag"/>
+            <code value="ALL"/>
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/StructureDefinition/extension-extension-error"/>
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="Error"/>
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+    <date value="#{date}" />
+    <fhirVersion value="4.0.1"/>
+    <kind value="complex-type"/>
+    <abstract value="false"/>
+    <context>
+        <type value="element"/>
+        <expression value="Extension"/>
+    </context>
+    <type value="Extension"/>
+    <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension"/>
+    <derivation value="constraint"/>
+    <differential>
+        <element id="Extension.extension">
+            <path value="Extension.extension"/>
+            <slicing>
+                <discriminator>
+                    <type value="value"/>
+                    <path value="url"/>
+                </discriminator>
+                <rules value="open"/>
+            </slicing>
+            <min value="4"/>
+            <max value="5"/>
+        </element>
+        <element id="Extension.extension:process">
+            <path value="Extension.extension"/>
+            <sliceName value="process"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:process.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="process"/>
+        </element>
+        <element id="Extension.extension:process.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="Coding"/>
+            </type>
+        </element>
+        <element id="Extension.extension:process.value[x].system">
+            <path value="Extension.extension.value[x].system"/>
+            <min value="1"/>
+            <max value="1"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-processes-v2"/>
+        </element>
+        <element id="Extension.extension:process.value[x].code">
+            <path value="Extension.extension.value[x].code"/>
+            <min value="1"/>
+            <max value="1"/>
+            <binding>
+                <strength value="required"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-processes-v2|#{version}"/>
+            </binding>
+        </element>
+        <element id="Extension.extension:process-step">
+            <path value="Extension.extension"/>
+            <sliceName value="process-step"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:process-step.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="process-step"/>
+        </element>
+        <element id="Extension.extension:process-step.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="Coding"/>
+            </type>
+        </element>
+        <element id="Extension.extension:process-step.value[x].system">
+            <path value="Extension.extension.value[x].system"/>
+            <min value="1"/>
+            <max value="1"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-process-steps-v2"/>
+        </element>
+        <element id="Extension.extension:process-step.value[x].code">
+            <path value="Extension.extension.value[x].code"/>
+            <min value="1"/>
+            <max value="1"/>
+            <binding>
+                <strength value="required"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-process-steps-v2|#{version}"/>
+            </binding>
+        </element>
+        <element id="Extension.extension:action">
+            <path value="Extension.extension"/>
+            <sliceName value="action"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:action.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="action"/>
+        </element>
+        <element id="Extension.extension:action.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="string"/>
+            </type>
+        </element>
+        <element id="Extension.extension:potential-fix">
+            <path value="Extension.extension"/>
+            <sliceName value="potential-fix"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:potential-fix.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="potential-fix"/>
+        </element>
+        <element id="Extension.extension:potential-fix.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="url"/>
+            </type>
+        </element>
+        <element id="Extension.extension:message">
+            <path value="Extension.extension"/>
+            <sliceName value="message"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:message.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="message"/>
+        </element>
+        <element id="Extension.extension:message.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="string"/>
+            </type>
+        </element>
+        <element id="Extension.url">
+            <path value="Extension.url"/>
+            <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-extension-error"/>
+        </element>
+        <element id="Extension.value[x]">
+            <path value="Extension.value[x]"/>
+            <max value="0"/>
+        </element>
+    </differential>
+</StructureDefinition>
