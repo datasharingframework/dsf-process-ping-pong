@@ -38,7 +38,7 @@
         <bpmn:outgoing>Flow_0y9usku</bpmn:outgoing>
         <bpmn:outgoing>Flow_1lghrxh</bpmn:outgoing>
       </bpmn:eventBasedGateway>
-      <bpmn:serviceTask id="LogNoResponse" name="Log and Save No Response" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveNoResponse">
+      <bpmn:serviceTask id="LogNoResponse" name="Check Ping Task Status" camunda:class="dev.dsf.bpe.service.ping.CheckPingTaskStatus">
         <bpmn:incoming>Flow_1fjeq2h</bpmn:incoming>
         <bpmn:outgoing>Flow_136htek</bpmn:outgoing>
       </bpmn:serviceTask>

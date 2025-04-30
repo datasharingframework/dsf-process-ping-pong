@@ -3,6 +3,7 @@ package dev.dsf.bpe.message;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
@@ -21,6 +22,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.fhir.client.FhirWebserviceClient;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.StatusType;
@@ -28,6 +30,7 @@ import jakarta.ws.rs.core.Response.StatusType;
 public class SendPing extends AbstractTaskMessageSend
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPing.class);
+	private IdType taskId;
 
 	public SendPing(ProcessPluginApi api)
 	{
@@ -52,6 +55,26 @@ public class SendPing extends AbstractTaskMessageSend
 
 		return Stream.concat(endpointIdentifierStream,
 				Stream.concat(downloadResourceReferenceStream, downloadResourceSizeBytesStream));
+	}
+
+	@Override
+	protected void sendTask(DelegateExecution execution, Variables variables, Target target,
+			String instantiatesCanonical, String messageName, String businessKey, String profile,
+			Stream<ParameterComponent> additionalInputParameters)
+	{
+		super.sendTask(execution, variables, target, instantiatesCanonical, messageName, businessKey, profile,
+				additionalInputParameters);
+		if (taskId != null)
+		{
+			execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID, taskId);
+		}
+	}
+
+	@Override
+	protected IdType doSend(FhirWebserviceClient client, Task task)
+	{
+		taskId = super.doSend(client, task);
+		return taskId;
 	}
 
 	@Override

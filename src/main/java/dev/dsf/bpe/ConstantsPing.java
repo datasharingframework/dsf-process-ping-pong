@@ -91,6 +91,7 @@ public final class ConstantsPing
 	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_ERRORS = "store-errors";
 	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_TIMER_CATCH_EVENT = "cleanup-timer-catch-event";
 	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG_MESSAGE_TIMEOUT_TIMER_CATCH_EVENT = "pong-timer-catch-event";
+	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CHECK_PING_TASK_STATUS = "check-ping-task-status";
 
 	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
 	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
@@ -140,6 +141,7 @@ public final class ConstantsPing
 	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
 	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
 	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
+	public static final String BPMN_EXECUTION_VARIABLE_PING_TASK_ID = "pingTaskId";
 
 	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
 	public static final String BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";

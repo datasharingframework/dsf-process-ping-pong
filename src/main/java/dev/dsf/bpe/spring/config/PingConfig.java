@@ -18,9 +18,9 @@ import dev.dsf.bpe.service.Cleanup;
 import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
+import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
-import dev.dsf.bpe.service.ping.LogAndSaveNoResponse;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
@@ -175,9 +175,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveNoResponse logAndSaveNoResponse()
+	public CheckPingTaskStatus logAndSaveNoResponse()
 	{
-		return new LogAndSaveNoResponse(api);
+		return new CheckPingTaskStatus(api);
 	}
 
 	@Bean
