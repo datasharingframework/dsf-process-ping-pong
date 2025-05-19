@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hl7.fhir.r4.model.Coding;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
@@ -26,7 +27,10 @@ public class ErrorOutputComponentGenerator
 		param.getType().addCoding(
 				new Coding(ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR, null));
 		param.addExtension(ProcessError.toOutputExtension(error));
-		param.setValue(new StringType(error.message()));
+		Extension dataAbsentReason = new Extension()
+				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason").setValue(
+						new Coding("http://terminology.hl7.org/CodeSystem/data-absent-reason", "not-applicable", null));
+		param.addExtension(dataAbsentReason);
 
 		return param;
 	}

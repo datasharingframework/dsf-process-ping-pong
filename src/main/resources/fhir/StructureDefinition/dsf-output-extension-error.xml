@@ -139,6 +139,24 @@
                 <code value="url"/>
             </type>
         </element>
+        <element id="Extension.extension:message">
+            <path value="Extension.extension"/>
+            <sliceName value="message"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:message.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="message"/>
+        </element>
+        <element id="Extension.extension:message.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="string"/>
+            </type>
+        </element>
         <element id="Extension.url">
             <path value="Extension.url"/>
             <fixedUri value="http://dsf.dev/fhir/StructureDefinition/output-extension-error"/>

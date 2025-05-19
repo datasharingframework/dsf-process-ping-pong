@@ -66,6 +66,7 @@ public record ProcessError(String process, String processStep, String action, St
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(error.action()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
 				.setValue(new UrlType(error.potentialFixUrl()));
+		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(error.message()));
 
 		return extension;
 	}

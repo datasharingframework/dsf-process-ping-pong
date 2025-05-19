@@ -206,7 +206,7 @@
         <rules value="open" />
       </slicing>
       <min value="1"/>
-      <max value="1"/>
+      <max value="2"/>
     </element>
     <element id="Task.input:process-error.extension:error-extension">
       <path value="Task.input.extension" />
@@ -216,6 +216,16 @@
       <type>
         <code value="Extension" />
         <profile value="http://dsf.dev/fhir/StructureDefinition/input-extension-error|#{version}" />
+      </type>
+    </element>
+    <element id="Task.input:process-error.extension:data-absent-reason">
+      <path value="Task.input.extension" />
+      <sliceName value="data-absent-reason" />
+      <min value="1" />
+      <max value="1"/>
+      <type>
+        <code value="Extension" />
+        <profile value="http://hl7.org/fhir/StructureDefinition/data-absent-reason" />
       </type>
     </element>
     <element id="Task.input:process-error.type">
@@ -243,12 +253,6 @@
       <min value="1"/>
       <max value="1"/>
       <fixedCode value="error"/>
-    </element>
-    <element id="Task.input:process-error.value[x]">
-      <path value="Task.input.value[x]"/>
-      <type>
-        <code value="string"/>
-      </type>
     </element>
   </differential>
 </StructureDefinition>
