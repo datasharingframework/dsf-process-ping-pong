@@ -233,7 +233,7 @@
       <max value="1"/>
       <type>
         <code value="Extension" />
-        <profile value="http://dsf.dev/fhir/StructureDefinition/output-extension-error|#{version}" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-error|#{version}" />
       </type>
     </element>
     <element id="Task.output:process-error.type">

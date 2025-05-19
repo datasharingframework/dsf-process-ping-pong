@@ -5,7 +5,7 @@
             <code value="ALL"/>
         </tag>
     </meta>
-    <url value="http://dsf.dev/fhir/StructureDefinition/input-extension-error"/>
+    <url value="http://dsf.dev/fhir/StructureDefinition/extension-error"/>
     <!-- version managed by bpe -->
     <version value="#{version}" />
     <name value="Error"/>
@@ -19,7 +19,15 @@
     <abstract value="false"/>
     <context>
         <type value="element"/>
+        <expression value="Extension"/>
+    </context>
+    <context>
+        <type value="element"/>
         <expression value="Task.input"/>
+    </context>
+    <context>
+        <type value="element"/>
+        <expression value="Task.output"/>
     </context>
     <type value="Extension"/>
     <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension"/>
@@ -159,7 +167,7 @@
         </element>
         <element id="Extension.url">
             <path value="Extension.url"/>
-            <fixedUri value="http://dsf.dev/fhir/StructureDefinition/input-extension-error"/>
+            <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-error"/>
         </element>
         <element id="Extension.value[x]">
             <path value="Extension.value[x]"/>

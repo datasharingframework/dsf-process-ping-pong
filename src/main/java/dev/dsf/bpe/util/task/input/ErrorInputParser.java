@@ -18,7 +18,7 @@ public class ErrorInputParser
 
 		return inputs.stream()
 				.map(input -> ProcessError
-						.toError(input.getExtensionByUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_INPUT_EXTENSION_ERROR)))
+						.toError(input.getExtensionByUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR)))
 				.toList();
 	}
 }

@@ -655,7 +655,7 @@ public class PingStatusGenerator
 			Extension extension = getOrCreatePingStatusExtension(outputComponent);
 			for (ProcessError error : errors)
 			{
-				extension.addExtension(ProcessError.toExtensionExtension(error));
+				extension.addExtension(ProcessError.toExtension(error));
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
@@ -671,7 +671,7 @@ public class PingStatusGenerator
 
 		if (errors != null)
 		{
-			List<Extension> newErrorExtensions = errors.stream().map(ProcessError::toExtensionExtension)
+			List<Extension> newErrorExtensions = errors.stream().map(ProcessError::toExtension)
 					.collect(Collectors.toCollection(ArrayList::new));
 			nonErrorExtensions.addAll(newErrorExtensions);
 			extension.setExtension(newErrorExtensions);

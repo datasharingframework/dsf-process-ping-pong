@@ -28,7 +28,7 @@ public class ErrorInputComponentGenerator
 
 		param.getType().addCoding(
 				new Coding(ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR, null));
-		param.addExtension(ProcessError.toInputExtension(error));
+		param.addExtension(ProcessError.toExtension(error));
 		Extension dataAbsentReason = new Extension()
 				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
 				.setValue(new CodeType("not-applicable"));

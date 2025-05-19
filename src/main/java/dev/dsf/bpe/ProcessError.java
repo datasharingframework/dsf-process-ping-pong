@@ -22,43 +22,11 @@ public record ProcessError(String process, String processStep, String action, St
 
 	}
 
-	public static Extension toExtensionExtension(ProcessError error)
-	{
-		Extension errorExtension = new Extension();
-		errorExtension.setUrl(ConstantsPing.EXTENSION_URL_ERROR);
-		Extension errorExtensionExtension = new Extension();
-
-		errorExtensionExtension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_EXTENSION_ERROR);
-		errorExtensionExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES, error.process(), null));
-		errorExtensionExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS, error.process(), null));
-		errorExtensionExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION)
-				.setValue(new StringType(error.action()));
-		errorExtensionExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
-				.setValue(new UrlType(error.potentialFixUrl()));
-		errorExtensionExtension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE)
-				.setValue(new StringType(error.message()));
-
-		errorExtension.addExtension(errorExtensionExtension);
-		return errorExtension;
-	}
-
-	public static Extension toInputExtension(ProcessError error)
-	{
-		return toParameterExtension(error, ConstantsPing.STRUCTURE_DEFINITION_URL_INPUT_EXTENSION_ERROR);
-	}
-
-	public static Extension toOutputExtension(ProcessError error)
-	{
-		return toParameterExtension(error, ConstantsPing.STRUCTURE_DEFINITION_URL_OUTPUT_EXTENSION_ERROR);
-	}
-
-	private static Extension toParameterExtension(ProcessError error, String structureDefinitionUrl)
+	public static Extension toExtension(ProcessError error)
 	{
 		Extension extension = new Extension();
+		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
-		extension.setUrl(structureDefinitionUrl);
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
 				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES, error.process(), null));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)

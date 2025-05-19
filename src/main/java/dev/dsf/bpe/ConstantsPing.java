@@ -108,9 +108,7 @@ public final class ConstantsPing
 
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2";
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
-	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-extension-error";
-	public static final String STRUCTURE_DEFINITION_URL_INPUT_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/input-extension-error";
-	public static final String STRUCTURE_DEFINITION_URL_OUTPUT_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/output-extension-error";
+	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-error";
 
 	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	public static final String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";

@@ -62,9 +62,7 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
 		var sCleanupPong = "fhir/StructureDefinition/dsf-task-cleanup-pong.xml";
 		var sNetworkSpeedExtension = "fhir/StructureDefinition/dsf-extension-network-speed.xml";
-		var sErrorExtensionExtension = "fhir/StructureDefinition/dsf-extension-extension-error.xml";
-		var sErrorInputExtension = "fhir/StructureDefinition/dsf-input-extension-error.xml";
-		var sErrorOutputExtension = "fhir/StructureDefinition/dsf-output-extension-error.xml";
+		var sErrorExtension = "fhir/StructureDefinition/dsf-extension-error.xml";
 
 		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 		var tStartPingAutoStart = "fhir/Task/dsf-task-start-ping-autostart.xml";
@@ -75,15 +73,13 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPingStatus = "fhir/ValueSet/dsf-ping-status.xml";
 		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
 
-		return Map.of(
-				ConstantsPing.PROCESS_NAME_FULL_PING, Arrays.asList(aPing, cPing, cPingStatus, cPingUnits,
-						sErrorExtensionExtension, sErrorOutputExtension, sPingStatus, sStartPing, sPong, sCleanupPong,
-						sNetworkSpeedExtension, tStartPing, vPing, vPingStatus, vPingUnits),
-				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART, Arrays.asList(aPingAutostart, cPing,
-						sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart, tStopPingAutoStart, vPing),
-				ConstantsPing.PROCESS_NAME_FULL_PONG,
-				Arrays.asList(aPong, cPing, cPingStatus, cPingUnits, sErrorExtensionExtension, sErrorInputExtension,
-						sErrorOutputExtension, sPingStatus, sPing, sNetworkSpeedExtension, vPing, vPongStatus,
-						vPingUnits));
+		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
+				Arrays.asList(aPing, cPing, cPingStatus, cPingUnits, sErrorExtension, sPingStatus, sStartPing, sPong,
+						sCleanupPong, sNetworkSpeedExtension, tStartPing, vPing, vPingStatus, vPingUnits),
+				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
+				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
+						tStopPingAutoStart, vPing),
+				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingUnits,
+						sErrorExtension, sPingStatus, sPing, sNetworkSpeedExtension, vPing, vPongStatus, vPingUnits));
 	}
 }
