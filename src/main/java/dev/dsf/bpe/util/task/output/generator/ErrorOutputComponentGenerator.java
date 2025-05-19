@@ -3,11 +3,13 @@ package dev.dsf.bpe.util.task.output.generator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
+import ca.uhn.fhir.model.primitive.CodeDt;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 
@@ -28,9 +30,10 @@ public class ErrorOutputComponentGenerator
 				new Coding(ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR, null));
 		param.addExtension(ProcessError.toOutputExtension(error));
 		Extension dataAbsentReason = new Extension()
-				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason").setValue(
-						new Coding("http://terminology.hl7.org/CodeSystem/data-absent-reason", "not-applicable", null));
-		param.addExtension(dataAbsentReason);
+				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+				.setValue(new CodeType("not-applicable"));
+		param.setValue(new StringType());
+		param.getValue().addExtension(dataAbsentReason);
 
 		return param;
 	}
