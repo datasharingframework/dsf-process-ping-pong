@@ -1,5 +1,6 @@
 package dev.dsf.bpe;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hl7.fhir.r4.model.Coding;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public record ProcessError(String process, String processStep, String action, String potentialFixUrl, String message)
+		implements Serializable
 {
 	@Override
 	public boolean equals(Object obj)
