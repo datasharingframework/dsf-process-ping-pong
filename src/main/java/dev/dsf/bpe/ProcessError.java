@@ -49,7 +49,7 @@ public record ProcessError(String process, String processStep, String action, St
 				.getCode();
 		String action = ((StringType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_ACTION).getValue())
 				.getValue();
-		String potentialFixUrl = ((StringType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
+		String potentialFixUrl = ((UrlType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
 				.getValue()).getValue();
 		String message = ((StringType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_MESSAGE).getValue())
 				.getValue();
