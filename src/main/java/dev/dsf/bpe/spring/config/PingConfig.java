@@ -64,7 +64,7 @@ public class PingConfig
 
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
-	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabytes-per-second}")
+	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabits-per-second}")
 	private String networkSpeedUnit;
 
 	public String getNetworkSpeedUnit()
