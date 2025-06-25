@@ -30,7 +30,6 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		logger.debug("Starting resource download to measure speed...");
 
 		Task task = variables.getStartTask();
-		Target target = variables.getTarget();
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger,
 				ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG)
