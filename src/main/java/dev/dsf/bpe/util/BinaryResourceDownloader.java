@@ -86,7 +86,7 @@ public class BinaryResourceDownloader
 		}
 		catch (WebApplicationException e)
 		{
-			String errorMessage = e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage();
+			String errorMessage = (e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage()).trim();
 			ProcessError error = new ProcessError(process,
 					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
 					"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
