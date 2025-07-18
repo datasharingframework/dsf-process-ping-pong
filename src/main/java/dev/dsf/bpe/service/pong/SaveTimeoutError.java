@@ -30,8 +30,8 @@ public class SaveTimeoutError extends AbstractServiceDelegate
 
 		ProcessError error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG,
 				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_TIMER_CATCH_EVENT,
-				"Waiting for cleanup message from " + target.getOrganizationIdentifierValue(),
-				ConstantsPing.POTENTIAL_FIX_URL_DUMMY, "Timeout while waiting for cleanup message");
+				"Waiting for cleanup message from " + target.getOrganizationIdentifierValue(), null,
+				"Timeout while waiting for cleanup message");
 
 		ErrorListUtils.add(error, execution);
 

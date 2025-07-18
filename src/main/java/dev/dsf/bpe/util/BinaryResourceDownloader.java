@@ -2,6 +2,7 @@ package dev.dsf.bpe.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
@@ -13,6 +14,7 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
 public class BinaryResourceDownloader
@@ -41,8 +43,8 @@ public class BinaryResourceDownloader
 		{
 			ProcessError error = new ProcessError(process,
 					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-					"Extracting binary resource reference from task " + task.getIdElement().getValue(),
-					ConstantsPing.POTENTIAL_FIX_URL_DUMMY, "No reference provided in task");
+					"Extracting binary resource reference from task " + task.getIdElement().getValue(), null,
+					"No reference provided in task");
 			downloadResult = new DownloadResult(error);
 			return downloadResult;
 		}
@@ -51,6 +53,7 @@ public class BinaryResourceDownloader
 		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
+		String action = "Downloading binary resource from " + webserviceUrl;
 		try
 		{
 			InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider()
@@ -78,8 +81,7 @@ public class BinaryResourceDownloader
 				String errorMessage = e.getMessage();
 				ProcessError error = new ProcessError(process,
 						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-						"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-						errorMessage);
+						action, null, errorMessage);
 				logger.error("Encountered an error while downloading resource: {}", errorMessage);
 				downloadResult = new DownloadResult(error);
 			}
@@ -88,19 +90,33 @@ public class BinaryResourceDownloader
 		{
 			String errorMessage = (e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage()).trim();
 			ProcessError error = new ProcessError(process,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-					"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-					errorMessage);
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP, errorMessage);
 			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
 		}
-		catch (Exception e)
+		catch (ProcessingException e)
+		{
+			if (e.getCause() instanceof SocketTimeoutException)
+			{
+				String errorMessage = e.getCause().getMessage();
+				ProcessError error = new ProcessError(process,
+						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+						action, ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT, errorMessage);
+				logger.error("Encountered an error while downloading resource: {}", errorMessage);
+				downloadResult = new DownloadResult(error);
+			}
+			else
+			{
+				throw e;
+			}
+		}
+		catch (IOException e)
 		{
 			String errorMessage = e.getMessage();
 			ProcessError error = new ProcessError(process,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-					"Downloading binary resource from " + webserviceUrl, ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-					errorMessage);
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
+					null, errorMessage);
 			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
 		}

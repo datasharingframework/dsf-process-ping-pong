@@ -152,7 +152,15 @@ public final class ConstantsPing
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 
-	public static final String POTENTIAL_FIX_URL_DUMMY = "dsf.dev";
+	public static final String POTENTIAL_FIX_URL_BASE = "https://dsf.dev/s";
+	public static final String POTENTIAL_FIX_URL_ERROR_HTTP = POTENTIAL_FIX_URL_BASE + "/error-http";
+	public static final String POTENTIAL_FIX_URL_READ_TIMEOUT = POTENTIAL_FIX_URL_BASE + "/read-timeout";
+	public static final String POTENTIAL_FIX_URL_ERROR_SSL = POTENTIAL_FIX_URL_BASE + "/error-ssl";
+	public static final String POTENTIAL_FIX_URL_CONNECTION_TIMEOUT = POTENTIAL_FIX_URL_BASE + "/connection-timeout";
+	public static final String POTENTIAL_FIX_URL_CONNECTION_REFUSED = POTENTIAL_FIX_URL_BASE + "/connection-refused";
+	public static final String POTENTIAL_FIX_URL_UNKNOWN_HOST = POTENTIAL_FIX_URL_BASE + "/unknown-host";
+
+	public static final String CLEANUP_ERROR_ACTION = "Deleting generated Binary resource from local DSF FHIR server.";
 
 	public static String getBpmnExecutionVariableStatusCode()
 	{

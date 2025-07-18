@@ -11,20 +11,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.logging.PingPongLogger;
+import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
-import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
 
-public class CleanupPong extends AbstractTaskMessageSend
+public class CleanupPongMessage extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(CleanupPong.class);
-	public CleanupPong(ProcessPluginApi api)
+	private static final Logger logger = LoggerFactory.getLogger(CleanupPongMessage.class);
+
+	public CleanupPongMessage(ProcessPluginApi api)
 	{
 		super(api);
 	}
@@ -54,29 +54,23 @@ public class CleanupPong extends AbstractTaskMessageSend
 	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
 			String errorMessage)
 	{
+		PingPongLogger logger = new PingPongLogger(CleanupPongMessage.class, variables.getStartTask());
 		Target target = variables.getTarget();
+		ProcessError error = SendTaskErrorConverter.convert(exception,
+				"Sending cleanup message to " + target.getEndpointUrl());
 
-		String responseCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				? Response.Status.fromStatusCode(w.getResponse().getStatus()).toString()
-				: "unknown";
-		String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
-
-		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
-		String specialErrorMessage = createErrorMessage(exception);
-		ProcessError pingSendError = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_PONG,
-				"Sending cleanup message to " + target.getEndpointUrl(), ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-				specialErrorMessage);
 		try
 		{
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(),
-					ProcessError.toString(pingSendError));
+			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(), ProcessError.toString(error));
+			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 		}
 		catch (JsonProcessingException e)
 		{
 			throw new RuntimeException(e);
 		}
-		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), responseCode);
+
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
 	}
 
 	@Override
@@ -113,17 +107,5 @@ public class CleanupPong extends AbstractTaskMessageSend
 
 		super.sendTask(execution, variables, newTarget, instantiatesCanonical, messageName, businessKey, profile,
 				additionalInputParameters);
-	}
-
-	private String createErrorMessage(Exception exception)
-	{
-		if (exception instanceof WebApplicationException w
-				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
-		{
-			Response.StatusType statusInfo = w.getResponse().getStatusInfo();
-			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
-		}
-		else
-			return exception.getMessage();
 	}
 }

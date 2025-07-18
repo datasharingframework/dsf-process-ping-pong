@@ -25,13 +25,11 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPong.class, startTask);
 
-		String errorMessage = variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR);
-		ProcessError error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE,
-				"Storing binary resource for download", ConstantsPing.POTENTIAL_FIX_URL_DUMMY, errorMessage);
+		ProcessError error = ProcessError
+				.parse(variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR));
 
 		ErrorListUtils.add(error, execution);
 
-		logger.info("Error while storing binary resource for download: {}", errorMessage);
+		logger.info("Error while storing binary resource for download: {}", error.message());
 	}
 }

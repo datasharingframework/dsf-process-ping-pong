@@ -2,6 +2,7 @@ package dev.dsf.bpe;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
@@ -26,6 +27,12 @@ public record ProcessError(String process, String processStep, String action, St
 
 	public static Extension toExtension(ProcessError error)
 	{
+		Objects.requireNonNull(error);
+		Objects.requireNonNull(error.action());
+		Objects.requireNonNull(error.process());
+		Objects.requireNonNull(error.message());
+		Objects.requireNonNull(error.processStep());
+
 		Extension extension = new Extension();
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
@@ -34,8 +41,11 @@ public record ProcessError(String process, String processStep, String action, St
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
 				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS, error.process(), null));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(error.action()));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
-				.setValue(new UrlType(error.potentialFixUrl()));
+		if (Objects.nonNull(error.potentialFixUrl))
+		{
+			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
+					.setValue(new UrlType(error.potentialFixUrl()));
+		}
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(error.message()));
 
 		return extension;

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -218,8 +217,8 @@ public class TaskProfileTest
 		for (int i = 0; i < amount; i++)
 		{
 			errors.add(new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, UUID.randomUUID().toString(),
-					ConstantsPing.POTENTIAL_FIX_URL_DUMMY, UUID.randomUUID().toString()));
+					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, UUID.randomUUID().toString(), null,
+					UUID.randomUUID().toString()));
 		}
 		return errors;
 	}

@@ -16,6 +16,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.logging.PingPongLogger;
+import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -23,16 +25,13 @@ import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.fhir.client.FhirWebserviceClient;
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.StatusType;
 
-public class SendPing extends AbstractTaskMessageSend
+public class SendPingMessage extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(SendPing.class);
+	private static final Logger logger = LoggerFactory.getLogger(SendPingMessage.class);
 	private IdType taskId;
 
-	public SendPing(ProcessPluginApi api)
+	public SendPingMessage(ProcessPluginApi api)
 	{
 		super(api);
 	}
@@ -81,47 +80,29 @@ public class SendPing extends AbstractTaskMessageSend
 	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
 			String errorMessage)
 	{
+		PingPongLogger logger = new PingPongLogger(SendPingMessage.class, variables.getStartTask());
 		Target target = variables.getTarget();
+		ProcessError error = SendTaskErrorConverter.convert(exception,
+				"Sending ping message to " + target.getEndpointUrl());
 
-		String responseCode = exception instanceof WebApplicationException w && w.getResponse() != null
-				? Response.Status.fromStatusCode(w.getResponse().getStatus()).toString()
-				: "unknown";
-		String statusCode = ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
-
-		execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(), statusCode);
-		String specialErrorMessage = createErrorMessage(exception);
-		ProcessError pingSendError = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING,
-				"Sending ping message to " + target.getEndpointUrl(), ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-				specialErrorMessage);
 		try
 		{
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(),
-					ProcessError.toString(pingSendError));
+			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(), ProcessError.toString(error));
+			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 		}
 		catch (JsonProcessingException e)
 		{
 			throw new RuntimeException(e);
 		}
-		logger.info("Request to {} resulted in status {}", target.getEndpointUrl(), responseCode);
+
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
 	}
 
 	@Override
 	protected void addErrorMessage(Task task, String errorMessage)
 	{
 		// error message part of
-	}
-
-	private String createErrorMessage(Exception exception)
-	{
-		if (exception instanceof WebApplicationException w
-				&& (exception.getMessage() == null || exception.getMessage().isBlank()))
-		{
-			StatusType statusInfo = w.getResponse().getStatusInfo();
-			return statusInfo.getStatusCode() + " " + statusInfo.getReasonPhrase();
-		}
-		else
-			return exception.getMessage();
 	}
 
 	private Identifier getLocalEndpointIdentifier()

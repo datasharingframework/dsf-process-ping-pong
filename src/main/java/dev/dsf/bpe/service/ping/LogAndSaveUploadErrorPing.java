@@ -6,7 +6,6 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -25,13 +24,9 @@ public class LogAndSaveUploadErrorPing extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPing.class, startTask);
 
-		String errorMessage = variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR);
-		ProcessError error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE,
-				"Storing binary resource on local DSF FHIR server", ConstantsPing.POTENTIAL_FIX_URL_DUMMY,
-				errorMessage);
-		ErrorListUtils.add(error, execution);
+		ProcessError error = ProcessError
+				.parse(variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR));
 
-		logger.info("Error while storing binary resource for download: {}", errorMessage);
+		logger.info("Error while storing binary resource for download: {}", error.message());
 	}
 }

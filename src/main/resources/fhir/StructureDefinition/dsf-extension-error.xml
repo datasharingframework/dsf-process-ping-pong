@@ -132,7 +132,7 @@
         <element id="Extension.extension:potential-fix">
             <path value="Extension.extension"/>
             <sliceName value="potential-fix"/>
-            <min value="1"/>
+            <min value="0"/>
             <max value="1"/>
         </element>
         <element id="Extension.extension:potential-fix.url">

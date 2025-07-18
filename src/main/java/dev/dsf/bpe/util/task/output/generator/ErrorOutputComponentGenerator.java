@@ -9,7 +9,6 @@ import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
-import ca.uhn.fhir.model.primitive.CodeDt;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 

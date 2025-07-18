@@ -10,23 +10,25 @@ import org.springframework.context.annotation.Scope;
 import dev.dsf.bpe.listener.PingPongDeploymentStateListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
-import dev.dsf.bpe.message.CleanupPong;
-import dev.dsf.bpe.message.SendPing;
-import dev.dsf.bpe.message.SendPong;
+import dev.dsf.bpe.message.CleanupPongMessage;
+import dev.dsf.bpe.message.SendPingMessage;
+import dev.dsf.bpe.message.SendPongMessage;
 import dev.dsf.bpe.message.SendStartPing;
-import dev.dsf.bpe.service.Cleanup;
-import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
+import dev.dsf.bpe.service.ping.CleanupPing;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
+import dev.dsf.bpe.service.ping.GenerateAndStoreResourcePing;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
+import dev.dsf.bpe.service.pong.CleanupPong;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
+import dev.dsf.bpe.service.pong.GenerateAndStoreResourcePong;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
 import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
 import dev.dsf.bpe.service.pong.LogPing;
@@ -133,9 +135,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPing sendPing()
+	public SendPingMessage sendPing()
 	{
-		return new SendPing(api);
+		return new SendPingMessage(api);
 	}
 
 	@Bean
@@ -168,9 +170,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPong sendPong()
+	public SendPongMessage sendPong()
 	{
-		return new SendPong(api, pongErrorLogger());
+		return new SendPongMessage(api, pongErrorLogger());
 	}
 
 	@Bean
@@ -182,9 +184,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CleanupPong cleanupPong()
+	public CleanupPongMessage cleanupPongMessage()
 	{
-		return new CleanupPong(api);
+		return new CleanupPongMessage(api);
 	}
 
 	@Bean
@@ -203,9 +205,16 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public Cleanup cleanup()
+	public CleanupPing cleanupPing()
 	{
-		return new Cleanup(api);
+		return new CleanupPing(api);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public CleanupPong cleanupPong()
+	{
+		return new CleanupPong(api);
 	}
 
 	@Bean
@@ -280,9 +289,16 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public GenerateAndStoreResource generateAndStoreResource()
+	public GenerateAndStoreResourcePing generateAndStoreResourcePing()
 	{
-		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
+		return new GenerateAndStoreResourcePing(api, maxUploadSizeBytes);
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public GenerateAndStoreResourcePong generateAndStoreResourcePong()
+	{
+		return new GenerateAndStoreResourcePong(api, maxUploadSizeBytes);
 	}
 
 	@Bean
