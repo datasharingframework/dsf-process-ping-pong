@@ -5,8 +5,12 @@ import java.math.RoundingMode;
 
 import dev.dsf.bpe.ConstantsPing;
 
-public class NetworkSpeedCalculator
+public final class NetworkSpeedCalculator
 {
+	private NetworkSpeedCalculator()
+	{
+	}
+
 	public static BigDecimal calculate(int bytes, long duration, String unit)
 	{
 		if (bytes == 0)

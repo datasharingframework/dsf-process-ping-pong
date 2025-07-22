@@ -5,8 +5,12 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 
-public class DownloadedBytesGenerator
+public final class DownloadedBytesGenerator
 {
+	private DownloadedBytesGenerator()
+	{
+	}
+
 	public static Task.ParameterComponent create(int bytes)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();

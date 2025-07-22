@@ -23,31 +23,10 @@ import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
 import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
 import dev.dsf.bpe.v1.variables.Target;
 
-public class PingStatusGenerator
+public final class PingStatusGenerator
 {
-	public static Task updatePingStatusOutput(Task task, String correlationKey, List<ProcessError> errors)
+	private PingStatusGenerator()
 	{
-		List<TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				correlationKey);
-
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutput(new TaskOutputComponent(), errors));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutput(outputs.get(0), errors);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
-						+ " with correlation key " + correlationKey);
-			}
-		}
-		return task;
 	}
 
 	public static Task updatePongStatusOutput(Task task, List<ProcessError> errors)
@@ -93,44 +72,6 @@ public class PingStatusGenerator
 		return output;
 	}
 
-	public static Task updatePingStatusOutput(Task task, String correlationKey, String statusCode)
-	{
-		List<Task.TaskOutputComponent> pingStatusOutputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				correlationKey);
-		if (pingStatusOutputs.isEmpty())
-		{
-			task.addOutput(updatePingStatusOutput(new TaskOutputComponent(), statusCode));
-		}
-		else
-		{
-			if (pingStatusOutputs.size() == 1)
-			{
-				updatePingStatusOutput(pingStatusOutputs.get(0), statusCode);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping status output for task " + task.getId()
-						+ " with correlation key " + correlationKey);
-			}
-		}
-
-		return task;
-	}
-
-	public static TaskOutputComponent updatePingStatusOutput(TaskOutputComponent outputComponent, String statusCode)
-	{
-		if (hasStatusCodeSet(outputComponent))
-		{
-			updateStatus(outputComponent, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode);
-		}
-		else
-		{
-			addStatus(outputComponent, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode);
-		}
-
-		return outputComponent;
-	}
 
 	public static Task updatePongStatusOutput(Task task, String statusCode)
 	{
@@ -169,30 +110,6 @@ public class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePingStatusOutput(Task task, Target target)
-	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				target.getCorrelationKey());
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutput(new TaskOutputComponent(), target));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutput(outputs.get(0), target);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
-						+ " with correlation key " + target.getCorrelationKey());
-			}
-		}
-		return task;
-	}
-
 	public static Task updatePongStatusOutput(Task task, Target target)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
@@ -227,104 +144,6 @@ public class PingStatusGenerator
 			addTarget(outputComponent, target);
 		}
 		return outputComponent;
-	}
-
-	public static Task updatePingStatusOutput(Task task, String correlationKey, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String statusCode)
-	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				correlationKey);
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutput(new TaskOutputComponent(), downloadSpeed, uploadSpeed, statusCode));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutput(outputs.get(0), downloadSpeed, uploadSpeed, statusCode);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
-						+ " with correlation key " + correlationKey);
-			}
-		}
-		return task;
-	}
-
-	public static Task updatePongStatusOutput(Task task, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
-			String statusCode)
-	{
-		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutput(new TaskOutputComponent(), downloadSpeed, uploadSpeed, statusCode));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutput(outputs.get(0), downloadSpeed, uploadSpeed, statusCode);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId());
-			}
-		}
-
-		return task;
-	}
-
-	public static TaskOutputComponent updateStatusOutput(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String networkSpeedUnit)
-	{
-		if (hasDownloadSpeedSet(outputComponent))
-		{
-			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit);
-		}
-		else
-		{
-			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit);
-		}
-
-		if (hasUploadSpeedSet(outputComponent))
-		{
-			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit);
-		}
-		else
-		{
-			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit);
-		}
-
-		return outputComponent;
-	}
-
-	public static Task updatePingStatusOutputDownloadSpeed(Task task, String correlationKey, BigDecimal downloadSpeed,
-			String networkSpeedUnit)
-	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				correlationKey);
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutputDownloadSpeed(new TaskOutputComponent(), downloadSpeed, networkSpeedUnit));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutputDownloadSpeed(outputs.get(0), downloadSpeed, networkSpeedUnit);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
-						+ " with correlation key " + correlationKey);
-			}
-		}
-		return task;
 	}
 
 	public static Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed, String networkSpeedUnit)
@@ -363,32 +182,6 @@ public class PingStatusGenerator
 		}
 
 		return outputComponent;
-	}
-
-	public static Task updatePingStatusOutputUploadSpeed(Task task, String correlationKey, BigDecimal uploadSpeed,
-			String networkSpeedUnit)
-	{
-		List<Task.TaskOutputComponent> outputs = filterByCorrelationKey(
-				getOutputsByExtensionUrlAndCodes(task, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS),
-				correlationKey);
-		if (outputs.isEmpty())
-		{
-			task.addOutput(updateStatusOutputUploadSpeed(new TaskOutputComponent(), uploadSpeed, networkSpeedUnit));
-		}
-		else
-		{
-			if (outputs.size() == 1)
-			{
-				updateStatusOutputUploadSpeed(outputs.get(0), uploadSpeed, networkSpeedUnit);
-			}
-			else
-			{
-				throw new RuntimeException("There is more than one ping/pong status output for task " + task.getId()
-						+ " with correlation key " + correlationKey);
-			}
-		}
-
-		return task;
 	}
 
 	public static Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed, String networkSpeedUnit)
@@ -452,30 +245,12 @@ public class PingStatusGenerator
 						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem()));
 	}
 
-	private static boolean hasNetworkSpeedSet(TaskOutputComponent outputComponent)
-	{
-		return hasDownloadSpeedSet(outputComponent) && hasUploadSpeedSet(outputComponent);
-	}
-
 	private static boolean hasDownloadSpeedSet(TaskOutputComponent outputComponent)
 	{
 		Extension extension = getOrCreatePingStatusExtension(outputComponent);
 		Extension downloadSpeedExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
 
 		return downloadSpeedExtension != null;
-	}
-
-	private static boolean hasUploadSpeedSet(TaskOutputComponent outputComponent)
-	{
-		Extension extension = getOrCreatePingStatusExtension(outputComponent);
-		Extension uploadSpeedExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_UPLOAD_SPEED);
-
-		return uploadSpeedExtension != null;
-	}
-
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode)
-	{
-		return createPingStatusOutput(target, statusCode, null);
 	}
 
 	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, BigDecimal downloadSpeed,
@@ -503,24 +278,11 @@ public class PingStatusGenerator
 		return createPongStatusOutput(target, statusCode, null);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String unit)
-	{
-		return createPongStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
-	}
-
 	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
 			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errors, null,
 				null, null);
-	}
-
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit)
-	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errors,
-				downloadSpeed, uploadSpeed, unit);
 	}
 
 	private static TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
@@ -693,14 +455,6 @@ public class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateNetworkSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String unit)
-	{
-		updateDownloadSpeed(outputComponent, downloadSpeed, unit);
-		updateUploadSpeed(outputComponent, uploadSpeed, unit);
-		return outputComponent;
-	}
-
 	private static TaskOutputComponent addDownloadSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
 			String unit)
 	{
@@ -829,23 +583,6 @@ public class PingStatusGenerator
 		}
 	}
 
-	private static Optional<Extension> getPingStatusExtension(Task task)
-	{
-		Optional<TaskOutputComponent> optPingStatusOutput = task.getOutput().stream()
-				.filter(outputComponent -> outputComponent.getExtension().stream()
-						.anyMatch(extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS
-								.equals(extension.getUrl())))
-				.findFirst();
-		if (optPingStatusOutput.isPresent())
-		{
-			return getPingStatusExtension(optPingStatusOutput.get());
-		}
-		else
-		{
-			return Optional.empty();
-		}
-	}
-
 	private static Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
@@ -881,51 +618,6 @@ public class PingStatusGenerator
 										ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS)
 										.equals(extension.getUrl())))
 				.collect(Collectors.toCollection(ArrayList::new));
-	}
-
-	private static List<Task.TaskOutputComponent> filterByCorrelationKey(List<TaskOutputComponent> outputs,
-			String correlationKey)
-	{
-		return outputs.stream().filter(outputComponent ->
-		{
-			List<Extension> outputExtensions = outputComponent.getExtension();
-			if (outputExtensions.isEmpty())
-				return false;
-			List<Extension> pingStatusExtensions = outputExtensions.stream()
-					.filter(extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS
-							.equals(extension.getUrl()))
-					.toList();
-			if (pingStatusExtensions.isEmpty())
-				return false;
-			List<Extension> extensionsMatchingCorrelationKey = pingStatusExtensions.stream()
-					.filter(extension -> extension.getExtension().stream().anyMatch(
-							extension1 -> ConstantsPing.EXTENSION_URL_CORRELATION_KEY.equals(extension1.getUrl())
-									&& correlationKey.equals(((StringType) extension1.getValue()).getValue())))
-					.toList();
-			if (extensionsMatchingCorrelationKey.isEmpty())
-				return false;
-			if (extensionsMatchingCorrelationKey.size() == 1)
-			{
-				return true;
-			}
-			else
-			{
-				throw new RuntimeException(
-						"Only one Task.output.extension.extension with correlationKey is allowed but found "
-								+ extensionsMatchingCorrelationKey.size());
-			}
-		}).collect(Collectors.toCollection(ArrayList::new));
-	}
-
-	private static void sortStatusOutputExtensions(Task task)
-	{
-		List<TaskOutputComponent> outputs = task.getOutput().stream()
-				.filter(outputComponent -> ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS
-						.equals(outputComponent.getType().getCodingFirstRep().getCode())
-						|| ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS
-								.equals(outputComponent.getType().getCodingFirstRep().getCode()))
-				.toList();
-		outputs.forEach(PingStatusGenerator::sortStatusOutputExtensions);
 	}
 
 	private static void sortStatusOutputExtensions(TaskOutputComponent outputComponent)

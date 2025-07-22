@@ -7,8 +7,12 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 
-public class NetworkSpeedMetricGenerator
+public final class NetworkSpeedMetricGenerator
 {
+	private NetworkSpeedMetricGenerator()
+	{
+	}
+
 	public static Task.ParameterComponent createDownloadedDurationMillis(long duration)
 	{
 		Task.ParameterComponent downloadedDuration = new Task.ParameterComponent();

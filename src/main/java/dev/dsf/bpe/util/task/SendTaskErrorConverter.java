@@ -16,8 +16,13 @@ import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 
-public class SendTaskErrorConverter
+public final class SendTaskErrorConverter
 {
+
+	private SendTaskErrorConverter()
+	{
+	}
+
 	private static final Map<Class<? extends Throwable>, BiFunction<? extends Throwable, String, ProcessError>> EXPECTED_CAUSES_WITH_CONVERTERS = Map
 			.of(SSLHandshakeException.class, convertSSLHandshakeException(), ConnectTimeoutException.class,
 					convertConnectTimeoutException(), UnknownHostException.class, convertUnknownHostException(),

@@ -6,8 +6,12 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 
-public class DownloadResourceReferenceGenerator
+public final class DownloadResourceReferenceGenerator
 {
+	private DownloadResourceReferenceGenerator()
+	{
+	}
+
 	public static Task.ParameterComponent create(String uri)
 	{
 		Reference reference = new Reference(uri);

@@ -12,8 +12,12 @@ import org.hl7.fhir.r4.model.Task;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 
-public class ErrorInputComponentGenerator
+public final class ErrorInputComponentGenerator
 {
+	private ErrorInputComponentGenerator()
+	{
+	}
+
 	public static List<Task.ParameterComponent> create(List<ProcessError> errors)
 	{
 		if (errors == null || errors.isEmpty())

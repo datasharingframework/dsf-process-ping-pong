@@ -6,8 +6,12 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
 
-public class DownloadResourceSizeGenerator
+public final class DownloadResourceSizeGenerator
 {
+	private DownloadResourceSizeGenerator()
+	{
+	}
+
 	public static Task.ParameterComponent create(int sizeBytes)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
