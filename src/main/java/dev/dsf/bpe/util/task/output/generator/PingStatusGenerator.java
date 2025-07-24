@@ -355,12 +355,12 @@ public final class PingStatusGenerator
 		{
 			Extension extension = getOrCreatePingStatusExtension(outputComponent);
 
-			extension.addExtension(ConstantsPing.EXTENSION_URL_CORRELATION_KEY,
-					new StringType(target.getCorrelationKey()));
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER)
 					.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER)
 					.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
+			extension.addExtension(ConstantsPing.EXTENSION_URL_CORRELATION_KEY,
+					new StringType(target.getCorrelationKey()));
 			sortStatusOutputExtensions(outputComponent);
 		}
 
@@ -639,11 +639,6 @@ public final class PingStatusGenerator
 			Optional<Extension> endpointIdentifierExtension = extensions.stream()
 					.filter(extension -> ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER.equals(extension.getUrl()))
 					.findFirst();
-			if (correlationKeyExtension.isPresent())
-			{
-				extensions.remove(correlationKeyExtension.get());
-				sortedExtensions.add(correlationKeyExtension.get());
-			}
 			if (organizationIdentifierExtension.isPresent())
 			{
 				extensions.remove(organizationIdentifierExtension.get());
@@ -653,6 +648,11 @@ public final class PingStatusGenerator
 			{
 				extensions.remove(endpointIdentifierExtension.get());
 				sortedExtensions.add(endpointIdentifierExtension.get());
+			}
+			if (correlationKeyExtension.isPresent())
+			{
+				extensions.remove(correlationKeyExtension.get());
+				sortedExtensions.add(correlationKeyExtension.get());
 			}
 
 			Optional<Extension> downloadSpeedExtension = extensions.stream()
