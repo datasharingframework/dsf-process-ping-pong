@@ -66,7 +66,8 @@ public class RandomByteInputStream extends InputStream
 				break;
 			}
 		}
-		if (localNumBytesRead == numBytes) this.close();
+		if (localNumBytesRead == numBytes)
+			this.close();
 		return localNumBytesRead;
 	}
 

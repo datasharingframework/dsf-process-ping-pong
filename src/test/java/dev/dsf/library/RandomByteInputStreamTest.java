@@ -31,7 +31,8 @@ public class RandomByteInputStreamTest
 			}
 			assertEquals(-1, out);
 			assertTrue(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -56,7 +57,8 @@ public class RandomByteInputStreamTest
 			}
 			assertEquals(-1, out);
 			assertTrue(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -71,7 +73,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes);
 			assertEquals(bytes.length, out);
 			assertFalse(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -86,7 +89,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes);
 			assertEquals(bytes.length, out);
 			assertTrue(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -103,7 +107,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes, offset, amount);
 			assertEquals(amount, out);
 			assertFalse(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -120,7 +125,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes, offset, amount);
 			assertEquals(amount, out);
 			assertFalse(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -137,7 +143,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes, offset, amount);
 			assertEquals(amount, out);
 			assertTrue(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
@@ -154,7 +161,8 @@ public class RandomByteInputStreamTest
 			int out = inputStream.read(bytes, offset, amount);
 			assertEquals(offset, out);
 			assertFalse(inputStream.isClosed());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
