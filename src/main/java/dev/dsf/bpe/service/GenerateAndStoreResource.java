@@ -1,8 +1,5 @@
 package dev.dsf.bpe.service;
 
-import java.io.ByteArrayInputStream;
-import java.util.Random;
-
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
@@ -33,10 +30,20 @@ public class GenerateAndStoreResource
 		PingPongLogger logger = new PingPongLogger(GenerateAndStoreResource.class, variables.getStartTask());
 		logger.debug("Generating resource...");
 		int downloadResourceSizeBytes = getDownloadResourceSize(variables);
-
-		byte[] resourceContent = generateRandomBinaryContent(downloadResourceSizeBytes, logger);
+		RandomByteInputStream resourceContent;
+		if (downloadResourceSizeBytes > maxUploadSizeBytes)
+		{
+			logger.info(
+					"Requested resource size of {} bytes exceeds configured maximum upload size of {} bytes. Trimmed to maximum upload size.",
+					downloadResourceSizeBytes, maxUploadSizeBytes);
+			resourceContent = new RandomByteInputStream(maxUploadSizeBytes / 3 * 2);
+		}
+		else
+		{
+			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes / 3 * 2);
+		}
 		variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
-				resourceContent.length);
+				downloadResourceSizeBytes);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
@@ -62,33 +69,15 @@ public class GenerateAndStoreResource
 		}
 	}
 
-	private byte[] generateRandomBinaryContent(int desiredSizeBytes, PingPongLogger logger)
-	{
-		int sizeBytes = Math.min(maxUploadSizeBytes, desiredSizeBytes);
-		byte[] bytes = generateRandomByteArray(sizeBytes);
-		logger.info(
-				"Generated binary content for network speed measurement. Requested size was: {} bytes, generated size was : {}",
-				desiredSizeBytes, bytes.length);
-		return bytes;
-	}
-
-	private byte[] generateRandomByteArray(int sizeBytes)
-	{
-		Random rand = new Random();
-		byte[] randomBytes = new byte[sizeBytes];
-		rand.nextBytes(randomBytes);
-		return randomBytes;
-	}
-
 	private int getDownloadResourceSize(Variables variables)
 	{
 		return variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 	}
 
-	private IdType storeBinary(byte[] downloadResourceContent, DelegateExecution delegateExecution)
+	private IdType storeBinary(RandomByteInputStream downloadResourceContent, DelegateExecution delegateExecution)
 	{
 		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().createBinary(
-				new ByteArrayInputStream(downloadResourceContent), ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
+				downloadResourceContent, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
 				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 
