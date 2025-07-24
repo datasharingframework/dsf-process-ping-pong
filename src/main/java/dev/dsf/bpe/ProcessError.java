@@ -53,16 +53,27 @@ public record ProcessError(String process, String processStep, String action, St
 
 	public static ProcessError toError(Extension extension)
 	{
-		String process = ((Coding) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_PROCESS).getValue())
-				.getCode();
-		String processStep = ((Coding) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP).getValue())
-				.getCode();
-		String action = ((StringType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_ACTION).getValue())
-				.getValue();
-		String potentialFixUrl = ((UrlType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
-				.getValue()).getValue();
-		String message = ((StringType) extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_MESSAGE).getValue())
-				.getValue();
+		Extension processExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_PROCESS);
+		Objects.requireNonNull(processExtension);
+		String process = ((Coding) processExtension.getValue()).getCode();
+
+
+		Extension processStepExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP);
+		Objects.requireNonNull(processStepExtension);
+		String processStep = ((Coding) processStepExtension.getValue()).getCode();
+
+		Extension actionExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_ACTION);
+		Objects.requireNonNull(actionExtension);
+		String action = ((StringType) actionExtension.getValue()).getValue();
+
+		Extension potentalFixUrlExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX);
+		String potentialFixUrl = Objects.nonNull(potentalFixUrlExtension)
+				? ((UrlType) potentalFixUrlExtension.getValue()).getValue()
+				: null;
+
+		Extension messageExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_MESSAGE);
+		Objects.requireNonNull(messageExtension);
+		String message = ((StringType) messageExtension.getValue()).getValue();
 
 		return new ProcessError(process, processStep, action, potentialFixUrl, message);
 	}
