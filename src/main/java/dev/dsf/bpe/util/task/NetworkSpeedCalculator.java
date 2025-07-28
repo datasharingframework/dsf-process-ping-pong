@@ -11,7 +11,7 @@ public final class NetworkSpeedCalculator
 	{
 	}
 
-	public static BigDecimal calculate(int bytes, long duration, String unit)
+	public static BigDecimal calculate(long bytes, long duration, String unit)
 	{
 		if (bytes == 0)
 			return BigDecimal.ZERO;

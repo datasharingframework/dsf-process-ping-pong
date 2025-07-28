@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
-import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
 
@@ -36,9 +35,10 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogPing.class, startTask);
 		logger.debug("Storing upload speed...");
 
-		Optional<IntegerType> uploadedBytesTaskInput = getUploadedBytes(cleanup);
+		Optional<DecimalType> uploadedBytesTaskInput = getUploadedBytes(cleanup);
 		Optional<DecimalType> uploadedDurationMillisTaskInput = getUploadedDurationMillis(cleanup);
-		int uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(0);
+		long uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(BigDecimal.valueOf(0))
+				.longValue();
 		long uploadedDurationMillis = uploadedDurationMillisTaskInput
 				.map(decimalType -> decimalType.getValue().longValue()).orElse(0L);
 
@@ -51,10 +51,10 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		logger.debug("Stored upload speed: " + uploadSpeed + " " + networkSpeedUnit);
 	}
 
-	private Optional<IntegerType> getUploadedBytes(Task task)
+	private Optional<DecimalType> getUploadedBytes(Task task)
 	{
 		return api.getTaskHelper().getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, IntegerType.class);
+				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, DecimalType.class);
 	}
 
 	private Optional<DecimalType> getUploadedDurationMillis(Task task)

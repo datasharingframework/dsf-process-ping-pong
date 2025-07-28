@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import org.hl7.fhir.r4.model.IntegerType;
+import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
@@ -396,7 +396,7 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
-		task.addInput().setValue(new IntegerType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
+		task.addInput().setValue(new DecimalType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
 				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		return task;

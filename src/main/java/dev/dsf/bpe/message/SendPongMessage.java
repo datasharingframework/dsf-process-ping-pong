@@ -47,11 +47,11 @@ public class SendPongMessage extends AbstractTaskMessageSend
 			Variables variables)
 	{
 		List<ProcessError> errorList = ErrorListUtils.getErrorMessageList(execution);
-		int downloadResourceSizeBytes = variables
-				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		long downloadResourceSizeBytes = variables
+				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 		if (downloadResourceSizeBytes >= 0)
 		{
-			Integer downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
+			Long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
 			Long downloadedDurationMillis = variables
 					.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 			String downloadResourceReference = variables

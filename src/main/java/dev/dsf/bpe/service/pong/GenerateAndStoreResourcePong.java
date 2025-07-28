@@ -13,7 +13,7 @@ public class GenerateAndStoreResourcePong extends AbstractServiceDelegate
 {
 	private final GenerateAndStoreResource delegate;
 
-	public GenerateAndStoreResourcePong(ProcessPluginApi api, int maxUploadSizeBytes)
+	public GenerateAndStoreResourcePong(ProcessPluginApi api, long maxUploadSizeBytes)
 	{
 		super(api);
 		this.delegate = new GenerateAndStoreResource(api, maxUploadSizeBytes, Process.PONG);

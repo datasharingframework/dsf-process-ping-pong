@@ -31,7 +31,7 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(StoreDownloadSpeed.class, startTask);
 		logger.debug("Storing download speed...");
 
-		int downloadedBytes = variables.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
+		long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
 		long downloadedDurationMillis = variables
 				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
 

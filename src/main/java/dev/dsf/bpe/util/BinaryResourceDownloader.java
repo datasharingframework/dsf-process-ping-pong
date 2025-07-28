@@ -28,12 +28,12 @@ public class BinaryResourceDownloader
 		this.process = process;
 	}
 
-	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, int maxDownloadSizeBytes)
+	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, long maxDownloadSizeBytes)
 	{
 		DownloadResult downloadResult;
 
-		int downloadResourceSizeBytes = variables
-				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		long downloadResourceSizeBytes = variables
+				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		Optional<Reference> optDownloadResourceReference = api.getTaskHelper().getFirstInputParameterValue(task,
 				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE,
@@ -66,7 +66,7 @@ public class BinaryResourceDownloader
 						"Downloading resource for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes...",
 						downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
 				long downloadStartTime = System.currentTimeMillis();
-				int numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
+				long numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
 				binaryResourceInputStream.skipNBytes(numBytes);
 				long downloadEndTime = System.currentTimeMillis();
 				long downloadedDurationMillis = downloadEndTime - downloadStartTime;
@@ -78,7 +78,7 @@ public class BinaryResourceDownloader
 			catch (IOException e)
 			{
 				binaryResourceInputStream.close();
-				String errorMessage = e.getMessage();
+				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
 						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
 						action, null, errorMessage);
@@ -99,7 +99,7 @@ public class BinaryResourceDownloader
 		{
 			if (e.getCause() instanceof SocketTimeoutException)
 			{
-				String errorMessage = e.getCause().getMessage();
+				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
 						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
 						action, ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT, errorMessage);
@@ -113,7 +113,7 @@ public class BinaryResourceDownloader
 		}
 		catch (IOException e)
 		{
-			String errorMessage = e.getMessage();
+			String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 			ProcessError error = new ProcessError(process,
 					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
 					null, errorMessage);
@@ -134,11 +134,11 @@ public class BinaryResourceDownloader
 
 	public static class DownloadResult
 	{
-		private final int downloadedBytes;
+		private final long downloadedBytes;
 		private final long downloadedDurationMillis;
 		private final ProcessError error;
 
-		public DownloadResult(int downloadedBytes, long downloadedDurationMillis)
+		public DownloadResult(long downloadedBytes, long downloadedDurationMillis)
 		{
 			this.downloadedBytes = downloadedBytes;
 			this.downloadedDurationMillis = downloadedDurationMillis;
@@ -152,7 +152,7 @@ public class BinaryResourceDownloader
 			this.error = error;
 		}
 
-		public int getDownloadedBytes()
+		public long getDownloadedBytes()
 		{
 			return downloadedBytes;
 		}

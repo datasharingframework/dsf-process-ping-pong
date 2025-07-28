@@ -42,7 +42,7 @@
 				<code value="download-resource-size-bytes" />
 			</coding>
 		</type>
-		<valueInteger value="1000000"/>
+		<valueDecimal value="1000000"/>
 	</input>
 	<input>
       <type>

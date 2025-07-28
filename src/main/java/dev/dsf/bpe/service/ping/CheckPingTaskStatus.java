@@ -34,7 +34,7 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		IdType taskId = (IdType) delegateExecution.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID);
+		String taskId = (String) delegateExecution.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID);
 
 		Objects.requireNonNull(taskId);
 		FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
@@ -43,7 +43,7 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		try
 		{
 
-			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId.getIdPart());
+			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
 			switch (pingTask.getStatus())
 			{
 				case REQUESTED, INPROGRESS, FAILED,
@@ -51,12 +51,12 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 					error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
 							ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CHECK_PING_TASK_STATUS,
 							"Awaiting pong message", null,
-							"Pong message timed out. Status of ping task resource with id " + taskId.getIdPart()
-									+ " from " + target.getEndpointUrl() + " is " + pingTask.getStatus());
+							"Pong message timed out. Status of ping task resource with id " + taskId + " from "
+									+ target.getEndpointUrl() + " is " + pingTask.getStatus());
 				default -> error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
 						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CHECK_PING_TASK_STATUS,
 						"Awaiting pong message", null,
-						"Pong message timed out. Status of ping task resource with id " + taskId.getIdPart() + " from "
+						"Pong message timed out. Status of ping task resource with id " + taskId + " from "
 								+ target.getEndpointUrl() + " is " + pingTask.getStatus()
 								+ ". Unexpected status. Should be either of " + Task.TaskStatus.REQUESTED + ", "
 								+ Task.TaskStatus.INPROGRESS + ", " + Task.TaskStatus.COMPLETED + " or "
@@ -69,8 +69,8 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		{
 			error = new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
 					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CHECK_PING_TASK_STATUS,
-					"Pong message timed out. Error when retrieving status of ping task resource with id "
-							+ taskId.getIdPart() + " from " + target.getEndpointUrl(),
+					"Pong message timed out. Error when retrieving status of ping task resource with id " + taskId
+							+ " from " + target.getEndpointUrl(),
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP, e.getMessage());
 		}
 		ErrorListUtils.add(error, delegateExecution, correlationKey);

@@ -13,7 +13,7 @@ public class GenerateAndStoreResourcePing extends AbstractServiceDelegate
 {
 	private final GenerateAndStoreResource delegate;
 
-	public GenerateAndStoreResourcePing(ProcessPluginApi api, int maxUploadSizeBytes)
+	public GenerateAndStoreResourcePing(ProcessPluginApi api, long maxUploadSizeBytes)
 	{
 		super(api);
 		delegate = new GenerateAndStoreResource(api, maxUploadSizeBytes, Process.PING);

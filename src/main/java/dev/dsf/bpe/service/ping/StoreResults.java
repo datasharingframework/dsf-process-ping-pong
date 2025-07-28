@@ -63,13 +63,13 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			List<ProcessError> errors = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			String statusCode = errors.isEmpty() ? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED
 					: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
-			int downloadResourceSizeBytes = variables
-					.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+			long downloadResourceSizeBytes = variables
+					.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 			List<ProcessError> errorMessageList = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
-				Integer downloadedBytes = variables
-						.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+				Long downloadedBytes = variables
+						.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
 				Long downloadedDurationMillis = variables
 						.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 
@@ -77,8 +77,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis, networkSpeedUnit)
 						: null;
 
-				Integer uploadedBytes = variables
-						.getInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
+				Long uploadedBytes = variables
+						.getLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
 				Long uploadedDurationMillis = variables
 						.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
 

@@ -35,8 +35,7 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
-		Integer downloadedBytes = variables
-				.getInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+		Long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
 		Long downloadedDurationMillis = variables
 				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
 

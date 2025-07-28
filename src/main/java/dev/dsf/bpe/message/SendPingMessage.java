@@ -41,8 +41,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 	{
 		String downloadResourceReference = variables
 				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
-		int downloadResourceSizeBytes = variables
-				.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		long downloadResourceSizeBytes = variables
+				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 
 		Stream<ParameterComponent> downloadResourceReferenceStream = downloadResourceReference == null ? Stream.empty()
 				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
@@ -65,7 +65,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 				additionalInputParameters);
 		if (taskId != null)
 		{
-			execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID, taskId);
+			execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID, taskId.getIdPart());
 		}
 	}
 

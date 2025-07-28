@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
-import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
@@ -45,11 +44,12 @@ public class SavePong extends AbstractServiceDelegate
 				ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey),
 				decimalType.getValue().longValue()));
 
-		Optional<IntegerType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
+		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
 				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES,
-				IntegerType.class);
-		optDownloadedBytes.ifPresent(integerType -> variables.setInteger(
-				ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), integerType.getValue()));
+				DecimalType.class);
+		optDownloadedBytes.ifPresent(
+				decimalType -> variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey),
+						decimalType.getValue().longValue()));
 
 
 		List<ProcessError> errorList = ErrorInputParser.parseInputs(pong);

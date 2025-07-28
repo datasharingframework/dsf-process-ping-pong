@@ -13,9 +13,9 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 {
-	private final int maxDownloadSizeBytes;
+	private final long maxDownloadSizeBytes;
 
-	public DownloadResourceAndMeasureSpeed(ProcessPluginApi api, int maxDownloadSizeBytes)
+	public DownloadResourceAndMeasureSpeed(ProcessPluginApi api, long maxDownloadSizeBytes)
 	{
 		super(api);
 		this.maxDownloadSizeBytes = maxDownloadSizeBytes;
@@ -35,7 +35,7 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 
 		if (downloadResult.getError() == null)
 		{
-			variables.setInteger(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
+			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(),
 					downloadResult.getDownloadedBytes());
 			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(),
 					downloadResult.getDownloadedDurationMillis());

@@ -15,10 +15,10 @@ import jakarta.ws.rs.WebApplicationException;
 public class GenerateAndStoreResource
 {
 	private final ProcessPluginApi api;
-	private final int maxUploadSizeBytes;
+	private final long maxUploadSizeBytes;
 	private final Process process;
 
-	public GenerateAndStoreResource(ProcessPluginApi api, int maxUploadSizeBytes, Process process)
+	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes, Process process)
 	{
 		this.api = api;
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
@@ -29,20 +29,20 @@ public class GenerateAndStoreResource
 	{
 		PingPongLogger logger = new PingPongLogger(GenerateAndStoreResource.class, variables.getStartTask());
 		logger.debug("Generating resource...");
-		int downloadResourceSizeBytes = getDownloadResourceSize(variables);
+		long downloadResourceSizeBytes = getDownloadResourceSize(variables);
 		RandomByteInputStream resourceContent;
 		if (downloadResourceSizeBytes > maxUploadSizeBytes)
 		{
 			logger.info(
 					"Requested resource size of {} bytes exceeds configured maximum upload size of {} bytes. Trimmed to maximum upload size.",
 					downloadResourceSizeBytes, maxUploadSizeBytes);
-			resourceContent = new RandomByteInputStream(maxUploadSizeBytes / 3 * 2);
+			resourceContent = new RandomByteInputStream(maxUploadSizeBytes);
 		}
 		else
 		{
-			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes / 3 * 2);
+			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes);
 		}
-		variables.setInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
+		variables.setLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
 				downloadResourceSizeBytes);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
@@ -51,7 +51,7 @@ public class GenerateAndStoreResource
 		{
 			IdType downloadResource = storeBinary(resourceContent, delegateExecution);
 
-			String reference = downloadResource.getValueAsString();
+			String reference = downloadResource.toVersionless().getValueAsString();
 
 			variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
 
@@ -69,9 +69,9 @@ public class GenerateAndStoreResource
 		}
 	}
 
-	private int getDownloadResourceSize(Variables variables)
+	private long getDownloadResourceSize(Variables variables)
 	{
-		return variables.getInteger(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		return variables.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
 	}
 
 	private IdType storeBinary(RandomByteInputStream downloadResourceContent, DelegateExecution delegateExecution)

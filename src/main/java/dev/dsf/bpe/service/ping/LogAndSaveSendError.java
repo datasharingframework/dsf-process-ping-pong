@@ -31,7 +31,7 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 			ProcessError error = ProcessError
 					.parse((String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableError()));
 			ErrorListUtils.add(error, execution, correlationKey);
-			variables.setInteger(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0);
+			variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0L);
 			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey), 0L);
 			logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
 		}

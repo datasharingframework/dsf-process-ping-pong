@@ -57,12 +57,12 @@ public class PingConfig
 
 	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
 	@Value("${dev.dsf.bpe.ping.maxDownloadSizeBytes:10000000}")
-	private int maxDownloadSizeBytes;
+	private long maxDownloadSizeBytes;
 
 	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.maxUploadSizeBytes:10000000}")
-	private int maxUploadSizeBytes;
+	private long maxUploadSizeBytes;
 
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
@@ -79,22 +79,22 @@ public class PingConfig
 		this.networkSpeedUnit = networkSpeedUnit;
 	}
 
-	public int getMaxDownloadSizeBytes()
+	public long getMaxDownloadSizeBytes()
 	{
 		return maxDownloadSizeBytes;
 	}
 
-	public void setMaxDownloadSizeBytes(int maxDownloadSizeBytes)
+	public void setMaxDownloadSizeBytes(long maxDownloadSizeBytes)
 	{
 		this.maxDownloadSizeBytes = maxDownloadSizeBytes;
 	}
 
-	public int getMaxUploadSizeBytes()
+	public long getMaxUploadSizeBytes()
 	{
 		return maxUploadSizeBytes;
 	}
 
-	public void setMaxUploadSizeBytes(int maxUploadSizeBytes)
+	public void setMaxUploadSizeBytes(long maxUploadSizeBytes)
 	{
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
 	}
@@ -193,14 +193,14 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DownloadResourceAndMeasureSpeed downloadResourceAndMeasureSpeed()
 	{
-		return new DownloadResourceAndMeasureSpeed(api, (int) maxDownloadSizeBytes);
+		return new DownloadResourceAndMeasureSpeed(api, maxDownloadSizeBytes);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
 	{
-		return new DownloadResourceAndMeasureSpeedInSubProcess(api, (int) maxDownloadSizeBytes);
+		return new DownloadResourceAndMeasureSpeedInSubProcess(api, maxDownloadSizeBytes);
 	}
 
 	@Bean
