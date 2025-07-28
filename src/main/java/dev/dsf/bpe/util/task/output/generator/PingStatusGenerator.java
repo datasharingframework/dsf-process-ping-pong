@@ -1,7 +1,5 @@
 package dev.dsf.bpe.util.task.output.generator;
 
-import static dev.dsf.bpe.util.VersionUtils.appendFhirResourceVersion;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -578,7 +576,7 @@ public final class PingStatusGenerator
 		else
 		{
 			Extension extension = outputComponent.addExtension();
-			extension.setUrl(appendFhirResourceVersion(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS));
+			extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS);
 			return extension;
 		}
 	}
@@ -586,8 +584,8 @@ public final class PingStatusGenerator
 	private static Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
-				.filter(extension -> appendFhirResourceVersion(
-						ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS).equals(extension.getUrl()))
+				.filter(extension ->
+						ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS.equals(extension.getUrl()))
 				.toList();
 		if (pingStatusExtensions.isEmpty())
 		{
@@ -614,8 +612,8 @@ public final class PingStatusGenerator
 						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem())
 								&& Stream.of(codes).anyMatch(code -> code.equals(coding.getCode())))
 						|| outputComponent.getExtension().stream()
-								.anyMatch(extension -> appendFhirResourceVersion(
-										ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS)
+								.anyMatch(extension ->
+										ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS
 										.equals(extension.getUrl())))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
