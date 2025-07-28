@@ -96,8 +96,6 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			errors.forEach(error -> errorMailService.addError(target, error));
 		});
 
-		// TODO only send one combined status mail
-
 		variables.updateTask(task);
 
 		errorMailService.send(task.getIdElement());
