@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
@@ -31,9 +32,8 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(StoreDownloadSpeed.class, startTask);
 		logger.debug("Storing download speed...");
 
-		long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
-		long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
+		long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());
+		long downloadedDurationMillis = variables.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.getValue());
 
 		BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis,
 				networkSpeedUnit);

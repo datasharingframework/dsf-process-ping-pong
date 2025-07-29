@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
@@ -35,9 +36,9 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
-		Long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+		Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
 		Long downloadedDurationMillis = variables
-				.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
+				.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
 
 		Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 				? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
@@ -60,8 +61,8 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 
 		try
 		{
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(), ProcessError.toString(error));
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+			execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
+			execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(),
 					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 		}
 		catch (JsonProcessingException e)

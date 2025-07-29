@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -40,14 +41,14 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 		if (downloadResult.getError() == null)
 		{
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey),
+			variables.setLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey),
 					downloadResult.getDownloadedBytes());
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey),
+			variables.setLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey),
 					downloadResult.getDownloadedDurationMillis());
 		}
 		else
 		{
-			delegateExecution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR,
+			delegateExecution.setVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue(),
 					downloadResult.getError());
 		}
 

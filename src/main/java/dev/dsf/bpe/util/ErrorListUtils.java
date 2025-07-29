@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 
 public class ErrorListUtils
@@ -42,11 +43,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			add(error, ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey), execution);
+			add(error, ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			add(error, ConstantsPing.getBpmnExecutionVariableErrorList(), execution);
+			add(error, ExecutionVariables.ERROR_LIST.getValue(), execution);
 		}
 	}
 
@@ -59,12 +60,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			return getErrorMessageList(ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey),
-					execution);
+			return getErrorMessageList(ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			return getErrorMessageList(ConstantsPing.getBpmnExecutionVariableErrorList(), execution);
+			return getErrorMessageList(ExecutionVariables.ERROR_LIST.getValue(), execution);
 		}
 	}
 
@@ -108,11 +108,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			saveErrorList(errors, ConstantsPing.getBpmnExecutionVariableErrorMessageList(correlationKey), execution);
+			saveErrorList(errors, ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			saveErrorList(errors, ConstantsPing.getBpmnExecutionVariableErrorList(), execution);
+			saveErrorList(errors, ExecutionVariables.ERROR_LIST.getValue(), execution);
 		}
 	}
 

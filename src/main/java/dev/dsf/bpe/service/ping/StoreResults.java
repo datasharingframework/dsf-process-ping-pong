@@ -11,6 +11,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
@@ -64,23 +65,23 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			String statusCode = errors.isEmpty() ? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED
 					: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
 			long downloadResourceSizeBytes = variables
-					.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+					.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 			List<ProcessError> errorMessageList = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
 				Long downloadedBytes = variables
-						.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes(correlationKey));
+						.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
 				Long downloadedDurationMillis = variables
-						.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey));
+						.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
 
 				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDurationMillis != null
 						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis, networkSpeedUnit)
 						: null;
 
 				Long uploadedBytes = variables
-						.getLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey));
+						.getLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey));
 				Long uploadedDurationMillis = variables
-						.getLong(ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey));
+						.getLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
 
 				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
 						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)

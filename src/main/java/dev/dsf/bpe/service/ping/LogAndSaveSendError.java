@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -29,10 +30,10 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		try
 		{
 			ProcessError error = ProcessError
-					.parse((String) execution.getVariableLocal(ConstantsPing.getBpmnExecutionVariableError()));
+					.parse((String) execution.getVariableLocal(ExecutionVariables.ERROR.getValue()));
 			ErrorListUtils.add(error, execution, correlationKey);
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey), 0L);
-			variables.setLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis(correlationKey), 0L);
+			variables.setLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), 0L);
+			variables.setLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey), 0L);
 			logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
 		}
 		catch (JsonProcessingException e)

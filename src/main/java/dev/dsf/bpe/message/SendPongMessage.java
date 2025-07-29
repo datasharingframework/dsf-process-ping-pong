@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
@@ -47,15 +48,13 @@ public class SendPongMessage extends AbstractTaskMessageSend
 			Variables variables)
 	{
 		List<ProcessError> errorList = ErrorListUtils.getErrorMessageList(execution);
-		long downloadResourceSizeBytes = variables
-				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 		if (downloadResourceSizeBytes >= 0)
 		{
-			Long downloadedBytes = variables.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedBytes());
-			Long downloadedDurationMillis = variables
-					.getLong(ConstantsPing.getBpmnExecutionVariableDownloadedDurationMillis());
+			Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());
+			Long downloadedDurationMillis = variables.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.getValue());
 			String downloadResourceReference = variables
-					.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
+					.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue());
 
 			Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 					? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
@@ -100,7 +99,7 @@ public class SendPongMessage extends AbstractTaskMessageSend
 
 		ErrorListUtils.add(error, execution);
 		PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
-		variables.setString(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+		variables.setString(ExecutionVariables.STATUS_CODE.getValue(),
 				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 		variables.updateTask(startTask);
 

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -23,10 +24,9 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
 	{
 		String timerInterval = getTimerInterval(variables);
-		logger.debug("Setting variable '{}' to {}", ConstantsPing.BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL,
-				timerInterval);
+		logger.debug("Setting variable '{}' to {}", ExecutionVariables.TIMER_INTERVAL.getValue(), timerInterval);
 
-		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL, timerInterval);
+		variables.setString(ExecutionVariables.TIMER_INTERVAL.getValue(), timerInterval);
 		variables.setTarget(
 				variables.createTarget(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().get(),
 						api.getEndpointProvider().getLocalEndpointIdentifierValue().get(),

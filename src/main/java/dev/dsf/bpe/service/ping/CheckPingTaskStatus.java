@@ -8,6 +8,7 @@ import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -34,7 +35,7 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		String taskId = (String) delegateExecution.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID);
+		String taskId = (String) delegateExecution.getVariableLocal(ExecutionVariables.PING_TASK_ID.getValue());
 
 		Objects.requireNonNull(taskId);
 		FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()

@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -25,7 +26,7 @@ public class LogAndSaveUploadErrorPing extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPing.class, startTask);
 
 		ProcessError error = ProcessError
-				.parse(variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR));
+				.parse(variables.getString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue()));
 
 		logger.info("Error while storing binary resource for download: {}", error.message());
 	}

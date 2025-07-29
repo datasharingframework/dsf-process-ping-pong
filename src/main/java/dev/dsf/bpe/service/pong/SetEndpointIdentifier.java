@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -27,8 +28,7 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 
 		Task task = variables.getStartTask();
 		String endpointIdentifierValue = getEndpointIdentifierValue(task);
-		variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER,
-				endpointIdentifierValue);
+		variables.setString(ExecutionVariables.PONG_TARGET_ENDPOINT_IDENTIFIER.getValue(), endpointIdentifierValue);
 
 		logger.debug("Set endpoint identifier to " + endpointIdentifierValue);
 	}

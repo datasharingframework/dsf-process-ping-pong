@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.Process;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -42,8 +43,7 @@ public class GenerateAndStoreResource
 		{
 			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes);
 		}
-		variables.setLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
-				downloadResourceSizeBytes);
+		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), downloadResourceSizeBytes);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
@@ -53,7 +53,7 @@ public class GenerateAndStoreResource
 
 			String reference = downloadResource.toVersionless().getValueAsString();
 
-			variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE, reference);
+			variables.setString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue(), reference);
 
 			logger.debug("Stored binary resource for download");
 		}
@@ -64,14 +64,13 @@ public class GenerateAndStoreResource
 					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE,
 					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 					"Local DSF FHIR server responded with status: " + status);
-			variables.setString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR,
-					ProcessError.toString(error));
+			variables.setString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue(), ProcessError.toString(error));
 		}
 	}
 
 	private long getDownloadResourceSize(Variables variables)
 	{
-		return variables.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		return variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 	}
 
 	private IdType storeBinary(RandomByteInputStream downloadResourceContent, DelegateExecution delegateExecution)

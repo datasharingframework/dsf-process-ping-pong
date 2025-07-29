@@ -124,28 +124,6 @@ public final class ConstantsPing
 	public static final String EXTENSION_URL_POTENTIAL_FIX = "potential-fix";
 	public static final String EXTENSION_URL_MESSAGE = "message";
 
-	public static final String BPMN_EXECUTION_VARIABLE_TIMER_INTERVAL = "timerInterval";
-	public static final String BPMN_EXECUTION_VARIABLE_STOP_TIMER = "stopTimer";
-	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES = "downloadResourceSizeBytes";
-	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE = "downloadResource";
-	public static final String BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE = "downloadResourceReference";
-	private static final String BPMN_EXECUTION_VARIABLE_STATUS_CODE = "statusCode";
-	private static final String BPMN_EXECUTION_VARIABLE_ERROR = "error";
-	private static final String BPMN_EXECUTION_VARIABLE_ERROR_LIST = "errors";
-	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES = "downloadedBytes";
-	private static final String BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS = "downloadedDurationMillis";
-	public static final String BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER = "targetEndpointIdentifier";
-	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES = "uploadedBytes";
-	private static final String BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS = "uploadedDurationMillis";
-	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
-	public static final String BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
-	public static final String BPMN_EXECUTION_VARIABLE_PING_TASK_ID = "pingTaskId";
-
-	public static final String BPMN_ERROR_CODE_RESOURCE_DOWNLOAD_ERROR = "resourceDownloadError";
-	public static final String BPMN_ERROR_CODE_RESOURCE_UPLOAD_ERROR = "resourceUploadError";
-
-	public static final String PONG_ERROR_MESSAGE_CLEANUP_TIMEOUT = "Timeout while waiting for cleanup message";
-
 	public static final long DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT = 10000000L;
 
 	public static final MediaType DOWNLOAD_RESOURCE_MIME_TYPE = MediaType.APPLICATION_OCTET_STREAM_TYPE;
@@ -161,74 +139,4 @@ public final class ConstantsPing
 	public static final String POTENTIAL_FIX_URL_UNKNOWN_HOST = POTENTIAL_FIX_URL_BASE + "/unknown-host";
 
 	public static final String CLEANUP_ERROR_ACTION = "Deleting generated Binary resource from local DSF FHIR server.";
-
-	public static String getBpmnExecutionVariableStatusCode()
-	{
-		return BPMN_EXECUTION_VARIABLE_STATUS_CODE;
-	}
-
-	public static String getBpmnExecutionVariableStatusCode(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_STATUS_CODE + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableError()
-	{
-		return BPMN_EXECUTION_VARIABLE_ERROR;
-	}
-
-	public static String getBpmnExecutionVariableErrorMessage(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_ERROR + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableDownloadedBytes()
-	{
-		return BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES;
-	}
-
-	public static String getBpmnExecutionVariableDownloadedBytes(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_DOWNLOADED_BYTES + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableDownloadedDurationMillis()
-	{
-		return BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS;
-	}
-
-	public static String getBpmnExecutionVariableDownloadedDurationMillis(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_DOWNLOADED_DURATION_MILLIS + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableUploadedBytes()
-	{
-		return BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES;
-	}
-
-	public static String getBpmnExecutionVariableUploadedBytes(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_UPLOADED_BYTES + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableUploadedDurationMillis()
-	{
-		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS;
-	}
-
-	public static String getBpmnExecutionVariableUploadedDurationMillis(String correlationKey)
-	{
-		return BPMN_EXECUTION_VARIABLE_UPLOADED_DURATION_MILLIS + "_" + correlationKey;
-	}
-
-	public static String getBpmnExecutionVariableErrorList()
-	{
-		return BPMN_EXECUTION_VARIABLE_ERROR_LIST;
-	}
-
-	public static String getBpmnExecutionVariableErrorMessageList(String correlationKey)
-	{
-		return getBpmnExecutionVariableErrorList() + "_" + correlationKey;
-	}
 }

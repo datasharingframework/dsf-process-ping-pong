@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -32,7 +33,7 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 				.getFirstInputParameterStringValue(task, BpmnMessage.URL, BpmnMessage.Codes.CORRELATION_KEY).get();
 		String targetOrganizationIdentifierValue = task.getRequester().getIdentifier().getValue();
 		String targetEndpointIdentifierValue = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_PONG_TARGET_ENDPOINT_IDENTIFIER);
+				.getString(ExecutionVariables.PONG_TARGET_ENDPOINT_IDENTIFIER.getValue());
 
 		String targetEndpointAddress = api.getEndpointProvider().getEndpointAddress(targetEndpointIdentifierValue)
 				.orElseThrow(() ->

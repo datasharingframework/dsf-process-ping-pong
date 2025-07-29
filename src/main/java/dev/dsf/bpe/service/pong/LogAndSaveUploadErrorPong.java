@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -26,7 +27,7 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPong.class, startTask);
 
 		ProcessError error = ProcessError
-				.parse(variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_UPLOAD_ERROR));
+				.parse(variables.getString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue()));
 
 		ErrorListUtils.add(error, execution);
 

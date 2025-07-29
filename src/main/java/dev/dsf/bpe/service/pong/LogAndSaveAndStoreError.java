@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -29,7 +30,7 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 
 		ProcessError error = (ProcessError) delegateExecution
-				.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR);
+				.getVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue());
 
 		ErrorListUtils.add(error, delegateExecution);
 		PingStatusGenerator.updatePongStatusOutput(startTask, ErrorListUtils.getErrorMessageList(delegateExecution));

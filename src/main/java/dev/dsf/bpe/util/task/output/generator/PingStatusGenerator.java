@@ -583,9 +583,8 @@ public final class PingStatusGenerator
 
 	private static Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
 	{
-		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream()
-				.filter(extension ->
-						ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS.equals(extension.getUrl()))
+		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream().filter(
+				extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS.equals(extension.getUrl()))
 				.toList();
 		if (pingStatusExtensions.isEmpty())
 		{
@@ -612,8 +611,7 @@ public final class PingStatusGenerator
 						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem())
 								&& Stream.of(codes).anyMatch(code -> code.equals(coding.getCode())))
 						|| outputComponent.getExtension().stream()
-								.anyMatch(extension ->
-										ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS
+								.anyMatch(extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS
 										.equals(extension.getUrl())))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}

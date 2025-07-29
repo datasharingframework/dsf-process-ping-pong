@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -41,15 +42,14 @@ public class SavePong extends AbstractServiceDelegate
 				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS,
 				DecimalType.class);
 		optDownloadedDurationMillis.ifPresent(decimalType -> variables.setLong(
-				ConstantsPing.getBpmnExecutionVariableUploadedDurationMillis(correlationKey),
+				ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey),
 				decimalType.getValue().longValue()));
 
 		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
 				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES,
 				DecimalType.class);
-		optDownloadedBytes.ifPresent(
-				decimalType -> variables.setLong(ConstantsPing.getBpmnExecutionVariableUploadedBytes(correlationKey),
-						decimalType.getValue().longValue()));
+		optDownloadedBytes.ifPresent(decimalType -> variables.setLong(
+				ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
 
 		List<ProcessError> errorList = ErrorInputParser.parseInputs(pong);

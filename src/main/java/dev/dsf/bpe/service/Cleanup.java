@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.service.pong.CleanupPong;
 import dev.dsf.bpe.util.ErrorListUtils;
@@ -34,7 +35,7 @@ public class Cleanup
 		PingPongLogger logger = new PingPongLogger(CleanupPong.class, variables.getStartTask());
 		logger.debug("Cleaning up...");
 		String downloadResourceId = new IdType(
-				variables.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE)).getIdPart();
+				variables.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue())).getIdPart();
 		if (downloadResourceId != null)
 		{
 			try

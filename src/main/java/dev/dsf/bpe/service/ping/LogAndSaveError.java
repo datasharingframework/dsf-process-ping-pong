@@ -4,6 +4,7 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -26,7 +27,7 @@ public class LogAndSaveError extends AbstractServiceDelegate
 		Target target = variables.getTarget();
 
 		ProcessError error = (ProcessError) delegateExecution
-				.getVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_RESOURCE_DOWNLOAD_ERROR);
+				.getVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue());
 
 		ErrorListUtils.add(error, delegateExecution, target.getCorrelationKey());
 

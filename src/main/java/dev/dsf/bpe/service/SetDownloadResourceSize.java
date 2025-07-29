@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -28,7 +29,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(SetDownloadResourceSize.class, variables.getStartTask());
 		logger.debug("Setting download resource size...");
 
-		variables.setLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES,
+		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(),
 				getDownloadResourceSize(variables));
 
 		logger.debug("Set download resource size to " + maxDownloadResourceSizeBytes);

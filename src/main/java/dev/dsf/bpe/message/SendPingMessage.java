@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
@@ -40,9 +41,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
 		String downloadResourceReference = variables
-				.getString(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_REFERENCE);
-		long downloadResourceSizeBytes = variables
-				.getLong(ConstantsPing.BPMN_EXECUTION_VARIABLE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+				.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue());
+		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 
 		Stream<ParameterComponent> downloadResourceReferenceStream = downloadResourceReference == null ? Stream.empty()
 				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
@@ -65,7 +65,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 				additionalInputParameters);
 		if (taskId != null)
 		{
-			execution.setVariableLocal(ConstantsPing.BPMN_EXECUTION_VARIABLE_PING_TASK_ID, taskId.getIdPart());
+			execution.setVariableLocal(ExecutionVariables.PING_TASK_ID.getValue(), taskId.getIdPart());
 		}
 	}
 
@@ -87,8 +87,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 
 		try
 		{
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableError(), ProcessError.toString(error));
-			execution.setVariableLocal(ConstantsPing.getBpmnExecutionVariableStatusCode(),
+			execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
+			execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(),
 					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
 		}
 		catch (JsonProcessingException e)
