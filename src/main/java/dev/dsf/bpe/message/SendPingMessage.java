@@ -27,7 +27,6 @@ import dev.dsf.fhir.client.FhirWebserviceClient;
 
 public class SendPingMessage extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(SendPingMessage.class);
 	private IdType taskId;
 
 	public SendPingMessage(ProcessPluginApi api)

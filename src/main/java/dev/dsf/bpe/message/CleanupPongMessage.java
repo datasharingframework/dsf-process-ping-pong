@@ -21,8 +21,6 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class CleanupPongMessage extends AbstractTaskMessageSend
 {
-	private static final Logger logger = LoggerFactory.getLogger(CleanupPongMessage.class);
-
 	public CleanupPongMessage(ProcessPluginApi api)
 	{
 		super(api);
