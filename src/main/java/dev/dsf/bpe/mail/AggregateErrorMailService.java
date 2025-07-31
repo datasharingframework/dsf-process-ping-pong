@@ -71,7 +71,7 @@ public class AggregateErrorMailService
 
 		if (error != null && error.process() != null)
 		{
-			if (CodeSystem.DsfPingProcesses.Code.PING.getValue().equals(error.process()))
+			if (CodeSystem.DsfPingProcesses.Code.PING.equals(error.process()))
 			{
 				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
 				b.append('/');
