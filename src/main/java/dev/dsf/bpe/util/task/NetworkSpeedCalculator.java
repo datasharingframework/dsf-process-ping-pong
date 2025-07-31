@@ -44,7 +44,6 @@ public final class NetworkSpeedCalculator
 				BigDecimal megabytes = new BigDecimal(bytes).divide(BigDecimal.valueOf(1000000), RoundingMode.HALF_UP);
 				yield megabytes.divide(seconds, 2, RoundingMode.HALF_UP);
 			}
-			default -> BigDecimal.ZERO;
 		};
 	}
 }
