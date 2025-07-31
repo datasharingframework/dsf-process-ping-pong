@@ -22,7 +22,7 @@ public class SaveTimeoutError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		Target target = variables.getTarget();

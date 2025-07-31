@@ -4,6 +4,8 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -21,7 +23,7 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPong.class, startTask);

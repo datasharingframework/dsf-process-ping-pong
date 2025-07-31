@@ -22,23 +22,16 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(LogAndSaveSendError.class, variables.getStartTask());
 
 		String correlationKey = variables.getTarget().getCorrelationKey();
-		try
-		{
-			ProcessError error = ProcessError
-					.parse((String) execution.getVariableLocal(ExecutionVariables.ERROR.getValue()));
-			ErrorListUtils.add(error, execution, correlationKey);
-			variables.setLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), 0L);
-			variables.setLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey), 0L);
-			logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
-		}
-		catch (JsonProcessingException e)
-		{
-			throw new RuntimeException(e);
-		}
+		ProcessError error = ProcessError
+				.parse((String) execution.getVariableLocal(ExecutionVariables.ERROR.getValue()));
+		ErrorListUtils.add(error, execution, correlationKey);
+		variables.setLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), 0L);
+		variables.setLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey), 0L);
+		logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
 	}
 }

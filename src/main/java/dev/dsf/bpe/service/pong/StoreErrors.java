@@ -24,7 +24,7 @@ public class StoreErrors extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(StoreErrors.class, startTask);

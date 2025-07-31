@@ -74,26 +74,12 @@ public class ErrorListUtils
 		if (errorJson == null)
 		{
 			List<ProcessError> errors = new Vector<>();
-			try
-			{
-				execution.setVariable(variableName, ProcessError.toString(errors));
-			}
-			catch (JsonProcessingException e)
-			{
-				throw new RuntimeException(e);
-			}
+			execution.setVariable(variableName, ProcessError.toString(errors));
 			return errors;
 		}
 		else
 		{
-			try
-			{
-				return ProcessError.parseList(errorJson);
-			}
-			catch (JsonProcessingException e)
-			{
-				throw new RuntimeException(e);
-			}
+			return ProcessError.parseList(errorJson);
 		}
 	}
 
@@ -118,13 +104,6 @@ public class ErrorListUtils
 
 	private static void saveErrorList(List<ProcessError> errors, String variableName, DelegateExecution execution)
 	{
-		try
-		{
-			execution.setVariable(variableName, ProcessError.toString(errors));
-		}
-		catch (JsonProcessingException e)
-		{
-			throw new RuntimeException(e);
-		}
+		execution.setVariable(variableName, ProcessError.toString(errors));
 	}
 }

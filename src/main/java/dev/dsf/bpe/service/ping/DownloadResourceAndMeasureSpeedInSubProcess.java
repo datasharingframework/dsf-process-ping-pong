@@ -25,7 +25,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(DownloadResourceAndMeasureSpeedInSubProcess.class,
 				variables.getStartTask());

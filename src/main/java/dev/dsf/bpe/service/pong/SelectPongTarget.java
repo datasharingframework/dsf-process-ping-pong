@@ -22,7 +22,7 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(SelectPingTargets.class, variables.getStartTask());
 		logger.debug("Selecting pong targets...");

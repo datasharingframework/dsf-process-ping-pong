@@ -28,7 +28,7 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(CheckPingTaskStatus.class, variables.getStartTask());
 		logger.debug("Checking status of ping task...");

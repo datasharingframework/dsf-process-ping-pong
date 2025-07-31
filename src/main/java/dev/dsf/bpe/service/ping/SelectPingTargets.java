@@ -48,7 +48,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables)

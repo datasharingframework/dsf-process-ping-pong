@@ -22,7 +22,7 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(SetEndpointIdentifier.class, variables.getStartTask());
 		logger.debug("Setting endpoint identifier...");

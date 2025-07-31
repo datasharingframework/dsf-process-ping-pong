@@ -21,7 +21,7 @@ public class LogAndSaveError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(LogAndSaveError.class, variables.getStartTask());
 		Target target = variables.getTarget();

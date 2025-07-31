@@ -20,7 +20,7 @@ public class LogPing extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(LogPing.class, variables.getStartTask());
 

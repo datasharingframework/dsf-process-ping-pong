@@ -3,6 +3,8 @@ package dev.dsf.bpe.service.pong;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -20,7 +22,7 @@ public class GenerateAndStoreResourcePong extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		delegate.doExecute(delegateExecution, variables);
 	}

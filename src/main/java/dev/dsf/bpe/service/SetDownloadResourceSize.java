@@ -25,7 +25,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(SetDownloadResourceSize.class, variables.getStartTask());
 		logger.debug("Setting download resource size...");

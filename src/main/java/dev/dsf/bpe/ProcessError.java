@@ -83,29 +83,57 @@ public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.
 		return new ProcessError(processCode, stepCode, action, potentialFixUrl, message);
 	}
 
-	public static String toString(List<ProcessError> errors) throws JsonProcessingException
+	public static String toString(List<ProcessError> errors)
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(errors);
-	}
-
-	public static String toString(ProcessError error) throws JsonProcessingException
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(error);
-	}
-
-	public static List<ProcessError> parseList(String json) throws JsonProcessingException
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, new TypeReference<List<ProcessError>>()
+		try
 		{
-		});
+			ObjectMapper objectMapper = new ObjectMapper();
+			return objectMapper.writeValueAsString(errors);
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new RuntimeException(e);
+		}
 	}
 
-	public static ProcessError parse(String json) throws JsonProcessingException
+	public static String toString(ProcessError error)
 	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, ProcessError.class);
+		try
+		{
+			ObjectMapper objectMapper = new ObjectMapper();
+			return objectMapper.writeValueAsString(error);
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static List<ProcessError> parseList(String json)
+	{
+		try
+		{
+			ObjectMapper objectMapper = new ObjectMapper();
+			return objectMapper.readValue(json, new TypeReference<>()
+			{
+			});
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new IllegalArgumentException("Unable to parse [" + json + "] to List<ProcessError>", e);
+		}
+	}
+
+	public static ProcessError parse(String json)
+	{
+		try
+		{
+			ObjectMapper objectMapper = new ObjectMapper();
+			return objectMapper.readValue(json, ProcessError.class);
+		}
+		catch (JsonProcessingException e)
+		{
+			throw new IllegalArgumentException("Unable to parse [" + json + "] to ProcessError", e);
+		}
 	}
 }

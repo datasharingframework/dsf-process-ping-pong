@@ -22,7 +22,7 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		String timerInterval = getTimerInterval(variables);
 		logger.debug("Setting variable '{}' to {}", ExecutionVariables.TIMER_INTERVAL.getValue(), timerInterval);

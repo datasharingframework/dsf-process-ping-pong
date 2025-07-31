@@ -86,16 +86,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 		ProcessError error = SendTaskErrorConverter.convert(exception,
 				"Sending ping message to " + target.getEndpointUrl());
 
-		try
-		{
-			execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
-			execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(),
-					CodeSystem.DsfPing.Code.ERROR.getValue());
-		}
-		catch (JsonProcessingException e)
-		{
-			throw new RuntimeException(e);
-		}
+		execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
+		execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
 	}

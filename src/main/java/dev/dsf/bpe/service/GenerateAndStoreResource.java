@@ -4,6 +4,8 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
@@ -27,7 +29,7 @@ public class GenerateAndStoreResource
 		this.process = process;
 	}
 
-	public void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError, Exception
+	public void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(GenerateAndStoreResource.class, variables.getStartTask());
 		logger.debug("Generating resource...");

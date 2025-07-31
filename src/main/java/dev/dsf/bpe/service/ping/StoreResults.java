@@ -48,7 +48,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError, Exception
+	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		PingPongLogger logger = new PingPongLogger(StoreResults.class, variables.getStartTask());
 
