@@ -74,7 +74,7 @@ public class TaskProfileTest
 			validationRule.getValidationSupport());
 
 	@Test
-	public void testTaskStartAutostartProcessProfileValid() throws Exception
+	public void testTaskStartAutostartProcessProfileValid()
 	{
 		Task task = createValidTaskStartAutostartProcess();
 
@@ -86,7 +86,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartAutostartProcessProfileValidWithTargetEndpoints() throws Exception
+	public void testTaskStartAutostartProcessProfileValidWithTargetEndpoints()
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput()
@@ -103,7 +103,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartAutostartProcessProfileValidTimerInterval() throws Exception
+	public void testTaskStartAutostartProcessProfileValidTimerInterval()
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput().setValue(new StringType("PT24H")).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
@@ -117,7 +117,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartAutostartProcessProfileNotValidTimerInterval() throws Exception
+	public void testTaskStartAutostartProcessProfileNotValidTimerInterval()
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput().setValue(new StringType("invalid_duration")).getType().addCoding()
@@ -153,7 +153,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStopAutostartProcessProfileValid() throws Exception
+	public void testTaskStopAutostartProcessProfileValid()
 	{
 		Task task = createValidTaskStopAutostartProcess();
 
@@ -185,7 +185,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValid() throws Exception
+	public void testTaskStartPingProcessProfileValid()
 	{
 		Task task = createValidTaskStartPingProcess();
 
@@ -197,7 +197,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValidWithErrorMessages() throws Exception
+	public void testTaskStartPingProcessProfileValidWithErrorMessages()
 	{
 		Task task = createValidTaskStartPingProcess();
 
@@ -222,7 +222,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValidWithTargetEndpoints() throws Exception
+	public void testTaskStartPingProcessProfileValidWithTargetEndpoints()
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.addInput()
@@ -239,7 +239,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileValidWithBuisnessKeyOutput() throws Exception
+	public void testTaskStartPingProcessProfileValidWithBuisnessKeyOutput()
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.addOutput().setValue(new StringType(UUID.randomUUID().toString())).getType()
@@ -340,7 +340,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileNotValid1() throws Exception
+	public void testTaskStartPingProcessProfileNotValid1()
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.setInstantiatesCanonical("http://dsf.dev/bpe/Process/ping/0.1.0"); // not valid
@@ -353,7 +353,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileNotValid2() throws Exception
+	public void testTaskStartPingProcessProfileNotValid2()
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.setIntent(TaskIntent.FILLERORDER);
@@ -366,7 +366,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskStartPingProcessProfileNotValid3() throws Exception
+	public void testTaskStartPingProcessProfileNotValid3()
 	{
 		Task task = createValidTaskStartPingProcess();
 		task.setAuthoredOn(null);
@@ -400,7 +400,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingValid() throws Exception
+	public void testTaskPingValid()
 	{
 		Task task = createValidTaskPing();
 
@@ -522,7 +522,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongValid() throws Exception
+	public void testTaskPongValid()
 	{
 		Task task = createValidTaskPong();
 
