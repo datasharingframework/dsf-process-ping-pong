@@ -10,6 +10,7 @@ import javax.net.ssl.SSLHandshakeException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import jakarta.ws.rs.ProcessingException;
@@ -63,45 +64,44 @@ public final class SendTaskErrorConverter
 
 	private static BiFunction<SSLHandshakeException, String, ProcessError> convertSSLHandshakeException()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action,
-				ConstantsPing.POTENTIAL_FIX_URL_ERROR_SSL, e.getMessage());
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_ERROR_SSL,
+				e.getMessage());
 	}
 
 	private static BiFunction<Exception, String, ProcessError> convertExceptionFallback()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action, null, e.getMessage());
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, null, e.getMessage());
 	}
 
 	private static BiFunction<ConnectTimeoutException, String, ProcessError> convertConnectTimeoutException()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action,
-				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT, e.getMessage());
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT,
+				e.getMessage());
 	}
 
 	private static BiFunction<WebApplicationException, String, ProcessError> convertWebApplicationException()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action,
-				ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 				"Response from remote DSF FHIR server: " + e.getResponse().getStatus() + " "
 						+ Response.Status.fromStatusCode(e.getResponse().getStatus()).toString());
 	}
 
 	private static BiFunction<HttpHostConnectException, String, ProcessError> convertHttpHostConnectException()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action,
-				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED, e.getMessage());
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED,
+				e.getMessage());
 	}
 
 	private static BiFunction<UnknownHostException, String, ProcessError> convertUnknownHostException()
 	{
-		return (e, action) -> new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, action,
-				ConstantsPing.POTENTIAL_FIX_URL_UNKNOWN_HOST, e.getMessage());
+		return (e, action) -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_UNKNOWN_HOST,
+				e.getMessage());
 	}
 
 	private static <T extends Throwable> ProcessError applyConverter(T ex, String action)

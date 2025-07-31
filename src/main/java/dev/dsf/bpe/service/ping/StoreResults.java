@@ -10,6 +10,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -28,9 +29,10 @@ import dev.dsf.bpe.v1.variables.Variables;
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
 	private final AggregateErrorMailService errorMailService;
-	private final String networkSpeedUnit;
+	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public StoreResults(ProcessPluginApi api, AggregateErrorMailService errorMailService, String networkSpeedUnit)
+	public StoreResults(ProcessPluginApi api, AggregateErrorMailService errorMailService,
+			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
@@ -62,8 +64,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			String correlationKey = target.getCorrelationKey();
 
 			List<ProcessError> errors = ErrorListUtils.getErrorMessageList(execution, correlationKey);
-			String statusCode = errors.isEmpty() ? ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED
-					: ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR;
+			CodeSystem.DsfPingStatus.Code statusCode = errors.isEmpty() ? CodeSystem.DsfPingStatus.Code.COMPLETED
+					: CodeSystem.DsfPingStatus.Code.ERROR;
 			long downloadResourceSizeBytes = variables
 					.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 			List<ProcessError> errorMessageList = ErrorListUtils.getErrorMessageList(execution, correlationKey);

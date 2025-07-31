@@ -45,67 +45,6 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
 
-	public static final String CODESYSTEM_DSF_PING = "http://dsf.dev/fhir/CodeSystem/ping-v2";
-	public static final String CODESYSTEM_DSF_PING_VALUE_PING_STATUS = "ping-status";
-	public static final String CODESYSTEM_DSF_PING_VALUE_PONG_STATUS = "pong-status";
-	public static final String CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER = "endpoint-identifier";
-	public static final String CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS = "target-endpoints";
-	public static final String CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL = "timer-interval";
-	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES = "download-resource-size-bytes";
-	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS = "downloaded-duration-millis";
-	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES = "downloaded-bytes";
-	public static final String CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE = "download-resource-reference";
-	public static final String CODESYSTEM_DSF_PING_VALUE_ERROR = "error";
-
-	public static final String CODESYSTEM_DSF_PING_STATUS = "http://dsf.dev/fhir/CodeSystem/ping-status-v2";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED = "completed";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_PENDING = "pending";
-	public static final String CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR = "error";
-
-	public static final String CODESYSTEM_DSF_PING_PROCESSES = "http://dsf.dev/fhir/CodeSystem/ping-processes-v2";
-	public static final String CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING = "ping";
-	public static final String CODESYSTEM_DSF_PING_PROCESSES_VALUE_PONG = "pong";
-
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS = "http://dsf.dev/fhir/CodeSystem/ping-process-steps-v2";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SET_DOWNLOAD_RESOURCE_SIZE = "set-download-resource-size";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE = "generate-and-store-resource";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_ERROR = "log-and-save-error";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SELECT_TARGETS = "select-targets";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING = "ping";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_SEND_ERROR = "log-and-save-send-error";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_NO_RESPONSE = "log-and-save-no-response";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SAVE_PONG = "save-pong";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED = "download-resource-and-measure-speed";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_PONG = "cleanup-pong";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP = "cleanup";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_RESULTS = "store-results";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_PING = "log-ping";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SET_ENDPOINT_IDENTIFIER = "set-endpoint-identifier";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SELECT_PONG_TARGET = "select-pong-target";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_DOWNLOAD_SPEED = "store-download-speed";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_LOG_AND_SAVE_AND_STORE_ERROR = "log-and-save-and-store-error";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_ESTIMATE_CLEANUP_TIMER_DURATION = "estimate-cleanup-timer-duration";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG = "pong";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_UPLOAD_SPEED = "store-upload-speed";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_SAVE_TIMEOUT_ERROR = "save-timeout-error";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_STORE_ERRORS = "store-errors";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CLEANUP_TIMER_CATCH_EVENT = "cleanup-timer-catch-event";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PONG_MESSAGE_TIMEOUT_TIMER_CATCH_EVENT = "pong-timer-catch-event";
-	public static final String CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_CHECK_PING_TASK_STATUS = "check-ping-task-status";
-
-	public static final String CODESYSTEM_DSF_PING_UNITS = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
-	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND = "bits-per-second";
-	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND = "bytes-per-second";
-	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND = "megabits-per-second";
-	public static final String CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND = "megabytes-per-second";
-
-	public static final List<String> CODESYSTEM_DSF_PING_UNITS_VALUES = List.of(
-			CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND, CODESYSTEM_DSF_PING_UNITS_VALUE_BYTES_PER_SECOND,
-			CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABITS_PER_SECOND, CODESYSTEM_DSF_PING_UNITS_VALUE_MEGABYTES_PER_SECOND);
-
-	public static final String CODESYSTEM_READ_ACCESS_TAG = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
-	public static final String CODESYSTEM_READ_ACCESS_TAG_VALUE_ALL = "ALL";
-
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2";
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-error";

@@ -13,8 +13,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public record ProcessError(String process, String processStep, String action, String potentialFixUrl, String message)
-		implements Serializable
+import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
+
+public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.DsfPingProcessSteps.Code processStep,
+		String action, String potentialFixUrl, String message) implements Serializable
 {
 	@Override
 	public boolean equals(Object obj)
@@ -37,9 +39,9 @@ public record ProcessError(String process, String processStep, String action, St
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES, error.process(), null));
+				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, error.process().getValue(), null));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS, error.process(), null));
+				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, error.process().getValue(), null));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(error.action()));
 		if (Objects.nonNull(error.potentialFixUrl))
 		{
@@ -75,7 +77,10 @@ public record ProcessError(String process, String processStep, String action, St
 		Objects.requireNonNull(messageExtension);
 		String message = ((StringType) messageExtension.getValue()).getValue();
 
-		return new ProcessError(process, processStep, action, potentialFixUrl, message);
+		CodeSystem.DsfPingProcesses.Code processCode = CodeSystem.DsfPingProcesses.Code.ofValue(process);
+		CodeSystem.DsfPingProcessSteps.Code stepCode = CodeSystem.DsfPingProcessSteps.Code.ofValue(processStep);
+
+		return new ProcessError(processCode, stepCode, action, potentialFixUrl, message);
 	}
 
 	public static String toString(List<ProcessError> errors) throws JsonProcessingException

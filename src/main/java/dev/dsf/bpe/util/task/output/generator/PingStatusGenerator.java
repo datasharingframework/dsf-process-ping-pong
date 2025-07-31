@@ -15,6 +15,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.TaskOutputComponent;
 import org.hl7.fhir.r4.model.Type;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
@@ -30,7 +31,7 @@ public final class PingStatusGenerator
 	public static Task updatePongStatusOutput(Task task, List<ProcessError> errors)
 	{
 		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
+				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
 		if (pongStatusOutputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), errors));
@@ -70,11 +71,10 @@ public final class PingStatusGenerator
 		return output;
 	}
 
-
-	public static Task updatePongStatusOutput(Task task, String statusCode)
+	public static Task updatePongStatusOutput(Task task, CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
+				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
 		if (pongStatusOutputs.isEmpty())
 		{
 			task.addOutput(updatePongStatusOutput(new TaskOutputComponent(), statusCode));
@@ -94,15 +94,16 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent, String statusCode)
+	public static TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent,
+			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (hasStatusCodeSet(outputComponent))
 		{
-			updateStatus(outputComponent, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode);
+			updateStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue());
 		}
 		else
 		{
-			addStatus(outputComponent, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode);
+			addStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue());
 		}
 
 		return outputComponent;
@@ -111,7 +112,7 @@ public final class PingStatusGenerator
 	public static Task updatePongStatusOutput(Task task, Target target)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
+				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutput(new TaskOutputComponent(), target));
@@ -144,10 +145,11 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed, String networkSpeedUnit)
+	public static Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed,
+			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
+				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputDownloadSpeed(new TaskOutputComponent(), downloadSpeed, networkSpeedUnit));
@@ -168,24 +170,25 @@ public final class PingStatusGenerator
 	}
 
 	public static TaskOutputComponent updateStatusOutputDownloadSpeed(TaskOutputComponent outputComponent,
-			BigDecimal downloadSpeed, String networkSpeedUnit)
+			BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit);
+			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.getValue());
 		}
 		else
 		{
-			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit);
+			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.getValue());
 		}
 
 		return outputComponent;
 	}
 
-	public static Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed, String networkSpeedUnit)
+	public static Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed,
+			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS);
+				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
 		if (outputs.isEmpty())
 		{
 			task.addOutput(updateStatusOutputUploadSpeed(new TaskOutputComponent(), uploadSpeed, networkSpeedUnit));
@@ -206,15 +209,15 @@ public final class PingStatusGenerator
 	}
 
 	public static TaskOutputComponent updateStatusOutputUploadSpeed(TaskOutputComponent outputComponent,
-			BigDecimal uploadSpeed, String networkSpeedUnit)
+			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit);
+			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.getValue());
 		}
 		else
 		{
-			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit);
+			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.getValue());
 		}
 
 		return outputComponent;
@@ -237,10 +240,8 @@ public final class PingStatusGenerator
 		Type valueType = outputComponent.getValue();
 		List<Coding> outputTypeCodings = outputComponent.getType().getCoding();
 
-		return (valueType instanceof Coding coding
-				&& ConstantsPing.CODESYSTEM_DSF_PING_STATUS.equals(coding.getSystem()))
-				|| outputTypeCodings.stream()
-						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem()));
+		return (valueType instanceof Coding coding && CodeSystem.DsfPingStatus.URL.equals(coding.getSystem()))
+				|| outputTypeCodings.stream().anyMatch(coding -> CodeSystem.DsfPing.URL.equals(coding.getSystem()));
 	}
 
 	private static boolean hasDownloadSpeedSet(TaskOutputComponent outputComponent)
@@ -251,36 +252,37 @@ public final class PingStatusGenerator
 		return downloadSpeedExtension != null;
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String unit)
+	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
+			BigDecimal downloadSpeed, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code unit)
 	{
 		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode,
+	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errors, null,
-				null, null);
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
+				null, null, null);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, String statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit)
+	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
+			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
+			CodeSystem.DsfPingUnits.Code unit)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PING_STATUS, statusCode, errors,
-				downloadSpeed, uploadSpeed, unit);
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
+				downloadSpeed, uploadSpeed, unit.getValue());
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode)
+	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		return createPongStatusOutput(target, statusCode, null);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, String statusCode,
+	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_PONG_STATUS, statusCode, errors, null,
-				null, null);
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue(), errors,
+				null, null, null);
 	}
 
 	private static TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
@@ -300,9 +302,8 @@ public final class PingStatusGenerator
 	{
 		if (outputParameter != null && statusCode != null)
 		{
-			outputComponent
-					.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
-			outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
+			outputComponent.setValue(new Coding().setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode));
+			outputComponent.getType().addCoding().setSystem(CodeSystem.DsfPing.URL).setCode(outputParameter);
 			sortStatusOutputExtensions(outputComponent);
 		}
 
@@ -315,31 +316,29 @@ public final class PingStatusGenerator
 		Type valueType = outputComponent.getValue();
 		if (valueType instanceof Coding coding)
 		{
-			coding.setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode);
+			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode);
 		}
 		else
 		{
-			outputComponent
-					.setValue(new Coding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING_STATUS).setCode(statusCode));
+			outputComponent.setValue(new Coding().setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode));
 		}
 
 		List<Coding> outputTypeCodings = outputComponent.getType().getCoding();
 		if (outputTypeCodings.isEmpty())
 		{
-			outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
+			outputComponent.getType().addCoding().setSystem(CodeSystem.DsfPing.URL).setCode(outputParameter);
 		}
 		else
 		{
 			if (outputTypeCodings.size() == 1)
 			{
 				Coding coding = outputTypeCodings.get(0);
-				coding.setSystem(ConstantsPing.CODESYSTEM_DSF_PING).setCode(outputParameter);
+				coding.setSystem(CodeSystem.DsfPing.URL).setCode(outputParameter);
 			}
 			else
 			{
 				outputComponent.getType().setCoding(null);
-				outputComponent.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-						.setCode(outputParameter);
+				outputComponent.getType().addCoding().setSystem(CodeSystem.DsfPing.URL).setCode(outputParameter);
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
@@ -466,7 +465,7 @@ public final class PingStatusGenerator
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 					.setValue(new DecimalType(downloadSpeed));
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
-					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
+					.setValue(new Coding(CodeSystem.DsfPingUnits.URL, unit, null));
 		}
 		sortStatusOutputExtensions(outputComponent);
 
@@ -491,7 +490,7 @@ public final class PingStatusGenerator
 					extensions.add(new Extension(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE,
 							new DecimalType(downloadSpeed)));
 					extensions.add(new Extension(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT,
-							new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null)));
+							new Coding(CodeSystem.DsfPingUnits.URL, unit, null)));
 				}
 			}
 			else
@@ -502,7 +501,7 @@ public final class PingStatusGenerator
 				networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 						.setValue(new DecimalType(downloadSpeed));
 				networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
-						.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
+						.setValue(new Coding(CodeSystem.DsfPingUnits.URL, unit, null));
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
@@ -522,7 +521,7 @@ public final class PingStatusGenerator
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 					.setValue(new DecimalType(uploadSpeed));
 			networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
-					.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
+					.setValue(new Coding(CodeSystem.DsfPingUnits.URL, unit, null));
 		}
 		sortStatusOutputExtensions(outputComponent);
 
@@ -547,7 +546,7 @@ public final class PingStatusGenerator
 					extensions.add(new Extension(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE,
 							new DecimalType(uploadSpeed)));
 					extensions.add(new Extension(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT,
-							new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null)));
+							new Coding(CodeSystem.DsfPingUnits.URL, unit, null)));
 				}
 			}
 			else
@@ -558,7 +557,7 @@ public final class PingStatusGenerator
 				networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_VALUE)
 						.setValue(new DecimalType(uploadSpeed));
 				networkSpeed.addExtension().setUrl(ConstantsPing.EXTENSION_URL_NETWORK_SPEED_UNIT)
-						.setValue(new Coding(ConstantsPing.CODESYSTEM_DSF_PING_UNITS, unit, null));
+						.setValue(new Coding(CodeSystem.DsfPingUnits.URL, unit, null));
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
@@ -608,7 +607,7 @@ public final class PingStatusGenerator
 	{
 		return task.getOutput().stream()
 				.filter(outputComponent -> outputComponent.getType().getCoding().stream()
-						.anyMatch(coding -> ConstantsPing.CODESYSTEM_DSF_PING.equals(coding.getSystem())
+						.anyMatch(coding -> CodeSystem.DsfPing.URL.equals(coding.getSystem())
 								&& Stream.of(codes).anyMatch(code -> code.equals(coding.getCode())))
 						|| outputComponent.getExtension().stream()
 								.anyMatch(extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS

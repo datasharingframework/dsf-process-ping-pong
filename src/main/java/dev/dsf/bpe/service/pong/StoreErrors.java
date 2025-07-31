@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
@@ -34,12 +35,11 @@ public class StoreErrors extends AbstractServiceDelegate
 
 		if (!errors.isEmpty())
 		{
-			PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
+			PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
 		}
 		else
 		{
-			PingStatusGenerator.updatePongStatusOutput(startTask,
-					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED);
+			PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.COMPLETED);
 		}
 
 		variables.updateTask(startTask);

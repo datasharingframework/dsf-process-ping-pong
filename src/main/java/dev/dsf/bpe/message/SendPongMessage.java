@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -98,9 +99,8 @@ public class SendPongMessage extends AbstractTaskMessageSend
 				"Sending pong message to " + target.getEndpointUrl());
 
 		ErrorListUtils.add(error, execution);
-		PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
-		variables.setString(ExecutionVariables.STATUS_CODE.getValue(),
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
+		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
+		variables.setString(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
 		variables.updateTask(startTask);
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());

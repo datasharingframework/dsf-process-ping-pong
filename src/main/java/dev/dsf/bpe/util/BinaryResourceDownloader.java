@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -21,9 +22,9 @@ import jakarta.ws.rs.WebApplicationException;
 public class BinaryResourceDownloader
 {
 	private final PingPongLogger logger;
-	private final String process;
+	private final CodeSystem.DsfPingProcesses.Code process;
 
-	public BinaryResourceDownloader(PingPongLogger logger, String process)
+	public BinaryResourceDownloader(PingPongLogger logger, CodeSystem.DsfPingProcesses.Code process)
 	{
 		this.logger = logger;
 		this.process = process;
@@ -36,13 +37,13 @@ public class BinaryResourceDownloader
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 
 		Optional<Reference> optDownloadResourceReference = api.getTaskHelper().getFirstInputParameterValue(task,
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE,
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE.getValue(),
 				Reference.class);
 
 		if (optDownloadResourceReference.isEmpty())
 		{
 			ProcessError error = new ProcessError(process,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
+					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
 					"Extracting binary resource reference from task " + task.getIdElement().getValue(), null,
 					"No reference provided in task");
 			downloadResult = new DownloadResult(error);
@@ -80,8 +81,8 @@ public class BinaryResourceDownloader
 				binaryResourceInputStream.close();
 				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
-						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-						action, null, errorMessage);
+						CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action, null,
+						errorMessage);
 				logger.error("Encountered an error while downloading resource: {}", errorMessage);
 				downloadResult = new DownloadResult(error);
 			}
@@ -90,7 +91,7 @@ public class BinaryResourceDownloader
 		{
 			String errorMessage = (e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage()).trim();
 			ProcessError error = new ProcessError(process,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
+					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP, errorMessage);
 			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
@@ -101,8 +102,8 @@ public class BinaryResourceDownloader
 			{
 				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
-						ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-						action, ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT, errorMessage);
+						CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
+						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT, errorMessage);
 				logger.error("Encountered an error while downloading resource: {}", errorMessage);
 				downloadResult = new DownloadResult(error);
 			}
@@ -115,8 +116,8 @@ public class BinaryResourceDownloader
 		{
 			String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 			ProcessError error = new ProcessError(process,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
-					null, errorMessage);
+					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action, null,
+					errorMessage);
 			logger.error("Encountered an error while downloading resource: {}", errorMessage);
 			downloadResult = new DownloadResult(error);
 		}

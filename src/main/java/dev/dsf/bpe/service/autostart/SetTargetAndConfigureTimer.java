@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -36,8 +37,8 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 	private String getTimerInterval(Variables variables)
 	{
 		return api.getTaskHelper()
-				.getFirstInputParameterStringValue(variables.getStartTask(), ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL)
+				.getFirstInputParameterStringValue(variables.getStartTask(), CodeSystem.DsfPing.URL,
+						CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue())
 				.orElse(ConstantsPing.TIMER_INTERVAL_DEFAULT_VALUE);
 	}
 }

@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 
@@ -29,8 +30,7 @@ public final class ErrorOutputComponentGenerator
 	{
 		Task.TaskOutputComponent param = new Task.TaskOutputComponent();
 
-		param.getType().addCoding(
-				new Coding(ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ERROR, null));
+		param.getType().addCoding(new Coding(CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ERROR.getValue(), null));
 		param.addExtension(ProcessError.toExtension(error));
 		Extension dataAbsentReason = new Extension()
 				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")

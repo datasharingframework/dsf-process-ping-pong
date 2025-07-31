@@ -4,6 +4,7 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
@@ -36,8 +37,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(logger,
-				ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING)
-				.download(variables, api, task, maxDownloadSizeBytes);
+				CodeSystem.DsfPingProcesses.Code.PING).download(variables, api, task, maxDownloadSizeBytes);
 
 		if (downloadResult.getError() == null)
 		{

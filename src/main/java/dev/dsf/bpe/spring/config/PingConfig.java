@@ -1,13 +1,20 @@
 package dev.dsf.bpe.spring.config;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.convert.converter.ConverterRegistry;
+import org.springframework.core.convert.support.DefaultConversionService;
 
-import dev.dsf.bpe.listener.PingPongDeploymentStateListener;
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
@@ -38,6 +45,7 @@ import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
+import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 
@@ -67,14 +75,14 @@ public class PingConfig
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabits-per-second}")
-	private String networkSpeedUnit;
+	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public String getNetworkSpeedUnit()
+	public CodeSystem.DsfPingUnits.Code getNetworkSpeedUnit()
 	{
 		return networkSpeedUnit;
 	}
 
-	public void setNetworkSpeedUnit(String networkSpeedUnit)
+	public void setNetworkSpeedUnit(CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		this.networkSpeedUnit = networkSpeedUnit;
 	}
@@ -268,13 +276,6 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public PingPongDeploymentStateListener pingPongDeploymentStateListener()
-	{
-		return new PingPongDeploymentStateListener(this);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreDownloadSpeed storeDownloadSpeed()
 	{
 		return new StoreDownloadSpeed(api, networkSpeedUnit);
@@ -327,5 +328,14 @@ public class PingConfig
 	public LogAndSaveUploadErrorPong logAndSaveUploadErrorPong()
 	{
 		return new LogAndSaveUploadErrorPong(api);
+	}
+
+	@Bean
+	public static ConversionService conversionService()
+	{
+		DefaultConversionService conversionService = new DefaultConversionService();
+		DefaultConversionService.addDefaultConverters(conversionService);
+		conversionService.addConverter(new CodeSystemDsfPingUnitsConverter());
+		return conversionService;
 	}
 }

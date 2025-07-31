@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -36,8 +37,8 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 	private String getEndpointIdentifierValue(Task task)
 	{
 		return api.getTaskHelper()
-				.getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER, Reference.class)
+				.getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
+						CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue(), Reference.class)
 				.map(Reference::getIdentifier).map(Identifier::getValue).get();
 	}
 }

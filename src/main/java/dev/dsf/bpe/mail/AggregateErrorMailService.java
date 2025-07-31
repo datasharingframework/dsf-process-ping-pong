@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -71,7 +72,7 @@ public class AggregateErrorMailService
 
 		if (error != null && error.process() != null)
 		{
-			if (ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING.equals(error.process()))
+			if (CodeSystem.DsfPingProcesses.Code.PING.getValue().equals(error.process()))
 			{
 				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
 				b.append('/');

@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -38,8 +39,8 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 	private long getDownloadResourceSize(Variables variables)
 	{
 		Optional<DecimalType> downloadResourceSizeType = api.getTaskHelper().getFirstInputParameterValue(
-				variables.getStartTask(), ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES, DecimalType.class);
+				variables.getStartTask(), CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), DecimalType.class);
 
 		return downloadResourceSizeType.map(decimalType -> decimalType.getValue().longValue()).orElseGet(
 				() -> Math.min(maxDownloadResourceSizeBytes, ConstantsPing.DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT));

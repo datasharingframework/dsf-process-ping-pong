@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -39,15 +40,14 @@ public class SavePong extends AbstractServiceDelegate
 		Task pong = variables.getLatestTask();
 
 		Optional<DecimalType> optDownloadedDurationMillis = api.getTaskHelper().getFirstInputParameterValue(pong,
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS,
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(),
 				DecimalType.class);
 		optDownloadedDurationMillis.ifPresent(decimalType -> variables.setLong(
 				ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey),
 				decimalType.getValue().longValue()));
 
 		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES,
-				DecimalType.class);
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);
 		optDownloadedBytes.ifPresent(decimalType -> variables.setLong(
 				ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 

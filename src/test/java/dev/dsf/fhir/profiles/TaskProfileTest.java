@@ -31,6 +31,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
@@ -91,8 +92,8 @@ public class TaskProfileTest
 		task.addInput()
 				.setValue(new StringType(
 						"Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|endpoint.target.org"))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -105,9 +106,8 @@ public class TaskProfileTest
 	public void testTaskStartAutostartProcessProfileValidTimerInterval() throws Exception
 	{
 		Task task = createValidTaskStartAutostartProcess();
-		task.addInput().setValue(new StringType("PT24H")).getType().addCoding()
-				.setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL);
+		task.addInput().setValue(new StringType("PT24H")).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -121,8 +121,7 @@ public class TaskProfileTest
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput().setValue(new StringType("invalid_duration")).getType().addCoding()
-				.setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL);
+				.setSystem(CodeSystem.DsfPing.URL).setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -216,9 +215,8 @@ public class TaskProfileTest
 		List<ProcessError> errors = new ArrayList<>();
 		for (int i = 0; i < amount; i++)
 		{
-			errors.add(new ProcessError(ConstantsPing.CODESYSTEM_DSF_PING_PROCESSES_VALUE_PING,
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_PING, UUID.randomUUID().toString(), null,
-					UUID.randomUUID().toString()));
+			errors.add(new ProcessError(CodeSystem.DsfPingProcesses.Code.PING, CodeSystem.DsfPingProcessSteps.Code.PING,
+					UUID.randomUUID().toString(), null, UUID.randomUUID().toString()));
 		}
 		return errors;
 	}
@@ -230,8 +228,8 @@ public class TaskProfileTest
 		task.addInput()
 				.setValue(new StringType(
 						"Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|endpoint.target.org"))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -287,8 +285,8 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR, processErrors(5)));
+		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.ERROR,
+				processErrors(5)));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -331,9 +329,8 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(PingStatusGenerator.createPingStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED, BigDecimal.ZERO, BigDecimal.ZERO,
-				ConstantsPing.CODESYSTEM_DSF_PING_UNITS_VALUE_BITS_PER_SECOND));
+		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED,
+				BigDecimal.ZERO, BigDecimal.ZERO, CodeSystem.DsfPingUnits.Code.BITS_PER_SECOND));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -396,8 +393,8 @@ public class TaskProfileTest
 
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
-		task.addInput().setValue(new DecimalType(1)).getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES);
+		task.addInput().setValue(new DecimalType(1)).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 
 		return task;
 	}
@@ -444,8 +441,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED));
+		task.addOutput(PingStatusGenerator.createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -485,8 +481,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(PingStatusGenerator.createPongStatusOutput(target,
-				ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_COMPLETED));
+		task.addOutput(PingStatusGenerator.createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000));
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
@@ -520,8 +515,8 @@ public class TaskProfileTest
 		task.addInput()
 				.setValue(new Reference().setType(ResourceType.Endpoint.name())
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER);
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue());
 
 		return task;
 	}

@@ -9,6 +9,7 @@ import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
@@ -19,9 +20,9 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreUploadSpeed extends AbstractServiceDelegate
 {
-	private final String networkSpeedUnit;
+	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public StoreUploadSpeed(ProcessPluginApi api, String networkSpeedUnit)
+	public StoreUploadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
@@ -53,13 +54,13 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 
 	private Optional<DecimalType> getUploadedBytes(Task task)
 	{
-		return api.getTaskHelper().getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_BYTES, DecimalType.class);
+		return api.getTaskHelper().getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);
 	}
 
 	private Optional<DecimalType> getUploadedDurationMillis(Task task)
 	{
-		return api.getTaskHelper().getFirstInputParameterValue(task, ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOADED_DURATION_MILLIS, DecimalType.class);
+		return api.getTaskHelper().getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(), DecimalType.class);
 	}
 }

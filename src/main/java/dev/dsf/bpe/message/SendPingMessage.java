@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
@@ -50,7 +51,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 				.of(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes));
 		Stream<ParameterComponent> endpointIdentifierStream = Stream.of(api.getTaskHelper().createInput(
 				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
-				ConstantsPing.CODESYSTEM_DSF_PING, ConstantsPing.CODESYSTEM_DSF_PING_VALUE_ENDPOINT_IDENTIFIER));
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue()));
 
 		return Stream.concat(endpointIdentifierStream,
 				Stream.concat(downloadResourceReferenceStream, downloadResourceSizeBytesStream));
@@ -89,7 +90,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 		{
 			execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
 			execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(),
-					ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_ERROR);
+					CodeSystem.DsfPing.Code.ERROR.getValue());
 		}
 		catch (JsonProcessingException e)
 		{

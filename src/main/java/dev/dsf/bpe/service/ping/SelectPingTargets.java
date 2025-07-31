@@ -26,6 +26,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -78,8 +79,8 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	{
 		Task mainTask = variables.getStartTask();
 		return api.getTaskHelper()
-				.getFirstInputParameterStringValue(mainTask, ConstantsPing.CODESYSTEM_DSF_PING,
-						ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS)
+				.getFirstInputParameterStringValue(mainTask, CodeSystem.DsfPing.URL,
+						CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue())
 				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
 	}
 

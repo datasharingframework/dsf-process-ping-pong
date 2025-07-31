@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -17,9 +18,9 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreDownloadSpeed extends AbstractServiceDelegate
 {
-	private final String networkSpeedUnit;
+	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public StoreDownloadSpeed(ProcessPluginApi api, String networkSpeedUnit)
+	public StoreDownloadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
@@ -38,7 +39,7 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis,
 				networkSpeedUnit);
 
-		PingStatusGenerator.updatePongStatusOutput(startTask, ConstantsPing.CODESYSTEM_DSF_PING_STATUS_VALUE_PENDING);
+		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.PENDING);
 		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);

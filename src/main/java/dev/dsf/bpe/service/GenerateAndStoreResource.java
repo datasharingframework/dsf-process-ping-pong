@@ -4,10 +4,10 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.util.Process;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -17,9 +17,10 @@ public class GenerateAndStoreResource
 {
 	private final ProcessPluginApi api;
 	private final long maxUploadSizeBytes;
-	private final Process process;
+	private final CodeSystem.DsfPingProcesses.Code process;
 
-	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes, Process process)
+	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes,
+			CodeSystem.DsfPingProcesses.Code process)
 	{
 		this.api = api;
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
@@ -60,8 +61,8 @@ public class GenerateAndStoreResource
 		catch (WebApplicationException e)
 		{
 			String status = String.valueOf(e.getResponse().getStatus());
-			ProcessError error = new ProcessError(process.toString(),
-					ConstantsPing.CODESYSTEM_DSF_PING_PROCESS_STEPS_VALUE_GENERATE_AND_STORE_RESOURCE,
+			ProcessError error = new ProcessError(process,
+					CodeSystem.DsfPingProcessSteps.Code.GENERATE_AND_STORE_RESOURCE,
 					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 					"Local DSF FHIR server responded with status: " + status);
 			variables.setString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue(), ProcessError.toString(error));

@@ -7,6 +7,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
@@ -24,10 +25,10 @@ public class SendStartPing extends AbstractTaskMessageSend
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
 		return Stream.concat(
-				variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType).filter(i -> i
-						.getType().getCoding().stream()
-						.anyMatch(c -> ConstantsPing.CODESYSTEM_DSF_PING.equals(c.getSystem())
-								&& ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS.equals(c.getCode()))),
+				variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType)
+						.filter(i -> i.getType().getCoding().stream()
+								.anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
+										&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode()))),
 				Stream.of(getDownloadResourceSizeInputParameter(variables)));
 	}
 
@@ -40,8 +41,8 @@ public class SendStartPing extends AbstractTaskMessageSend
 	private boolean isDownloadResourceSizeParameter(ParameterComponent parameterComponent)
 	{
 		return parameterComponent.getType().getCoding().stream()
-				.anyMatch(t -> ConstantsPing.CODESYSTEM_DSF_PING.equals(t.getSystem())
-						&& ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_SIZE_BYTES.equals(t.getCode()));
+				.anyMatch(t -> CodeSystem.DsfPing.URL.equals(t.getSystem())
+						&& CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue().equals(t.getCode()));
 	}
 
 	@Override

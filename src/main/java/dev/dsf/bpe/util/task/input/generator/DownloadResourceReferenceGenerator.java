@@ -4,6 +4,7 @@ import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 
 public final class DownloadResourceReferenceGenerator
@@ -22,8 +23,8 @@ public final class DownloadResourceReferenceGenerator
 	public static Task.ParameterComponent create(Reference reference)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
-		param.setValue(reference).getType().addCoding(new Coding(ConstantsPing.CODESYSTEM_DSF_PING,
-				ConstantsPing.CODESYSTEM_DSF_PING_VALUE_DOWNLOAD_RESOURCE_REFERENCE, null));
+		param.setValue(reference).getType().addCoding(new Coding(CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE.getValue(), null));
 		return param;
 	}
 }
