@@ -50,7 +50,7 @@ public class GenerateAndStoreResource
 
 		try
 		{
-			IdType downloadResource = storeBinary(resourceContent, delegateExecution);
+			IdType downloadResource = storeBinary(resourceContent);
 
 			String reference = downloadResource.toVersionless().getValueAsString();
 
@@ -74,7 +74,7 @@ public class GenerateAndStoreResource
 		return variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 	}
 
-	private IdType storeBinary(RandomByteInputStream downloadResourceContent, DelegateExecution delegateExecution)
+	private IdType storeBinary(RandomByteInputStream downloadResourceContent)
 	{
 		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().createBinary(
 				downloadResourceContent, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
