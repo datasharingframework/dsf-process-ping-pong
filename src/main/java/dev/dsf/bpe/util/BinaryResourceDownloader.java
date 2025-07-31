@@ -168,12 +168,4 @@ public class BinaryResourceDownloader
 			return error;
 		}
 	}
-
-	public static class MissingReferenceException extends Exception
-	{
-		public MissingReferenceException(String message)
-		{
-			super(message);
-		}
-	}
 }
