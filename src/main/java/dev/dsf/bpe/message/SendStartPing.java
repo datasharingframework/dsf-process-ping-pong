@@ -8,7 +8,6 @@ import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;

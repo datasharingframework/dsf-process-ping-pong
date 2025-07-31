@@ -5,7 +5,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.util.logging.PingPongLogger;

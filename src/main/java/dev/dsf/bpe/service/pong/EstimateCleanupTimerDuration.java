@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;

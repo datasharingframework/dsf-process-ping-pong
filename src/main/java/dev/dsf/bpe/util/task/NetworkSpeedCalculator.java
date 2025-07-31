@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 
 public final class NetworkSpeedCalculator
 {

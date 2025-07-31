@@ -5,9 +5,6 @@ import java.util.Vector;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 

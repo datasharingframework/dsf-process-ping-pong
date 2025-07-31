@@ -13,8 +13,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
-
 public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.DsfPingProcessSteps.Code processStep,
 		String action, String potentialFixUrl, String message) implements Serializable
 {

@@ -5,7 +5,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.util.logging.PingPongLogger;

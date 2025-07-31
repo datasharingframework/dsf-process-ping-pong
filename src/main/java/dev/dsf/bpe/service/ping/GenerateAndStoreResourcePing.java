@@ -3,8 +3,6 @@ package dev.dsf.bpe.service.ping;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.v1.ProcessPluginApi;

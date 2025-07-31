@@ -10,7 +10,6 @@ import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 
 public final class ErrorOutputComponentGenerator

@@ -1,7 +1,5 @@
 package dev.dsf.bpe;
 
-import java.util.List;
-
 import jakarta.ws.rs.core.MediaType;
 
 public final class ConstantsPing

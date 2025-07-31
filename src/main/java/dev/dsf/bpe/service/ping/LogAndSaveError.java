@@ -3,7 +3,6 @@ package dev.dsf.bpe.service.ping;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;

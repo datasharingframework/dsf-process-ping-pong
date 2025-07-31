@@ -3,7 +3,6 @@ package dev.dsf.bpe.util;
 import org.hl7.fhir.r4.model.Coding;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 
 public class ReadAccessTagGenerator
 {

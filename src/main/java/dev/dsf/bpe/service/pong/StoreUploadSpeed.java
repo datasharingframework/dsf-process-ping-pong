@@ -10,7 +10,6 @@ import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;

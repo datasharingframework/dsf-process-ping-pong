@@ -7,7 +7,6 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;

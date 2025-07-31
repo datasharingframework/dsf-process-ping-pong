@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;

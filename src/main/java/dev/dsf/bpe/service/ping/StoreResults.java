@@ -11,7 +11,6 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
