@@ -98,7 +98,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		if (resourceType.isEmpty())
 			return Stream.empty();
 
-		Map<String, List<String>> queryParameters = new HashMap<String, List<String>>();
+		Map<String, List<String>> queryParameters = new HashMap<>();
 		queryParameters.putAll(searchParameters.getQueryParams());
 		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
 
