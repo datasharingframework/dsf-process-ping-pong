@@ -74,7 +74,6 @@ public class BinaryResourceDownloader
 				downloadResult = new DownloadResult(numBytes, downloadedDurationMillis);
 				logger.info("Finished downloading {} bytes. Took {}", numBytes,
 						toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
-
 			}
 			catch (IOException e)
 			{
