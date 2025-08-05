@@ -91,7 +91,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 	@Override
 	protected void addErrorMessage(Task task, String errorMessage)
 	{
-		// error message part of
+		// error message part of status extension
 	}
 
 	private Identifier getLocalEndpointIdentifier()
