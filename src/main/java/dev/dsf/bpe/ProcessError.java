@@ -13,6 +13,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+//todo: remove process and processStep + CodeSystems, make message never contain e.getMessage() becaus security
+// ping status codesystem should extend old ping status codesystem, map every possible error to a unique name in a new codesystem
+// that repaces process + processStep, display values should contain the exact text that is now contained in action
+// remove equals method
 public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.DsfPingProcessSteps.Code processStep,
 		String action, String potentialFixUrl, String message) implements Serializable
 {
