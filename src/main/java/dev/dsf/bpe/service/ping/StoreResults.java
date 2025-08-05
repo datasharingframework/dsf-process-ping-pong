@@ -2,7 +2,9 @@ package dev.dsf.bpe.service.ping;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -55,6 +57,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				variables.getStartTask().getIdElement().getValue());
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
+		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
 
 		ErrorOutputComponentGenerator.create(ErrorListUtils.getErrorMessageList(execution)).forEach(task::addOutput);
 
@@ -95,12 +98,12 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			{
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList));
 			}
-			errors.forEach(error -> errorMailService.addError(target, error));
+			errorsPerTarget.put(target, errors);
 		});
 
 		variables.updateTask(task);
 
-		errorMailService.send(task.getIdElement());
+		errorMailService.send(task.getIdElement(), errorsPerTarget);
 
 		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
 	}
