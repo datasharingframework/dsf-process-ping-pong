@@ -84,7 +84,6 @@ public class AggregateErrorMailService
 				b.append(target.getEndpointIdentifierValue());
 
 				b.append(":");
-
 			}
 			else
 			{
@@ -100,7 +99,6 @@ public class AggregateErrorMailService
 
 				b.append(": ");
 			}
-
 			b.append("\n\t");
 			b.append("Process: ").append(error.process());
 			b.append("\n\t");
