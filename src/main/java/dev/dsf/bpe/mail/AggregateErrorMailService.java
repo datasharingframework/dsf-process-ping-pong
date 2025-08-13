@@ -60,8 +60,8 @@ public class AggregateErrorMailService implements InitializingBean
 				}));
 
 		mailMessage.append("Process started by: ");
-		mailMessage.append(
-				taskId.toVersionless().withServerBase(api.getEndpointProvider().getLocalEndpointAddress(), "Task").getValue());
+		mailMessage.append(taskId.toVersionless()
+				.withServerBase(api.getEndpointProvider().getLocalEndpointAddress(), "Task").getValue());
 
 		return mailMessage.toString();
 	}
