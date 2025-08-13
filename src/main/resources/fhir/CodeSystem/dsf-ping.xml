@@ -67,8 +67,8 @@
 		<definition value="Amount of bytes downloaded to measure network speed"/>
 	</concept>
 	<concept>
-		<code value="downloaded-duration-millis"/>
-		<display value="Downloaded Duration Millis"/>
+		<code value="downloaded-duration"/>
+		<display value="Downloaded Duration"/>
 		<definition value="Duration it took for the resource to be downloaded to measure network speed"/>
 	</concept>
 	<concept>

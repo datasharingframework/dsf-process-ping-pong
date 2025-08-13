@@ -12,6 +12,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.DurationValueImpl;
 
 public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractServiceDelegate
 {
@@ -42,8 +43,8 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		{
 			variables.setLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey),
 					downloadResult.getDownloadedBytes());
-			variables.setLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey),
-					downloadResult.getDownloadedDurationMillis());
+			variables.setVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey),
+					new DurationValueImpl(downloadResult.getDownloadedDuration()));
 		}
 		else
 		{

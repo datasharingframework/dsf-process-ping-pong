@@ -11,6 +11,7 @@ import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.DurationValueImpl;
 
 public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 {
@@ -36,8 +37,8 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 		if (downloadResult.getError() == null)
 		{
 			variables.setLong(ExecutionVariables.DOWNLOADED_BYTES.getValue(), downloadResult.getDownloadedBytes());
-			variables.setLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.getValue(),
-					downloadResult.getDownloadedDurationMillis());
+			variables.setVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue(),
+					new DurationValueImpl(downloadResult.getDownloadedDuration()));
 		}
 		else
 		{

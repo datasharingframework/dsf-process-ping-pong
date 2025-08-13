@@ -1,5 +1,6 @@
 package dev.dsf.bpe.message;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -16,7 +17,7 @@ import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
-import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -52,21 +53,22 @@ public class SendPongMessage extends AbstractTaskMessageSend
 		if (downloadResourceSizeBytes >= 0)
 		{
 			Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());
-			Long downloadedDurationMillis = variables.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.getValue());
+			Duration downloadedDuration = (Duration) variables
+					.getVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue());
 			String downloadResourceReference = variables
 					.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue());
 
 			Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 					? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
 					: Stream.empty();
-			Stream<Task.ParameterComponent> downloadedDurationMillisParameter = downloadedDurationMillis != null
-					? Stream.of(DownloadedDurationMillisGenerator.create(downloadedDurationMillis))
+			Stream<Task.ParameterComponent> downloadedDurationParameter = downloadedDuration != null
+					? Stream.of(DownloadedDurationGenerator.create(downloadedDuration))
 					: Stream.empty();
 			Stream<Task.ParameterComponent> downloadedResourceReferenceParameter = downloadResourceReference != null
 					? Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference))
 					: Stream.empty();
 
-			return Stream.of(downloadedBytesParameter, downloadedDurationMillisParameter,
+			return Stream.of(downloadedBytesParameter, downloadedDurationParameter,
 					downloadedResourceReferenceParameter, ErrorInputComponentGenerator.create(errorList).stream())
 					.flatMap(stream -> stream);
 		}

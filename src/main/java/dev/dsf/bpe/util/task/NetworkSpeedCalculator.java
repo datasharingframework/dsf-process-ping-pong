@@ -2,6 +2,7 @@ package dev.dsf.bpe.util.task;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 
 import dev.dsf.bpe.CodeSystem;
 
@@ -11,17 +12,17 @@ public final class NetworkSpeedCalculator
 	{
 	}
 
-	public static BigDecimal calculate(long bytes, long duration, CodeSystem.DsfPingUnits.Code unit)
+	public static BigDecimal calculate(long bytes, Duration duration, CodeSystem.DsfPingUnits.Code unit)
 	{
 		if (bytes == 0)
 			return BigDecimal.ZERO;
-		if (duration == 0)
+		if (duration.isZero())
 			return BigDecimal.valueOf(Long.MAX_VALUE);
 
-		BigDecimal seconds = BigDecimal.valueOf(duration).setScale(3, RoundingMode.HALF_UP)
+		BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 				.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 
-		return switch (unit)
+		return switch (unit) // todo: unit can implement calculate for each entry
 		{
 			case BITS_PER_SECOND ->
 			{

@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service.ping;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -75,17 +76,17 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			{
 				Long downloadedBytes = variables
 						.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
-				Long downloadedDurationMillis = variables
-						.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
+				Duration downloadedDuration = (Duration) variables
+						.getVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey));
 
-				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDurationMillis != null
-						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDurationMillis, networkSpeedUnit)
+				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDuration != null
+						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDuration, networkSpeedUnit)
 						: null;
 
 				Long uploadedBytes = variables
 						.getLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey));
-				Long uploadedDurationMillis = variables
-						.getLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
+				Duration uploadedDurationMillis = (Duration) variables
+						.getVariable(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
 
 				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
 						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)

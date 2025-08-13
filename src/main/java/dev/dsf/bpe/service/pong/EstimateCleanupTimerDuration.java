@@ -26,11 +26,12 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 
 		logger.debug("Estimating cleanup timer duration...");
 		final long minTimerDurationMillis = 20000;
-		long downloadedDurationMillis = Optional
-				.ofNullable(variables.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.getValue())).orElse(0L);
-		long timerDurationMillis = downloadedDurationMillis > Long.MAX_VALUE / 10 - minTimerDurationMillis
+		Duration downloadedDuration = Optional
+				.ofNullable((Duration) variables.getVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue()))
+				.orElse(Duration.ZERO);
+		long timerDurationMillis = downloadedDuration.toMillis() > Long.MAX_VALUE / 10 - minTimerDurationMillis
 				? Long.MAX_VALUE
-				: downloadedDurationMillis * 10 + minTimerDurationMillis;
+				: downloadedDuration.toMillis() * 10 + minTimerDurationMillis;
 
 		String cleanUpTimerDuration = Duration.ofMillis(timerDurationMillis).toString();
 		variables.setString("cleanupTimerDuration", cleanUpTimerDuration);

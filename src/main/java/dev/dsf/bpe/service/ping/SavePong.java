@@ -1,5 +1,6 @@
 package dev.dsf.bpe.service.ping;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.DurationValueImpl;
 
 public class SavePong extends AbstractServiceDelegate
 {
@@ -38,12 +40,13 @@ public class SavePong extends AbstractServiceDelegate
 
 		Task pong = variables.getLatestTask();
 
-		Optional<DecimalType> optDownloadedDurationMillis = api.getTaskHelper().getFirstInputParameterValue(pong,
-				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(),
-				DecimalType.class);
-		optDownloadedDurationMillis.ifPresent(decimalType -> variables.setLong(
+		Optional<org.hl7.fhir.r4.model.Duration> optDownloadedDuration = api.getTaskHelper()
+				.getFirstInputParameterValue(pong, CodeSystem.DsfPing.URL,
+						CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(),
+						org.hl7.fhir.r4.model.Duration.class);
+		optDownloadedDuration.ifPresent(duration -> variables.setVariable(
 				ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey),
-				decimalType.getValue().longValue()));
+				new DurationValueImpl(Duration.ofMillis(duration.getValue().longValue()))));
 
 		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
 				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);

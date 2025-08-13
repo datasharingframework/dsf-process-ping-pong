@@ -43,6 +43,7 @@ import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
+import dev.dsf.bpe.variables.DurationValueSerializer;
 
 @Configuration
 public class PingConfig
@@ -323,6 +324,12 @@ public class PingConfig
 	public LogAndSaveUploadErrorPong logAndSaveUploadErrorPong()
 	{
 		return new LogAndSaveUploadErrorPong(api);
+	}
+
+	@Bean
+	public DurationValueSerializer durationValueSerializer()
+	{
+		return new DurationValueSerializer();
 	}
 
 	@Bean

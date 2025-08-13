@@ -57,7 +57,7 @@ public final class CodeSystem
 			TARGET_ENDPOINTS("target-endpoints"),
 			TIMER_INTERVAL("timer-interval"),
 			DOWNLOAD_RESOURCE_SIZE_BYTES("download-resource-size-bytes"),
-			DOWNLOADED_DURATION_MILLIS("downloaded-duration-millis"),
+			DOWNLOADED_DURATION_MILLIS("downloaded-duration"),
 			DOWNLOADED_BYTES("downloaded-bytes"),
 			DOWNLOAD_RESOURCE_REFERENCE("download-resource-reference"),
 			ERROR("error");

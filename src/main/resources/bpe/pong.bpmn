@@ -196,7 +196,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
     <bpmn:textAnnotation id="TextAnnotation_1o7v81w">
       <bpmn:text>Information in message:
 - downloadedBytes: long
-- downloadedDurationMillis: long
+- downloadedDuration: Duration
 - downloadResourceReference: Reference
 - errors: List</bpmn:text>
     </bpmn:textAnnotation>

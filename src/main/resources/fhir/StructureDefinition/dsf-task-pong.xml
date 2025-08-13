@@ -151,13 +151,13 @@
         <code value="decimal"/>
       </type>
     </element>
-    <element id="Task.input:downloaded-duration-millis">
+    <element id="Task.input:downloaded-duration">
       <path value="Task.input"/>
-      <sliceName value="downloaded-duration-millis"/>
+      <sliceName value="downloaded-duration"/>
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Task.input:downloaded-duration-millis.type">
+    <element id="Task.input:downloaded-duration.type">
       <path value="Task.input.type"/>
       <min value="1"/>
       <max value="1"/>
@@ -166,29 +166,29 @@
         <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
       </binding>
     </element>
-    <element id="Task.input:downloaded-duration-millis.type.coding">
+    <element id="Task.input:downloaded-duration.type.coding">
       <path value="Task.input.type.coding"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Task.input:downloaded-duration-millis.type.coding.system">
+    <element id="Task.input:downloaded-duration.type.coding.system">
       <path value="Task.input.type.coding.system"/>
       <min value="1"/>
       <max value="1"/>
       <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
     </element>
-    <element id="Task.input:downloaded-duration-millis.type.coding.code">
+    <element id="Task.input:downloaded-duration.type.coding.code">
       <path value="Task.input.type.coding.code"/>
       <min value="1"/>
       <max value="1"/>
-      <fixedCode value="downloaded-duration-millis"/>
+      <fixedCode value="downloaded-duration"/>
     </element>
-    <element id="Task.input:downloaded-duration-millis.value[x]">
+    <element id="Task.input:downloaded-duration.value[x]">
       <path value="Task.input.value[x]"/>
       <min value="1"/>
       <max value="1"/>
       <type>
-        <code value="decimal"/>
+        <code value="Duration"/>
       </type>
     </element>
     <element id="Task.input:process-error">

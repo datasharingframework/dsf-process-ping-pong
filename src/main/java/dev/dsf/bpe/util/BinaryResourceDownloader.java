@@ -3,6 +3,7 @@ package dev.dsf.bpe.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 import java.util.Optional;
 
 import org.hl7.fhir.r4.model.IdType;
@@ -70,10 +71,9 @@ public class BinaryResourceDownloader
 				long numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
 				binaryResourceInputStream.skipNBytes(numBytes);
 				long downloadEndTime = System.currentTimeMillis();
-				long downloadedDurationMillis = downloadEndTime - downloadStartTime;
-				downloadResult = new DownloadResult(numBytes, downloadedDurationMillis);
-				logger.info("Finished downloading {} bytes. Took {}", numBytes,
-						toHoursMinutesSecondsMilliseconds(downloadedDurationMillis));
+				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
+				downloadResult = new DownloadResult(numBytes, downloadedDuration);
+				logger.info("Finished downloading {} bytes. Took {}", numBytes, downloadedDuration.toString());
 			}
 			catch (IOException e)
 			{
@@ -123,32 +123,23 @@ public class BinaryResourceDownloader
 		return downloadResult;
 	}
 
-	private String toHoursMinutesSecondsMilliseconds(long millis)
-	{
-		long hours = (millis / 1000) / 60 / 60 % 24;
-		long minutes = (millis / 1000) / 60 % 60;
-		long seconds = (millis / 1000) % 60;
-		long milliSeconds = millis % 1000;
-		return String.format("%02d:%02d:%02d:%03d (h:m:s:ms)", hours, minutes, seconds, milliSeconds);
-	}
-
 	public static class DownloadResult
 	{
 		private final long downloadedBytes;
-		private final long downloadedDurationMillis;
+		private final Duration downloadedDuration;
 		private final ProcessError error;
 
-		public DownloadResult(long downloadedBytes, long downloadedDurationMillis)
+		public DownloadResult(long downloadedBytes, Duration downloadedDuration)
 		{
 			this.downloadedBytes = downloadedBytes;
-			this.downloadedDurationMillis = downloadedDurationMillis;
+			this.downloadedDuration = downloadedDuration;
 			error = null;
 		}
 
 		public DownloadResult(ProcessError error)
 		{
 			downloadedBytes = 0;
-			downloadedDurationMillis = 0;
+			downloadedDuration = Duration.ZERO;
 			this.error = error;
 		}
 
@@ -157,9 +148,9 @@ public class BinaryResourceDownloader
 			return downloadedBytes;
 		}
 
-		public long getDownloadedDurationMillis()
+		public Duration getDownloadedDuration()
 		{
-			return downloadedDurationMillis;
+			return downloadedDuration;
 		}
 
 		public ProcessError getError()

@@ -11,7 +11,7 @@ public enum ExecutionVariables
 	ERROR("error"),
 	ERROR_LIST("errors"),
 	DOWNLOADED_BYTES("downloadedBytes"),
-	DOWNLOADED_DURATION_MILLIS("downloadedDurationMillis"),
+	DOWNLOADED_DURATION("downloadedDuration"),
 	PONG_TARGET_ENDPOINT_IDENTIFIER("targetEndpointIdentifier"),
 	UPLOADED_BYTES("uploadedBytes"),
 	UPLOADED_DURATION_MILLIS("uploadedDurationMillis"),

@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service.pong;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -36,14 +37,13 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		logger.debug("Storing upload speed...");
 
 		Optional<DecimalType> uploadedBytesTaskInput = getUploadedBytes(cleanup);
-		Optional<DecimalType> uploadedDurationMillisTaskInput = getUploadedDurationMillis(cleanup);
+		Optional<org.hl7.fhir.r4.model.Duration> uploadedDurationTaskInput = getUploadedDuration(cleanup);
 		long uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(BigDecimal.valueOf(0))
 				.longValue();
-		long uploadedDurationMillis = uploadedDurationMillisTaskInput
-				.map(decimalType -> decimalType.getValue().longValue()).orElse(0L);
+		Duration uploadedDuration = uploadedDurationTaskInput
+				.map(duration -> Duration.ofMillis(duration.getValue().longValue())).orElse(Duration.ZERO);
 
-		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis,
-				networkSpeedUnit);
+		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDuration, networkSpeedUnit);
 
 		PingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
 
@@ -57,9 +57,9 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 				CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);
 	}
 
-	private Optional<DecimalType> getUploadedDurationMillis(Task task)
+	private Optional<org.hl7.fhir.r4.model.Duration> getUploadedDuration(Task task)
 	{
 		return api.getTaskHelper().getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
-				CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(), DecimalType.class);
+				CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(), org.hl7.fhir.r4.model.Duration.class);
 	}
 }

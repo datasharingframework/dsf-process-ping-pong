@@ -1,11 +1,10 @@
 package dev.dsf.bpe.message;
 
+import java.time.Duration;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
@@ -13,7 +12,7 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
-import dev.dsf.bpe.util.task.input.generator.DownloadedDurationMillisGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
@@ -33,17 +32,17 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 		Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
-		Long downloadedDurationMillis = variables
-				.getLong(ExecutionVariables.DOWNLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
+		Duration downloadedDuration = (Duration) variables
+				.getVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey));
 
 		Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 				? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
 				: Stream.empty();
-		Stream<Task.ParameterComponent> downloadedDurationMillisParameter = downloadedDurationMillis != null
-				? Stream.of(DownloadedDurationMillisGenerator.create(downloadedDurationMillis))
+		Stream<Task.ParameterComponent> downloadedDurationParameter = downloadedDuration != null
+				? Stream.of(DownloadedDurationGenerator.create(downloadedDuration))
 				: Stream.empty();
 
-		return Stream.of(downloadedBytesParameter, downloadedDurationMillisParameter).flatMap(s -> s);
+		return Stream.of(downloadedBytesParameter, downloadedDurationParameter).flatMap(s -> s);
 	}
 
 	@Override
