@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,8 +38,9 @@ import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
+import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
-import dev.dsf.bpe.util.task.input.generator.NetworkSpeedMetricGenerator;
 import dev.dsf.bpe.util.task.output.generator.ErrorOutputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
@@ -539,8 +541,8 @@ public class TaskProfileTest
 		Task task = createValidTaskPong();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(DownloadedBytesGenerator.create(1000));
+		task.addInput(DownloadedDurationGenerator.create(Duration.ofMillis(1000)));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -555,8 +557,8 @@ public class TaskProfileTest
 		Task task = createValidTaskPong();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(DownloadedBytesGenerator.create(1000));
+		task.addInput(DownloadedDurationGenerator.create(Duration.ofMillis(1000)));
 		task.addInput(ErrorInputComponentGenerator.create(processErrors(1).get(0)));
 		task.addInput(ErrorInputComponentGenerator.create(processErrors(1).get(0)));
 
@@ -621,8 +623,8 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedBytes(1000));
-		task.addInput(NetworkSpeedMetricGenerator.createDownloadedDurationMillis(1000));
+		task.addInput(DownloadedBytesGenerator.create(1000));
+		task.addInput(DownloadedDurationGenerator.create(Duration.ofMillis(1000)));
 		return task;
 	}
 
