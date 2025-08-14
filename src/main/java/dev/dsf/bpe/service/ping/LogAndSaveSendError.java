@@ -24,8 +24,7 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		PingPongLogger logger = new PingPongLogger(LogAndSaveSendError.class, variables.getStartTask());
 
 		String correlationKey = variables.getTarget().getCorrelationKey();
-		ProcessError error = ProcessError
-				.parse((String) execution.getVariableLocal(ExecutionVariables.ERROR.getValue()));
+		ProcessError error = (ProcessError) execution.getVariableLocal(ExecutionVariables.ERROR.getValue());
 		ErrorListUtils.add(error, execution, correlationKey);
 		variables.setLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), 0L);
 		variables.setLong(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey), 0L);

@@ -1,18 +1,17 @@
 package dev.dsf.bpe.util;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.ProcessErrors;
+import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueImpl;
 
 public class ErrorListUtils
 {
-	public static void addAll(List<ProcessError> errors, DelegateExecution execution)
+	public static void addAll(ProcessErrors errors, DelegateExecution execution)
 	{
-		List<ProcessError> errorList = getErrorMessageList(execution);
+		ProcessErrors errorList = getErrorList(execution);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
@@ -20,10 +19,10 @@ public class ErrorListUtils
 		}
 	}
 
-	public static void addAll(List<ProcessError> errors, DelegateExecution execution, String correlationKey)
+	public static void addAll(ProcessErrors errors, DelegateExecution execution, String correlationKey)
 	{
-		List<ProcessError> errorList = correlationKey != null ? getErrorMessageList(execution, correlationKey)
-				: getErrorMessageList(execution);
+		ProcessErrors errorList = correlationKey != null ? getErrorList(execution, correlationKey)
+				: getErrorList(execution);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
@@ -48,46 +47,42 @@ public class ErrorListUtils
 		}
 	}
 
-	public static List<ProcessError> getErrorMessageList(DelegateExecution execution)
+	public static ProcessErrors getErrorList(DelegateExecution execution)
 	{
-		return getErrorMessageList(execution, null);
+		return getErrorList(execution, null);
 	}
 
-	public static List<ProcessError> getErrorMessageList(DelegateExecution execution, String correlationKey)
+	public static ProcessErrors getErrorList(DelegateExecution execution, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			return getErrorMessageList(ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
+			return getErrorList(ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			return getErrorMessageList(ExecutionVariables.ERROR_LIST.getValue(), execution);
+			return getErrorList(ExecutionVariables.ERROR_LIST.getValue(), execution);
 		}
 	}
 
-	public static List<ProcessError> getErrorMessageList(String variableName, DelegateExecution execution)
+	public static ProcessErrors getErrorList(String variableName, DelegateExecution execution)
 	{
-		String errorJson = (String) execution.getVariable(variableName);
-		if (errorJson == null)
+		ProcessErrors errors = (ProcessErrors) execution.getVariable(variableName);
+		if (errors == null)
 		{
-			List<ProcessError> errors = new Vector<>();
-			execution.setVariable(variableName, ProcessError.toString(errors));
-			return errors;
+			errors = new ProcessErrors();
+			saveErrorList(errors, variableName, execution);
 		}
-		else
-		{
-			return ProcessError.parseList(errorJson);
-		}
+		return errors;
 	}
 
 	public static void add(ProcessError error, String variableName, DelegateExecution execution)
 	{
-		List<ProcessError> errors = getErrorMessageList(variableName, execution);
+		ProcessErrors errors = getErrorList(variableName, execution);
 		errors.add(error);
 		saveErrorList(errors, variableName, execution);
 	}
 
-	private static void saveErrorList(List<ProcessError> errors, DelegateExecution execution, String correlationKey)
+	private static void saveErrorList(ProcessErrors errors, DelegateExecution execution, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
@@ -99,8 +94,8 @@ public class ErrorListUtils
 		}
 	}
 
-	private static void saveErrorList(List<ProcessError> errors, String variableName, DelegateExecution execution)
+	private static void saveErrorList(ProcessErrors errors, String variableName, DelegateExecution execution)
 	{
-		execution.setVariable(variableName, ProcessError.toString(errors));
+		execution.setVariable(variableName, new ProcessErrorsValueImpl(errors));
 	}
 }

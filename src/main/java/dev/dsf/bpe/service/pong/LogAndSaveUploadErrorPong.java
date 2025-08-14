@@ -25,8 +25,7 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPong.class, startTask);
 
-		ProcessError error = ProcessError
-				.parse(variables.getString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue()));
+		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue());
 
 		ErrorListUtils.add(error, execution);
 

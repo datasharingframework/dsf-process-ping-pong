@@ -17,6 +17,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 
 public class CleanupPongMessage extends AbstractTaskMessageSend
 {
@@ -54,7 +55,7 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 		ProcessError error = SendTaskErrorConverter.convert(exception,
 				"Sending cleanup message to " + target.getEndpointUrl());
 
-		execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), ProcessError.toString(error));
+		execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), new ProcessErrorValueImpl(error));
 		execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());

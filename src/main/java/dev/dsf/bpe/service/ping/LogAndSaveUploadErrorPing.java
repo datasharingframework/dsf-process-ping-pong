@@ -24,8 +24,7 @@ public class LogAndSaveUploadErrorPing extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 		PingPongLogger logger = new PingPongLogger(LogAndSaveUploadErrorPing.class, startTask);
 
-		ProcessError error = ProcessError
-				.parse(variables.getString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue()));
+		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue());
 
 		logger.info("Error while storing binary resource for download: {}", error.message());
 	}

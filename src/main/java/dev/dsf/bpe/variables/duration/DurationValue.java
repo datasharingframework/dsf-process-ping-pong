@@ -1,4 +1,4 @@
-package dev.dsf.bpe.variables;
+package dev.dsf.bpe.variables.duration;
 
 import java.time.Duration;
 

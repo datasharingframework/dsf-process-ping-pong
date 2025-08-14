@@ -32,7 +32,8 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 				.getVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue());
 
 		ErrorListUtils.add(error, delegateExecution);
-		PingStatusGenerator.updatePongStatusOutput(startTask, ErrorListUtils.getErrorMessageList(delegateExecution));
+		PingStatusGenerator.updatePongStatusOutput(startTask,
+				ErrorListUtils.getErrorList(delegateExecution).getEntries());
 		variables.updateTask(startTask);
 
 		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(), error.message());

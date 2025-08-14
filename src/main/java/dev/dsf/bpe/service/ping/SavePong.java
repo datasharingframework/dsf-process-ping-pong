@@ -1,7 +1,6 @@
 package dev.dsf.bpe.service.ping;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -11,7 +10,6 @@ import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.input.ErrorInputParser;
@@ -19,7 +17,8 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.DurationValueImpl;
+import dev.dsf.bpe.variables.duration.DurationValueImpl;
+import dev.dsf.bpe.ProcessErrors;
 
 public class SavePong extends AbstractServiceDelegate
 {
@@ -54,7 +53,7 @@ public class SavePong extends AbstractServiceDelegate
 				ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
 
-		List<ProcessError> errorList = ErrorInputParser.parseInputs(pong);
+		ProcessErrors errorList = new ProcessErrors(ErrorInputParser.parseInputs(pong));
 
 		ErrorListUtils.addAll(errorList, delegateExecution, correlationKey);
 

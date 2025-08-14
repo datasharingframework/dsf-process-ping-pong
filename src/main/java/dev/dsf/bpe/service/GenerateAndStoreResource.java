@@ -11,6 +11,7 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 import jakarta.ws.rs.WebApplicationException;
 
 public class GenerateAndStoreResource
@@ -65,7 +66,8 @@ public class GenerateAndStoreResource
 					CodeSystem.DsfPingProcessSteps.Code.GENERATE_AND_STORE_RESOURCE,
 					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 					"Local DSF FHIR server responded with status: " + status);
-			variables.setString(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue(), ProcessError.toString(error));
+			variables.setVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue(),
+					new ProcessErrorValueImpl(error));
 		}
 	}
 

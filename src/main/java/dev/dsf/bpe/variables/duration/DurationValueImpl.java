@@ -1,4 +1,4 @@
-package dev.dsf.bpe.variables;
+package dev.dsf.bpe.variables.duration;
 
 import java.time.Duration;
 
@@ -12,5 +12,10 @@ public class DurationValueImpl extends PrimitiveTypeValueImpl<Duration> implemen
 	public DurationValueImpl(Duration value)
 	{
 		super(value, DURATION_VALUE_TYPE);
+	}
+
+	public DurationValueImpl(Duration value, PrimitiveValueType type)
+	{
+		super(value, type);
 	}
 }

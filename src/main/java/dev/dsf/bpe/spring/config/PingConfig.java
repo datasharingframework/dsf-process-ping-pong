@@ -1,6 +1,7 @@
 package dev.dsf.bpe.spring.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.DefaultConversionService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
@@ -43,7 +47,9 @@ import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
-import dev.dsf.bpe.variables.DurationValueSerializer;
+import dev.dsf.bpe.variables.duration.DurationValueSerializer;
+import dev.dsf.bpe.variables.process_error.ProcessErrorValueSerializer;
+import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueSerializer;
 
 @Configuration
 public class PingConfig
@@ -327,9 +333,30 @@ public class PingConfig
 	}
 
 	@Bean
-	public DurationValueSerializer durationValueSerializer()
+	public DurationValueSerializer durationValueSerializer(
+			@Qualifier(OBJECT_MAPPER_WITH_TIME_MODULE) ObjectMapper objectMapper)
 	{
-		return new DurationValueSerializer();
+		return new DurationValueSerializer(objectMapper);
+	}
+
+	@Bean
+	public ProcessErrorValueSerializer processErrorValueSerializer()
+	{
+		return new ProcessErrorValueSerializer();
+	}
+
+	@Bean
+	public ProcessErrorsValueSerializer processErrorsValueSerializer()
+	{
+		return new ProcessErrorsValueSerializer();
+	}
+
+	@Bean(name = OBJECT_MAPPER_WITH_TIME_MODULE)
+	public ObjectMapper objectMapperWithJavaTimeModule()
+	{
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+		return objectMapper;
 	}
 
 	@Bean
@@ -340,4 +367,6 @@ public class PingConfig
 		conversionService.addConverter(new CodeSystemDsfPingUnitsConverter());
 		return conversionService;
 	}
+
+	private static final String OBJECT_MAPPER_WITH_TIME_MODULE = "objectMapperWithJavaTimeModule";
 }

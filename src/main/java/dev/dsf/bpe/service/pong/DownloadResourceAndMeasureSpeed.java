@@ -11,7 +11,7 @@ import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.DurationValueImpl;
+import dev.dsf.bpe.variables.duration.DurationValueImpl;
 
 public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 {

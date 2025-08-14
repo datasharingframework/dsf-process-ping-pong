@@ -1,7 +1,6 @@
 package dev.dsf.bpe.message;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -24,6 +23,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.ProcessErrors;
 
 public class SendPongMessage extends AbstractTaskMessageSend
 {
@@ -48,7 +48,7 @@ public class SendPongMessage extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		List<ProcessError> errorList = ErrorListUtils.getErrorMessageList(execution);
+		ProcessErrors errorList = ErrorListUtils.getErrorList(execution);
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
 		if (downloadResourceSizeBytes >= 0)
 		{
@@ -68,13 +68,14 @@ public class SendPongMessage extends AbstractTaskMessageSend
 					? Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference))
 					: Stream.empty();
 
-			return Stream.of(downloadedBytesParameter, downloadedDurationParameter,
-					downloadedResourceReferenceParameter, ErrorInputComponentGenerator.create(errorList).stream())
+			return Stream
+					.of(downloadedBytesParameter, downloadedDurationParameter, downloadedResourceReferenceParameter,
+							ErrorInputComponentGenerator.create(errorList.getEntries()).stream())
 					.flatMap(stream -> stream);
 		}
 		else
 		{
-			return ErrorInputComponentGenerator.create(errorList).stream();
+			return ErrorInputComponentGenerator.create(errorList.getEntries()).stream();
 		}
 	}
 

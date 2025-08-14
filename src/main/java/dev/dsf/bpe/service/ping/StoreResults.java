@@ -27,6 +27,7 @@ import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Targets;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.ProcessErrors;
 
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
@@ -60,18 +61,18 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		Targets targets = variables.getTargets();
 		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
 
-		ErrorOutputComponentGenerator.create(ErrorListUtils.getErrorMessageList(execution)).forEach(task::addOutput);
+		ErrorOutputComponentGenerator.create(ErrorListUtils.getErrorList(execution).getEntries())
+				.forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
 			String correlationKey = target.getCorrelationKey();
 
-			List<ProcessError> errors = ErrorListUtils.getErrorMessageList(execution, correlationKey);
+			ProcessErrors errors = ErrorListUtils.getErrorList(execution, correlationKey);
 			CodeSystem.DsfPingStatus.Code statusCode = errors.isEmpty() ? CodeSystem.DsfPingStatus.Code.COMPLETED
 					: CodeSystem.DsfPingStatus.Code.ERROR;
 			long downloadResourceSizeBytes = variables
 					.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
-			List<ProcessError> errorMessageList = ErrorListUtils.getErrorMessageList(execution, correlationKey);
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
 				Long downloadedBytes = variables
@@ -92,14 +93,14 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
 						: null;
 
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList,
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),
 						downloadSpeed, uploadSpeed, networkSpeedUnit));
 			}
 			else // if slim-ping
 			{
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errorMessageList));
+				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries()));
 			}
-			errorsPerTarget.put(target, errors);
+			errorsPerTarget.put(target, errors.getEntries());
 		});
 
 		variables.updateTask(task);
