@@ -26,7 +26,7 @@ public class DurationValueSerializer extends PrimitiveValueSerializer<DurationVa
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void afterPropertiesSet()
 	{
 		Objects.requireNonNull(objectMapper, "objectMapper");
 	}
