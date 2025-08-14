@@ -20,14 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.DsfPingProcessSteps.Code processStep,
 		String action, String potentialFixUrl, String message) implements Serializable
 {
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj instanceof ProcessError error && process.equals(error.process())
-				&& processStep.equals(error.processStep()) && action.equals(error.action())
-				&& message.equals(error.message());
-	}
-
 	public static Extension toExtension(ProcessError error)
 	{
 		Objects.requireNonNull(error);
