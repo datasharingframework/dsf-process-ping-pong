@@ -20,7 +20,6 @@ import jakarta.ws.rs.WebApplicationException;
 
 public class Cleanup
 {
-
 	private final ProcessPluginApi api;
 	private final CodeSystem.DsfPingProcesses.Code process;
 
