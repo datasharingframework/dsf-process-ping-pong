@@ -26,7 +26,6 @@ public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.
 		return obj instanceof ProcessError error && process.equals(error.process())
 				&& processStep.equals(error.processStep()) && action.equals(error.action())
 				&& message.equals(error.message());
-
 	}
 
 	public static Extension toExtension(ProcessError error)
