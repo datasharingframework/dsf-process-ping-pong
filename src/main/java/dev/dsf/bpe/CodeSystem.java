@@ -235,38 +235,4 @@ public final class CodeSystem
 			}
 		}
 	}
-
-	public static final class ReadAccessTag
-	{
-		public static final String URL = "http://dsf.dev/fhir/CodeSystem/read-access-tag";
-
-		private ReadAccessTag()
-		{
-		}
-
-		public enum Code implements SingleStringValueEnum
-		{
-			ALL("ALL"),
-			LOCAL("LOCAL"),
-			ORGANIZATION("ORGANIZATION"),
-			ROLE("ROLE");
-
-			private final String value;
-
-			Code(String value)
-			{
-				this.value = value;
-			}
-
-			public String getValue()
-			{
-				return value;
-			}
-
-			public static Code ofValue(String value)
-			{
-				return new SingleStringValueEnumParser<>(Code.class).ofValue(value);
-			}
-		}
-	}
 }
