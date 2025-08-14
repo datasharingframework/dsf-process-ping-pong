@@ -173,7 +173,12 @@
       <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1op4sei</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0802w0b" name="Cleanup" camunda:class="dev.dsf.bpe.service.ping.CleanupPing">
+    <bpmn:serviceTask id="Activity_0802w0b" name="Cleanup" camunda:class="dev.dsf.bpe.service.Cleanup">
+      <bpmn:extensionElements>
+        <camunda:field name="process">
+          <camunda:string>ping</camunda:string>
+        </camunda:field>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1bfs68o</bpmn:incoming>
       <bpmn:outgoing>Flow_0gubpgz</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -261,12 +266,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   <bpmn:error id="Error_0tkfq65" name="resourceUploadError" errorCode="resourceUploadError" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
-      <bpmndi:BPMNShape id="BPMNShape_0a51zrr" bpmnElement="Gateway_1nb10cc" isMarkerVisible="true">
-        <dc:Bounds x="665" y="475" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="Activity_1ddl5dm">
-        <dc:Bounds x="790" y="580" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">
         <dc:Bounds x="1040" y="180" width="1820" height="560" />
       </bpmndi:BPMNShape>
@@ -485,6 +484,12 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="260" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="Activity_1ddl5dm">
+        <dc:Bounds x="790" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0a51zrr" bpmnElement="Gateway_1nb10cc" isMarkerVisible="true">
+        <dc:Bounds x="665" y="475" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0diib78" bpmnElement="TextAnnotation_1ig0151">
         <dc:Bounds x="2990" y="239" width="160" height="49" />
         <bpmndi:BPMNLabel />
@@ -546,18 +551,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="840" y="580" />
         <di:waypoint x="840" y="385" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_149mrr9" bpmnElement="Association_0xonsp5">
-        <di:waypoint x="539" y="540" />
-        <di:waypoint x="498" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0yofzg9" bpmnElement="Association_1f86scd">
-        <di:waypoint x="3013" y="490" />
-        <di:waypoint x="2984" y="410" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
-        <di:waypoint x="3079" y="330" />
-        <di:waypoint x="3058" y="288" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1op4sei_di" bpmnElement="Flow_1op4sei">
         <di:waypoint x="630" y="500" />
         <di:waypoint x="665" y="500" />
@@ -571,6 +564,18 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="715" y="500" />
         <di:waypoint x="840" y="500" />
         <di:waypoint x="840" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_149mrr9" bpmnElement="Association_0xonsp5">
+        <di:waypoint x="539" y="540" />
+        <di:waypoint x="498" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0yofzg9" bpmnElement="Association_1f86scd">
+        <di:waypoint x="3013" y="490" />
+        <di:waypoint x="2984" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
+        <di:waypoint x="3079" y="330" />
+        <di:waypoint x="3058" y="288" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

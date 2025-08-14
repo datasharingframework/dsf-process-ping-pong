@@ -1,38 +1,42 @@
 package dev.dsf.bpe.service;
 
 import java.net.SocketTimeoutException;
+import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
+import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.service.pong.CleanupPong;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
-public class Cleanup
+public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 {
-	private final ProcessPluginApi api;
-	private final CodeSystem.DsfPingProcesses.Code process;
+	private org.camunda.bpm.engine.delegate.Expression process;
 
-	public Cleanup(ProcessPluginApi api, CodeSystem.DsfPingProcesses.Code process)
+	public Cleanup(ProcessPluginApi api)
 	{
-		this.api = api;
-		this.process = process;
+		super(api);
 	}
 
 	public void doExecute(DelegateExecution delegateExecution, Variables variables)
 	{
-		PingPongLogger logger = new PingPongLogger(CleanupPong.class, variables.getStartTask());
+		PingPongLogger logger = new PingPongLogger(Cleanup.class, variables.getStartTask());
 		logger.debug("Cleaning up...");
+
+		CodeSystem.DsfPingProcesses.Code process = getProcess((String) this.process.getValue(delegateExecution));
+		Objects.requireNonNull(process);
+
 		String downloadResourceId = new IdType(
 				variables.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue())).getIdPart();
 		if (downloadResourceId != null)
@@ -72,5 +76,17 @@ public class Cleanup
 			logger.debug("Nothing to do");
 		}
 		logger.debug("Cleanup complete.");
+	}
+
+	public void setProcess(org.camunda.bpm.engine.delegate.Expression process)
+	{
+		this.process = process;
+	}
+
+	private CodeSystem.DsfPingProcesses.Code getProcess(String process)
+	{
+		if (process == null || process.isEmpty())
+			return null;
+		return CodeSystem.DsfPingProcesses.Code.ofValue(process);
 	}
 }

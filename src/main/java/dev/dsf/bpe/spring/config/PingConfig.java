@@ -20,10 +20,10 @@ import dev.dsf.bpe.message.CleanupPongMessage;
 import dev.dsf.bpe.message.SendPingMessage;
 import dev.dsf.bpe.message.SendPongMessage;
 import dev.dsf.bpe.message.SendStartPing;
+import dev.dsf.bpe.service.Cleanup;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
-import dev.dsf.bpe.service.ping.CleanupPing;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.GenerateAndStoreResourcePing;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
@@ -31,7 +31,6 @@ import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
-import dev.dsf.bpe.service.pong.CleanupPong;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.GenerateAndStoreResourcePong;
@@ -215,16 +214,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CleanupPing cleanupPing()
+	public Cleanup cleanup()
 	{
-		return new CleanupPing(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CleanupPong cleanupPong()
-	{
-		return new CleanupPong(api);
+		return new Cleanup(api);
 	}
 
 	@Bean
