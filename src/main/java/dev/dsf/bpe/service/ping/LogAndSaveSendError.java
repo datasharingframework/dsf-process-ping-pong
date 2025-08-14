@@ -30,7 +30,8 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		ProcessError error = (ProcessError) execution.getVariableLocal(ExecutionVariables.ERROR.getValue());
 		ErrorListUtils.add(error, execution, correlationKey);
 		variables.setLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), 0L);
-		variables.setVariable(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey), new DurationValueImpl(Duration.ZERO));
+		variables.setVariable(ExecutionVariables.UPLOADED_DURATION.correlatedValue(correlationKey),
+				new DurationValueImpl(Duration.ZERO));
 		logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
 	}
 }

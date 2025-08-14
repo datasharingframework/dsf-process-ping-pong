@@ -14,7 +14,7 @@ public enum ExecutionVariables
 	DOWNLOADED_DURATION("downloadedDuration"),
 	PONG_TARGET_ENDPOINT_IDENTIFIER("targetEndpointIdentifier"),
 	UPLOADED_BYTES("uploadedBytes"),
-	UPLOADED_DURATION_MILLIS("uploadedDurationMillis"),
+	UPLOADED_DURATION("uploadedDuration"),
 	RESOURCE_DOWNLOAD_ERROR("resourceDownloadError"),
 	RESOURCE_UPLOAD_ERROR("resourceUploadError"),
 	PING_TASK_ID("pingTaskId");

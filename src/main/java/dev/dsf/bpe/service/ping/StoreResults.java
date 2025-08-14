@@ -16,6 +16,7 @@ import org.springframework.beans.factory.InitializingBean;
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.logging.PingPongLogger;
@@ -27,7 +28,6 @@ import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Targets;
 import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.ProcessErrors;
 
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
@@ -87,7 +87,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				Long uploadedBytes = variables
 						.getLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey));
 				Duration uploadedDurationMillis = (Duration) variables
-						.getVariable(ExecutionVariables.UPLOADED_DURATION_MILLIS.correlatedValue(correlationKey));
+						.getVariable(ExecutionVariables.UPLOADED_DURATION.correlatedValue(correlationKey));
 
 				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
 						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
