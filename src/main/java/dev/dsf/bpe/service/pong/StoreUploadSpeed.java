@@ -9,9 +9,10 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -20,6 +21,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreUploadSpeed extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(StoreUploadSpeed.class);
 	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public StoreUploadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
@@ -33,7 +35,6 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 	{
 		Task startTask = variables.getStartTask();
 		Task cleanup = variables.getLatestTask();
-		PingPongLogger logger = new PingPongLogger(LogPing.class, startTask);
 		logger.debug("Storing upload speed...");
 
 		Optional<DecimalType> uploadedBytesTaskInput = getUploadedBytes(cleanup);

@@ -5,11 +5,12 @@ import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
@@ -21,6 +22,8 @@ import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 
 public class CleanupPongMessage extends AbstractTaskMessageSend
 {
+	private static final Logger logger = LoggerFactory.getLogger(CleanupPongMessage.class);
+
 	public CleanupPongMessage(ProcessPluginApi api)
 	{
 		super(api);
@@ -50,7 +53,6 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
 			String errorMessage)
 	{
-		PingPongLogger logger = new PingPongLogger(CleanupPongMessage.class, variables.getStartTask());
 		Target target = variables.getTarget();
 		ProcessError error = SendTaskErrorConverter.convert(exception,
 				"Sending cleanup message to " + target.getEndpointUrl());

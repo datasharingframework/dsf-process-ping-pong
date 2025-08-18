@@ -9,12 +9,13 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
 import jakarta.ws.rs.ProcessingException;
@@ -22,12 +23,11 @@ import jakarta.ws.rs.WebApplicationException;
 
 public class BinaryResourceDownloader
 {
-	private final PingPongLogger logger;
+	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
 	private final CodeSystem.DsfPingProcesses.Code process;
 
-	public BinaryResourceDownloader(PingPongLogger logger, CodeSystem.DsfPingProcesses.Code process)
+	public BinaryResourceDownloader(CodeSystem.DsfPingProcesses.Code process)
 	{
-		this.logger = logger;
 		this.process = process;
 	}
 

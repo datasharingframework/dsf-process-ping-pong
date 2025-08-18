@@ -4,11 +4,12 @@ import java.time.Duration;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -16,6 +17,8 @@ import dev.dsf.bpe.variables.duration.DurationValueImpl;
 
 public class LogAndSaveSendError extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveSendError.class);
+
 	public LogAndSaveSendError(ProcessPluginApi api)
 	{
 		super(api);
@@ -24,8 +27,6 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(LogAndSaveSendError.class, variables.getStartTask());
-
 		String correlationKey = variables.getTarget().getCorrelationKey();
 		ProcessError error = (ProcessError) execution.getVariableLocal(ExecutionVariables.ERROR.getValue());
 		ErrorListUtils.add(error, execution, correlationKey);

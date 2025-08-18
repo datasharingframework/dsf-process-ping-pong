@@ -3,12 +3,13 @@ package dev.dsf.bpe.service;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
@@ -16,6 +17,7 @@ import jakarta.ws.rs.WebApplicationException;
 
 public class GenerateAndStoreResource
 {
+	private static final Logger logger = LoggerFactory.getLogger(GenerateAndStoreResource.class);
 	private final ProcessPluginApi api;
 	private final long maxUploadSizeBytes;
 	private final CodeSystem.DsfPingProcesses.Code process;
@@ -30,7 +32,6 @@ public class GenerateAndStoreResource
 
 	public void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(GenerateAndStoreResource.class, variables.getStartTask());
 		logger.debug("Generating resource...");
 		long downloadResourceSizeBytes = getDownloadResourceSize(variables);
 		RandomByteInputStream resourceContent;

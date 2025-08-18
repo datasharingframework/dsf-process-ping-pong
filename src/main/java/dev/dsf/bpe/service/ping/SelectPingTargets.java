@@ -22,12 +22,13 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
@@ -37,7 +38,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class SelectPingTargets extends AbstractServiceDelegate implements InitializingBean
 {
-
+	private static final Logger logger = LoggerFactory.getLogger(SelectPingTargets.class);
 	private static final Pattern endpointResouceTypes = Pattern.compile(
 			"Endpoint|HealthcareService|ImagingStudy|InsurancePlan|Location|Organization|OrganizationAffiliation|PractitionerRole");
 
@@ -51,7 +52,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	{
 		Task startTask = variables.getStartTask();
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables)
-				.map(uriComponents -> searchForEndpoints(uriComponents, startTask)).orElse(allEndpoints())
+				.map(uriComponents -> searchForEndpoints(uriComponents)).orElse(allEndpoints())
 				.filter(isLocalEndpoint().negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
@@ -83,18 +84,17 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
 	}
 
-	private Stream<Endpoint> searchForEndpoints(UriComponents searchParameters, Task startTask)
+	private Stream<Endpoint> searchForEndpoints(UriComponents searchParameters)
 	{
-		return searchForEndpoints(searchParameters, 1, 0, startTask);
+		return searchForEndpoints(searchParameters, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(UriComponents searchParameters, int page, int currentTotal,
-			Task startTask)
+	private Stream<Endpoint> searchForEndpoints(UriComponents searchParameters, int page, int currentTotal)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
 			return Stream.empty();
 
-		Optional<Class<? extends Resource>> resourceType = getResourceType(searchParameters, startTask);
+		Optional<Class<? extends Resource>> resourceType = getResourceType(searchParameters);
 		if (resourceType.isEmpty())
 			return Stream.empty();
 
@@ -106,14 +106,14 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 				.searchWithStrictHandling(resourceType.get(), queryParameters);
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
-			return Stream.concat(toEndpoints(searchResult), searchForEndpoints(searchParameters, page + 1,
-					currentTotal + searchResult.getEntry().size(), startTask));
+			return Stream.concat(toEndpoints(searchResult),
+					searchForEndpoints(searchParameters, page + 1, currentTotal + searchResult.getEntry().size()));
 		else
 			return toEndpoints(searchResult);
 	}
 
 	@SuppressWarnings("unchecked")
-	private Optional<Class<? extends Resource>> getResourceType(UriComponents searchParameters, Task startTask)
+	private Optional<Class<? extends Resource>> getResourceType(UriComponents searchParameters)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
 			return Optional.empty();
@@ -128,7 +128,6 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		}
 		catch (ClassNotFoundException e)
 		{
-			PingPongLogger logger = new PingPongLogger(SelectPingTargets.class, startTask);
 			logger.error("Unable to find class for FHIR resource type " + type, e);
 			return Optional.empty();
 		}

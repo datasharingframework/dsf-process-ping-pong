@@ -5,13 +5,14 @@ import java.util.Objects;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -21,6 +22,8 @@ import jakarta.ws.rs.WebApplicationException;
 
 public class CheckPingTaskStatus extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(CheckPingTaskStatus.class);
+
 	public CheckPingTaskStatus(ProcessPluginApi api)
 	{
 		super(api);
@@ -29,7 +32,6 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(CheckPingTaskStatus.class, variables.getStartTask());
 		logger.debug("Checking status of ping task...");
 
 		Target target = variables.getTarget();

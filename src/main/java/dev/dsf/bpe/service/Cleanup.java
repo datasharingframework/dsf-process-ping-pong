@@ -6,6 +6,8 @@ import java.util.Objects;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
@@ -13,7 +15,6 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -22,6 +23,7 @@ import jakarta.ws.rs.WebApplicationException;
 
 public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 {
+	private static final Logger logger = LoggerFactory.getLogger(Cleanup.class);
 	private org.camunda.bpm.engine.delegate.Expression process;
 
 	public Cleanup(ProcessPluginApi api)
@@ -31,7 +33,6 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 
 	public void doExecute(DelegateExecution delegateExecution, Variables variables)
 	{
-		PingPongLogger logger = new PingPongLogger(Cleanup.class, variables.getStartTask());
 		logger.debug("Cleaning up...");
 
 		CodeSystem.DsfPingProcesses.Code process = getProcess((String) this.process.getValue(delegateExecution));

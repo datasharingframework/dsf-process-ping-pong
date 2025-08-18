@@ -1,17 +1,12 @@
 package dev.dsf.bpe;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.UrlType;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 //todo: remove process and processStep + CodeSystems, make message never contain e.getMessage() becaus security
 // ping status codesystem should extend old ping status codesystem, map every possible error to a unique name in a new codesystem

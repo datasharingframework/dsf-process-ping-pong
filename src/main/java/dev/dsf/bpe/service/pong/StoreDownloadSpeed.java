@@ -6,10 +6,11 @@ import java.time.Duration;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -18,6 +19,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreDownloadSpeed extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(StoreDownloadSpeed.class);
 	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public StoreDownloadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
@@ -30,7 +32,6 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
-		PingPongLogger logger = new PingPongLogger(StoreDownloadSpeed.class, startTask);
 		logger.debug("Storing download speed...");
 
 		long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());

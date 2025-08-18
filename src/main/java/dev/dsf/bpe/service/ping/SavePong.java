@@ -7,12 +7,13 @@ import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.input.ErrorInputParser;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -22,6 +23,8 @@ import dev.dsf.bpe.variables.duration.DurationValueImpl;
 
 public class SavePong extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(SavePong.class);
+
 	public SavePong(ProcessPluginApi api)
 	{
 		super(api);
@@ -30,8 +33,6 @@ public class SavePong extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(SavePong.class, variables.getStartTask());
-
 		Target target = variables.getTarget();
 		logger.debug("Pong received from {}. Saving pong information...", target.getEndpointUrl());
 		String correlationKey = target.getCorrelationKey();

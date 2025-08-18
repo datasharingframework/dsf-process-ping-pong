@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
@@ -13,7 +15,6 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
@@ -27,6 +28,8 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class SendPongMessage extends AbstractTaskMessageSend
 {
+	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
+
 	private final AggregateErrorMailService errorMailService;
 
 	public SendPongMessage(ProcessPluginApi api, AggregateErrorMailService errorMailService)
@@ -93,7 +96,6 @@ public class SendPongMessage extends AbstractTaskMessageSend
 	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
 			String errorMessage)
 	{
-		PingPongLogger logger = new PingPongLogger(SendPongMessage.class, variables.getStartTask());
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();
 

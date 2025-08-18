@@ -11,6 +11,8 @@ import java.util.Objects;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
@@ -19,7 +21,6 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.ErrorOutputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
@@ -31,6 +32,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 
 public class StoreResults extends AbstractServiceDelegate implements InitializingBean
 {
+	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 	private final AggregateErrorMailService errorMailService;
 	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
@@ -53,8 +55,6 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(StoreResults.class, variables.getStartTask());
-
 		logger.debug("Storing results for process started with Task {}",
 				variables.getStartTask().getIdElement().getValue());
 		Task task = variables.getStartTask();

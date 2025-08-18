@@ -5,16 +5,19 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.util.logging.PingPongLogger;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
 public class SetEndpointIdentifier extends AbstractServiceDelegate
 {
+	private static final Logger logger = LoggerFactory.getLogger(SetEndpointIdentifier.class);
+
 	public SetEndpointIdentifier(ProcessPluginApi api)
 	{
 		super(api);
@@ -23,7 +26,6 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		PingPongLogger logger = new PingPongLogger(SetEndpointIdentifier.class, variables.getStartTask());
 		logger.debug("Setting endpoint identifier...");
 
 		Task task = variables.getStartTask();
