@@ -1,5 +1,9 @@
 package dev.dsf.bpe;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
+
 public final class CodeSystem
 {
 	private CodeSystem()
@@ -210,29 +214,104 @@ public final class CodeSystem
 		{
 		}
 
-		public enum Code implements SingleStringValueEnum
+		public enum Code
 		{
-			BITS_PER_SECOND("bits-per-second"),
-			BYTES_PER_SECOND("bytes-per-second"),
-			MEGABITS_PER_SECOND("megabits-per-second"),
-			MEGABYTES_PER_SECOND("megabytes-per-second");
-
-			private final String value;
-
-			Code(String value)
+			bps
 			{
-				this.value = value;
-			}
-
-			public String getValue()
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal bits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return bits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			kbps
 			{
-				return value;
-			}
-
-			public static Code ofValue(String value)
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			Mbps
 			{
-				return new SingleStringValueEnumParser<>(Code.class).ofValue(value);
-			}
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			Gbps
+			{
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			Bps
+			{
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			kBps
+			{
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			MBps
+			{
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			},
+			GBps
+			{
+				@Override
+				public BigDecimal calculateSpeed(long bytes, Duration duration)
+				{
+					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
+					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
+							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
+					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+			};
+
+			public abstract BigDecimal calculateSpeed(long bytes, Duration duration);
 		}
 	}
 }

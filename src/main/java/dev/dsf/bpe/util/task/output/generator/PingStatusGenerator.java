@@ -174,11 +174,11 @@ public final class PingStatusGenerator
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.getValue());
+			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.name());
 		}
 		else
 		{
-			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.getValue());
+			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.name());
 		}
 
 		return outputComponent;
@@ -213,11 +213,11 @@ public final class PingStatusGenerator
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.getValue());
+			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.name());
 		}
 		else
 		{
-			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.getValue());
+			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.name());
 		}
 
 		return outputComponent;
@@ -270,7 +270,7 @@ public final class PingStatusGenerator
 			CodeSystem.DsfPingUnits.Code unit)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
-				downloadSpeed, uploadSpeed, unit.getValue());
+				downloadSpeed, uploadSpeed, unit.name());
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)

@@ -43,7 +43,6 @@ import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
-import dev.dsf.bpe.util.CodeSystemDsfPingUnitsConverter;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
 import dev.dsf.bpe.variables.duration.DurationValueSerializer;
@@ -73,9 +72,9 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.maxUploadSizeBytes:10000000}")
 	private long maxUploadSizeBytes;
 
-	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values be: \"bits-per-second\", \"bytes-per-second\", \"megabits-per-second\", \"megabytes-per-second\". Default is \"megabytes-per-second\".", processNames = {
+	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". Default is \"mbps\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
-	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:megabits-per-second}")
+	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:Mbps}")
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public CodeSystem.DsfPingUnits.Code getNetworkSpeedUnit()
@@ -349,15 +348,6 @@ public class PingConfig
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.registerModule(new JavaTimeModule());
 		return objectMapper;
-	}
-
-	@Bean
-	public static ConversionService conversionService()
-	{
-		DefaultConversionService conversionService = new DefaultConversionService();
-		DefaultConversionService.addDefaultConverters(conversionService);
-		conversionService.addConverter(new CodeSystemDsfPingUnitsConverter());
-		return conversionService;
 	}
 
 	private static final String OBJECT_MAPPER_WITH_TIME_MODULE = "objectMapperWithJavaTimeModule";

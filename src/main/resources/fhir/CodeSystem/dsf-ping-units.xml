@@ -22,22 +22,37 @@
     <versionNeeded value="false" />
     <content value="complete" />
     <concept>
-        <code value="bits-per-second"/>
+        <code value="bps"/>
         <display value="bps"/>
         <definition value="Download speed unit in bits per second" />
     </concept>
     <concept>
-        <code value="bytes-per-second"/>
-        <display value="Bps"/>
-        <definition value="Download speed unit in bytes per second" />
+        <code value="kbps"/>
+        <display value="kbps"/>
+        <definition value="Download speed unit in kilobits per second" />
     </concept>
     <concept>
-        <code value="megabits-per-second"/>
+        <code value="Mbps"/>
         <display value="Mbps"/>
         <definition value="Download speed unit in megabits per second" />
     </concept>
     <concept>
-        <code value="megabytes-per-second"/>
+        <code value="Gbps"/>
+        <display value="Gbps"/>
+        <definition value="Download speed unit in gigabits per second" />
+    </concept>
+    <concept>
+        <code value="Bps"/>
+        <display value="Bps"/>
+        <definition value="Download speed unit in bytes per second" />
+    </concept>
+    <concept>
+        <code value="kBps"/>
+        <display value="kBps"/>
+        <definition value="Download speed unit in kilobytes per second" />
+    </concept>
+    <concept>
+        <code value="MBps"/>
         <display value="MBps"/>
         <definition value="Download speed unit in megabytes per second" />
     </concept>

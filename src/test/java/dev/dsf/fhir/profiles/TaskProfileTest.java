@@ -332,7 +332,7 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
 		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED,
-				BigDecimal.ZERO, BigDecimal.ZERO, CodeSystem.DsfPingUnits.Code.BITS_PER_SECOND));
+				BigDecimal.ZERO, BigDecimal.ZERO, CodeSystem.DsfPingUnits.Code.bps));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
