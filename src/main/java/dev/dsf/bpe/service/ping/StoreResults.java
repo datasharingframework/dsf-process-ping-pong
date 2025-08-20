@@ -22,7 +22,6 @@ import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
-import dev.dsf.bpe.util.task.output.generator.ErrorOutputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -61,8 +60,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		Targets targets = variables.getTargets();
 		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
 
-		ErrorOutputComponentGenerator.create(ErrorListUtils.getErrorList(execution).getEntries())
-				.forEach(task::addOutput);
+		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(execution).getEntries()).forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{

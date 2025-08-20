@@ -1,11 +1,15 @@
 package dev.dsf.bpe;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.StringType;
+import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.UrlType;
 
 //todo: remove process and processStep + CodeSystems, make message never contain e.getMessage() becaus security
@@ -69,5 +73,27 @@ public record ProcessError(CodeSystem.DsfPingProcesses.Code process, CodeSystem.
 		CodeSystem.DsfPingProcessSteps.Code stepCode = CodeSystem.DsfPingProcessSteps.Code.ofValue(processStep);
 
 		return new ProcessError(processCode, stepCode, action, potentialFixUrl, message);
+	}
+
+	public static List<Task.TaskOutputComponent> toTaskOutput(List<ProcessError> errors)
+	{
+		if (errors == null || errors.isEmpty())
+			return List.of();
+		return errors.stream().map(ProcessError::toTaskOutput).collect(Collectors.toList());
+	}
+
+	public static Task.TaskOutputComponent toTaskOutput(ProcessError error)
+	{
+		Task.TaskOutputComponent param = new Task.TaskOutputComponent();
+
+		param.getType().addCoding(new Coding(CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ERROR.getValue(), null));
+		param.addExtension(ProcessError.toExtension(error));
+		Extension dataAbsentReason = new Extension()
+				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+				.setValue(new CodeType("not-applicable"));
+		param.setValue(new StringType());
+		param.getValue().addExtension(dataAbsentReason);
+
+		return param;
 	}
 }
