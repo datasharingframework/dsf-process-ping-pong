@@ -1,33 +1,41 @@
 package dev.dsf.bpe.service;
 
+import java.util.Objects;
+
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.Expression;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 import jakarta.ws.rs.WebApplicationException;
 
-public class GenerateAndStoreResource
+public class GenerateAndStoreResource extends AbstractServiceDelegate implements InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(GenerateAndStoreResource.class);
-	private final ProcessPluginApi api;
 	private final long maxUploadSizeBytes;
-	private final CodeSystem.DsfPingProcesses.Code process;
+	private Expression process;
 
-	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes,
-			CodeSystem.DsfPingProcesses.Code process)
+	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes)
 	{
-		this.api = api;
+		super(api);
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
-		this.process = process;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
 	}
 
 	public void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
@@ -63,7 +71,7 @@ public class GenerateAndStoreResource
 		catch (WebApplicationException e)
 		{
 			String status = String.valueOf(e.getResponse().getStatus());
-			ProcessError error = new ProcessError(process,
+			ProcessError error = new ProcessError(getProcess((String) process.getValue(delegateExecution)),
 					CodeSystem.DsfPingProcessSteps.Code.GENERATE_AND_STORE_RESOURCE,
 					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 					"Local DSF FHIR server responded with status: " + status);
@@ -84,4 +92,10 @@ public class GenerateAndStoreResource
 				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 
+	private CodeSystem.DsfPingProcesses.Code getProcess(String process)
+	{
+		if (process == null || process.isEmpty())
+			return null;
+		return CodeSystem.DsfPingProcesses.Code.ofValue(process);
+	}
 }

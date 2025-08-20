@@ -169,7 +169,12 @@
       <bpmn:association id="Association_14iteoh" sourceRef="Activity_0vw65a2" targetRef="TextAnnotation_0smygq5" />
       <bpmn:association id="Association_0l3n1oc" sourceRef="TextAnnotation_08ic0l2" targetRef="Activity_0h9o9u7" />
     </bpmn:subProcess>
-    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.ping.GenerateAndStoreResourcePing">
+    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
+      <bpmn:extensionElements>
+        <camunda:field name="process">
+          <camunda:string>ping</camunda:string>
+        </camunda:field>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1op4sei</bpmn:outgoing>
     </bpmn:serviceTask>

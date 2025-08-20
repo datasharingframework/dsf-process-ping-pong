@@ -7,8 +7,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.support.DefaultConversionService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -21,11 +19,11 @@ import dev.dsf.bpe.message.SendPingMessage;
 import dev.dsf.bpe.message.SendPongMessage;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
+import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
-import dev.dsf.bpe.service.ping.GenerateAndStoreResourcePing;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
@@ -33,7 +31,6 @@ import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
-import dev.dsf.bpe.service.pong.GenerateAndStoreResourcePong;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
 import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
 import dev.dsf.bpe.service.pong.LogPing;
@@ -283,16 +280,9 @@ public class PingConfig
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public GenerateAndStoreResourcePing generateAndStoreResourcePing()
+	public GenerateAndStoreResource generateAndStoreResource()
 	{
-		return new GenerateAndStoreResourcePing(api, maxUploadSizeBytes);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public GenerateAndStoreResourcePong generateAndStoreResourcePong()
-	{
-		return new GenerateAndStoreResourcePong(api, maxUploadSizeBytes);
+		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
 	}
 
 	@Bean

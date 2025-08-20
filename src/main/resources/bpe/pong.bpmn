@@ -78,7 +78,12 @@
       <bpmn:incoming>Flow_0h8flp6</bpmn:incoming>
       <bpmn:outgoing>Flow_0zib7wr</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.pong.GenerateAndStoreResourcePong">
+    <bpmn:serviceTask id="Activity_1m4wavi" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
+      <bpmn:extensionElements>
+        <camunda:field name="process">
+          <camunda:string>pong</camunda:string>
+        </camunda:field>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0x7t1ii</bpmn:incoming>
       <bpmn:outgoing>Flow_033lqly</bpmn:outgoing>
     </bpmn:serviceTask>
