@@ -19,7 +19,6 @@ import jakarta.ws.rs.core.Response;
 
 public final class SendTaskErrorConverter
 {
-
 	private SendTaskErrorConverter()
 	{
 	}
@@ -31,35 +30,32 @@ public final class SendTaskErrorConverter
 
 	public static ProcessError convert(Exception exception, String action)
 	{
-		ProcessError processError;
 		if (exception instanceof WebApplicationException e)
 		{
-			processError = convertWebApplicationException().apply(e, action);
+			return convertWebApplicationException().apply(e, action);
 		}
 		else if (exception instanceof SSLHandshakeException e)
 		{
-			processError = convertSSLHandshakeException().apply(e, action);
+			return convertSSLHandshakeException().apply(e, action);
 		}
 		else if (exception instanceof ConnectTimeoutException e)
 		{
-			processError = convertConnectTimeoutException().apply(e, action);
+			return convertConnectTimeoutException().apply(e, action);
 		}
 		else if (exception instanceof HttpHostConnectException e)
 		{
-			processError = convertHttpHostConnectException().apply(e, action);
+			return convertHttpHostConnectException().apply(e, action);
 		}
 		else if (exception instanceof ProcessingException e)
 		{
-			processError = EXPECTED_CAUSES_WITH_CONVERTERS.keySet().stream()
+			return EXPECTED_CAUSES_WITH_CONVERTERS.keySet().stream()
 					.map(causeClass -> getExpectedCauseInstanceFromStack(causeClass, e)).filter(Objects::nonNull)
 					.findFirst().map(ex -> applyConverter(ex, action)).orElse(applyConverter(e, action));
 		}
 		else
 		{
-			processError = convertExceptionFallback().apply(exception, action);
+			return convertExceptionFallback().apply(exception, action);
 		}
-
-		return processError;
 	}
 
 	private static BiFunction<SSLHandshakeException, String, ProcessError> convertSSLHandshakeException()
