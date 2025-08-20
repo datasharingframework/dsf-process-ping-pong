@@ -4,6 +4,7 @@ import java.net.SocketTimeoutException;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.camunda.bpm.engine.delegate.Expression;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ import jakarta.ws.rs.WebApplicationException;
 public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(Cleanup.class);
-	private org.camunda.bpm.engine.delegate.Expression process;
+	private Expression process;
 
 	public Cleanup(ProcessPluginApi api)
 	{
