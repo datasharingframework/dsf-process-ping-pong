@@ -23,11 +23,6 @@ public final class SendTaskErrorConverter
 	{
 	}
 
-	private static final Map<Class<? extends Throwable>, BiFunction<? extends Throwable, String, ProcessError>> EXPECTED_CAUSES_WITH_CONVERTERS = Map
-			.of(SSLHandshakeException.class, convertSSLHandshakeException(), ConnectTimeoutException.class,
-					convertConnectTimeoutException(), UnknownHostException.class, convertUnknownHostException(),
-					HttpHostConnectException.class, convertConnectTimeoutException());
-
 	public static ProcessError convert(Exception exception, String action)
 	{
 		if (exception instanceof WebApplicationException e)
@@ -48,9 +43,31 @@ public final class SendTaskErrorConverter
 		}
 		else if (exception instanceof ProcessingException e)
 		{
-			return EXPECTED_CAUSES_WITH_CONVERTERS.keySet().stream()
-					.map(causeClass -> getExpectedCauseInstanceFromStack(causeClass, e)).filter(Objects::nonNull)
-					.findFirst().map(ex -> applyConverter(ex, action)).orElse(applyConverter(e, action));
+			SSLHandshakeException sslHandshakeException = getExpectedCauseInstanceFromStack(SSLHandshakeException.class, e);
+			if(sslHandshakeException != null)
+			{
+				return convertSSLHandshakeException().apply(sslHandshakeException, action);
+			}
+
+			ConnectTimeoutException connectTimeoutException = getExpectedCauseInstanceFromStack(ConnectTimeoutException.class, e);
+			if(connectTimeoutException != null)
+			{
+				return convertConnectTimeoutException().apply(connectTimeoutException, action);
+			}
+
+			UnknownHostException unknownHostException = getExpectedCauseInstanceFromStack(UnknownHostException.class, e);
+			if (unknownHostException != null)
+			{
+				return convertUnknownHostException().apply(unknownHostException, action);
+			}
+
+			HttpHostConnectException httpHostConnectException = getExpectedCauseInstanceFromStack(HttpHostConnectException.class, e);
+			if (httpHostConnectException != null)
+			{
+				return convertHttpHostConnectException().apply(httpHostConnectException, action);
+			}
+
+			return convertExceptionFallback().apply(e, action);
 		}
 		else
 		{
@@ -99,15 +116,6 @@ public final class SendTaskErrorConverter
 				CodeSystem.DsfPingProcessSteps.Code.PING, action, ConstantsPing.POTENTIAL_FIX_URL_UNKNOWN_HOST,
 				e.getMessage());
 	}
-
-	private static <T extends Throwable> ProcessError applyConverter(T ex, String action)
-	{
-		@SuppressWarnings("unchecked")
-		BiFunction<T, String, ProcessError> converter = (BiFunction<T, String, ProcessError>) EXPECTED_CAUSES_WITH_CONVERTERS
-				.getOrDefault(ex.getClass(), convertExceptionFallback());
-		return converter.apply(ex, action);
-	}
-
 
 	private static <T extends Throwable> T getExpectedCauseInstanceFromStack(Class<T> expectedCause, Throwable e)
 	{
