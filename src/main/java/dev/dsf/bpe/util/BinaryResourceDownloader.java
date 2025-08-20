@@ -31,7 +31,7 @@ public class BinaryResourceDownloader
 		this.process = process;
 	}
 
-	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task, long maxDownloadSizeBytes)
+	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task)
 	{
 		DownloadResult downloadResult;
 
@@ -64,16 +64,15 @@ public class BinaryResourceDownloader
 
 			try (binaryResourceInputStream)
 			{
-				logger.info(
-						"Downloading resource for: '{}'. Requested resource size is {} bytes, maximum downloadable size is {} bytes...",
-						downloadResourceReference.getReference(), downloadResourceSizeBytes, maxDownloadSizeBytes);
+				logger.info("Downloading resource for: '{}'. Requested resource size is {} bytes...",
+						downloadResourceReference.getReference(), downloadResourceSizeBytes);
 				long downloadStartTime = System.currentTimeMillis();
-				long numBytes = Math.min(downloadResourceSizeBytes, maxDownloadSizeBytes);
-				binaryResourceInputStream.skipNBytes(numBytes);
+				binaryResourceInputStream.skipNBytes(downloadResourceSizeBytes);
 				long downloadEndTime = System.currentTimeMillis();
 				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
-				downloadResult = new DownloadResult(numBytes, downloadedDuration);
-				logger.info("Finished downloading {} bytes. Took {}", numBytes, downloadedDuration.toString());
+				downloadResult = new DownloadResult(downloadResourceSizeBytes, downloadedDuration);
+				logger.info("Finished downloading {} bytes. Took {}", downloadResourceSizeBytes,
+						downloadedDuration.toString());
 			}
 			catch (IOException e)
 			{

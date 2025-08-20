@@ -18,12 +18,10 @@ import dev.dsf.bpe.variables.duration.DurationValueImpl;
 public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeedInSubProcess.class);
-	private final long maxDownloadSizeBytes;
 
-	public DownloadResourceAndMeasureSpeedInSubProcess(ProcessPluginApi api, long maxDownloadSizeBytes)
+	public DownloadResourceAndMeasureSpeedInSubProcess(ProcessPluginApi api)
 	{
 		super(api);
-		this.maxDownloadSizeBytes = maxDownloadSizeBytes;
 	}
 
 	@Override
@@ -37,7 +35,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
-				CodeSystem.DsfPingProcesses.Code.PING).download(variables, api, task, maxDownloadSizeBytes);
+				CodeSystem.DsfPingProcesses.Code.PING).download(variables, api, task);
 
 		if (downloadResult.getError() == null)
 		{

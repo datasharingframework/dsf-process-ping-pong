@@ -198,14 +198,14 @@ public class PingConfig
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DownloadResourceAndMeasureSpeed downloadResourceAndMeasureSpeed()
 	{
-		return new DownloadResourceAndMeasureSpeed(api, maxDownloadSizeBytes);
+		return new DownloadResourceAndMeasureSpeed(api);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
 	{
-		return new DownloadResourceAndMeasureSpeedInSubProcess(api, maxDownloadSizeBytes);
+		return new DownloadResourceAndMeasureSpeedInSubProcess(api);
 	}
 
 	@Bean
