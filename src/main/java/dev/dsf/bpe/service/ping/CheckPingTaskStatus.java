@@ -46,21 +46,20 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		try
 		{
 			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
-			switch (pingTask.getStatus())
+			error = switch (pingTask.getStatus())
 			{
-				case REQUESTED, INPROGRESS, FAILED, COMPLETED -> error = new ProcessError(
-						CodeSystem.DsfPingProcesses.Code.PING,
+				case REQUESTED, INPROGRESS, FAILED, COMPLETED -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
 						CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS, "Awaiting pong message", null,
 						"Pong message timed out. Status of ping task resource with id " + taskId + " from "
 								+ target.getEndpointUrl() + " is " + pingTask.getStatus());
-				default -> error = new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
+				default -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
 						CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS, "Awaiting pong message", null,
 						"Pong message timed out. Status of ping task resource with id " + taskId + " from "
 								+ target.getEndpointUrl() + " is " + pingTask.getStatus()
 								+ ". Unexpected status. Should be either of " + Task.TaskStatus.REQUESTED + ", "
 								+ Task.TaskStatus.INPROGRESS + ", " + Task.TaskStatus.COMPLETED + " or "
 								+ Task.TaskStatus.FAILED);
-			}
+			};
 		}
 		catch (WebApplicationException e)
 		{
