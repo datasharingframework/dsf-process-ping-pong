@@ -23,7 +23,8 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 	public SetDownloadResourceSize(ProcessPluginApi api, long maxDownloadResourceSizeBytes)
 	{
 		super(api);
-		this.maxDownloadResourceSizeBytes = Math.min(maxDownloadResourceSizeBytes, ConstantsPing.DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT);
+		this.maxDownloadResourceSizeBytes = Math.min(maxDownloadResourceSizeBytes,
+				ConstantsPing.DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT);
 	}
 
 	@Override
@@ -32,8 +33,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 		logger.debug("Setting download resource size...");
 
 		long downloadResourceSizeBytes = getDownloadResourceSizeBytes(variables);
-		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(),
-				downloadResourceSizeBytes);
+		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), downloadResourceSizeBytes);
 
 		logger.debug("Set download resource size to " + downloadResourceSizeBytes);
 	}
@@ -44,7 +44,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 				variables.getStartTask(), CodeSystem.DsfPing.URL,
 				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), DecimalType.class);
 
-		return downloadResourceSizeType.map(decimalType -> decimalType.getValue().longValue()).orElse(
-				maxDownloadResourceSizeBytes);
+		return downloadResourceSizeType.map(decimalType -> decimalType.getValue().longValue())
+				.orElse(maxDownloadResourceSizeBytes);
 	}
 }

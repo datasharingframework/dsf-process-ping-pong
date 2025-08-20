@@ -45,7 +45,6 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		ProcessError error;
 		try
 		{
-
 			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
 			switch (pingTask.getStatus())
 			{
@@ -62,8 +61,6 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 								+ Task.TaskStatus.INPROGRESS + ", " + Task.TaskStatus.COMPLETED + " or "
 								+ Task.TaskStatus.FAILED);
 			}
-
-
 		}
 		catch (WebApplicationException e)
 		{
