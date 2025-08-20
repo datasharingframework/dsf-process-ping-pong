@@ -43,25 +43,29 @@ public final class SendTaskErrorConverter
 		}
 		else if (exception instanceof ProcessingException e)
 		{
-			SSLHandshakeException sslHandshakeException = getExpectedCauseInstanceFromStack(SSLHandshakeException.class, e);
-			if(sslHandshakeException != null)
+			SSLHandshakeException sslHandshakeException = getExpectedCauseInstanceFromStack(SSLHandshakeException.class,
+					e);
+			if (sslHandshakeException != null)
 			{
 				return convertSSLHandshakeException().apply(sslHandshakeException, action);
 			}
 
-			ConnectTimeoutException connectTimeoutException = getExpectedCauseInstanceFromStack(ConnectTimeoutException.class, e);
-			if(connectTimeoutException != null)
+			ConnectTimeoutException connectTimeoutException = getExpectedCauseInstanceFromStack(
+					ConnectTimeoutException.class, e);
+			if (connectTimeoutException != null)
 			{
 				return convertConnectTimeoutException().apply(connectTimeoutException, action);
 			}
 
-			UnknownHostException unknownHostException = getExpectedCauseInstanceFromStack(UnknownHostException.class, e);
+			UnknownHostException unknownHostException = getExpectedCauseInstanceFromStack(UnknownHostException.class,
+					e);
 			if (unknownHostException != null)
 			{
 				return convertUnknownHostException().apply(unknownHostException, action);
 			}
 
-			HttpHostConnectException httpHostConnectException = getExpectedCauseInstanceFromStack(HttpHostConnectException.class, e);
+			HttpHostConnectException httpHostConnectException = getExpectedCauseInstanceFromStack(
+					HttpHostConnectException.class, e);
 			if (httpHostConnectException != null)
 			{
 				return convertHttpHostConnectException().apply(httpHostConnectException, action);
