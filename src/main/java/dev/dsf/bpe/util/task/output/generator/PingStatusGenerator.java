@@ -94,7 +94,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent,
+	private static TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent,
 			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (hasStatusCodeSet(outputComponent))
@@ -132,7 +132,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updateStatusOutput(TaskOutputComponent outputComponent, Target target)
+	private static TaskOutputComponent updateStatusOutput(TaskOutputComponent outputComponent, Target target)
 	{
 		if (hasTargetSet(outputComponent))
 		{
@@ -169,7 +169,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updateStatusOutputDownloadSpeed(TaskOutputComponent outputComponent,
+	private static TaskOutputComponent updateStatusOutputDownloadSpeed(TaskOutputComponent outputComponent,
 			BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
@@ -208,7 +208,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updateStatusOutputUploadSpeed(TaskOutputComponent outputComponent,
+	private static TaskOutputComponent updateStatusOutputUploadSpeed(TaskOutputComponent outputComponent,
 			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
@@ -253,12 +253,6 @@ public final class PingStatusGenerator
 	}
 
 	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
-			BigDecimal downloadSpeed, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code unit)
-	{
-		return createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
-	}
-
-	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
@@ -271,11 +265,6 @@ public final class PingStatusGenerator
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
 				downloadSpeed, uploadSpeed, unit.name());
-	}
-
-	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)
-	{
-		return createPongStatusOutput(target, statusCode, null);
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
