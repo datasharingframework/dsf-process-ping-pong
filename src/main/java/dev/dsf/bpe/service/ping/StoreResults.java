@@ -21,7 +21,6 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -79,7 +78,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						.getVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey));
 
 				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDuration != null
-						? NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDuration, networkSpeedUnit)
+						? networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration)
 						: null;
 
 				Long uploadedBytes = variables
@@ -88,7 +87,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						.getVariable(ExecutionVariables.UPLOADED_DURATION.correlatedValue(correlationKey));
 
 				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
-						? NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDurationMillis, networkSpeedUnit)
+						? networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDurationMillis)
 						: null;
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),

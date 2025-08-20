@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -38,8 +37,7 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		Duration downloadedDuration = (Duration) variables
 				.getVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue());
 
-		BigDecimal downloadSpeed = NetworkSpeedCalculator.calculate(downloadedBytes, downloadedDuration,
-				networkSpeedUnit);
+		BigDecimal downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
 
 		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.PENDING);
 		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);

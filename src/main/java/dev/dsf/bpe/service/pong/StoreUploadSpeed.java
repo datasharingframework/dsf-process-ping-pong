@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.util.task.NetworkSpeedCalculator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
@@ -44,7 +43,7 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		Duration uploadedDuration = uploadedDurationTaskInput
 				.map(duration -> Duration.ofMillis(duration.getValue().longValue())).orElse(Duration.ZERO);
 
-		BigDecimal uploadSpeed = NetworkSpeedCalculator.calculate(uploadedBytes, uploadedDuration, networkSpeedUnit);
+		BigDecimal uploadSpeed = networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDuration);
 
 		PingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
 

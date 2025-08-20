@@ -221,6 +221,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal bits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
@@ -232,6 +236,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
@@ -244,6 +252,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
@@ -256,6 +268,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes * 8L).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
@@ -268,6 +284,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
@@ -279,6 +299,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
@@ -291,6 +315,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
@@ -303,6 +331,10 @@ public final class CodeSystem
 				@Override
 				public BigDecimal calculateSpeed(long bytes, Duration duration)
 				{
+					if (bytes == 0)
+						return BigDecimal.ZERO;
+					if (duration.isZero())
+						return BigDecimal.valueOf(Long.MAX_VALUE);
 					BigDecimal kiloBits = BigDecimal.valueOf(bytes).setScale(2, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000000000), RoundingMode.HALF_UP);
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
