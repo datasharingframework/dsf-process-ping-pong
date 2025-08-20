@@ -1,6 +1,7 @@
 package dev.dsf.bpe.service.ping;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -11,10 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.util.task.input.ErrorInputParser;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
@@ -54,10 +56,22 @@ public class SavePong extends AbstractServiceDelegate
 				ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
 
-		ProcessErrors errorList = new ProcessErrors(ErrorInputParser.parseInputs(pong));
+		ProcessErrors errorList = new ProcessErrors(parseInputs(pong));
 
 		ErrorListUtils.addAll(errorList, delegateExecution, correlationKey);
 
 		logger.debug("Saved pong information.");
+	}
+
+	private List<ProcessError> parseInputs(Task task)
+	{
+		List<Task.ParameterComponent> inputs = task.getInput().stream().filter(
+				input -> CodeSystem.DsfPing.Code.ERROR.getValue().equals(input.getType().getCodingFirstRep().getCode()))
+				.toList();
+
+		return inputs.stream()
+				.map(input -> ProcessError
+						.toError(input.getExtensionByUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR)))
+				.toList();
 	}
 }
