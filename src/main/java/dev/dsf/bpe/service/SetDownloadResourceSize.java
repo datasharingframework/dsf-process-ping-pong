@@ -33,7 +33,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 		logger.debug("Setting download resource size...");
 
 		long downloadResourceSizeBytes = getDownloadResourceSizeBytes(variables);
-		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), downloadResourceSizeBytes);
+		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), downloadResourceSizeBytes);
 
 		logger.debug("Set download resource size to " + downloadResourceSizeBytes);
 	}

@@ -28,7 +28,7 @@ public class LogAndSaveError extends AbstractServiceDelegate
 		Target target = variables.getTarget();
 
 		ProcessError error = (ProcessError) delegateExecution
-				.getVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue());
+				.getVariableLocal(ExecutionVariables.resourceDownloadError.name());
 
 		ErrorListUtils.add(error, delegateExecution, target.getCorrelationKey());
 

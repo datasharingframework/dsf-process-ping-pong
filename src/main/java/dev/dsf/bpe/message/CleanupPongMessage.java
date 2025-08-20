@@ -35,9 +35,9 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
-		Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
+		Long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey));
 		Duration downloadedDuration = (Duration) variables
-				.getVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey));
+				.getVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey));
 
 		Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 				? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
@@ -57,8 +57,8 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 		ProcessError error = SendTaskErrorConverter.convert(exception,
 				"Sending cleanup message to " + target.getEndpointUrl());
 
-		execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), new ProcessErrorValueImpl(error));
-		execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
+		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(error));
+		execution.setVariableLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
 	}

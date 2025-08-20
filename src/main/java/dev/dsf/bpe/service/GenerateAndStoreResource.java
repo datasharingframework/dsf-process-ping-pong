@@ -54,7 +54,7 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 		{
 			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes);
 		}
-		variables.setLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), downloadResourceSizeBytes);
+		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), downloadResourceSizeBytes);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
@@ -64,7 +64,7 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 
 			String reference = downloadResource.toVersionless().getValueAsString();
 
-			variables.setString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue(), reference);
+			variables.setString(ExecutionVariables.downloadResourceReference.name(), reference);
 
 			logger.debug("Stored binary resource for download");
 		}
@@ -75,14 +75,13 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 					CodeSystem.DsfPingProcessSteps.Code.GENERATE_AND_STORE_RESOURCE,
 					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
 					"Local DSF FHIR server responded with status: " + status);
-			variables.setVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue(),
-					new ProcessErrorValueImpl(error));
+			variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
 		}
 	}
 
 	private long getDownloadResourceSize(Variables variables)
 	{
-		return variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
+		return variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 	}
 
 	private IdType storeBinary(RandomByteInputStream downloadResourceContent)

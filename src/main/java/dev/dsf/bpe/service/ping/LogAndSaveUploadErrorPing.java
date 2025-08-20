@@ -23,7 +23,7 @@ public class LogAndSaveUploadErrorPing extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue());
+		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.resourceUploadError.name());
 
 		logger.info("Error while storing binary resource for download: {}", error.message());
 	}

@@ -25,9 +25,9 @@ public class SetTargetAndConfigureTimer extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		String timerInterval = getTimerInterval(variables);
-		logger.debug("Setting variable '{}' to {}", ExecutionVariables.TIMER_INTERVAL.getValue(), timerInterval);
+		logger.debug("Setting variable '{}' to {}", ExecutionVariables.timerInterval.name(), timerInterval);
 
-		variables.setString(ExecutionVariables.TIMER_INTERVAL.getValue(), timerInterval);
+		variables.setString(ExecutionVariables.timerInterval.name(), timerInterval);
 		variables.setTarget(
 				variables.createTarget(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().get(),
 						api.getEndpointProvider().getLocalEndpointIdentifierValue().get(),

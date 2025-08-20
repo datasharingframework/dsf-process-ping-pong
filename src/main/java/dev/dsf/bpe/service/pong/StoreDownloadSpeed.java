@@ -33,9 +33,8 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 		logger.debug("Storing download speed...");
 
-		long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());
-		Duration downloadedDuration = (Duration) variables
-				.getVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue());
+		long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
+		Duration downloadedDuration = (Duration) variables.getVariable(ExecutionVariables.downloadedDuration.name());
 
 		BigDecimal downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
 

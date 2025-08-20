@@ -39,8 +39,8 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 		CodeSystem.DsfPingProcesses.Code process = getProcess((String) this.process.getValue(delegateExecution));
 		Objects.requireNonNull(process);
 
-		String downloadResourceId = new IdType(
-				variables.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue())).getIdPart();
+		String downloadResourceId = new IdType(variables.getString(ExecutionVariables.downloadResourceReference.name()))
+				.getIdPart();
 		if (downloadResourceId != null)
 		{
 			try

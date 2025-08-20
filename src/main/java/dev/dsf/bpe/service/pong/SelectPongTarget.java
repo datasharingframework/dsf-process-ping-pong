@@ -32,8 +32,7 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 		String correlationKey = api.getTaskHelper()
 				.getFirstInputParameterStringValue(task, BpmnMessage.URL, BpmnMessage.Codes.CORRELATION_KEY).get();
 		String targetOrganizationIdentifierValue = task.getRequester().getIdentifier().getValue();
-		String targetEndpointIdentifierValue = variables
-				.getString(ExecutionVariables.PONG_TARGET_ENDPOINT_IDENTIFIER.getValue());
+		String targetEndpointIdentifierValue = variables.getString(ExecutionVariables.targetEndpointIdentifier.name());
 
 		String targetEndpointAddress = api.getEndpointProvider().getEndpointAddress(targetEndpointIdentifierValue)
 				.orElseThrow(() ->

@@ -39,14 +39,14 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 		if (downloadResult.getError() == null)
 		{
-			variables.setLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey),
+			variables.setLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey),
 					downloadResult.getDownloadedBytes());
-			variables.setVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey),
+			variables.setVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey),
 					new DurationValueImpl(downloadResult.getDownloadedDuration()));
 		}
 		else
 		{
-			delegateExecution.setVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue(),
+			delegateExecution.setVariableLocal(ExecutionVariables.resourceDownloadError.name(),
 					downloadResult.getError());
 		}
 

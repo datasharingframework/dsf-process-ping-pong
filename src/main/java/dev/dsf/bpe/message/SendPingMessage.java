@@ -38,9 +38,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 	@Override
 	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
 	{
-		String downloadResourceReference = variables
-				.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue());
-		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
+		String downloadResourceReference = variables.getString(ExecutionVariables.downloadResourceReference.name());
+		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 
 		Stream<ParameterComponent> downloadResourceReferenceStream = downloadResourceReference == null ? Stream.empty()
 				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
@@ -63,7 +62,7 @@ public class SendPingMessage extends AbstractTaskMessageSend
 				additionalInputParameters);
 		if (taskId != null)
 		{
-			execution.setVariableLocal(ExecutionVariables.PING_TASK_ID.getValue(), taskId.getIdPart());
+			execution.setVariableLocal(ExecutionVariables.pingTaskId.name(), taskId.getIdPart());
 		}
 	}
 
@@ -82,8 +81,8 @@ public class SendPingMessage extends AbstractTaskMessageSend
 		ProcessError error = SendTaskErrorConverter.convert(exception,
 				"Sending ping message to " + target.getEndpointUrl());
 
-		execution.setVariableLocal(ExecutionVariables.ERROR.getValue(), new ProcessErrorValueImpl(error));
-		execution.setVariableLocal(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
+		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(error));
+		execution.setVariableLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
 	}

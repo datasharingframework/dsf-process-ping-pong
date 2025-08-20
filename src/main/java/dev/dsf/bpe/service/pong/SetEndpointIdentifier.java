@@ -30,7 +30,7 @@ public class SetEndpointIdentifier extends AbstractServiceDelegate
 
 		Task task = variables.getStartTask();
 		String endpointIdentifierValue = getEndpointIdentifierValue(task);
-		variables.setString(ExecutionVariables.PONG_TARGET_ENDPOINT_IDENTIFIER.getValue(), endpointIdentifierValue);
+		variables.setString(ExecutionVariables.targetEndpointIdentifier.name(), endpointIdentifierValue);
 
 		logger.debug("Set endpoint identifier to " + endpointIdentifierValue);
 	}

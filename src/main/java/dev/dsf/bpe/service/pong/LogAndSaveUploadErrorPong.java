@@ -24,7 +24,7 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 	@Override
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.RESOURCE_UPLOAD_ERROR.getValue());
+		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.resourceUploadError.name());
 
 		ErrorListUtils.add(error, execution);
 

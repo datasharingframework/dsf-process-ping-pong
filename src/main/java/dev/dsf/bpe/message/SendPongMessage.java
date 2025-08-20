@@ -52,14 +52,13 @@ public class SendPongMessage extends AbstractTaskMessageSend
 			Variables variables)
 	{
 		ProcessErrors errorList = ErrorListUtils.getErrorList(execution);
-		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
+		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 		if (downloadResourceSizeBytes >= 0)
 		{
-			Long downloadedBytes = variables.getLong(ExecutionVariables.DOWNLOADED_BYTES.getValue());
+			Long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
 			Duration downloadedDuration = (Duration) variables
-					.getVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue());
-			String downloadResourceReference = variables
-					.getString(ExecutionVariables.DOWNLOAD_RESOURCE_REFERENCE.getValue());
+					.getVariable(ExecutionVariables.downloadedDuration.name());
+			String downloadResourceReference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 
 			Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
 					? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
@@ -104,7 +103,7 @@ public class SendPongMessage extends AbstractTaskMessageSend
 
 		ErrorListUtils.add(error, execution);
 		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
-		variables.setString(ExecutionVariables.STATUS_CODE.getValue(), CodeSystem.DsfPing.Code.ERROR.getValue());
+		variables.setString(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 		variables.updateTask(startTask);
 
 		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());

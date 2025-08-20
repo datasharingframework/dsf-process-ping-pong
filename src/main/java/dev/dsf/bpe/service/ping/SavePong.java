@@ -47,13 +47,13 @@ public class SavePong extends AbstractServiceDelegate
 						CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(),
 						org.hl7.fhir.r4.model.Duration.class);
 		optDownloadedDuration.ifPresent(
-				duration -> variables.setVariable(ExecutionVariables.UPLOADED_DURATION.correlatedValue(correlationKey),
+				duration -> variables.setVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey),
 						new DurationValueImpl(Duration.ofMillis(duration.getValue().longValue()))));
 
 		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
 				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);
 		optDownloadedBytes.ifPresent(decimalType -> variables.setLong(
-				ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey), decimalType.getValue().longValue()));
+				ExecutionVariables.uploadedBytes.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
 
 		ProcessErrors errorList = new ProcessErrors(parseInputs(pong));

@@ -31,7 +31,7 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 
 		ProcessError error = (ProcessError) delegateExecution
-				.getVariableLocal(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue());
+				.getVariableLocal(ExecutionVariables.resourceDownloadError.name());
 
 		ErrorListUtils.add(error, delegateExecution);
 		PingStatusGenerator.updatePongStatusOutput(startTask,

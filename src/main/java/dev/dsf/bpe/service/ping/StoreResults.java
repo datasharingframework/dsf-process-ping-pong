@@ -68,23 +68,22 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			ProcessErrors errors = ErrorListUtils.getErrorList(execution, correlationKey);
 			CodeSystem.DsfPingStatus.Code statusCode = errors.isEmpty() ? CodeSystem.DsfPingStatus.Code.COMPLETED
 					: CodeSystem.DsfPingStatus.Code.ERROR;
-			long downloadResourceSizeBytes = variables
-					.getLong(ExecutionVariables.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
+			long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{
 				Long downloadedBytes = variables
-						.getLong(ExecutionVariables.DOWNLOADED_BYTES.correlatedValue(correlationKey));
+						.getLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey));
 				Duration downloadedDuration = (Duration) variables
-						.getVariable(ExecutionVariables.DOWNLOADED_DURATION.correlatedValue(correlationKey));
+						.getVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey));
 
 				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDuration != null
 						? networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration)
 						: null;
 
 				Long uploadedBytes = variables
-						.getLong(ExecutionVariables.UPLOADED_BYTES.correlatedValue(correlationKey));
+						.getLong(ExecutionVariables.uploadedBytes.correlatedValue(correlationKey));
 				Duration uploadedDurationMillis = (Duration) variables
-						.getVariable(ExecutionVariables.UPLOADED_DURATION.correlatedValue(correlationKey));
+						.getVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey));
 
 				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
 						? networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDurationMillis)

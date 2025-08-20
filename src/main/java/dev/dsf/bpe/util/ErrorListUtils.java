@@ -39,11 +39,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			add(error, ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
+			add(error, ExecutionVariables.errors.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			add(error, ExecutionVariables.ERROR_LIST.getValue(), execution);
+			add(error, ExecutionVariables.errors.name(), execution);
 		}
 	}
 
@@ -56,11 +56,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			return getErrorList(ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
+			return getErrorList(ExecutionVariables.errors.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			return getErrorList(ExecutionVariables.ERROR_LIST.getValue(), execution);
+			return getErrorList(ExecutionVariables.errors.name(), execution);
 		}
 	}
 
@@ -86,11 +86,11 @@ public class ErrorListUtils
 	{
 		if (correlationKey != null)
 		{
-			saveErrorList(errors, ExecutionVariables.ERROR_LIST.correlatedValue(correlationKey), execution);
+			saveErrorList(errors, ExecutionVariables.errors.correlatedValue(correlationKey), execution);
 		}
 		else
 		{
-			saveErrorList(errors, ExecutionVariables.ERROR_LIST.getValue(), execution);
+			saveErrorList(errors, ExecutionVariables.errors.name(), execution);
 		}
 	}
 

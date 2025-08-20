@@ -35,14 +35,13 @@ public class DownloadResourceAndMeasureSpeed extends AbstractServiceDelegate
 
 		if (downloadResult.getError() == null)
 		{
-			variables.setLong(ExecutionVariables.DOWNLOADED_BYTES.getValue(), downloadResult.getDownloadedBytes());
-			variables.setVariable(ExecutionVariables.DOWNLOADED_DURATION.getValue(),
+			variables.setLong(ExecutionVariables.downloadedBytes.name(), downloadResult.getDownloadedBytes());
+			variables.setVariable(ExecutionVariables.downloadedDuration.name(),
 					new DurationValueImpl(downloadResult.getDownloadedDuration()));
 		}
 		else
 		{
-			delegateExecution.setVariable(ExecutionVariables.RESOURCE_DOWNLOAD_ERROR.getValue(),
-					downloadResult.getError());
+			delegateExecution.setVariable(ExecutionVariables.resourceDownloadError.name(), downloadResult.getError());
 		}
 		logger.debug("Completed resource download and measured speed.");
 	}
