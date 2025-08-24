@@ -59,16 +59,16 @@ public class TaskProfileTest
 	@ClassRule
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
-			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-error.xml", "dsf-extension-network-speed.xml",
-					"dsf-extension-ping-status.xml", "dsf-extension-ping-status-1_0.xml", "dsf-task-ping.xml",
-					"dsf-task-pong.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
-					"dsf-task-stop-ping-autostart.xml", "dsf-task-cleanup-pong.xml"),
+			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
+					"dsf-extension-ping-status-1_0.xml", "dsf-task-ping.xml", "dsf-task-pong.xml",
+					"dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
+					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
-					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-units.xml",
-					"dsf-ping-process-steps.xml", "dsf-ping-processes.xml"),
+					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-process-steps.xml",
+					"dsf-ping-processes.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-pong-status-1_0.xml",
-					"dsf-pong-status.xml", "dsf-ping-units.xml", "dsf-ping-process-steps.xml",
+					"dsf-pong-status.xml", "dsf-network-speed-units.xml", "dsf-ping-process-steps.xml",
 					"dsf-ping-processes.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),

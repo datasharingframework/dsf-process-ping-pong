@@ -230,6 +230,12 @@ public final class CodeSystem
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return bits.divide(seconds, 2, RoundingMode.HALF_UP);
 				}
+
+				@Override
+				public String toUcum()
+				{
+					return "bit/s";
+				}
 			},
 			kbps
 			{
@@ -245,6 +251,12 @@ public final class CodeSystem
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+
+				@Override
+				public String toUcum()
+				{
+					return "Kbit/s";
 				}
 			},
 			Mbps
@@ -262,6 +274,12 @@ public final class CodeSystem
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
 				}
+
+				@Override
+				public String toUcum()
+				{
+					return "Mbit/s";
+				}
 			},
 			Gbps
 			{
@@ -278,6 +296,12 @@ public final class CodeSystem
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
 				}
+
+				@Override
+				public String toUcum()
+				{
+					return "Gbit/s";
+				}
 			},
 			Bps
 			{
@@ -292,6 +316,12 @@ public final class CodeSystem
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+
+				@Override
+				public String toUcum()
+				{
+					return "By/s";
 				}
 			},
 			kBps
@@ -309,6 +339,12 @@ public final class CodeSystem
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
 				}
+
+				@Override
+				public String toUcum()
+				{
+					return "KBy/s";
+				}
 			},
 			MBps
 			{
@@ -324,6 +360,12 @@ public final class CodeSystem
 					BigDecimal seconds = BigDecimal.valueOf(duration.toMillis()).setScale(3, RoundingMode.HALF_UP)
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
+				}
+
+				@Override
+				public String toUcum()
+				{
+					return "MBy/s";
 				}
 			},
 			GBps
@@ -341,9 +383,17 @@ public final class CodeSystem
 							.divide(BigDecimal.valueOf(1000).setScale(3, RoundingMode.HALF_UP), RoundingMode.HALF_UP);
 					return kiloBits.divide(seconds, 2, RoundingMode.HALF_UP);
 				}
+
+				@Override
+				public String toUcum()
+				{
+					return "GBy/s";
+				}
 			};
 
 			public abstract BigDecimal calculateSpeed(long bytes, Duration duration);
+
+			public abstract String toUcum();
 		}
 	}
 }

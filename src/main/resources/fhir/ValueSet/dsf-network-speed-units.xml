@@ -21,8 +21,29 @@
     <immutable value="true" />
     <compose>
         <include>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping-units-v2" />
-            <version value="#{version}" />
+            <system value="http://unitsofmeasure.org" />
+            <version value="3.0.1"/>
+            <concept>
+                <code value="bit/s"/>
+            </concept>
+            <concept>
+                <code value="Kbit/s"/>
+            </concept>
+            <concept>
+                <code value="Mbit/s"/>
+            </concept>
+            <concept>
+                <code value="GBit/s"/>
+            </concept>
+            <concept>
+                <code value="By/s"/>
+            </concept>
+            <concept>
+                <code value="KBy/s"/>
+            </concept>
+            <concept>
+                <code value="MBy/s"/>
+            </concept>
         </include>
     </compose>
 </ValueSet>

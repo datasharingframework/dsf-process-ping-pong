@@ -111,34 +111,37 @@
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.extension">
-      <path value="Extension.extension.extension" />
-      <slicing>
-        <discriminator>
-          <type value="value" />
-          <path value="url" />
-        </discriminator>
-        <rules value="open" />
-      </slicing>
-      <min value="1"/>
-      <max value="1"/>
-    </element>
-    <element id="Extension.extension:download-speed.extension:network-speed-extension">
-      <path value="Extension.extension.extension" />
-      <sliceName value="network-speed-extension" />
-      <min value="1" />
-      <type>
-        <code value="Extension" />
-        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-network-speed|#{version}" />
-      </type>
-    </element>
     <element id="Extension.extension:download-speed.url">
       <path value="Extension.extension.url"/>
       <fixedUri value="download-speed"/>
     </element>
     <element id="Extension.extension:download-speed.value[x]">
       <path value="Extension.extension.value[x]"/>
-      <max value="0"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="Quantity"/>
+      </type>
+    </element>
+    <element id="Extension.extension:download-speed.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed.value[x].unit">
+      <path value="Extension.extension.value[x].unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed.value[x].code">
+      <path value="Extension.extension.value[x].code"/>
+      <min value="1"/>
+      <max value="1"/>
     </element>
     <element id="Extension.extension:upload-speed">
       <path value="Extension.extension"/>
@@ -146,34 +149,37 @@
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.extension">
-      <path value="Extension.extension.extension" />
-      <slicing>
-        <discriminator>
-          <type value="value" />
-          <path value="url" />
-        </discriminator>
-        <rules value="open" />
-      </slicing>
-      <min value="1"/>
-      <max value="1"/>
-    </element>
-    <element id="Extension.extension:upload-speed.extension:network-speed-extension">
-      <path value="Extension.extension.extension" />
-      <sliceName value="network-speed-extension" />
-      <min value="1" />
-      <type>
-        <code value="Extension" />
-        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-network-speed|#{version}" />
-      </type>
-    </element>
     <element id="Extension.extension:upload-speed.url">
       <path value="Extension.extension.url"/>
       <fixedUri value="upload-speed"/>
     </element>
     <element id="Extension.extension:upload-speed.value[x]">
       <path value="Extension.extension.value[x]"/>
-      <max value="0"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="Quantity"/>
+      </type>
+    </element>
+    <element id="Extension.extension:upload-speed.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed.value[x].unit">
+      <path value="Extension.extension.value[x].unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed.value[x].code">
+      <path value="Extension.extension.value[x].code"/>
+      <min value="1"/>
+      <max value="1"/>
     </element>
     <element id="Extension.extension:error">
       <path value="Extension.extension"/>
