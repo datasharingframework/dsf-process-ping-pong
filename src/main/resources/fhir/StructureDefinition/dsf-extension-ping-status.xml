@@ -105,6 +105,23 @@
       <path value="Extension.extension.value[x].value"/>
       <min value="1"/>
     </element>
+    <element id="Extension.extension:error-message">
+      <path value="Extension.extension"/>
+      <sliceName value="error-message"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:error-message.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="error-message"/>
+    </element>
+    <element id="Extension.extension:error-message.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <type>
+        <code value="string"/>
+      </type>
+    </element>
     <element id="Extension.extension:download-speed">
       <path value="Extension.extension"/>
       <sliceName value="download-speed"/>
