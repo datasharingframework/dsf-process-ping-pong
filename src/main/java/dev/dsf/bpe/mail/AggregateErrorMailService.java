@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Target;
@@ -72,7 +72,7 @@ public class AggregateErrorMailService implements InitializingBean
 
 		if (error != null && error.process() != null)
 		{
-			if (CodeSystem.DsfPingProcesses.Code.PING.equals(error.process()))
+			if (ConstantsPing.PROCESS_NAME_PING.equals(error.process()))
 			{
 				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
 				b.append('/');
@@ -101,13 +101,7 @@ public class AggregateErrorMailService implements InitializingBean
 				b.append(": ");
 			}
 			b.append("\n\t");
-			b.append("Process: ").append(error.process());
-			b.append("\n\t");
-			b.append("Process step: ").append(error.processStep());
-			b.append("\n\t");
-			b.append("Action: ").append(error.action());
-			b.append("\n\t");
-			b.append("Message: ").append(error.message());
+			b.append("Description: ").append(error.concept().getDisplay());
 		}
 		else
 		{

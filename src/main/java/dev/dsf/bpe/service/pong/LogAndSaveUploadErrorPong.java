@@ -25,9 +25,12 @@ public class LogAndSaveUploadErrorPong extends AbstractServiceDelegate
 	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.resourceUploadError.name());
-
 		ErrorListUtils.add(error, execution);
 
-		logger.info("Error while storing binary resource for download: {}", error.message());
+		ProcessError errorRemote = (ProcessError) variables
+				.getVariable(ExecutionVariables.resourceUploadErrorRemote.name());
+		ErrorListUtils.addRemote(errorRemote, execution);
+
+		logger.info("Error while storing binary resource for download: {}", error.concept().getDisplay());
 	}
 }

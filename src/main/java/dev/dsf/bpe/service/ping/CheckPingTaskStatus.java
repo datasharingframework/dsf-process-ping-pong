@@ -42,35 +42,54 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		Objects.requireNonNull(taskId);
 		FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
 				.getWebserviceClient(target.getEndpointUrl());
-		ProcessError error;
 		try
 		{
 			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
-			error = switch (pingTask.getStatus())
+			ProcessError error = switch (pingTask.getStatus())
 			{
-				case REQUESTED, INPROGRESS, FAILED, COMPLETED -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
-						CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS, "Awaiting pong message", null,
-						"Pong message timed out. Status of ping task resource with id " + taskId + " from "
-								+ target.getEndpointUrl() + " is " + pingTask.getStatus());
-				default -> new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
-						CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS, "Awaiting pong message", null,
-						"Pong message timed out. Status of ping task resource with id " + taskId + " from "
-								+ target.getEndpointUrl() + " is " + pingTask.getStatus()
-								+ ". Unexpected status. Should be either of " + Task.TaskStatus.REQUESTED + ", "
-								+ Task.TaskStatus.INPROGRESS + ", " + Task.TaskStatus.COMPLETED + " or "
-								+ Task.TaskStatus.FAILED);
+				case COMPLETED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_COMPLETED, null);
+				case FAILED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_FAILED, null);
+				case INPROGRESS -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_IN_PROGRESS, null);
+				case REQUESTED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED, null);
+				default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED, null);
 			};
+			ErrorListUtils.add(error, delegateExecution, correlationKey);
 		}
 		catch (WebApplicationException e)
 		{
-			error = new ProcessError(CodeSystem.DsfPingProcesses.Code.PING,
-					CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS,
-					"Pong message timed out. Error when retrieving status of ping task resource with id " + taskId
-							+ " from " + target.getEndpointUrl(),
-					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP, e.getMessage());
+			ProcessError error = getProcessError(e);
+			ErrorListUtils.add(error, delegateExecution, correlationKey);
 		}
-		ErrorListUtils.add(error, delegateExecution, correlationKey);
+
 		logger.debug("Saved '{}' to process execution for correlation key '{}'",
 				CodeSystem.DsfPing.Code.ERROR.getValue(), correlationKey);
+	}
+
+	private static ProcessError getProcessError(WebApplicationException e)
+	{
+		int statusCode = e.getResponse().getStatus();
+		return switch (statusCode)
+		{
+			case 401 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_401,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 403 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_403,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 500 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_500,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 502 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_502,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+		};
 	}
 }

@@ -1,7 +1,6 @@
 package dev.dsf.bpe.service;
 
 import java.net.SocketTimeoutException;
-import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.Expression;
@@ -36,8 +35,7 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 	{
 		logger.debug("Cleaning up...");
 
-		CodeSystem.DsfPingProcesses.Code process = getProcess((String) this.process.getValue(delegateExecution));
-		Objects.requireNonNull(process);
+		String process = (String) this.process.getValue(delegateExecution);
 
 		String downloadResourceId = new IdType(variables.getString(ExecutionVariables.downloadResourceReference.name()))
 				.getIdPart();
@@ -55,10 +53,11 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 			{
 				if (e.getCause() instanceof SocketTimeoutException)
 				{
-					ProcessError error = new ProcessError(process, CodeSystem.DsfPingProcessSteps.Code.CLEANUP,
-							ConstantsPing.CLEANUP_ERROR_ACTION, ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT,
-							e.getCause().getMessage());
+					ProcessError error = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_TIMEOUT,
+							ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
 					ErrorListUtils.add(error, delegateExecution);
+					logger.error(e.getCause().getMessage());
 				}
 				else
 				{
@@ -67,9 +66,7 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 			}
 			catch (WebApplicationException e)
 			{
-				ProcessError error = new ProcessError(process, CodeSystem.DsfPingProcessSteps.Code.CLEANUP,
-						ConstantsPing.CLEANUP_ERROR_ACTION, ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
-						"Response from local DSF FHIR server: " + e.getResponse().getStatus());
+				ProcessError error = toProcessError(e, process);
 				ErrorListUtils.add(error, delegateExecution);
 			}
 		}
@@ -80,15 +77,29 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 		logger.debug("Cleanup complete.");
 	}
 
-	public void setProcess(org.camunda.bpm.engine.delegate.Expression process)
+	private ProcessError toProcessError(WebApplicationException e, String process)
 	{
-		this.process = process;
+		int status = e.getResponse().getStatus();
+		String message = "Response from local DSF FHIR server: " + status;
+		logger.error(message, e);
+
+		return switch (status)
+		{
+			case 401 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_401,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 403 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_403,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 500 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_500,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 502 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_502,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			default -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_UNEXPECTED,
+					null);
+		};
 	}
 
-	private CodeSystem.DsfPingProcesses.Code getProcess(String process)
+	public void setProcess(Expression process)
 	{
-		if (process == null || process.isEmpty())
-			return null;
-		return CodeSystem.DsfPingProcesses.Code.ofValue(process);
+		this.process = process;
 	}
 }

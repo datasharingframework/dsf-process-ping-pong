@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
@@ -51,7 +52,7 @@ public class SendPongMessage extends AbstractTaskMessageSend
 	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
 			Variables variables)
 	{
-		ProcessErrors errorList = ErrorListUtils.getErrorList(execution);
+		ProcessErrors errorListRemote = ErrorListUtils.getErrorListRemote(execution);
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 		if (downloadResourceSizeBytes >= 0)
 		{
@@ -72,12 +73,12 @@ public class SendPongMessage extends AbstractTaskMessageSend
 
 			return Stream
 					.of(downloadedBytesParameter, downloadedDurationParameter, downloadedResourceReferenceParameter,
-							ErrorInputComponentGenerator.create(errorList.getEntries()).stream())
+							ErrorInputComponentGenerator.create(errorListRemote.getEntries()).stream())
 					.flatMap(stream -> stream);
 		}
 		else
 		{
-			return ErrorInputComponentGenerator.create(errorList.getEntries()).stream();
+			return ErrorInputComponentGenerator.create(errorListRemote.getEntries()).stream();
 		}
 	}
 
@@ -98,14 +99,13 @@ public class SendPongMessage extends AbstractTaskMessageSend
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();
 
-		ProcessError error = SendTaskErrorConverter.convert(exception,
-				"Sending pong message to " + target.getEndpointUrl());
+		ProcessError error = SendTaskErrorConverter.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PONG);
 
 		ErrorListUtils.add(error, execution);
 		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
 		variables.setString(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 		variables.updateTask(startTask);
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.concept().getDisplay());
 	}
 }

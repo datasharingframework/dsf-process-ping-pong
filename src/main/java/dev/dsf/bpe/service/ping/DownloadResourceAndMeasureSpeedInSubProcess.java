@@ -6,7 +6,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.v1.ProcessPluginApi;
@@ -35,9 +35,9 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
-				CodeSystem.DsfPingProcesses.Code.PING).download(variables, api, task);
+				ConstantsPing.PROCESS_NAME_PING).download(variables, api, task);
 
-		if (downloadResult.getError() == null)
+		if (downloadResult.getErrorTuple() == null)
 		{
 			variables.setLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey),
 					downloadResult.getDownloadedBytes());
@@ -47,7 +47,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		else
 		{
 			delegateExecution.setVariableLocal(ExecutionVariables.resourceDownloadError.name(),
-					downloadResult.getError());
+					downloadResult.getErrorTuple().errorLocal());
 		}
 
 		logger.debug("Completed resource download and measured speed.");

@@ -33,6 +33,6 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 		variables.setLong(ExecutionVariables.uploadedBytes.correlatedValue(correlationKey), 0L);
 		variables.setVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey),
 				new DurationValueImpl(Duration.ZERO));
-		logger.debug("Saved error when trying to send ping message. Error message: {}", error.message());
+		logger.debug("Saved error when trying to send ping message. Error message: {}", error.concept().getDisplay());
 	}
 }

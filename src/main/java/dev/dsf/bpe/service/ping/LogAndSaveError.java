@@ -32,6 +32,7 @@ public class LogAndSaveError extends AbstractServiceDelegate
 
 		ErrorListUtils.add(error, delegateExecution, target.getCorrelationKey());
 
-		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(), error.message());
+		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(),
+				error.concept().getDisplay());
 	}
 }

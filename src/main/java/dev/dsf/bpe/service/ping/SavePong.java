@@ -70,8 +70,9 @@ public class SavePong extends AbstractServiceDelegate
 				.toList();
 
 		return inputs.stream()
-				.map(input -> ProcessError
-						.toError(input.getExtensionByUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR)))
+				.map(input -> ProcessError.toError(
+						input.getExtensionByUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR),
+						ConstantsPing.PROCESS_NAME_PONG))
 				.toList();
 	}
 }

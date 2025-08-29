@@ -16,45 +16,27 @@ import dev.dsf.bpe.ProcessError;
 public class ProcessErrorTest
 {
 	private static final String testString = "foo";
-	private static final CodeSystem.DsfPingProcesses.Code testProcess = CodeSystem.DsfPingProcesses.Code.PING;
-	private static final CodeSystem.DsfPingProcessSteps.Code testStep = CodeSystem.DsfPingProcessSteps.Code.CHECK_PING_TASK_STATUS;
+	private static final String testProcess = ConstantsPing.PROCESS_NAME_PING;
+	private static final CodeSystem.DsfPingError.Concept testConcept = CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_401;
 
 	@Test
 	public void ExtensionToErrorTest()
 	{
-		ProcessError expected = new ProcessError(testProcess, testStep, testString, testString, testString);
-		assertEquals(expected, ProcessError.toError(getExtensionFull()));
+		ProcessError expected = new ProcessError(testProcess, testConcept, testString);
+		assertEquals(expected, ProcessError.toError(getExtensionFull(), testProcess));
 	}
 
 	@Test
 	public void ExtensionWithoutFixUrlToErrorTest()
 	{
-		ProcessError expected = new ProcessError(testProcess, testStep, testString, null, testString);
-		assertEquals(expected, ProcessError.toError(getExtensionMissingFixUrl()));
+		ProcessError expected = new ProcessError(testProcess, testConcept, null);
+		assertEquals(expected, ProcessError.toError(getExtensionMissingFixUrl(), testProcess));
 	}
 
 	@Test
-	public void ExtensionWithoutProcessToErrorTest()
+	public void ExtensionWithoutErrorToErrorTest()
 	{
-		assertThrows(NullPointerException.class, () -> ProcessError.toError(getExtensionMissingProcess()));
-	}
-
-	@Test
-	public void ExtensionWithoutProcessStepToErrorTest()
-	{
-		assertThrows(NullPointerException.class, () -> ProcessError.toError(getExtensionMissingProcessStep()));
-	}
-
-	@Test
-	public void ExtensionWithoutActionToErrorTest()
-	{
-		assertThrows(NullPointerException.class, () -> ProcessError.toError(getExtensionMissingAction()));
-	}
-
-	@Test
-	public void ExtensionWithoutMessageToErrorTest()
-	{
-		assertThrows(NullPointerException.class, () -> ProcessError.toError(getExtensionMissingMessage()));
+		assertThrows(NullPointerException.class, () -> ProcessError.toError(getExtensionMissingError(), testProcess));
 	}
 
 
@@ -63,13 +45,10 @@ public class ProcessErrorTest
 		Extension extension = new Extension();
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, testProcess.getValue(), null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, testStep.getValue(), null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(testString));
+		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR)
+				.setValue(new Coding().setSystem(CodeSystem.DsfPingError.URL).setCode(testConcept.getCode())
+						.setDisplay(testConcept.getDisplay()));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX).setValue(new UrlType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(testString));
 
 		return extension;
 	}
@@ -79,69 +58,18 @@ public class ProcessErrorTest
 		Extension extension = new Extension();
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, testProcess.getValue(), null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, testStep.getValue(), null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(testString));
+		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR)
+				.setValue(new Coding().setSystem(CodeSystem.DsfPingError.URL).setCode(testConcept.getCode())
+						.setDisplay(testConcept.getDisplay()));
 
 		return extension;
 	}
 
-	private Extension getExtensionMissingProcess()
+	private Extension getExtensionMissingError()
 	{
 		Extension extension = new Extension();
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX).setValue(new UrlType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(testString));
-
-		return extension;
-	}
-
-	private Extension getExtensionMissingProcessStep()
-	{
-		Extension extension = new Extension();
-		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
-
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX).setValue(new UrlType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(testString));
-
-		return extension;
-	}
-
-	private Extension getExtensionMissingAction()
-	{
-		Extension extension = new Extension();
-		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
-
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX).setValue(new UrlType(testString));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_MESSAGE).setValue(new StringType(testString));
-
-		return extension;
-	}
-
-	private Extension getExtensionMissingMessage()
-	{
-		Extension extension = new Extension();
-		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
-
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS)
-				.setValue(new Coding(CodeSystem.DsfPingProcesses.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_PROCESS_STEP)
-				.setValue(new Coding(CodeSystem.DsfPingProcessSteps.URL, testString, null));
-		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ACTION).setValue(new StringType(testString));
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX).setValue(new UrlType(testString));
 
 		return extension;

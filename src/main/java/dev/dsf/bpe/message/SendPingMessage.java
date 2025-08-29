@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
@@ -78,13 +79,12 @@ public class SendPingMessage extends AbstractTaskMessageSend
 			String errorMessage)
 	{
 		Target target = variables.getTarget();
-		ProcessError error = SendTaskErrorConverter.convert(exception,
-				"Sending ping message to " + target.getEndpointUrl());
+		ProcessError error = SendTaskErrorConverter.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PING);
 
 		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(error));
 		execution.setVariableLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.message());
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.concept().getDisplay());
 	}
 
 	@Override

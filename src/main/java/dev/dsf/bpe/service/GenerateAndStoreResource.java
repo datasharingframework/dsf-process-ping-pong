@@ -1,6 +1,6 @@
 package dev.dsf.bpe.service;
 
-import java.util.Objects;
+import java.net.SocketTimeoutException;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -18,6 +18,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
+import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
 public class GenerateAndStoreResource extends AbstractServiceDelegate implements InitializingBean
@@ -42,6 +43,7 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 	{
 		logger.debug("Generating resource...");
 		long downloadResourceSizeBytes = getDownloadResourceSize(variables);
+		String process = (String) this.process.getValue(delegateExecution);
 		RandomByteInputStream resourceContent;
 		if (downloadResourceSizeBytes > maxUploadSizeBytes)
 		{
@@ -70,12 +72,74 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 		}
 		catch (WebApplicationException e)
 		{
-			String status = String.valueOf(e.getResponse().getStatus());
-			ProcessError error = new ProcessError(getProcess((String) process.getValue(delegateExecution)),
-					CodeSystem.DsfPingProcessSteps.Code.GENERATE_AND_STORE_RESOURCE,
-					"Storing Binary resource on local DSF FHIR server.", ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP,
-					"Local DSF FHIR server responded with status: " + status);
+			int status = e.getResponse().getStatus();
+			ProcessError error;
+			ProcessError errorRemote;
+
+			switch (status)
+			{
+				case 401:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_401,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_401,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 403:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_403,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_403,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 500:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_500,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_500,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 502:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_502,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_502,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				default:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_UNEXPECTED,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_UNEXPECTED,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+			}
+
 			variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+			if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
+			{
+				variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
+						new ProcessErrorValueImpl(errorRemote));
+			}
+		}
+		catch (ProcessingException e)
+		{
+			if (e.getCause() instanceof SocketTimeoutException)
+			{
+				ProcessError error = new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT,
+						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+				ProcessError errorRemote = new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_TIMEOUT,
+						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+
+				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
+				{
+					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
+							new ProcessErrorValueImpl(errorRemote));
+				}
+			}
+			else
+			{
+				throw e;
+			}
 		}
 	}
 
@@ -91,10 +155,8 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 
-	private CodeSystem.DsfPingProcesses.Code getProcess(String process)
+	public void setProcess(Expression process)
 	{
-		if (process == null || process.isEmpty())
-			return null;
-		return CodeSystem.DsfPingProcesses.Code.ofValue(process);
+		this.process = process;
 	}
 }

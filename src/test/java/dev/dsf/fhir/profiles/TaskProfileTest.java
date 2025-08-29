@@ -64,12 +64,10 @@ public class TaskProfileTest
 					"dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
-					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-ping-process-steps.xml",
-					"dsf-ping-processes.xml"),
+					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml", "dsf-pong-status-1_0.xml",
-					"dsf-pong-status.xml", "dsf-network-speed-units.xml", "dsf-ping-process-steps.xml",
-					"dsf-ping-processes.xml"));
+					"dsf-pong-status.xml", "dsf-network-speed-units.xml"));
 
 	private ResourceValidator resourceValidator = new ResourceValidatorImpl(validationRule.getFhirContext(),
 			validationRule.getValidationSupport());
@@ -216,8 +214,8 @@ public class TaskProfileTest
 		List<ProcessError> errors = new ArrayList<>();
 		for (int i = 0; i < amount; i++)
 		{
-			errors.add(new ProcessError(CodeSystem.DsfPingProcesses.Code.PING, CodeSystem.DsfPingProcessSteps.Code.PING,
-					UUID.randomUUID().toString(), null, UUID.randomUUID().toString()));
+			CodeSystem.DsfPingError.Concept[] concepts = CodeSystem.DsfPingError.Concept.values();
+			errors.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING, concepts[i % concepts.length], null));
 		}
 		return errors;
 	}

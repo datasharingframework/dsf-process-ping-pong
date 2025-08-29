@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
@@ -25,6 +26,8 @@ public class LogAndSaveUploadErrorPing extends AbstractServiceDelegate
 	{
 		ProcessError error = (ProcessError) variables.getVariable(ExecutionVariables.resourceUploadError.name());
 
-		logger.info("Error while storing binary resource for download: {}", error.message());
+		ErrorListUtils.add(error, execution);
+
+		logger.info("Error while storing binary resource for download: {}", error.concept().getDisplay());
 	}
 }

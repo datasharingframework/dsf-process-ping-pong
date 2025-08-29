@@ -31,13 +31,18 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 		Task startTask = variables.getStartTask();
 
 		ProcessError error = (ProcessError) delegateExecution
-				.getVariableLocal(ExecutionVariables.resourceDownloadError.name());
-
+				.getVariable(ExecutionVariables.resourceDownloadError.name());
 		ErrorListUtils.add(error, delegateExecution);
+
+		ProcessError errorRemote = (ProcessError) delegateExecution
+				.getVariable(ExecutionVariables.resourceDownloadErrorRemote.name());
+		ErrorListUtils.addRemote(errorRemote, delegateExecution);
+
 		PingStatusGenerator.updatePongStatusOutput(startTask,
 				ErrorListUtils.getErrorList(delegateExecution).getEntries());
 		variables.updateTask(startTask);
 
-		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(), error.message());
+		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(),
+				error.concept().getDisplay());
 	}
 }

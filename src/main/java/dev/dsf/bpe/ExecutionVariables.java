@@ -9,14 +9,19 @@ public enum ExecutionVariables
 	downloadResourceReference,
 	statusCode,
 	error,
+	errorLocal,
+	errorRemote,
 	errors,
+	errorsRemote,
 	downloadedBytes,
 	downloadedDuration,
 	targetEndpointIdentifier,
 	uploadedBytes,
 	uploadedDuration,
 	resourceDownloadError,
+	resourceDownloadErrorRemote,
 	resourceUploadError,
+	resourceUploadErrorRemote,
 	pingTaskId;
 
 	public String correlatedValue(String correlationKey)

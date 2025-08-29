@@ -24,9 +24,9 @@ import jakarta.ws.rs.WebApplicationException;
 public class BinaryResourceDownloader
 {
 	private static final Logger logger = LoggerFactory.getLogger(BinaryResourceDownloader.class);
-	private final CodeSystem.DsfPingProcesses.Code process;
+	private final String process;
 
-	public BinaryResourceDownloader(CodeSystem.DsfPingProcesses.Code process)
+	public BinaryResourceDownloader(String process)
 	{
 		this.process = process;
 	}
@@ -44,10 +44,11 @@ public class BinaryResourceDownloader
 		if (optDownloadResourceReference.isEmpty())
 		{
 			ProcessError error = new ProcessError(process,
-					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED,
-					"Extracting binary resource reference from task " + task.getIdElement().getValue(), null,
-					"No reference provided in task");
-			downloadResult = new DownloadResult(error);
+					CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_MISSING_REFERENCE, null);
+			ProcessError errorRemote = new ProcessError(process,
+					CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE, null);
+			logDownloadError("Missing binary reference");
+			downloadResult = new DownloadResult(error, errorRemote);
 			return downloadResult;
 		}
 
@@ -55,7 +56,6 @@ public class BinaryResourceDownloader
 		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
-		String action = "Downloading binary resource from " + webserviceUrl;
 		try
 		{
 			InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider()
@@ -79,20 +79,59 @@ public class BinaryResourceDownloader
 				binaryResourceInputStream.close();
 				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
-						CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action, null,
-						errorMessage);
-				logger.error("Encountered an error while downloading resource: {}", errorMessage);
-				downloadResult = new DownloadResult(error);
+						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_IO_ERROR, null);
+				ProcessError errorRemote = new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_IO_ERROR, null);
+				logDownloadError(errorMessage);
+				downloadResult = new DownloadResult(error, errorRemote);
 			}
 		}
 		catch (WebApplicationException e)
 		{
 			String errorMessage = (e.getResponse().getStatusInfo().getStatusCode() + " " + e.getMessage()).trim();
-			ProcessError error = new ProcessError(process,
-					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
-					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP, errorMessage);
-			logger.error("Encountered an error while downloading resource: {}", errorMessage);
-			downloadResult = new DownloadResult(error);
+			int statusCode = e.getResponse().getStatus();
+			ProcessError error;
+			ProcessError errorRemote;
+
+			switch (statusCode)
+			{
+				case 401:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_401,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_401,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 403:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_403,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_403,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 500:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_500,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_500,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				case 502:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_502,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_502,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
+				default:
+					error = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_UNEXPECTED, null);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_UNEXPECTED, null);
+					break;
+			}
+			logDownloadError(errorMessage);
+			downloadResult = new DownloadResult(error, errorRemote);
 		}
 		catch (ProcessingException e)
 		{
@@ -100,10 +139,13 @@ public class BinaryResourceDownloader
 			{
 				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 				ProcessError error = new ProcessError(process,
-						CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action,
-						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT, errorMessage);
-				logger.error("Encountered an error while downloading resource: {}", errorMessage);
-				downloadResult = new DownloadResult(error);
+						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT,
+						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+				ProcessError errorRemote = new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT,
+						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+				logDownloadError(errorMessage);
+				downloadResult = new DownloadResult(error, errorRemote);
 			}
 			else
 			{
@@ -114,32 +156,40 @@ public class BinaryResourceDownloader
 		{
 			String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
 			ProcessError error = new ProcessError(process,
-					CodeSystem.DsfPingProcessSteps.Code.DOWNLOAD_RESOURCE_AND_MEASURE_SPEED, action, null,
-					errorMessage);
-			logger.error("Encountered an error while downloading resource: {}", errorMessage);
-			downloadResult = new DownloadResult(error);
+					CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_IO_ERROR,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+			ProcessError errorRemote = new ProcessError(process,
+					CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_IO_ERROR,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+			logDownloadError(errorMessage);
+			downloadResult = new DownloadResult(error, errorRemote);
 		}
 		return downloadResult;
+	}
+
+	private void logDownloadError(String errorMessage)
+	{
+		logger.error("Encountered an error while downloading resource: {}", errorMessage);
 	}
 
 	public static class DownloadResult
 	{
 		private final long downloadedBytes;
 		private final Duration downloadedDuration;
-		private final ProcessError error;
+		private final ErrorTuple errorTuple;
 
 		public DownloadResult(long downloadedBytes, Duration downloadedDuration)
 		{
 			this.downloadedBytes = downloadedBytes;
 			this.downloadedDuration = downloadedDuration;
-			error = null;
+			errorTuple = null;
 		}
 
-		public DownloadResult(ProcessError error)
+		public DownloadResult(ProcessError error, ProcessError errorRemote)
 		{
 			downloadedBytes = 0;
 			downloadedDuration = Duration.ZERO;
-			this.error = error;
+			this.errorTuple = new ErrorTuple(error, errorRemote);
 		}
 
 		public long getDownloadedBytes()
@@ -152,9 +202,14 @@ public class BinaryResourceDownloader
 			return downloadedDuration;
 		}
 
-		public ProcessError getError()
+		public ErrorTuple getErrorTuple()
 		{
-			return error;
+			return errorTuple;
 		}
+
+		public record ErrorTuple(ProcessError errorLocal, ProcessError errorRemote)
+		{
+		}
+
 	}
 }
