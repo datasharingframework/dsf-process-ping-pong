@@ -5,6 +5,7 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 
 public final class DownloadResourceReferenceGenerator
 {
@@ -17,8 +18,7 @@ public final class DownloadResourceReferenceGenerator
 		Reference reference = new Reference(uri);
 		reference.setType("Binary");
 		Task.ParameterComponent param = new Task.ParameterComponent();
-		param.setValue(reference).getType().addCoding(new Coding(CodeSystem.DsfPing.URL,
-				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE.getValue(), null));
+		param.setValue(reference).getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE));
 		return param;
 	}
 }

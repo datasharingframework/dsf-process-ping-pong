@@ -15,8 +15,7 @@ public final class DownloadResourceSizeGenerator
 	public static Task.ParameterComponent create(long sizeBytes)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
-		param.setValue(new DecimalType(sizeBytes)).getType().addCoding(new Coding(CodeSystem.DsfPing.URL,
-				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), null));
+		param.setValue(new DecimalType(sizeBytes)).getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES));
 		return param;
 	}
 }

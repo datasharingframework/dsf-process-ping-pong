@@ -17,6 +17,7 @@ import org.hl7.fhir.r4.model.Type;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
 import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
@@ -101,11 +102,11 @@ public final class PingStatusGenerator
 	{
 		if (hasStatusCodeSet(outputComponent))
 		{
-			updateStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue());
+			updateStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode);
 		}
 		else
 		{
-			addStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue());
+			addStatus(outputComponent, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode);
 		}
 
 		return outputComponent;
@@ -261,7 +262,7 @@ public final class PingStatusGenerator
 	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors,
 				null, null, null, null, null);
 	}
 
@@ -269,18 +270,18 @@ public final class PingStatusGenerator
 			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
 			CodeSystem.DsfPingUnits.Code unit)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS.getValue(), statusCode.getValue(), errors,
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors,
 				downloadSpeed, uploadSpeed, unit.name(), CODESYSTEM_UCUM, unit.toUcum());
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS.getValue(), statusCode.getValue(), errors,
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors,
 				null, null, null, null, null);
 	}
 
-	private static TaskOutputComponent createStatusOutput(Target target, String outputParameter, String statusCode,
+	private static TaskOutputComponent createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit, String unitSystem,
 			String unitCode)
 	{
@@ -293,13 +294,13 @@ public final class PingStatusGenerator
 		return output;
 	}
 
-	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent, String outputParameter,
-			String statusCode)
+	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent, CodeSystem.DsfPing.Code outputParameter,
+			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (outputParameter != null && statusCode != null)
 		{
-			outputComponent.setValue(new Coding().setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode));
-			outputComponent.getType().addCoding().setSystem(CodeSystem.DsfPing.URL).setCode(outputParameter);
+			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode));
+			outputComponent.getType().addCoding(CodeSystem.DsfPing.fromCode(outputParameter));
 			sortStatusOutputExtensions(outputComponent);
 		}
 
@@ -307,16 +308,17 @@ public final class PingStatusGenerator
 	}
 
 	private static TaskOutputComponent updateStatus(TaskOutputComponent outputComponent, String outputParameter,
-			String statusCode)
+			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		Type valueType = outputComponent.getValue();
 		if (valueType instanceof Coding coding)
 		{
-			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode);
+			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode.getValue()).setVersion(
+					PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 		else
 		{
-			outputComponent.setValue(new Coding().setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode));
+			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode));
 		}
 
 		List<Coding> outputTypeCodings = outputComponent.getType().getCoding();

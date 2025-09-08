@@ -29,7 +29,7 @@ public final class ErrorInputComponentGenerator
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
 
-		param.getType().addCoding(new Coding(CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ERROR.getValue(), null));
+		param.getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.ERROR));
 		param.addExtension(ProcessError.toExtension(error));
 		Extension dataAbsentReason = new Extension()
 				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")

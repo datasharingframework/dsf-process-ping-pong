@@ -6,6 +6,8 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hl7.fhir.r4.model.Coding;
+
 public final class CodeSystem
 {
 	private CodeSystem()
@@ -46,13 +48,20 @@ public final class CodeSystem
 		}
 	}
 
-
 	public static final class DsfPing
 	{
 		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-v2";
 
 		private DsfPing()
 		{
+		}
+
+		public static Coding fromCode(Code code)
+		{
+			return new Coding()
+					.setSystem(URL)
+					.setCode(code.getValue())
+					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
 		public enum Code implements SingleStringValueEnum
@@ -95,6 +104,14 @@ public final class CodeSystem
 		{
 		}
 
+		public static Coding fromCode(Code code)
+		{
+			return new Coding()
+					.setSystem(URL)
+					.setCode(code.getValue())
+					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+		}
+
 		public enum Code implements SingleStringValueEnum
 		{
 			COMPLETED("completed"),
@@ -127,6 +144,14 @@ public final class CodeSystem
 
 		private DsfPingUnits()
 		{
+		}
+
+		public static Coding fromCode(Code code)
+		{
+			return new Coding()
+					.setSystem(URL)
+					.setCode(code.toUcum())
+					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
 		public enum Code
@@ -318,6 +343,15 @@ public final class CodeSystem
 
 		private DsfPingError()
 		{
+		}
+
+		public static Coding fromConcept(Concept concept)
+		{
+			return new Coding()
+					.setSystem(URL)
+					.setCode(concept.getCode())
+					.setDisplay(concept.getDisplay())
+					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
 		public enum Concept

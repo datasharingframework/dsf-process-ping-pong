@@ -25,8 +25,7 @@ public record ProcessError(String process, CodeSystem.DsfPingError.Concept conce
 		extension.setUrl(ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_ERROR);
 
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR)
-				.setValue(new Coding().setSystem(CodeSystem.DsfPingError.URL).setCode(error.concept.getCode())
-						.setDisplay(error.concept.getDisplay()));
+				.setValue(CodeSystem.DsfPingError.fromConcept(error.concept()));
 		if (Objects.nonNull(error.potentialFixUrl))
 		{
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
@@ -62,7 +61,7 @@ public record ProcessError(String process, CodeSystem.DsfPingError.Concept conce
 	{
 		Task.TaskOutputComponent param = new Task.TaskOutputComponent();
 
-		param.getType().addCoding(new Coding(CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ERROR.getValue(), null));
+		param.getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.ERROR));
 		param.addExtension(ProcessError.toExtension(error));
 		Extension dataAbsentReason = new Extension()
 				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
