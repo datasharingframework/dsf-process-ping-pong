@@ -262,28 +262,28 @@ public final class PingStatusGenerator
 	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors,
-				null, null, null, null, null);
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, null, null, null,
+				null, null);
 	}
 
 	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
 			CodeSystem.DsfPingUnits.Code unit)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors,
-				downloadSpeed, uploadSpeed, unit.name(), CODESYSTEM_UCUM, unit.toUcum());
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, downloadSpeed,
+				uploadSpeed, unit.name(), CODESYSTEM_UCUM, unit.toUcum());
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
-		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors,
-				null, null, null, null, null);
+		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors, null, null, null,
+				null, null);
 	}
 
-	private static TaskOutputComponent createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed, String unit, String unitSystem,
-			String unitCode)
+	private static TaskOutputComponent createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter,
+			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
+			BigDecimal uploadSpeed, String unit, String unitSystem, String unitCode)
 	{
 		TaskOutputComponent output = new TaskOutputComponent();
 		addStatus(output, outputParameter, statusCode);
@@ -294,8 +294,8 @@ public final class PingStatusGenerator
 		return output;
 	}
 
-	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent, CodeSystem.DsfPing.Code outputParameter,
-			CodeSystem.DsfPingStatus.Code statusCode)
+	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent,
+			CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (outputParameter != null && statusCode != null)
 		{
@@ -313,8 +313,8 @@ public final class PingStatusGenerator
 		Type valueType = outputComponent.getValue();
 		if (valueType instanceof Coding coding)
 		{
-			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode.getValue()).setVersion(
-					PingProcessPluginDefinition.RESOURCE_VERSION);
+			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode.getValue())
+					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 		else
 		{

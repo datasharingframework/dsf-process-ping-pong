@@ -18,7 +18,8 @@ public final class DownloadResourceReferenceGenerator
 		Reference reference = new Reference(uri);
 		reference.setType("Binary");
 		Task.ParameterComponent param = new Task.ParameterComponent();
-		param.setValue(reference).getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE));
+		param.setValue(reference).getType()
+				.addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE));
 		return param;
 	}
 }
