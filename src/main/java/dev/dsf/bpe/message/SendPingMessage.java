@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
@@ -23,6 +22,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 import dev.dsf.fhir.client.FhirWebserviceClient;
 
@@ -79,12 +79,15 @@ public class SendPingMessage extends AbstractTaskMessageSend
 			String errorMessage)
 	{
 		Target target = variables.getTarget();
-		ProcessError error = SendTaskErrorConverter.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PING);
+		SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
+				.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PING);
 
-		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(error));
-		execution.setVariableLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
+		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(errorAndStatus.error()));
+		execution.setVariableLocal(ExecutionVariables.statusCode.name(),
+				new CodeValueImpl(errorAndStatus.statusCode()));
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.concept().getDisplay());
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
+				errorAndStatus.error().concept().getDisplay());
 	}
 
 	@Override

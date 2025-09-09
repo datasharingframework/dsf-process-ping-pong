@@ -314,6 +314,12 @@ public class PingConfig
 	}
 
 	@Bean
+	public dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer pingStatusCodeSerializer()
+	{
+		return new dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer();
+	}
+
+	@Bean
 	public DurationValueSerializer durationValueSerializer(
 			@Qualifier(OBJECT_MAPPER_WITH_TIME_MODULE) ObjectMapper objectMapper)
 	{

@@ -21,6 +21,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 import dev.dsf.bpe.variables.duration.DurationValueImpl;
 
 public class SavePong extends AbstractServiceDelegate
@@ -59,6 +60,8 @@ public class SavePong extends AbstractServiceDelegate
 		ProcessErrors errorList = new ProcessErrors(parseInputs(pong));
 
 		ErrorListUtils.addAll(errorList, delegateExecution, correlationKey);
+		variables.setVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey),
+				new CodeValueImpl(CodeSystem.DsfPingStatus.Code.PONG_RECEIVED));
 
 		logger.debug("Saved pong information.");
 	}

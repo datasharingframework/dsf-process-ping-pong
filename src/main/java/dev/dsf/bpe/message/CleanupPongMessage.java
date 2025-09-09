@@ -55,12 +55,14 @@ public class CleanupPongMessage extends AbstractTaskMessageSend
 			String errorMessage)
 	{
 		Target target = variables.getTarget();
-		ProcessError error = SendTaskErrorConverter.convertLocal(exception, false, ConstantsPing.PROCESS_NAME_PING);
+		SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
+				.convertLocal(exception, false, ConstantsPing.PROCESS_NAME_PING);
 
-		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(error));
+		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(errorAndStatus.error()));
 		execution.setVariableLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.concept().getDisplay());
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
+				errorAndStatus.error().concept().getDisplay());
 	}
 
 	@Override

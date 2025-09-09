@@ -66,8 +66,8 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 			String correlationKey = target.getCorrelationKey();
 
 			ProcessErrors errors = ErrorListUtils.getErrorList(execution, correlationKey);
-			CodeSystem.DsfPingStatus.Code statusCode = errors.isEmpty() ? CodeSystem.DsfPingStatus.Code.COMPLETED
-					: CodeSystem.DsfPingStatus.Code.ERROR;
+			CodeSystem.DsfPingStatus.Code statusCode = (CodeSystem.DsfPingStatus.Code) variables
+					.getVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey));
 			long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 			if (downloadResourceSizeBytes >= 0) // if fat-ping
 			{

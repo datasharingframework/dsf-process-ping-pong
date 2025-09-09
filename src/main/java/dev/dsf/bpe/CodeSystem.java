@@ -58,9 +58,7 @@ public final class CodeSystem
 
 		public static Coding fromCode(Code code)
 		{
-			return new Coding()
-					.setSystem(URL)
-					.setCode(code.getValue())
+			return new Coding().setSystem(URL).setCode(code.getValue())
 					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
@@ -106,17 +104,17 @@ public final class CodeSystem
 
 		public static Coding fromCode(Code code)
 		{
-			return new Coding()
-					.setSystem(URL)
-					.setCode(code.getValue())
+			return new Coding().setSystem(URL).setCode(code.getValue())
 					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
 		public enum Code implements SingleStringValueEnum
 		{
-			COMPLETED("completed"),
-			PENDING("pending"),
-			ERROR("error");
+			NOT_ALLOWED("not-allowed"),
+			NOT_REACHABLE("not-reachable"),
+			PONG_MISSING("pong-missing"),
+			PONG_RECEIVED("pong-received"),
+			PONG_SENT("pong-send");
 
 			private final String value;
 
@@ -148,9 +146,7 @@ public final class CodeSystem
 
 		public static Coding fromCode(Code code)
 		{
-			return new Coding()
-					.setSystem(URL)
-					.setCode(code.toUcum())
+			return new Coding().setSystem(URL).setCode(code.toUcum())
 					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 
@@ -347,10 +343,7 @@ public final class CodeSystem
 
 		public static Coding fromConcept(Concept concept)
 		{
-			return new Coding()
-					.setSystem(URL)
-					.setCode(concept.getCode())
-					.setDisplay(concept.getDisplay())
+			return new Coding().setSystem(URL).setCode(concept.getCode()).setDisplay(concept.getDisplay())
 					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		}
 

@@ -38,7 +38,6 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 
 		BigDecimal downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
 
-		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.PENDING);
 		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);

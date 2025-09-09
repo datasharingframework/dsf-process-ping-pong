@@ -22,18 +22,28 @@
 	<versionNeeded value="false" />
 	<content value="complete" />
 	<concept>
-		<code value="completed" />
-		<display value="Completed" />
-		<definition value="Ping-pong was completed successfully" />
+		<code value="not-allowed" />
+		<display value="Not allowed" />
+		<definition value="Not allowed to start pong-process at target organization" />
 	</concept>
 	<concept>
-		<code value="error" />
-		<display value="Error" />
-		<definition value="An error occurred during ping-pong process" />
+		<code value="not-reachable" />
+		<display value="Not reachable" />
+		<definition value="Ping could not be sent to target organization" />
 	</concept>
 	<concept>
-		<code value="pending"/>
-		<display value="Pending"/>
-		<definition value="Execution completion is still pending"/>
+		<code value="pong-missing" />
+		<display value="Pong missing" />
+		<definition value="No pong received from target organization" />
+	</concept>
+	<concept>
+		<code value="pong-received" />
+		<display value="Pong received" />
+		<definition value="Pong received from target organization" />
+	</concept>
+	<concept>
+		<code value="pong-send" />
+		<display value="Pong sent" />
+		<definition value="Pong successfully sent to target organization" />
 	</concept>
 </CodeSystem> 

@@ -99,7 +99,7 @@
     <bpmn:sequenceFlow id="Flow_1o3n9u6" sourceRef="Gateway_1ggdr8l" targetRef="Activity_005ywv2" />
     <bpmn:sequenceFlow id="Flow_0fzmjzb" sourceRef="Activity_005ywv2" targetRef="Gateway_0eiy9fm" />
     <bpmn:sequenceFlow id="Flow_0h8flp6" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  statusCode == 'error'}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  (statusCode.getValue() == 'not-reachable' || statusCode.getValue() == 'not-allowed')}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1bzjspe" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1l5dkpz" />
     <bpmn:sequenceFlow id="Flow_00t1ck1" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">

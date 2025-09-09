@@ -26,6 +26,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 
 public class SendPongMessage extends AbstractTaskMessageSend
 {
@@ -87,6 +88,8 @@ public class SendPongMessage extends AbstractTaskMessageSend
 	{
 		Target target = variables.getTarget();
 		Task mainTask = variables.getStartTask();
+		variables.setVariable(ExecutionVariables.statusCode.name(),
+				new CodeValueImpl(CodeSystem.DsfPingStatus.Code.PONG_SENT));
 		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
 		variables.updateTask(mainTask);
 		super.doExecute(execution, variables);
@@ -99,13 +102,14 @@ public class SendPongMessage extends AbstractTaskMessageSend
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();
 
-		ProcessError error = SendTaskErrorConverter.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PONG);
+		SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
+				.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PONG);
 
-		ErrorListUtils.add(error, execution);
-		PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
-		variables.setString(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
+		ErrorListUtils.add(errorAndStatus.error(), execution);
+		variables.setVariable(ExecutionVariables.statusCode.name(), new CodeValueImpl(errorAndStatus.statusCode()));
 		variables.updateTask(startTask);
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(), error.concept().getDisplay());
+		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
+				errorAndStatus.error().concept().getDisplay());
 	}
 }

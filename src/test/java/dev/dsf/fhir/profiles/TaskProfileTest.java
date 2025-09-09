@@ -284,7 +284,7 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.ERROR,
+		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_MISSING,
 				processErrors(5)));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -328,7 +328,7 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED, BigDecimal.ZERO,
+		task.addOutput(createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_RECEIVED, BigDecimal.ZERO,
 				BigDecimal.ZERO, CodeSystem.DsfPingUnits.Code.bps));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -440,7 +440,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED));
+		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -480,7 +480,7 @@ public class TaskProfileTest
 			}
 		};
 		Task task = createValidTaskPing();
-		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.COMPLETED));
+		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000));
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary"));

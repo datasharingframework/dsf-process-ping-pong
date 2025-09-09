@@ -17,6 +17,7 @@ import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 import dev.dsf.fhir.client.FhirWebserviceClient;
 import jakarta.ws.rs.WebApplicationException;
 
@@ -64,6 +65,11 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 		{
 			ProcessError error = getProcessError(e);
 			ErrorListUtils.add(error, delegateExecution, correlationKey);
+		}
+		finally
+		{
+			variables.setVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey),
+					new CodeValueImpl(CodeSystem.DsfPingStatus.Code.PONG_MISSING));
 		}
 
 		logger.debug("Saved '{}' to process execution for correlation key '{}'",

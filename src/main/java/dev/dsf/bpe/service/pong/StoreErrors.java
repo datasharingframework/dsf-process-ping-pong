@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
@@ -32,14 +33,9 @@ public class StoreErrors extends AbstractServiceDelegate
 		ProcessErrors errors = ErrorListUtils.getErrorList(execution);
 		PingStatusGenerator.updatePongStatusOutput(startTask, errors.getEntries());
 
-		if (!errors.isEmpty())
-		{
-			PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.ERROR);
-		}
-		else
-		{
-			PingStatusGenerator.updatePongStatusOutput(startTask, CodeSystem.DsfPingStatus.Code.COMPLETED);
-		}
+		CodeSystem.DsfPingStatus.Code status = (CodeSystem.DsfPingStatus.Code) variables
+				.getVariable(ExecutionVariables.statusCode.name());
+		PingStatusGenerator.updatePongStatusOutput(startTask, status);
 
 		variables.updateTask(startTask);
 		logger.debug("Stored errors in task: " + startTask.getIdElement().getValue());
