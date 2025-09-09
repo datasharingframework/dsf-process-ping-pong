@@ -35,11 +35,6 @@ public final class SendTaskErrorConverter
 		return convert(exception, ErrorType.LOCAL, messageWithReference, process);
 	}
 
-	public static ProcessError convertRemote(Exception exception, boolean messageWithReference, String process)
-	{
-		return convert(exception, ErrorType.REMOTE, messageWithReference, process);
-	}
-
 	private static ProcessError convert(Exception exception, ErrorType errorType, boolean messageWithReference,
 			String process)
 	{
