@@ -105,8 +105,16 @@
     </concept>
 
     <concept>
-        <code value="local-binary-delete-timeout"/>
-        <display value="Local instance encountered a read/connect timeout trying to clean up the binary resource"/>
+        <code value="local-binary-delete-timeout-connect"/>
+        <display value="Local instance encountered a connect timeout trying to clean up the binary resource"/>
+    </concept>
+    <concept>
+        <code value="local-binary-delete-timeout-read"/>
+        <display value="Local instance encountered a read timeout trying to clean up the binary resource"/>
+    </concept>
+    <concept>
+        <code value="local-binary-delete-http-host-connect"/>
+        <display value="Local instance was unable to clean up the binary resource from the local DSF FHIR server because the connection was refused"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-401"/>
@@ -130,8 +138,16 @@
     </concept>
 
     <concept>
-        <code value="remote-binary-delete-timeout"/>
-        <display value="Remote instance encountered a read/connect timeout trying to clean up the binary resource"/>
+        <code value="remote-binary-delete-timeout-connect"/>
+        <display value="Remote instance encountered a connect timeout trying to clean up the binary resource"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-delete-timeout-read"/>
+        <display value="Remote instance encountered a read timeout trying to clean up the binary resource"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-delete-http-host-connect"/>
+        <display value="Remote instance was unable to clean up the binary resource from its DSF FHIR server because the connection was refused"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-401"/>
@@ -175,8 +191,16 @@
         <display value="Local instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
-        <code value="local-binary-post-timeout"/>
-        <display value="Local instance encountered a timeout trying to post the binary resource to its own FHIR server"/>
+        <code value="local-binary-post-timeout-connect"/>
+        <display value="Local instance encountered a connect timeout trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
+        <code value="local-binary-post-timeout-read"/>
+        <display value="Local instance encountered a read timeout trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
+        <code value="local-binary-post-http-host-connect"/>
+        <display value="Local instance was unable to post the binary resource to its own FHIR server because the connection was refused"/>
     </concept>
 
     <concept>
@@ -200,8 +224,16 @@
         <display value="Remote instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
-        <code value="remote-binary-post-timeout"/>
-        <display value="Remote instance encountered a timeout trying to post the binary resource to its own FHIR server"/>
+        <code value="remote-binary-post-timeout-connect"/>
+        <display value="Remote instance encountered a connect timeout trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-post-timeout-read"/>
+        <display value="Remote instance encountered a read timeout trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-post-http-host-connect"/>
+        <display value="Remote instance was unable to post the binary resource to its own DSF FHIR server because the connection was refused"/>
     </concept>
 
     <concept>
@@ -276,8 +308,16 @@
         <display value="Local instance received an unexpected HTTP status trying to download the binary resource from the target"/>
     </concept>
     <concept>
-        <code value="local-binary-download-timeout"/>
-        <display value="Local instance encountered a read/connect timeout trying to download the binary resource from the target"/>
+        <code value="local-binary-download-timeout-connect"/>
+        <display value="Local instance encountered a connect timeout trying to download the binary resource from the target"/>
+    </concept>
+    <concept>
+        <code value="local-binary-download-timeout-read"/>
+        <display value="Local instance encountered a read timeout trying to download the binary resource from the target"/>
+    </concept>
+    <concept>
+        <code value="local-binary-download-http-host-connect"/>
+        <display value="Local instance was unable to download the binary resource from the remote DSF FHIR server because the connection was refused"/>
     </concept>
     <concept>
         <code value="local-binary-download-missing-reference"/>
@@ -309,8 +349,16 @@
         <display value="Remote instance received an unexpected HTTP status trying to download the binary resource from this server"/>
     </concept>
     <concept>
-        <code value="remote-binary-download-timeout"/>
-        <display value="Remote instance encountered a read/connect timeout trying to download the binary resource from this server"/>
+        <code value="remote-binary-download-timeout-connect"/>
+        <display value="Remote instance encountered a connect timeout trying to download the binary resource from this server"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-download-timeout-read"/>
+        <display value="Remote instance encountered a read timeout trying to download the binary resource from this server"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-download-http-host-connect"/>
+        <display value="Remote instance was unable to download the binary resource from the local DSF FHIR server because the connection was refused"/>
     </concept>
     <concept>
         <code value="remote-binary-download-missing-reference"/>
@@ -318,7 +366,11 @@
     </concept>
 
     <concept>
-        <code value="unknown"/>
-        <display value="An unknown error was encountered. Consult logs for more details."/>
+        <code value="local-unknown"/>
+        <display value="An unknown error was encountered by the local instance"/>
+    </concept>
+    <concept>
+        <code value="remote-unknown"/>
+        <display value="An unknown error was encountered by the remote instance"/>
     </concept>
 </CodeSystem>

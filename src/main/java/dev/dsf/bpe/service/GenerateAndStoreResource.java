@@ -1,7 +1,10 @@
 package dev.dsf.bpe.service;
 
 import java.net.SocketTimeoutException;
+import java.util.Locale;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.Expression;
@@ -120,14 +123,34 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 		}
 		catch (ProcessingException e)
 		{
-			if (e.getCause() instanceof SocketTimeoutException)
+			if (e.getCause() instanceof SocketTimeoutException socketTimeoutException)
 			{
-				ProcessError error = new ProcessError(process,
-						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT,
-						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
-				ProcessError errorRemote = new ProcessError(process,
-						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_TIMEOUT,
-						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+				ProcessError error = toProcessErrorLocal(socketTimeoutException, process);
+				ProcessError errorRemote = toProcessErrorRemote(socketTimeoutException, process);
+
+				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
+				{
+					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
+							new ProcessErrorValueImpl(errorRemote));
+				}
+			}
+			else if (e.getCause() instanceof ConnectTimeoutException)
+			{
+				ProcessError error = toProcessErrorLocalConnectTimeout(process);
+				ProcessError errorRemote = toProcessErrorRemoteConnectTimeout(process);
+
+				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
+				{
+					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
+							new ProcessErrorValueImpl(errorRemote));
+				}
+			}
+			else if (e.getCause() instanceof HttpHostConnectException)
+			{
+				ProcessError error = toProcessErrorLocalHttpHostConnect(process);
+				ProcessError errorRemote = toProcessErrorRemoteHttpHostConnect(process);
 
 				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
@@ -138,9 +161,86 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 			}
 			else
 			{
-				throw e;
+				ProcessError error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+				ProcessError errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN,
+						null);
+				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
+				{
+					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
+							new ProcessErrorValueImpl(errorRemote));
+				}
+				logger.error("Unexpected error: {}", e.getMessage());
 			}
 		}
+	}
+
+	private ProcessError toProcessErrorLocal(SocketTimeoutException timeoutException, String process)
+	{
+		ProcessError error;
+		String message = timeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT_CONNECT,
+					ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+		}
+		else if (message.contains("read"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT_READ,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+		}
+		else
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+			logger.error("Unexpected error: {}", message);
+		}
+		return error;
+	}
+
+	private ProcessError toProcessErrorRemote(SocketTimeoutException timeoutException, String process)
+	{
+		ProcessError error;
+		String message = timeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT_CONNECT,
+					ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+		}
+		else if (message.contains("read"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT_READ,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+		}
+		else
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN, null);
+			logger.error("Unexpected error: {}", message);
+		}
+		return error;
+	}
+
+	private ProcessError toProcessErrorLocalHttpHostConnect(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_HOST_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED);
+	}
+
+	private ProcessError toProcessErrorRemoteHttpHostConnect(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_HOST_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED);
+	}
+
+	private ProcessError toProcessErrorLocalConnectTimeout(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_TIMEOUT_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+	}
+
+	private ProcessError toProcessErrorRemoteConnectTimeout(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_TIMEOUT_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
 	}
 
 	private long getDownloadResourceSize(Variables variables)

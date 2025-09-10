@@ -431,9 +431,17 @@ public final class CodeSystem
 					"Receiving a message was unsuccessful because the target hostname could not be resolved"
 			),
 
-			LOCAL_BINARY_DELETE_TIMEOUT(
-					"local-binary-delete-timeout",
-					"Local instance encountered a read/connect timeout trying to clean up the binary resource"
+			LOCAL_BINARY_DELETE_TIMEOUT_CONNECT(
+					"local-binary-delete-timeout-connect",
+					"Local instance encountered a connect timeout trying to clean up the binary resource"
+			),
+			LOCAL_BINARY_DELETE_TIMEOUT_READ(
+					"local-binary-delete-timeout-read",
+					"Local instance encountered a read timeout trying to clean up the binary resource"
+			),
+			LOCAL_BINARY_DELETE_HTTP_HOST_CONNECT(
+					"local-binary-delete-http-host-connect",
+					"Local instance was unable to clean up the binary resource from the local DSF FHIR server because the connection was refused"
 			),
 			LOCAL_BINARY_DELETE_HTTP_401(
 					"local-binary-delete-http-401",
@@ -456,9 +464,17 @@ public final class CodeSystem
 					"Local instance encountered an unexpected HTTP status code trying to clean up the binary resource"
 			),
 
-			REMOTE_BINARY_DELETE_TIMEOUT(
-					"remote-binary-delete-timeout",
-					"Remote instance encountered a read/connect timeout trying to clean up the binary resource"
+			REMOTE_BINARY_DELETE_TIMEOUT_CONNECT(
+					"remote-binary-delete-timeout-connect",
+					"Remote instance encountered a connect timeout trying to clean up the binary resource"
+			),
+			REMOTE_BINARY_DELETE_TIMEOUT_READ(
+					"remote-binary-delete-timeout-read",
+					"Remote instance encountered a read timeout trying to clean up the binary resource"
+			),
+			REMOTE_BINARY_DELETE_HTTP_HOST_CONNECT(
+					"remote-binary-delete-http-host-connect",
+					"Remote instance was unable to clean up the binary resource from its DSF FHIR server because the connection was refused"
 			),
 			REMOTE_BINARY_DELETE_HTTP_401(
 					"remote-binary-delete-http-401",
@@ -501,9 +517,17 @@ public final class CodeSystem
 					"local-binary-post-http-unexpected",
 					"Local instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
-			LOCAL_BINARY_POST_TIMEOUT(
-					"local-binary-post-timeout",
-					"Local instance encountered a timeout trying to post the binary resource to its own FHIR server"
+			LOCAL_BINARY_POST_TIMEOUT_CONNECT(
+					"local-binary-post-timeout-connect",
+					"Local instance encountered a connect timeout trying to post the binary resource to its own FHIR server"
+			),
+			LOCAL_BINARY_POST_TIMEOUT_READ(
+					"local-binary-post-timeout-read",
+					"Local instance encountered a read timeout trying to post the binary resource to its own FHIR server"
+			),
+			LOCAL_BINARY_POST_HTTP_HOST_CONNECT(
+					"local-binary-post-http-host-connect",
+					"Local instance was unable to post the binary resource to its own DSF FHIR server because the connection was refused"
 			),
 
 			REMOTE_BINARY_POST_HTTP_401(
@@ -526,9 +550,17 @@ public final class CodeSystem
 					"remote-binary-post-http-unexpected",
 					"Remote instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
-			REMOTE_BINARY_POST_TIMEOUT(
-					"remote-binary-post-timeout",
-					"Remote instance encountered a timeout trying to post the binary resource to its own FHIR server"
+			REMOTE_BINARY_POST_TIMEOUT_CONNECT(
+					"remote-binary-post-timeout-connect",
+					"Remote instance encountered a connect timeout trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_TIMEOUT_READ(
+					"remote-binary-post-timeout-read",
+					"Remote instance encountered a read timeout trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_HTTP_HOST_CONNECT(
+					"remote-binary-post-http-host-connect",
+					"Remote instance was unable to post the binary resource to its own DSF FHIR server because the connection was refused"
 			),
 
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED(
@@ -602,9 +634,17 @@ public final class CodeSystem
 					"local-binary-download-http-unexpected",
 					"Local instance received an unexpected HTTP status trying to download the binary resource from the target"
 			),
-			LOCAL_BINARY_DOWNLOAD_TIMEOUT(
-					"local-binary-download-timeout",
-					"Local instance encountered a read/connect timeout trying to download the binary resource from the target"
+			LOCAL_BINARY_DOWNLOAD_TIMEOUT_CONNECT(
+					"local-binary-download-timeout-connect",
+					"Local instance encountered a connect timeout trying to download the binary resource from the target"
+			),
+			LOCAL_BINARY_DOWNLOAD_TIMEOUT_READ(
+					"local-binary-download-timeout-read",
+					"Local instance encountered a read timeout trying to download the binary resource from the target"
+			),
+			LOCAL_BINARY_DOWNLOAD_HTTP_HOST_CONNECT(
+					"local-binary-download-http-host-connect",
+					"Local instance was unable to download the binary resource from the remote DSF FHIR server because the connection was refused"
 			),
 			LOCAL_BINARY_DOWNLOAD_MISSING_REFERENCE(
 					"local-binary-download-missing-reference",
@@ -635,19 +675,31 @@ public final class CodeSystem
 					"remote-binary-download-http-unexpected",
 					"Remote instance received an unexpected HTTP status trying to download the binary resource from this server"
 			),
-			REMOTE_BINARY_DOWNLOAD_TIMEOUT(
-					"remote-binary-download-timeout",
-					"Remote instance encountered a read/connect timeout trying to download the binary resource from this server"
+			REMOTE_BINARY_DOWNLOAD_TIMEOUT_CONNECT(
+					"remote-binary-download-timeout-connect",
+					"Remote instance encountered a connect timeout trying to download the binary resource from this server"
+			),
+			REMOTE_BINARY_DOWNLOAD_TIMEOUT_READ(
+					"remote-binary-download-timeout-read",
+					"Remote instance encountered a read timeout trying to download the binary resource from this server"
+			),
+			REMOTE_BINARY_DOWNLOAD_HTTP_HOST_CONNECT(
+					"remote-binary-download-timeout-read",
+					"Remote instance encountered a read timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE(
-					"remote-binary-download-missing-reference",
-					"Remote instance was unable to download the binary resource from this server because the reference was missing"
+					"remote-binary-download-http-host-connect",
+					"Remote instance was unable to download the binary resource from the local DSF FHIR server because the connection was refused"
 			),
 
-			UNKNOWN(
-					"unknown",
-					"An unknown error was encountered. Consult logs for more details."
-			),;
+			LOCAL_UNKNOWN(
+					"local-unknown",
+					"An unknown error was encountered by the local instance"
+			),
+			REMOTE_UNKNOWN(
+					"remote-unknown",
+					"An unknown error was encountered by the remote instance"
+			);
 
 			private final String code;
 			private final String display;

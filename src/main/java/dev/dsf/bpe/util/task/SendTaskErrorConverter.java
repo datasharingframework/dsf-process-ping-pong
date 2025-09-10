@@ -144,16 +144,26 @@ public final class SendTaskErrorConverter
 		{
 			return switch (errorType)
 			{
-				case LOCAL, REMOTE -> new ProcessErrorWithStatusCode(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.UNKNOWN, null), CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+				case LOCAL -> new ProcessErrorWithStatusCode(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
+						CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+				case REMOTE -> new ProcessErrorWithStatusCode(
+						new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+								CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN, null),
+						CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 			};
 		}
 		else if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 		{
 			return switch (errorType)
 			{
-				case LOCAL, REMOTE -> new ProcessErrorWithStatusCode(new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
-						CodeSystem.DsfPingError.Concept.UNKNOWN, null), CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+				case LOCAL -> new ProcessErrorWithStatusCode(new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
+						CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+				case REMOTE -> new ProcessErrorWithStatusCode(
+						new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+								CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN, null),
+						CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 			};
 		}
 		else
@@ -248,8 +258,7 @@ public final class SendTaskErrorConverter
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED,
-									null),
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED, null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 				case REMOTE -> switch (statusCode)
@@ -290,8 +299,7 @@ public final class SendTaskErrorConverter
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_UNEXPECTED,
-									null),
+									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_UNEXPECTED, null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 			};
@@ -324,8 +332,7 @@ public final class SendTaskErrorConverter
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
-									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED,
-									null),
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED, null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 				case REMOTE -> switch (statusCode)

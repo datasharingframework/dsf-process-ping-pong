@@ -1,7 +1,10 @@
 package dev.dsf.bpe.service;
 
 import java.net.SocketTimeoutException;
+import java.util.Locale;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.Expression;
 import org.hl7.fhir.r4.model.Binary;
@@ -51,17 +54,29 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 			}
 			catch (ProcessingException e)
 			{
-				if (e.getCause() instanceof SocketTimeoutException)
+				if (e.getCause() instanceof SocketTimeoutException timeoutException)
 				{
-					ProcessError error = new ProcessError(process,
-							CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_TIMEOUT,
-							ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+					ProcessError error = toProcessError(timeoutException, process);
+					ErrorListUtils.add(error, delegateExecution);
+					logger.error(e.getCause().getMessage());
+				}
+				else if (e.getCause() instanceof ConnectTimeoutException)
+				{
+					ProcessError error = toProcessErrorConnectTimeout(process);
+					ErrorListUtils.add(error, delegateExecution);
+					logger.error(e.getCause().getMessage());
+				}
+				else if (e.getCause() instanceof HttpHostConnectException)
+				{
+					ProcessError error = toProcessErrorLocalHttpHostConnect(process);
 					ErrorListUtils.add(error, delegateExecution);
 					logger.error(e.getCause().getMessage());
 				}
 				else
 				{
-					throw new RuntimeException(e);
+					ProcessError error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+					ErrorListUtils.add(error, delegateExecution);
+					logger.error("Unexpected error: {}", e.getCause().getMessage());
 				}
 			}
 			catch (WebApplicationException e)
@@ -75,6 +90,40 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 			logger.debug("Nothing to do");
 		}
 		logger.debug("Cleanup complete.");
+	}
+
+	private ProcessError toProcessError(SocketTimeoutException timeoutException, String process)
+	{
+		ProcessError error;
+		String message = timeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_TIMEOUT_CONNECT,
+					ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+		}
+		else if (message.contains("read"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_TIMEOUT_READ,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+		}
+		else
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+			logger.error("Unexpected error: {}", timeoutException.getMessage());
+		}
+		return error;
+	}
+
+	private ProcessError toProcessErrorLocalHttpHostConnect(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_HOST_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED);
+	}
+
+	private ProcessError toProcessErrorConnectTimeout(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_TIMEOUT_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
 	}
 
 	private ProcessError toProcessError(WebApplicationException e, String process)

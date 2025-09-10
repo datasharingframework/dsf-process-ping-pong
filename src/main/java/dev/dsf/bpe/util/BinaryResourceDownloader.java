@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
+import java.util.Locale;
 import java.util.Optional;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
@@ -135,21 +138,38 @@ public class BinaryResourceDownloader
 		}
 		catch (ProcessingException e)
 		{
-			if (e.getCause() instanceof SocketTimeoutException)
+			if (e.getCause() instanceof SocketTimeoutException socketTimeoutException)
 			{
 				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
-				ProcessError error = new ProcessError(process,
-						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT,
-						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
-				ProcessError errorRemote = new ProcessError(process,
-						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT,
-						ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+				ProcessError error = toProcessErrorLocal(socketTimeoutException, process);
+				ProcessError errorRemote = toProcessErrorRemote(socketTimeoutException, process);
+				logDownloadError(errorMessage);
+				downloadResult = new DownloadResult(error, errorRemote);
+			}
+			else if (e.getCause() instanceof ConnectTimeoutException)
+			{
+				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+				ProcessError error = toProcessErrorLocalConnectTimeout(process);
+				ProcessError errorRemote = toProcessErrorRemoteConnectTimeout(process);
+				logDownloadError(errorMessage);
+				downloadResult = new DownloadResult(error, errorRemote);
+			}
+			else if (e.getCause() instanceof HttpHostConnectException)
+			{
+				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+				ProcessError error = toProcessErrorLocalHttpHostConnect(process);
+				ProcessError errorRemote = toProcessErrorRemoteHttpHostConnect(process);
 				logDownloadError(errorMessage);
 				downloadResult = new DownloadResult(error, errorRemote);
 			}
 			else
 			{
-				throw e;
+				String errorMessage = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+				ProcessError error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+				ProcessError errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN,
+						null);
+				logger.error("Unexpected error: {}", errorMessage);
+				downloadResult = new DownloadResult(error, errorRemote);
 			}
 		}
 		catch (IOException e)
@@ -165,6 +185,74 @@ public class BinaryResourceDownloader
 			downloadResult = new DownloadResult(error, errorRemote);
 		}
 		return downloadResult;
+	}
+
+	private ProcessError toProcessErrorLocal(SocketTimeoutException timeoutException, String process)
+	{
+		ProcessError error;
+		String message = timeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+					ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+		}
+		else if (message.contains("read"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT_READ,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+		}
+		else
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
+			logger.error("Unexpected error: {}", timeoutException.getMessage());
+		}
+		return error;
+	}
+
+	private ProcessError toProcessErrorRemote(SocketTimeoutException timeoutException, String process)
+	{
+		ProcessError error;
+		String message = timeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+					ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+		}
+		else if (message.contains("read"))
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT_READ,
+					ConstantsPing.POTENTIAL_FIX_URL_READ_TIMEOUT);
+		}
+		else
+		{
+			error = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN, null);
+			logger.error("Unexpected error: {}", timeoutException.getMessage());
+		}
+		return error;
+	}
+
+	private ProcessError toProcessErrorLocalHttpHostConnect(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_HOST_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED);
+	}
+
+	private ProcessError toProcessErrorRemoteHttpHostConnect(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_HOST_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_REFUSED);
+	}
+
+	private ProcessError toProcessErrorLocalConnectTimeout(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+	}
+
+	private ProcessError toProcessErrorRemoteConnectTimeout(String process)
+	{
+		return new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+				ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
 	}
 
 	private void logDownloadError(String errorMessage)
