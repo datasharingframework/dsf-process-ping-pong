@@ -433,102 +433,102 @@ public final class CodeSystem
 
 			LOCAL_BINARY_DELETE_TIMEOUT(
 					"local-binary-delete-timeout",
-					"Local instance ran into a read/connect timeout trying to clean up the binary resource"
+					"Local instance encountered a read/connect timeout trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_401(
 					"local-binary-delete-http-401",
-					"Local instance ran into a HTTP status 401 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 401 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_403(
 					"local-binary-delete-http-403",
-					"Local instance ran into a HTTP status 403 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 403 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_500(
 					"local-binary-delete-http-500",
-					"Local instance ran into a HTTP status 500 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 500 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_502(
 					"local-binary-delete-http-502",
-					"Local instance ran into a HTTP status 502 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_UNEXPECTED(
 					"local-binary-delete-http-unexpected",
-					"Local instance ran into an unexpected HTTP status code trying to clean up the binary resource"
+					"Local instance encountered an unexpected HTTP status code trying to clean up the binary resource"
 			),
 
 			REMOTE_BINARY_DELETE_TIMEOUT(
 					"remote-binary-delete-timeout",
-					"Remote instance ran into a read/connect timeout trying to clean up the binary resource"
+					"Remote instance encountered a read/connect timeout trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_401(
 					"remote-binary-delete-http-401",
-					"Remote instance ran into a HTTP status 401 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 401 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_403(
 					"remote-binary-delete-http-403",
-					"Remote instance ran into a HTTP status 403 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 403 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_500(
 					"remote-binary-delete-http-500",
-					"Remote instance ran into a HTTP status 500 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 500 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_502(
 					"remote-binary-delete-http-502",
-					"Remote instance ran into a HTTP status 502 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_UNEXPECTED(
 					"remote-binary-delete-http-unexpected",
-					"Remote instance ran into an unexpected HTTP status code trying to clean up the binary resource"
+					"Remote instance encountered an unexpected HTTP status code trying to clean up the binary resource"
 			),
 
 			LOCAL_BINARY_POST_HTTP_401(
 					"local-binary-post-http-401",
-					"Local instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_403(
 					"local-binary-post-http-403",
-					"Local instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_500(
 					"local-binary-post-http-500",
-					"Local instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_502(
 					"local-binary-post-http-502",
-					"Local instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_UNEXPECTED(
 					"local-binary-post-http-unexpected",
-					"Local instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
+					"Local instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_TIMEOUT(
 					"local-binary-post-timeout",
-					"Local instance ran into a timeout trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a timeout trying to post the binary resource to its own FHIR server"
 			),
 
 			REMOTE_BINARY_POST_HTTP_401(
 					"remote-binary-post-http-401",
-					"Remote instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_403(
 					"remote-binary-post-http-403",
-					"Remote instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_500(
 					"remote-binary-post-http-500",
-					"Remote instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_502(
 					"remote-binary-post-http-502",
-					"Remote instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_UNEXPECTED(
 					"remote-binary-post-http-unexpected",
-					"Remote instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_TIMEOUT(
 					"remote-binary-post-timeout",
-					"Remote instance ran into a timeout trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a timeout trying to post the binary resource to its own FHIR server"
 			),
 
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED(
@@ -604,7 +604,7 @@ public final class CodeSystem
 			),
 			LOCAL_BINARY_DOWNLOAD_TIMEOUT(
 					"local-binary-download-timeout",
-					"Local instance ran into a read/connect timeout trying to download the binary resource from the target"
+					"Local instance encountered a read/connect timeout trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_MISSING_REFERENCE(
 					"local-binary-download-missing-reference",
@@ -637,7 +637,7 @@ public final class CodeSystem
 			),
 			REMOTE_BINARY_DOWNLOAD_TIMEOUT(
 					"remote-binary-download-timeout",
-					"Remote instance ran into a read/connect timeout trying to download the binary resource from this server"
+					"Remote instance encountered a read/connect timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE(
 					"remote-binary-download-missing-reference",

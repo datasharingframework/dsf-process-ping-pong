@@ -106,102 +106,102 @@
 
     <concept>
         <code value="local-binary-delete-timeout"/>
-        <display value="Local instance ran into a read/connect timeout trying to clean up the binary resource"/>
+        <display value="Local instance encountered a read/connect timeout trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-401"/>
-        <display value="Local instance ran into a HTTP status 401 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 401 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-403"/>
-        <display value="Local instance ran into a HTTP status 403 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 403 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-500"/>
-        <display value="Local instance ran into a HTTP status 500 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 500 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-502"/>
-        <display value="Local instance ran into a HTTP status 502 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 502 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-unexpected"/>
-        <display value="Local instance ran into an unexpected HTTP status code trying to clean up the binary resource"/>
+        <display value="Local instance encountered an unexpected HTTP status code trying to clean up the binary resource"/>
     </concept>
 
     <concept>
         <code value="remote-binary-delete-timeout"/>
-        <display value="Remote instance ran into a read/connect timeout trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a read/connect timeout trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-401"/>
-        <display value="Remote instance ran into a HTTP status 401 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 401 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-403"/>
-        <display value="Remote instance ran into a HTTP status 403 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 403 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-500"/>
-        <display value="Remote instance ran into a HTTP status 500 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 500 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-502"/>
-        <display value="Remote instance ran into a HTTP status 502 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 502 trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-unexpected"/>
-        <display value="Remote instance ran into an unexpected HTTP status code trying to clean up the binary resource"/>
+        <display value="Remote instance encountered an unexpected HTTP status code trying to clean up the binary resource"/>
     </concept>
 
     <concept>
         <code value="local-binary-post-http-401"/>
-        <display value="Local instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-403"/>
-        <display value="Local instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-500"/>
-        <display value="Local instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-502"/>
-        <display value="Local instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-unexpected"/>
-        <display value="Local instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-timeout"/>
-        <display value="Local instance ran into a timeout trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a timeout trying to post the binary resource to its own FHIR server"/>
     </concept>
 
     <concept>
         <code value="remote-binary-post-http-401"/>
-        <display value="Remote instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-403"/>
-        <display value="Remote instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-500"/>
-        <display value="Remote instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-502"/>
-        <display value="Remote instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-unexpected"/>
-        <display value="Remote instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered an unexpected HTTP status code trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-timeout"/>
-        <display value="Remote instance ran into a timeout trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a timeout trying to post the binary resource to its own FHIR server"/>
     </concept>
 
     <concept>
@@ -277,7 +277,7 @@
     </concept>
     <concept>
         <code value="local-binary-download-timeout"/>
-        <display value="Local instance ran into a read/connect timeout trying to download the binary resource from the target"/>
+        <display value="Local instance encountered a read/connect timeout trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-missing-reference"/>
@@ -310,7 +310,7 @@
     </concept>
     <concept>
         <code value="remote-binary-download-timeout"/>
-        <display value="Remote instance ran into a read/connect timeout trying to download the binary resource from this server"/>
+        <display value="Remote instance encountered a read/connect timeout trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-missing-reference"/>
