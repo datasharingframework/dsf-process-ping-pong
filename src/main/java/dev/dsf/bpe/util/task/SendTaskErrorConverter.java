@@ -215,7 +215,7 @@ public final class SendTaskErrorConverter
 					case 401 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_401,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 403 ->
 					{
@@ -224,7 +224,7 @@ public final class SendTaskErrorConverter
 							yield new ProcessErrorWithStatusCode(
 									new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 											CodeSystem.DsfPingError.Concept.SEND_REFERENCE_MESSAGE_HTTP_403,
-											ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+											ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 						else
@@ -232,24 +232,24 @@ public final class SendTaskErrorConverter
 							yield new ProcessErrorWithStatusCode(
 									new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 											CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_403,
-											ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+											ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 					}
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_500,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 502 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_502,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 				case REMOTE -> switch (statusCode)
@@ -257,7 +257,7 @@ public final class SendTaskErrorConverter
 					case 401 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_401,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 403 ->
 					{
@@ -266,7 +266,7 @@ public final class SendTaskErrorConverter
 							yield new ProcessErrorWithStatusCode(
 									new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 											CodeSystem.DsfPingError.Concept.RECEIVE_REFERENCE_MESSAGE_HTTP_403,
-											ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+											ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 						else
@@ -274,24 +274,24 @@ public final class SendTaskErrorConverter
 							yield new ProcessErrorWithStatusCode(
 									new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 											CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_403,
-											ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+											ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 					}
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_500,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 502 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_502,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_UNEXPECTED,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 			};
@@ -305,27 +305,27 @@ public final class SendTaskErrorConverter
 					case 401 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_401,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 403 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_403,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_500,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 502 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_502,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_UNEXPECTED,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									null),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 				};
 				case REMOTE -> switch (statusCode)
@@ -333,22 +333,22 @@ public final class SendTaskErrorConverter
 					case 401 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_401,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 403 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_403,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_500,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 502 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_502,
-									ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT),
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					default -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
