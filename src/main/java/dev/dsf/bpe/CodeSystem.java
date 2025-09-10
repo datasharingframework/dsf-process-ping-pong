@@ -351,39 +351,39 @@ public final class CodeSystem
 		{
 			SEND_MESSAGE_HTTP_401(
 					"send-message-http-401",
-					"Sending a message to the remote instance resulted in HTTP status 401."
+					"Sending a message to the remote instance resulted in HTTP status 401"
 			),
 			SEND_MESSAGE_HTTP_403(
 					"send-message-http-403",
-					"Sending a message to the remote instance resulted in HTTP status 403."
+					"Sending a message to the remote instance resulted in HTTP status 403"
 			),
 			SEND_REFERENCE_MESSAGE_HTTP_403(
 					"send-reference-message-http-403",
-					"Sending a message including a reference to the remote instance resulted in HTTP status 403."
+					"Sending a message including a reference to the remote instance resulted in HTTP status 403"
 			),
 			SEND_MESSAGE_HTTP_500(
 					"send-message-http-500",
-					"Sending a message to the remote instance resulted in HTTP status 500."
+					"Sending a message to the remote instance resulted in HTTP status 500"
 			),
 			SEND_MESSAGE_HTTP_502(
 					"send-message-http-502",
-					"Sending a message to the remote instance resulted in HTTP status 502."
+					"Sending a message to the remote instance resulted in HTTP status 502"
 			),
 			SEND_MESSAGE_HTTP_UNEXPECTED(
 					"send-message-http-unexpected",
-					"Sending a message to the remote instance resulted in an unexpected HTTP status code."
+					"Sending a message to the remote instance resulted in an unexpected HTTP status code"
 			),
 			SEND_MESSAGE_SSL_HANDSHAKE(
 					"send-message-ssl-handshake",
-					"Sending a message to the remote instance was unsuccessful because of a failed SSL handshake."
+					"Sending a message to the remote instance was unsuccessful because of a failed SSL handshake"
 			),
 			SEND_MESSAGE_CONNECT_TIMEOUT(
 					"send-message-connect-timeout",
-					"Sending a message to the remote instance was unsuccessful because of a connection timeout."
+					"Sending a message to the remote instance was unsuccessful because of a connection timeout"
 			),
 			SEND_MESSAGE_HTTP_HOST_CONNECT(
 					"send-message-http-host-connect",
-					"Sending a message to the remote instance was unsuccessful because the connection was refused."
+					"Sending a message to the remote instance was unsuccessful because the connection was refused"
 			),
 			SEND_MESSAGE_UNKNOWN_HOST(
 					"send-message-unknown-host",
@@ -392,39 +392,39 @@ public final class CodeSystem
 
 			RECEIVE_MESSAGE_HTTP_401(
 					"receive-message-http-401",
-					"Received a message and responded with HTTP status 401."
+					"Received a message and responded with HTTP status 401"
 			),
 			RECEIVE_MESSAGE_HTTP_403(
 					"receive-message-http-403",
-					"Received a message and responded with HTTP status 403."
+					"Received a message and responded with HTTP status 403"
 			),
 			RECEIVE_REFERENCE_MESSAGE_HTTP_403(
 					"receive-reference-message-http-403",
-					"Received a message including a reference and responded with HTTP status 403."
+					"Received a message including a reference and responded with HTTP status 403"
 			),
 			RECEIVE_MESSAGE_HTTP_500(
 					"receive-message-http-500",
-					"Received a message and responded with HTTP status 500."
+					"Received a message and responded with HTTP status 500"
 			),
 			RECEIVE_MESSAGE_HTTP_502(
 					"receive-message-http-502",
-					"Received a message and responded with HTTP status 502."
+					"Received a message and responded with HTTP status 502"
 			),
 			RECEIVE_MESSAGE_HTTP_UNEXPECTED(
 					"receive-message-http-unexpected",
-					"Received a message and responded with an unexpected HTTP status code."
+					"Received a message and responded with an unexpected HTTP status code"
 			),
 			RECEIVE_MESSAGE_SSL_HANDSHAKE(
 					"receive-message-ssl-handshake",
-					"Receiving a message was unsuccessful because of a failed SSL handshake."
+					"Receiving a message was unsuccessful because of a failed SSL handshake"
 			),
 			RECEIVE_MESSAGE_CONNECT_TIMEOUT(
 					"receive-message-connect-timeout",
-					"Receiving a message was unsuccessful because of a connection timeout."
+					"Receiving a message was unsuccessful because of a connection timeout"
 			),
 			RECEIVE_MESSAGE_HTTP_HOST_CONNECT(
 					"receive-message-http-host-connect",
-					"Receiving a message was unsuccessful because the connection was refused."
+					"Receiving a message was unsuccessful because the connection was refused"
 			),
 			RECEIVE_MESSAGE_UNKNOWN_HOST(
 					"receive-message-unknown-host",
@@ -433,102 +433,102 @@ public final class CodeSystem
 
 			LOCAL_BINARY_DELETE_TIMEOUT(
 					"local-binary-delete-timeout",
-					"Local instance ran into a read/connect timeout trying to clean up the binary resource."
+					"Local instance ran into a read/connect timeout trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_401(
 					"local-binary-delete-http-401",
-					"Local instance ran into a HTTP status 401 trying to clean up the binary resource."
+					"Local instance ran into a HTTP status 401 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_403(
 					"local-binary-delete-http-403",
-					"Local instance ran into a HTTP status 403 trying to clean up the binary resource."
+					"Local instance ran into a HTTP status 403 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_500(
 					"local-binary-delete-http-500",
-					"Local instance ran into a HTTP status 500 trying to clean up the binary resource."
+					"Local instance ran into a HTTP status 500 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_502(
 					"local-binary-delete-http-502",
-					"Local instance ran into a HTTP status 502 trying to clean up the binary resource."
+					"Local instance ran into a HTTP status 502 trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_UNEXPECTED(
 					"local-binary-delete-http-unexpected",
-					"Local instance ran into an unexpected HTTP status code trying to clean up the binary resource."
+					"Local instance ran into an unexpected HTTP status code trying to clean up the binary resource"
 			),
 
 			REMOTE_BINARY_DELETE_TIMEOUT(
 					"remote-binary-delete-timeout",
-					"Remote instance ran into a read/connect timeout trying to clean up the binary resource."
+					"Remote instance ran into a read/connect timeout trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_401(
 					"remote-binary-delete-http-401",
-					"Remote instance ran into a HTTP status 401 trying to clean up the binary resource."
+					"Remote instance ran into a HTTP status 401 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_403(
 					"remote-binary-delete-http-403",
-					"Remote instance ran into a HTTP status 403 trying to clean up the binary resource."
+					"Remote instance ran into a HTTP status 403 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_500(
 					"remote-binary-delete-http-500",
-					"Remote instance ran into a HTTP status 500 trying to clean up the binary resource."
+					"Remote instance ran into a HTTP status 500 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_502(
 					"remote-binary-delete-http-502",
-					"Remote instance ran into a HTTP status 502 trying to clean up the binary resource."
+					"Remote instance ran into a HTTP status 502 trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_UNEXPECTED(
 					"remote-binary-delete-http-unexpected",
-					"Remote instance ran into an unexpected HTTP status code trying to clean up the binary resource."
+					"Remote instance ran into an unexpected HTTP status code trying to clean up the binary resource"
 			),
 
 			LOCAL_BINARY_POST_HTTP_401(
 					"local-binary-post-http-401",
-					"Local instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server."
+					"Local instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_403(
 					"local-binary-post-http-403",
-					"Local instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server."
+					"Local instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_500(
 					"local-binary-post-http-500",
-					"Local instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server."
+					"Local instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_502(
 					"local-binary-post-http-502",
-					"Local instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server."
+					"Local instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_UNEXPECTED(
 					"local-binary-post-http-unexpected",
-					"Local instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server."
+					"Local instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_TIMEOUT(
 					"local-binary-post-timeout",
-					"Local instance ran into a timeout trying to post the binary resource to its own FHIR server."
+					"Local instance ran into a timeout trying to post the binary resource to its own FHIR server"
 			),
 
 			REMOTE_BINARY_POST_HTTP_401(
 					"remote-binary-post-http-401",
-					"Remote instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into a HTTP status 401 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_403(
 					"remote-binary-post-http-403",
-					"Remote instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into a HTTP status 403 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_500(
 					"remote-binary-post-http-500",
-					"Remote instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into a HTTP status 500 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_502(
 					"remote-binary-post-http-502",
-					"Remote instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into a HTTP status 502 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_UNEXPECTED(
 					"remote-binary-post-http-unexpected",
-					"Remote instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into an unexpected HTTP status code trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_TIMEOUT(
 					"remote-binary-post-timeout",
-					"Remote instance ran into a timeout trying to post the binary resource to its own FHIR server."
+					"Remote instance ran into a timeout trying to post the binary resource to its own FHIR server"
 			),
 
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED(
@@ -549,99 +549,99 @@ public final class CodeSystem
 			),
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED(
 					"response-message-timeout-status-unexpected",
-					"Response message timed out. The status of the request on the target FHIR server is neither of 'requested', 'in-progress', 'failed' or 'completed'."
+					"Response message timed out. The status of the request on the target FHIR server is neither of 'requested', 'in-progress', 'failed' or 'completed'"
 			),
 
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_401(
 					"response-message-timeout-http-401",
-					"Response message timed out. Received HTTP status 401 trying to check request status on the target."
+					"Response message timed out. Received HTTP status 401 trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_403(
 					"response-message-timeout-http-403",
-					"Response message timed out. Received HTTP status 403 trying to check request status on the target."
+					"Response message timed out. Received HTTP status 403 trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_500(
 					"response-message-timeout-http-500",
-					"Response message timed out. Received HTTP status 500 trying to check request status on the target."
+					"Response message timed out. Received HTTP status 500 trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_502(
 					"response-message-timeout-http-502",
-					"Response message timed out. Received HTTP status 502 trying to check request status on the target."
+					"Response message timed out. Received HTTP status 502 trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED(
 					"response-message-timeout-http-unexpected",
-					"Response message timed out. Received an unexpected HTTP status code trying to check request status on the target."
+					"Response message timed out. Received an unexpected HTTP status code trying to check request status on the target"
 			),
 
 			CLEANUP_MESSAGE_TIMEOUT(
 					"cleanup-message-timeout",
-					"Timeout while waiting for cleanup message from ping party."
+					"Timeout while waiting for cleanup message from remote instance"
 			),
 
 			LOCAL_BINARY_DOWNLOAD_IO_ERROR(
 					"local-binary-download-io-error",
-					"Local party encountered an I/O error trying to download the binary resource from the target."
+					"Local instance encountered an I/O error trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_401(
 					"local-binary-download-http-401",
-					"Local party received HTTP status 401 trying to download the binary resource from the target."
+					"Local instance received HTTP status 401 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_403(
 					"local-binary-download-http-403",
-					"Local party received HTTP status 403 trying to download the binary resource from the target."
+					"Local instance received HTTP status 403 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_500(
 					"local-binary-download-http-500",
-					"Local party received HTTP status 500 trying to download the binary resource from the target."
+					"Local instance received HTTP status 500 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_502(
 					"local-binary-download-http-502",
-					"Local party received HTTP status 500 trying to download the binary resource from the target."
+					"Local instance received HTTP status 500 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"local-binary-download-http-unexpected",
-					"Local party received an unexpected HTTP status trying to download the binary resource from the target."
+					"Local instance received an unexpected HTTP status trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_TIMEOUT(
 					"local-binary-download-timeout",
-					"Local party ran into a read/connect timeout trying to download the binary resource from the target."
+					"Local instance ran into a read/connect timeout trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_MISSING_REFERENCE(
 					"local-binary-download-missing-reference",
-					"Local instance was unable to download the binary resource from the target because the reference was missing."
+					"Local instance was unable to download the binary resource from the target because the reference was missing"
 			),
 
 			REMOTE_BINARY_DOWNLOAD_IO_ERROR(
 					"remote-binary-download-io-error",
-					"Remote party encountered an I/O error trying to download the binary resource from this server."
+					"Remote instance encountered an I/O error trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_401(
 					"remote-binary-download-http-401",
-					"Remote party received HTTP status 401 trying to download the binary resource from this server."
+					"Remote instance received HTTP status 401 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_403(
 					"remote-binary-download-http-403",
-					"Remote party received HTTP status 403 trying to download the binary resource from this server."
+					"Remote instance received HTTP status 403 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_500(
 					"remote-binary-download-http-500",
-					"Remote party received HTTP status 500 trying to download the binary resource from this server."
+					"Remote instance received HTTP status 500 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_502(
 					"remote-binary-download-http-502",
-					"Remote party received HTTP status 500 trying to download the binary resource from this server."
+					"Remote instance received HTTP status 502 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"remote-binary-download-http-unexpected",
-					"Remote party received an unexpected HTTP status trying to download the binary resource from this server."
+					"Remote instance received an unexpected HTTP status trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_TIMEOUT(
 					"remote-binary-download-timeout",
-					"Remote party ran into a read/connect timeout trying to download the binary resource from this server."
+					"Remote instance ran into a read/connect timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE(
 					"remote-binary-download-missing-reference",
-					"Remote instance was unable to download the binary resource from this server because the reference was missing."
+					"Remote instance was unable to download the binary resource from this server because the reference was missing"
 			),
 
 			UNKNOWN(
