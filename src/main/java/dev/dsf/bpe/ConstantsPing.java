@@ -55,6 +55,7 @@ public final class ConstantsPing
 	public static final String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
 	public static final String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
 	public static final String EXTENSION_URL_ERROR = "error";
+	public static final String EXTENSION_URL_ERRORS = "errors";
 	public static final String EXTENSION_URL_PROCESS = "process";
 	public static final String EXTENSION_URL_PROCESS_STEP = "process-step";
 	public static final String EXTENSION_URL_ACTION = "action";

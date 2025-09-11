@@ -409,9 +409,10 @@ public final class PingStatusGenerator
 		if (errors != null)
 		{
 			Extension extension = getOrCreatePingStatusExtension(outputComponent);
+			Extension errorsExtension = getOrCreateErrorsExtension(extension);
 			for (ProcessError error : errors)
 			{
-				extension.addExtension(ProcessError.toExtension(error));
+				errorsExtension.addExtension(ProcessError.toExtension(error));
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
@@ -421,20 +422,13 @@ public final class PingStatusGenerator
 	private static TaskOutputComponent updateErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
 	{
 		Extension extension = getOrCreatePingStatusExtension(outputComponent);
-		List<Extension> nonErrorExtensions = extension.getExtension().stream()
-				.filter(extension1 -> !ConstantsPing.EXTENSION_URL_ERROR.equals(extension1.getUrl()))
-				.collect(Collectors.toCollection(ArrayList::new));
+		Extension errorsExtension = getOrCreateErrorsExtension(extension);
 
 		if (errors != null)
 		{
 			List<Extension> newErrorExtensions = errors.stream().map(ProcessError::toExtension)
 					.collect(Collectors.toCollection(ArrayList::new));
-			nonErrorExtensions.addAll(newErrorExtensions);
-			extension.setExtension(newErrorExtensions);
-		}
-		else
-		{
-			extension.setExtension(nonErrorExtensions);
+			errorsExtension.setExtension(newErrorExtensions);
 		}
 		sortStatusOutputExtensions(outputComponent);
 
@@ -589,6 +583,42 @@ public final class PingStatusGenerator
 			{
 				throw new RuntimeException(
 						"Only one ping status extension is allowed but found " + pingStatusExtensions.size());
+			}
+		}
+	}
+
+	private static Extension getOrCreateErrorsExtension(Extension extension)
+	{
+		Optional<Extension> optionalExtension = getErrorsExtension(extension);
+		if (optionalExtension.isPresent())
+		{
+			return optionalExtension.get();
+		}
+		else
+		{
+			Extension errorsExtension = extension.addExtension();
+			errorsExtension.setUrl(ConstantsPing.EXTENSION_URL_ERRORS);
+			return errorsExtension;
+		}
+	}
+
+	private static Optional<Extension> getErrorsExtension(Extension extension)
+	{
+		List<Extension> errorsExtensions = extension.getExtension().stream()
+				.filter(ex -> ConstantsPing.EXTENSION_URL_ERRORS.equals(extension.getUrl())).toList();
+		if (errorsExtensions.isEmpty())
+		{
+			return Optional.empty();
+		}
+		else
+		{
+			if (errorsExtensions.size() == 1)
+			{
+				return Optional.of(errorsExtensions.get(0));
+			}
+			else
+			{
+				throw new RuntimeException("Only one errors extension is allowed but found " + errorsExtensions.size());
 			}
 		}
 	}

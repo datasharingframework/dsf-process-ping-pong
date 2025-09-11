@@ -198,12 +198,12 @@
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:error">
+    <element id="Extension.extension:errors">
       <path value="Extension.extension"/>
       <sliceName value="error"/>
       <min value="0"/>
     </element>
-    <element id="Extension.extension:error.extension">
+    <element id="Extension.extension:errors.extension">
       <path value="Extension.extension.extension" />
       <slicing>
         <discriminator>
@@ -212,23 +212,20 @@
         </discriminator>
         <rules value="open" />
       </slicing>
-      <min value="1"/>
-      <max value="1"/>
     </element>
-    <element id="Extension.extension:error.extension:error-extension">
+    <element id="Extension.extension:errors.extension:error-extension">
       <path value="Extension.extension.extension" />
       <sliceName value="error-extension" />
-      <min value="1" />
       <type>
         <code value="Extension" />
         <profile value="http://dsf.dev/fhir/StructureDefinition/extension-error|#{version}" />
       </type>
     </element>
-    <element id="Extension.extension:error.url">
+    <element id="Extension.extension:errors.url">
       <path value="Extension.extension.url"/>
-      <fixedUri value="error"/>
+      <fixedUri value="errors"/>
     </element>
-    <element id="Extension.extension:error.value[x]">
+    <element id="Extension.extension:errors.value[x]">
       <path value="Extension.extension.value[x]"/>
       <max value="0"/>
     </element>
