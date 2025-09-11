@@ -72,7 +72,7 @@
             <max value="1"/>
             <binding>
                 <strength value="required"/>
-                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
             </binding>
         </element>
         <element id="Task.input:downloaded-bytes.type.coding">
@@ -84,7 +84,13 @@
             <path value="Task.input.type.coding.system"/>
             <min value="1"/>
             <max value="1"/>
-            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+        </element>
+        <element id="Task.input:downloaded-bytes.type.coding.version">
+            <path value="Task.input.type.coding.version"/>
+            <min value="1"/>
+            <max value="1"/>
+            <fixedString value="#{version}"/>
         </element>
         <element id="Task.input:downloaded-bytes.type.coding.code">
             <path value="Task.input.type.coding.code"/>
@@ -112,7 +118,7 @@
             <max value="1"/>
             <binding>
                 <strength value="required"/>
-                <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+                <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
             </binding>
         </element>
         <element id="Task.input:downloaded-duration.type.coding">
@@ -124,7 +130,13 @@
             <path value="Task.input.type.coding.system"/>
             <min value="1"/>
             <max value="1"/>
-            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+            <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+        </element>
+        <element id="Task.input:downloaded-duration.type.coding.version">
+            <path value="Task.input.type.coding.version"/>
+            <min value="1"/>
+            <max value="1"/>
+            <fixedString value="#{version}"/>
         </element>
         <element id="Task.input:downloaded-duration.type.coding.code">
             <path value="Task.input.type.coding.code"/>

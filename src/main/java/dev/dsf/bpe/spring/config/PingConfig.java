@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.listener.PingPongProcessPluginDeploymentStateListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
@@ -102,6 +103,13 @@ public class PingConfig
 	public void setMaxUploadSizeBytes(long maxUploadSizeBytes)
 	{
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public PingPongProcessPluginDeploymentStateListener pingPongProcessPluginDeploymentStateListener()
+	{
+		return new PingPongProcessPluginDeploymentStateListener(api);
 	}
 
 	@Bean

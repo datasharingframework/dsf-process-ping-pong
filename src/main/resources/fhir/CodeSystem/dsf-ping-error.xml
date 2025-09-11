@@ -5,7 +5,7 @@
             <code value="ALL" />
         </tag>
     </meta>
-    <url value="http://dsf.dev/fhir/CodeSystem/ping-error-v2" />
+    <url value="http://dsf.dev/fhir/CodeSystem/ping-error" />
     <!-- version managed by bpe -->
     <version value="#{version}" />
     <name value="DSF_Ping_Error" />

@@ -38,7 +38,8 @@
    <input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+		 	<version value="#{version}"/>
             <code value="target-endpoints"/>
          </coding>
       </type>
@@ -47,7 +48,8 @@
    <input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+		 	<version value="#{version}"/>
             <code value="timer-interval"/>
          </coding>
       </type>
@@ -56,7 +58,8 @@
 	<input>
 		<type>
 			<coding>
-				<system value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<version value="#{version}"/>
 				<code value="download-resource-size-bytes"/>
 			</coding>
 		</type>

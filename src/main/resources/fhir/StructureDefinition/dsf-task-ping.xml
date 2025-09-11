@@ -70,7 +70,7 @@
       <path value="Task.input.type" />
       <binding>
         <strength value="required" />
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}" />
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
     <element id="Task.input:endpoint-identifier.type.coding">
@@ -81,7 +81,13 @@
     <element id="Task.input:endpoint-identifier.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2" />
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping" />
+    </element>
+    <element id="Task.input:endpoint-identifier.type.coding.version">
+      <path value="Task.input.type.coding.version"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedString value="#{version}"/>
     </element>
     <element id="Task.input:endpoint-identifier.type.coding.code">
       <path value="Task.input.type.coding.code" />
@@ -129,7 +135,7 @@
       <max value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
       </binding>
     </element>
     <element id="Task.input:download-resource-size-bytes.type.coding">
@@ -141,7 +147,13 @@
       <path value="Task.input.type.coding.system"/>
       <min value="1"/>
       <max value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.input:download-resource-size-bytes.type.coding.version">
+      <path value="Task.input.type.coding.version"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedString value="#{version}"/>
     </element>
     <element id="Task.input:download-resource-size-bytes.type.coding.code">
       <path value="Task.input.type.coding.code"/>
@@ -167,7 +179,7 @@
       <path value="Task.input.type"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.input:download-resource-reference.type.coding">
@@ -179,7 +191,13 @@
       <path value="Task.input.type.coding.system"/>
       <min value="1"/>
       <max value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.input:download-resource-reference.type.coding.version">
+      <path value="Task.input.type.coding.version"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedString value="#{version}"/>
     </element>
     <element id="Task.input:download-resource-reference.type.coding.code">
       <path value="Task.input.type.coding.code"/>
@@ -242,7 +260,7 @@
       <max value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.output:process-error.type.coding">
@@ -254,7 +272,13 @@
       <path value="Task.output.type.coding.system"/>
       <min value="1"/>
       <max value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.output:process-error.type.coding.version">
+      <path value="Task.output.type.coding.version"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedString value="#{version}"/>
     </element>
     <element id="Task.output:process-error.type.coding.code">
       <path value="Task.output.type.coding.code"/>
@@ -288,14 +312,14 @@
       <min value="1" />
       <type>
         <code value="Extension" />
-        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status-v2|#{version}" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status|#{version}" />
       </type>
     </element>
     <element id="Task.output:pong-status.type">
       <path value="Task.output.type"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping-v2|#{version}"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.output:pong-status.type.coding">
@@ -306,7 +330,13 @@
     <element id="Task.output:pong-status.type.coding.system">
       <path value="Task.output.type.coding.system"/>
       <min value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-v2"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping"/>
+    </element>
+    <element id="Task.output:pong-status.type.coding.version">
+      <path value="Task.output.type.coding.version"/>
+      <min value="1"/>
+      <max value="1"/>
+      <fixedString value="#{version}"/>
     </element>
     <element id="Task.output:pong-status.type.coding.code">
       <path value="Task.output.type.coding.code"/>
@@ -322,14 +352,14 @@
     <element id="Task.output:pong-status.value[x].system">
       <path value="Task.output.value[x].system"/>
       <min value="1"/>
-      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-status-v2"/>
+      <fixedUri value="http://dsf.dev/fhir/CodeSystem/ping-status"/>
     </element>
     <element id="Task.output:pong-status.value[x].code">
       <path value="Task.output.value[x].code"/>
       <min value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/pong-status-v2|#{version}"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/pong-status|#{version}"/>
       </binding>
     </element>
   </differential>

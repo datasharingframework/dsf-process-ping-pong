@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 
 public final class DownloadedDurationGenerator
 {
@@ -20,7 +21,8 @@ public final class DownloadedDurationGenerator
 		Task.ParameterComponent param = new Task.ParameterComponent();
 		param.setValue(new org.hl7.fhir.r4.model.Duration().setValue(duration.toMillis()).setSystem(CODESYSTEM_UCUM)
 				.setCode(CODESYSTEM_UCUM_CODE_MILLISECONDS)).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue());
+				.setCode(CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		return param;
 	}
 }

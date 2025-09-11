@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
@@ -46,9 +47,12 @@ public class SendPingMessage extends AbstractTaskMessageSend
 				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
 		Stream<ParameterComponent> downloadResourceSizeBytesStream = Stream
 				.of(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes));
-		Stream<ParameterComponent> endpointIdentifierStream = Stream.of(api.getTaskHelper().createInput(
+		ParameterComponent endpointIdentifierComponent = api.getTaskHelper().createInput(
 				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
-				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue()));
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue());
+		endpointIdentifierComponent.getType().getCodingFirstRep()
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+		Stream<ParameterComponent> endpointIdentifierStream = Stream.of(endpointIdentifierComponent);
 
 		return Stream.concat(endpointIdentifierStream,
 				Stream.concat(downloadResourceReferenceStream, downloadResourceSizeBytesStream));

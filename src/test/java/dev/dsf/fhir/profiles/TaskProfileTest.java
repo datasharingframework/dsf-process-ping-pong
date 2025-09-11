@@ -60,8 +60,8 @@ public class TaskProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-base-1.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
-					"dsf-extension-ping-status-1_0.xml", "dsf-task-ping.xml", "dsf-task-pong.xml",
-					"dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
+					"dsf-task-ping.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
+					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-1.0.0.xml", "dsf-bpmn-message-1.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml"),
@@ -92,7 +92,8 @@ public class TaskProfileTest
 				.setValue(new StringType(
 						"Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|endpoint.target.org"))
 				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -106,7 +107,8 @@ public class TaskProfileTest
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput().setValue(new StringType("PT24H")).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue());
+				.setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -120,7 +122,8 @@ public class TaskProfileTest
 	{
 		Task task = createValidTaskStartAutostartProcess();
 		task.addInput().setValue(new StringType("invalid_duration")).getType().addCoding()
-				.setSystem(CodeSystem.DsfPing.URL).setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue());
+				.setSystem(CodeSystem.DsfPing.URL).setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -228,7 +231,8 @@ public class TaskProfileTest
 				.setValue(new StringType(
 						"Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|endpoint.target.org"))
 				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -393,7 +397,8 @@ public class TaskProfileTest
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
 		task.addInput().setValue(new DecimalType(1)).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue());
+				.setCode(CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		return task;
 	}
@@ -515,7 +520,8 @@ public class TaskProfileTest
 				.setValue(new Reference().setType(ResourceType.Endpoint.name())
 						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
 				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue());
+				.setCode(CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 
 		return task;
 	}

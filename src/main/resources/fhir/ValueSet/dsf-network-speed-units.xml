@@ -6,7 +6,7 @@
             <code value="ALL" />
         </tag>
     </meta>
-    <url value="http://dsf.dev/fhir/ValueSet/ping-units-v2" />
+    <url value="http://dsf.dev/fhir/ValueSet/ping-units" />
     <!-- version managed by bpe -->
     <version value="#{version}" />
     <name value="DSF_Ping_Units" />

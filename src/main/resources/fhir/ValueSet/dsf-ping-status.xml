@@ -6,7 +6,7 @@
 			<code value="ALL" />
 		</tag>
 	</meta>
-	<url value="http://dsf.dev/fhir/ValueSet/ping-status-v2" />
+	<url value="http://dsf.dev/fhir/ValueSet/ping-status" />
 	<!-- version managed by bpe -->
 	<version value="#{version}" />
 	<name value="DSF_Ping_Status" />
@@ -21,19 +21,23 @@
 	<immutable value="true" />
 	<compose>
 		<include>
-			<system value="http://dsf.dev/fhir/CodeSystem/ping-status-v2" />
+			<system value="http://dsf.dev/fhir/CodeSystem/ping-status" />
 			<version value="#{version}" />
 			<concept>
 				<code value="not-allowed" />
+				<display value="Not allowed" />
 			</concept>
 			<concept>
 				<code value="not-reachable" />
+				<display value="Not reachable" />
 			</concept>
 			<concept>
 				<code value="pong-missing" />
+				<display value="Pong missing" />
 			</concept>
 			<concept>
 				<code value="pong-received" />
+				<display value="Pong received" />
 			</concept>
 		</include>
 	</compose>

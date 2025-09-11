@@ -4,6 +4,7 @@ import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 
 public final class DownloadedBytesGenerator
 {
@@ -15,7 +16,8 @@ public final class DownloadedBytesGenerator
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
 		param.setValue(new DecimalType(bytes)).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue());
+				.setCode(CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue())
+				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
 		return param;
 	}
 }

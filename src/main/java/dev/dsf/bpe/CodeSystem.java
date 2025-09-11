@@ -50,7 +50,7 @@ public final class CodeSystem
 
 	public static final class DsfPing
 	{
-		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-v2";
+		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping";
 
 		private DsfPing()
 		{
@@ -96,7 +96,7 @@ public final class CodeSystem
 
 	public static final class DsfPingStatus
 	{
-		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-status-v2";
+		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-status";
 
 		private DsfPingStatus()
 		{
@@ -138,7 +138,7 @@ public final class CodeSystem
 	// TODO: rename to DsfNetworkSpeedUnits
 	public static final class DsfPingUnits
 	{
-		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-units-v2";
+		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-units";
 
 		private DsfPingUnits()
 		{
@@ -335,7 +335,7 @@ public final class CodeSystem
 
 	public final class DsfPingError
 	{
-		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-error-v2";
+		public static final String URL = "http://dsf.dev/fhir/CodeSystem/ping-error";
 
 		private DsfPingError()
 		{

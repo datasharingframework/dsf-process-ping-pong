@@ -5,6 +5,7 @@ import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 
 public final class DownloadResourceSizeGenerator
 {
