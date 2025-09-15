@@ -505,6 +505,10 @@ public final class CodeSystem
 					"local-binary-post-http-403",
 					"Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
 			),
+			LOCAL_BINARY_POST_HTTP_413(
+					"local-binary-post-http-413",
+					"Local instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"
+			),
 			LOCAL_BINARY_POST_HTTP_500(
 					"local-binary-post-http-500",
 					"Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"
@@ -537,6 +541,10 @@ public final class CodeSystem
 			REMOTE_BINARY_POST_HTTP_403(
 					"remote-binary-post-http-403",
 					"Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_HTTP_413(
+					"remote-binary-post-http-413",
+					"Remote instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_500(
 					"remote-binary-post-http-500",

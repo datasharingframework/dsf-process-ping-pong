@@ -1,11 +1,9 @@
 package dev.dsf.bpe.util.task.input.generator;
 
-import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.Task;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.PingProcessPluginDefinition;
 
 public final class DownloadResourceReferenceGenerator
 {

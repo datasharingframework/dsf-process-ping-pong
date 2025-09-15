@@ -179,6 +179,10 @@
         <display value="Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
+        <code value="local-binary-post-http-413"/>
+        <display value="Local instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
         <code value="local-binary-post-http-500"/>
         <display value="Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
     </concept>
@@ -210,6 +214,10 @@
     <concept>
         <code value="remote-binary-post-http-403"/>
         <display value="Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
+    </concept>
+    <concept>
+        <code value="remote-binary-post-http-413"/>
+        <display value="Remote instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-500"/>

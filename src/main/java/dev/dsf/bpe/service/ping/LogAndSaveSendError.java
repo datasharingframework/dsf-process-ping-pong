@@ -1,6 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import java.time.Duration;
 import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
