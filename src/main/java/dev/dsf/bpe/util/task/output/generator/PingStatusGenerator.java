@@ -406,7 +406,7 @@ public final class PingStatusGenerator
 
 	private static TaskOutputComponent addErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
 	{
-		if (errors != null)
+		if (errors != null && !errors.isEmpty())
 		{
 			Extension extension = getOrCreatePingStatusExtension(outputComponent);
 			Extension errorsExtension = getOrCreateErrorsExtension(extension);
