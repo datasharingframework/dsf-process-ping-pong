@@ -60,7 +60,7 @@ public final class PingStatusGenerator
 		{
 			Extension pingStatusExtension = getOrCreatePingStatusExtension(output);
 			List<Extension> errorExtensions = pingStatusExtension.getExtension().stream()
-					.filter(extension -> ConstantsPing.EXTENSION_URL_ERROR.equals(extension.getUrl())).toList();
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ERRORS.equals(extension.getUrl())).toList();
 			if (errorExtensions.isEmpty())
 			{
 				addErrors(output, errors);
@@ -605,7 +605,7 @@ public final class PingStatusGenerator
 	private static Optional<Extension> getErrorsExtension(Extension extension)
 	{
 		List<Extension> errorsExtensions = extension.getExtension().stream()
-				.filter(ex -> ConstantsPing.EXTENSION_URL_ERRORS.equals(extension.getUrl())).toList();
+				.filter(ex -> ConstantsPing.EXTENSION_URL_ERRORS.equals(ex.getUrl())).toList();
 		if (errorsExtensions.isEmpty())
 		{
 			return Optional.empty();
@@ -688,12 +688,12 @@ public final class PingStatusGenerator
 				sortedExtensions.add(uploadSpeedExtension.get());
 			}
 
-			List<Extension> errorExtensions = extensions.stream()
-					.filter(extension -> ConstantsPing.EXTENSION_URL_ERROR.equals(extension.getUrl())).toList();
-			if (!errorExtensions.isEmpty())
+			Optional<Extension> errorsExtension = extensions.stream()
+					.filter(extension -> ConstantsPing.EXTENSION_URL_ERRORS.equals(extension.getUrl())).findFirst();
+			if (errorsExtension.isPresent())
 			{
-				extensions.removeAll(errorExtensions);
-				sortedExtensions.addAll(errorExtensions);
+				extensions.remove(errorsExtension.get());
+				sortedExtensions.add(errorsExtension.get());
 			}
 
 			sortedExtensions.addAll(extensions);

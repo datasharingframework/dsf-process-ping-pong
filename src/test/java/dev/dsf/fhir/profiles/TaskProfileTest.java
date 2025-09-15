@@ -381,7 +381,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	private Task createValidTaskStartPingProcess()
+	public static Task createValidTaskStartPingProcess()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_START_PING);
@@ -497,7 +497,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	private Task createValidTaskPing()
+	public static Task createValidTaskPing()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING);
