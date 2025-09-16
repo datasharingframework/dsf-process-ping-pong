@@ -122,17 +122,17 @@
         <code value="string"/>
       </type>
     </element>
-    <element id="Extension.extension:download-speed">
+    <element id="Extension.extension:download-speed-from-remote">
       <path value="Extension.extension"/>
-      <sliceName value="download-speed"/>
+      <sliceName value="download-speed-from-remote"/>
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.url">
+    <element id="Extension.extension:download-speed-from-remote.url">
       <path value="Extension.extension.url"/>
-      <fixedUri value="download-speed"/>
+      <fixedUri value="download-speed-from-remote"/>
     </element>
-    <element id="Extension.extension:download-speed.value[x]">
+    <element id="Extension.extension:download-speed-from-remote.value[x]">
       <path value="Extension.extension.value[x]"/>
       <min value="1"/>
       <max value="1"/>
@@ -140,37 +140,37 @@
         <code value="Quantity"/>
       </type>
     </element>
-    <element id="Extension.extension:download-speed.value[x].value">
+    <element id="Extension.extension:download-speed-from-remote.value[x].value">
       <path value="Extension.extension.value[x].value"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.value[x].unit">
+    <element id="Extension.extension:download-speed-from-remote.value[x].unit">
       <path value="Extension.extension.value[x].unit"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.value[x].system">
+    <element id="Extension.extension:download-speed-from-remote.value[x].system">
       <path value="Extension.extension.value[x].system"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:download-speed.value[x].code">
+    <element id="Extension.extension:download-speed-from-remote.value[x].code">
       <path value="Extension.extension.value[x].code"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed">
+    <element id="Extension.extension:upload-speed-to-remote">
       <path value="Extension.extension"/>
-      <sliceName value="upload-speed"/>
+      <sliceName value="upload-speed-to-remote"/>
       <min value="0"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.url">
+    <element id="Extension.extension:upload-speed-to-remote.url">
       <path value="Extension.extension.url"/>
-      <fixedUri value="upload-speed"/>
+      <fixedUri value="upload-speed-to-remote"/>
     </element>
-    <element id="Extension.extension:upload-speed.value[x]">
+    <element id="Extension.extension:upload-speed-to-remote.value[x]">
       <path value="Extension.extension.value[x]"/>
       <min value="1"/>
       <max value="1"/>
@@ -178,22 +178,22 @@
         <code value="Quantity"/>
       </type>
     </element>
-    <element id="Extension.extension:upload-speed.value[x].value">
+    <element id="Extension.extension:upload-speed-to-remote.value[x].value">
       <path value="Extension.extension.value[x].value"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.value[x].unit">
+    <element id="Extension.extension:upload-speed-to-remote.value[x].unit">
       <path value="Extension.extension.value[x].unit"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.value[x].system">
+    <element id="Extension.extension:upload-speed-to-remote.value[x].system">
       <path value="Extension.extension.value[x].system"/>
       <min value="1"/>
       <max value="1"/>
     </element>
-    <element id="Extension.extension:upload-speed.value[x].code">
+    <element id="Extension.extension:upload-speed-to-remote.value[x].code">
       <path value="Extension.extension.value[x].code"/>
       <min value="1"/>
       <max value="1"/>

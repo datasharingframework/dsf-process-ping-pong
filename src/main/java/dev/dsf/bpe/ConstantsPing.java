@@ -50,8 +50,8 @@ public final class ConstantsPing
 	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
 	public static final String EXTENSION_URL_ORGANIZATION_IDENTIFIER = "organization-identifier";
 	public static final String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
-	public static final String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed";
-	public static final String EXTENSION_URL_UPLOAD_SPEED = "upload-speed";
+	public static final String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed-from-remote";
+	public static final String EXTENSION_URL_UPLOAD_SPEED = "upload-speed-to-remote";
 	public static final String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
 	public static final String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
 	public static final String EXTENSION_URL_ERROR = "error";
