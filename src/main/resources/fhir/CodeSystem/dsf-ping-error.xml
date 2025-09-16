@@ -246,23 +246,23 @@
 
     <concept>
         <code value="response-message-timeout-status-requested"/>
-        <display value="Response message timed out. The status of the request on the target FHIR server is 'requested'"/>
+        <display value="Response missing, sent Task status is 'requested'"/>
     </concept>
     <concept>
         <code value="response-message-timeout-status-in-progress"/>
-        <display value="Response message timed out. The status of the request on the target FHIR server is 'in-progress'"/>
+        <display value="Response missing, sent Task status is 'in-progress'"/>
     </concept>
     <concept>
         <code value="response-message-timeout-status-failed"/>
-        <display value="Response message timed out. The status of the request on the target FHIR server is 'failed'"/>
+        <display value="Response missing, sent Task status is 'failed'"/>
     </concept>
     <concept>
         <code value="response-message-timeout-status-completed"/>
-        <display value="Response message timed out. The status of the request on the target FHIR server is 'completed'"/>
+        <display value="Response missing, sent Task status is 'completed'"/>
     </concept>
     <concept>
         <code value="response-message-timeout-status-unexpected"/>
-        <display value="Response message timed out. The status of the request on the target FHIR server is neither of 'requested', 'in-progress', 'failed' or 'completed'"/>
+        <display value="Response missing, sent Task status is neither of 'requested', 'in-progress', 'failed' or 'completed'"/>
     </concept>
 
     <concept>

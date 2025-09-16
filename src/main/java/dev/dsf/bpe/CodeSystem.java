@@ -573,23 +573,23 @@ public final class CodeSystem
 
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED(
 					"response-message-timeout-status-requested",
-					"Response message timed out. The status of the request on the target FHIR server is 'requested'"
+					"Response missing, sent Task status is 'requested'"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_IN_PROGRESS(
 					"response-message-timeout-status-in-progress",
-					"Response message timed out. The status of the request on the target FHIR server is 'in-progress'"
+					"Response missing, sent Task status is 'in-progress'"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_FAILED(
 					"response-message-timeout-status-failed",
-					"Response message timed out. The status of the request on the target FHIR server is 'failed'"
+					"Response missing, sent Task status is 'failed'"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_COMPLETED(
 					"response-message-timeout-status-completed",
-					"Response message timed out. The status of the request on the target FHIR server is 'completed'"
+					"Response missing, sent Task status is 'completed'"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED(
 					"response-message-timeout-status-unexpected",
-					"Response message timed out. The status of the request on the target FHIR server is neither of 'requested', 'in-progress', 'failed' or 'completed'"
+					"Response missing, sent Task status is neither of 'requested', 'in-progress', 'failed' or 'completed'"
 			),
 
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_401(
