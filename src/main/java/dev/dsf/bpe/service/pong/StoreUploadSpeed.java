@@ -42,19 +42,22 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 		long uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(BigDecimal.valueOf(0))
 				.longValue();
 		Duration uploadedDuration = uploadedDurationTaskInput
-				.map(duration -> Duration.ofMillis(duration.getValue().longValue())).orElse(Duration.ZERO);
+				.map(duration -> Duration.ofMillis(duration.getValue().longValue())).orElse(null);
 
-		BigDecimal uploadSpeed;
-		if (Objects.isNull(networkSpeedUnit))
+		BigDecimal uploadSpeed = null;
+		if (uploadedDuration != null)
 		{
-			CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
-					.calculateSpeedWithFittingUnit(uploadedBytes, uploadedDuration);
-			uploadSpeed = speedAndUnit.speed();
-			networkSpeedUnit = speedAndUnit.unit();
-		}
-		else
-		{
-			uploadSpeed = networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDuration);
+			if (Objects.isNull(networkSpeedUnit))
+			{
+				CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+						.calculateSpeedWithFittingUnit(uploadedBytes, uploadedDuration);
+				uploadSpeed = speedAndUnit.speed();
+				networkSpeedUnit = speedAndUnit.unit();
+			}
+			else
+			{
+				uploadSpeed = networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDuration);
+			}
 		}
 
 		PingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);

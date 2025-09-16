@@ -177,13 +177,14 @@ public final class PingStatusGenerator
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.name(), CODESYSTEM_UCUM,
-					networkSpeedUnit.toUcum());
+			updateDownloadSpeed(outputComponent, downloadSpeed,
+					networkSpeedUnit != null ? networkSpeedUnit.name() : null, CODESYSTEM_UCUM,
+					networkSpeedUnit != null ? networkSpeedUnit.toUcum() : null);
 		}
 		else
 		{
-			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit.name(), CODESYSTEM_UCUM,
-					networkSpeedUnit.toUcum());
+			addDownloadSpeed(outputComponent, downloadSpeed, networkSpeedUnit != null ? networkSpeedUnit.name() : null,
+					CODESYSTEM_UCUM, networkSpeedUnit != null ? networkSpeedUnit.toUcum() : null);
 		}
 
 		return outputComponent;
@@ -218,13 +219,13 @@ public final class PingStatusGenerator
 	{
 		if (hasDownloadSpeedSet(outputComponent))
 		{
-			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.name(), CODESYSTEM_UCUM,
-					networkSpeedUnit.toUcum());
+			updateUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit != null ? networkSpeedUnit.name() : null,
+					CODESYSTEM_UCUM, networkSpeedUnit != null ? networkSpeedUnit.toUcum() : null);
 		}
 		else
 		{
-			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit.name(), CODESYSTEM_UCUM,
-					networkSpeedUnit.toUcum());
+			addUploadSpeed(outputComponent, uploadSpeed, networkSpeedUnit != null ? networkSpeedUnit.name() : null,
+					CODESYSTEM_UCUM, networkSpeedUnit != null ? networkSpeedUnit.toUcum() : null);
 		}
 
 		return outputComponent;
@@ -271,7 +272,7 @@ public final class PingStatusGenerator
 			CodeSystem.DsfPingUnits.Code unit)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, downloadSpeed,
-				uploadSpeed, unit.name(), CODESYSTEM_UCUM, unit.toUcum());
+				uploadSpeed, unit != null ? unit.name() : null, CODESYSTEM_UCUM, unit != null ? unit.toUcum() : null);
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,

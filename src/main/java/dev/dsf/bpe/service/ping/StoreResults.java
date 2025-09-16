@@ -77,40 +77,15 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				Duration downloadedDuration = (Duration) variables
 						.getVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal downloadSpeed;
-				if (Objects.isNull(networkSpeedUnit))
-				{
-					CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
-							.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
-					downloadSpeed = speedAndUnit.speed();
-					networkSpeedUnit = speedAndUnit.unit();
-				}
-				else
-				{
-					downloadSpeed = downloadedBytes != null && downloadedDuration != null
-							? networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration)
-							: null;
-				}
+				BigDecimal downloadSpeed = calculateNetworkSpeed(downloadedBytes, downloadedDuration);
 
 				Long uploadedBytes = variables
 						.getLong(ExecutionVariables.uploadedBytes.correlatedValue(correlationKey));
 				Duration uploadedDurationMillis = (Duration) variables
 						.getVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal uploadSpeed;
-				if (Objects.isNull(networkSpeedUnit))
-				{
-					CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
-							.calculateSpeedWithFittingUnit(uploadedBytes, uploadedDurationMillis);
-					uploadSpeed = speedAndUnit.speed();
-					networkSpeedUnit = speedAndUnit.unit();
-				}
-				else
-				{
-					uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
-							? networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDurationMillis)
-							: null;
-				}
+				BigDecimal uploadSpeed = calculateNetworkSpeed(uploadedBytes, uploadedDurationMillis);
+
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),
 						downloadSpeed, uploadSpeed, networkSpeedUnit));
@@ -127,5 +102,25 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		errorMailService.send(task.getIdElement(), errorsPerTarget);
 
 		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
+	}
+
+	private BigDecimal calculateNetworkSpeed(Long downloadedBytes, Duration downloadedDuration)
+	{
+		BigDecimal downloadSpeed = null;
+		if (downloadedBytes != null && downloadedDuration != null)
+		{
+			if (Objects.isNull(networkSpeedUnit))
+			{
+				CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+						.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
+				downloadSpeed = speedAndUnit.speed();
+				networkSpeedUnit = speedAndUnit.unit();
+			}
+			else
+			{
+				downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+			}
+		}
+		return downloadSpeed;
 	}
 }

@@ -37,17 +37,20 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
 		Duration downloadedDuration = (Duration) variables.getVariable(ExecutionVariables.downloadedDuration.name());
 
-		BigDecimal downloadSpeed;
-		if (Objects.isNull(networkSpeedUnit))
+		BigDecimal downloadSpeed = null;
+		if (downloadedDuration != null)
 		{
-			CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
-					.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
-			downloadSpeed = speedAndUnit.speed();
-			networkSpeedUnit = speedAndUnit.unit();
-		}
-		else
-		{
-			downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+			if (Objects.isNull(networkSpeedUnit))
+			{
+				CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+						.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
+				downloadSpeed = speedAndUnit.speed();
+				networkSpeedUnit = speedAndUnit.unit();
+			}
+			else
+			{
+				downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+			}
 		}
 
 		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
