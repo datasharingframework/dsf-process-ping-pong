@@ -72,7 +72,7 @@ public class PingConfig
 
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". Default is \"mbps\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
-	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:Mbps}")
+	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:#{null}}")
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public CodeSystem.DsfPingUnits.Code getNetworkSpeedUnit()

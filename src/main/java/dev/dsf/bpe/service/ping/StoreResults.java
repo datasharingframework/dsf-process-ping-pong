@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -32,7 +33,7 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 	private final AggregateErrorMailService errorMailService;
-	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
+	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public StoreResults(ProcessPluginApi api, AggregateErrorMailService errorMailService,
 			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
@@ -76,18 +77,40 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				Duration downloadedDuration = (Duration) variables
 						.getVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal downloadSpeed = downloadedBytes != null && downloadedDuration != null
-						? networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration)
-						: null;
+				BigDecimal downloadSpeed;
+				if (Objects.isNull(networkSpeedUnit))
+				{
+					CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+							.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
+					downloadSpeed = speedAndUnit.speed();
+					networkSpeedUnit = speedAndUnit.unit();
+				}
+				else
+				{
+					downloadSpeed = downloadedBytes != null && downloadedDuration != null
+							? networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration)
+							: null;
+				}
 
 				Long uploadedBytes = variables
 						.getLong(ExecutionVariables.uploadedBytes.correlatedValue(correlationKey));
 				Duration uploadedDurationMillis = (Duration) variables
 						.getVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
-						? networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDurationMillis)
-						: null;
+				BigDecimal uploadSpeed;
+				if (Objects.isNull(networkSpeedUnit))
+				{
+					CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+							.calculateSpeedWithFittingUnit(uploadedBytes, uploadedDurationMillis);
+					uploadSpeed = speedAndUnit.speed();
+					networkSpeedUnit = speedAndUnit.unit();
+				}
+				else
+				{
+					uploadSpeed = uploadedBytes != null && uploadedDurationMillis != null
+							? networkSpeedUnit.calculateSpeed(uploadedBytes, uploadedDurationMillis)
+							: null;
+				}
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),
 						downloadSpeed, uploadSpeed, networkSpeedUnit));

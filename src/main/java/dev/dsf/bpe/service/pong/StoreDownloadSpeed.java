@@ -2,6 +2,7 @@ package dev.dsf.bpe.service.pong;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -19,7 +20,7 @@ import dev.dsf.bpe.v1.variables.Variables;
 public class StoreDownloadSpeed extends AbstractServiceDelegate
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreDownloadSpeed.class);
-	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
+	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public StoreDownloadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
@@ -36,7 +37,18 @@ public class StoreDownloadSpeed extends AbstractServiceDelegate
 		long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
 		Duration downloadedDuration = (Duration) variables.getVariable(ExecutionVariables.downloadedDuration.name());
 
-		BigDecimal downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+		BigDecimal downloadSpeed;
+		if (Objects.isNull(networkSpeedUnit))
+		{
+			CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
+					.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
+			downloadSpeed = speedAndUnit.speed();
+			networkSpeedUnit = speedAndUnit.unit();
+		}
+		else
+		{
+			downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+		}
 
 		PingStatusGenerator.updatePongStatusOutputDownloadSpeed(startTask, downloadSpeed, networkSpeedUnit);
 

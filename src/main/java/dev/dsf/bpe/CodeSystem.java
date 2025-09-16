@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.hl7.fhir.r4.model.Coding;
 
@@ -330,6 +331,22 @@ public final class CodeSystem
 			public abstract BigDecimal calculateSpeed(long bytes, Duration duration);
 
 			public abstract String toUcum();
+
+			public static SpeedAndUnit calculateSpeedWithFittingUnit(Long downloadedBytes, Duration downloadedDuration)
+			{
+				return Stream
+						.of(CodeSystem.DsfPingUnits.Code.bps, CodeSystem.DsfPingUnits.Code.kbps,
+								CodeSystem.DsfPingUnits.Code.Mbps, CodeSystem.DsfPingUnits.Code.Gbps)
+						.map(unit -> new SpeedAndUnit(unit.calculateSpeed(downloadedBytes, downloadedDuration), unit))
+						.filter(speedAndUnit -> speedAndUnit.speed.compareTo(BigDecimal.valueOf(1000L)) < 0).findFirst()
+						.orElse(new SpeedAndUnit(
+								CodeSystem.DsfPingUnits.Code.Gbps.calculateSpeed(downloadedBytes, downloadedDuration),
+								Code.Gbps));
+			}
+
+			public record SpeedAndUnit(BigDecimal speed, Code unit)
+			{
+			}
 		}
 	}
 
