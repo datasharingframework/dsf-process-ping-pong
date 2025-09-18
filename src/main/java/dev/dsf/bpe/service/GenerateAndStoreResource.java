@@ -53,13 +53,14 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 			logger.info(
 					"Requested resource size of {} bytes exceeds configured maximum upload size of {} bytes. Trimmed to maximum upload size.",
 					downloadResourceSizeBytes, maxUploadSizeBytes);
+			setDownloadResourceSizeBytes(variables, maxUploadSizeBytes);
 			resourceContent = new RandomByteInputStream(maxUploadSizeBytes);
 		}
 		else
 		{
+			setDownloadResourceSizeBytes(variables, downloadResourceSizeBytes);
 			resourceContent = new RandomByteInputStream(downloadResourceSizeBytes);
 		}
-		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), downloadResourceSizeBytes);
 		logger.debug("Generated resource.");
 		logger.debug("Storing binary resource for download...");
 
@@ -252,6 +253,11 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 	private long getDownloadResourceSize(Variables variables)
 	{
 		return variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
+	}
+
+	private void setDownloadResourceSizeBytes(Variables variables, long resourceSizeBytes)
+	{
+		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), resourceSizeBytes);
 	}
 
 	private IdType storeBinary(RandomByteInputStream downloadResourceContent)
