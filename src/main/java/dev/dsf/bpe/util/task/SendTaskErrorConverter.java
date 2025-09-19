@@ -1,6 +1,8 @@
 package dev.dsf.bpe.util.task;
 
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -59,6 +61,10 @@ public final class SendTaskErrorConverter
 		{
 			return convertHttpHostConnectException(errorType, process);
 		}
+		else if (exception instanceof SocketTimeoutException socketTimeoutException)
+		{
+			return convertSocketTimeoutException(errorType, process, socketTimeoutException);
+		}
 		else if (exception instanceof ProcessingException e)
 		{
 			SSLHandshakeException sslHandshakeException = getExpectedCauseInstanceFromStack(SSLHandshakeException.class,
@@ -89,12 +95,65 @@ public final class SendTaskErrorConverter
 				return convertHttpHostConnectException(errorType, process);
 			}
 
+			SocketTimeoutException socketTimeoutException = getExpectedCauseInstanceFromStack(
+					SocketTimeoutException.class, e);
+			if (socketTimeoutException != null)
+			{
+				return convertSocketTimeoutException(errorType, process, socketTimeoutException);
+			}
+
 			return convertExceptionFallback(exception, errorType, process);
 		}
 		else
 		{
 			return convertExceptionFallback(exception, errorType, process);
 		}
+	}
+
+	private static ProcessErrorWithStatusCode convertSocketTimeoutException(ErrorType errorType, String process,
+			SocketTimeoutException socketTimeoutException)
+	{
+		ProcessError error;
+		String message = socketTimeoutException.getMessage().toLowerCase(Locale.ROOT);
+		if (message.contains("connect"))
+		{
+			error = switch (errorType)
+			{
+				case LOCAL -> new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+				case REMOTE -> new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT_CONNECT,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+			};
+			return new ProcessErrorWithStatusCode(error, CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+		}
+		else if (message.contains("read"))
+		{
+			error = switch (errorType)
+			{
+				case LOCAL -> new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_TIMEOUT_READ,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+				case REMOTE -> new ProcessError(process,
+						CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_TIMEOUT_READ,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+			};
+			return new ProcessErrorWithStatusCode(error, CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+		}
+		else
+		{
+			error = switch (errorType)
+			{
+				case LOCAL -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+				case REMOTE -> new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN,
+						ConstantsPing.POTENTIAL_FIX_URL_CONNECTION_TIMEOUT);
+			};
+			logger.error("Unexpected error: {}", socketTimeoutException.getMessage());
+			return new ProcessErrorWithStatusCode(error, CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+		}
+
 	}
 
 	private static ProcessErrorWithStatusCode convertSSLHandshakeException(ErrorType errorType, String process)
