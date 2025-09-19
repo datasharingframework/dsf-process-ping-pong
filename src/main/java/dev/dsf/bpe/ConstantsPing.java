@@ -44,7 +44,6 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
 
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
-	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_NETWORK_SPEED = "http://dsf.dev/fhir/StructureDefinition/extension-network-speed";
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-error";
 
 	public static final String EXTENSION_URL_CORRELATION_KEY = "correlation-key";
@@ -52,15 +51,9 @@ public final class ConstantsPing
 	public static final String EXTENSION_URL_ENDPOINT_IDENTIFIER = "endpoint-identifier";
 	public static final String EXTENSION_URL_DOWNLOAD_SPEED = "download-speed-from-remote";
 	public static final String EXTENSION_URL_UPLOAD_SPEED = "upload-speed-to-remote";
-	public static final String EXTENSION_URL_NETWORK_SPEED_UNIT = "unit";
-	public static final String EXTENSION_URL_NETWORK_SPEED_VALUE = "network-speed";
 	public static final String EXTENSION_URL_ERROR = "error";
 	public static final String EXTENSION_URL_ERRORS = "errors";
-	public static final String EXTENSION_URL_PROCESS = "process";
-	public static final String EXTENSION_URL_PROCESS_STEP = "process-step";
-	public static final String EXTENSION_URL_ACTION = "action";
 	public static final String EXTENSION_URL_POTENTIAL_FIX = "potential-fix";
-	public static final String EXTENSION_URL_MESSAGE = "message";
 
 	public static final long DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT = 10000000L;
 
@@ -75,6 +68,4 @@ public final class ConstantsPing
 	public static final String POTENTIAL_FIX_URL_CONNECTION_TIMEOUT = POTENTIAL_FIX_URL_BASE + "/connection-timeout";
 	public static final String POTENTIAL_FIX_URL_CONNECTION_REFUSED = POTENTIAL_FIX_URL_BASE + "/connection-refused";
 	public static final String POTENTIAL_FIX_URL_UNKNOWN_HOST = POTENTIAL_FIX_URL_BASE + "/unknown-host";
-
-	public static final String CLEANUP_ERROR_ACTION = "Deleting generated Binary resource from local DSF FHIR server.";
 }
