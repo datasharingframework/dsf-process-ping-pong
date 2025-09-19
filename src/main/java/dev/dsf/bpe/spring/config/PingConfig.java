@@ -29,6 +29,7 @@ import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
+import dev.dsf.bpe.service.ping.SetPongTimeoutDuration;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
@@ -138,6 +139,13 @@ public class PingConfig
 		return new AggregateErrorMailService(api, sendPongProcessFailedMail);
 	}
 
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SetPongTimeoutDuration setPongTimeoutDuration()
+	{
+		return new SetPongTimeoutDuration(api);
+	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

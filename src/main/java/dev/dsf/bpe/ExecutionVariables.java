@@ -22,6 +22,7 @@ public enum ExecutionVariables
 	resourceDownloadErrorRemote,
 	resourceUploadError,
 	resourceUploadErrorRemote,
+	pongTimerDuration,
 	pingTaskId;
 
 	public String correlatedValue(String correlationKey)

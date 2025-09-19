@@ -65,4 +65,14 @@
 		</type>
 		<valueDecimal value="10000000"/>
 	</input>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<version value="#{version}"/>
+				<code value="pong-timeout-duration"/>
+			</coding>
+		</type>
+		<valueString value="PT30S"/>
+	</input>
 </Task>

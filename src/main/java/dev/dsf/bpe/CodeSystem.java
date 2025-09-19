@@ -74,7 +74,8 @@ public final class CodeSystem
 			DOWNLOADED_DURATION_MILLIS("downloaded-duration"),
 			DOWNLOADED_BYTES("downloaded-bytes"),
 			DOWNLOAD_RESOURCE_REFERENCE("download-resource-reference"),
-			ERROR("error");
+			ERROR("error"),
+			PONG_TIMEOUT_DURATION_ISO_8601("pong-timeout-duration");
 
 			private final String value;
 
