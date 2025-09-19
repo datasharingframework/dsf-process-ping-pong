@@ -264,33 +264,38 @@ public final class PingStatusGenerator
 			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, null, null, null,
-				null, null);
+				null, null, null, null, null);
 	}
 
 	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, BigDecimal uploadSpeed,
-			CodeSystem.DsfPingUnits.Code unit)
+			List<ProcessError> errors, BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code downloadUnit,
+			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code uploadUnit)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, downloadSpeed,
-				uploadSpeed, unit != null ? unit.name() : null, CODESYSTEM_UCUM, unit != null ? unit.toUcum() : null);
+				downloadUnit != null ? downloadUnit.name() : null, CODESYSTEM_UCUM,
+				downloadUnit != null ? downloadUnit.toUcum() : null, uploadSpeed,
+				uploadUnit != null ? uploadUnit.name() : null, CODESYSTEM_UCUM,
+				uploadUnit != null ? uploadUnit.toUcum() : null);
 	}
 
 	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors, null, null, null,
-				null, null);
+				null, null, null, null, null);
 	}
 
 	private static TaskOutputComponent createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter,
 			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String unit, String unitSystem, String unitCode)
+			String downloadUnit, String downloadUnitSystem, String downloadUnitCode, BigDecimal uploadSpeed,
+			String uploadUnit, String uploadUnitSystem, String uploadUnitCode)
 	{
 		TaskOutputComponent output = new TaskOutputComponent();
 		addStatus(output, outputParameter, statusCode);
 		addTarget(output, target);
 		addErrors(output, errors);
-		addNetworkSpeed(output, downloadSpeed, uploadSpeed, unit, unitSystem, unitCode);
+		addNetworkSpeed(output, downloadSpeed, downloadUnit, downloadUnitSystem, downloadUnitCode, uploadSpeed,
+				uploadUnit, uploadUnitSystem, uploadUnitCode);
 
 		return output;
 	}
@@ -437,10 +442,11 @@ public final class PingStatusGenerator
 	}
 
 	private static TaskOutputComponent addNetworkSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
-			BigDecimal uploadSpeed, String unit, String unitSystem, String unitCode)
+			String downloadUnit, String downloadUnitSystem, String downloadUnitCode, BigDecimal uploadSpeed,
+			String uploadUnit, String uploadUnitSystem, String uploadUnitCode)
 	{
-		addDownloadSpeed(outputComponent, downloadSpeed, unit, unitSystem, unitCode);
-		addUploadSpeed(outputComponent, uploadSpeed, unit, unitSystem, unitCode);
+		addDownloadSpeed(outputComponent, downloadSpeed, downloadUnit, downloadUnitSystem, downloadUnitCode);
+		addUploadSpeed(outputComponent, uploadSpeed, uploadUnit, uploadUnitSystem, uploadUnitCode);
 
 		return outputComponent;
 	}

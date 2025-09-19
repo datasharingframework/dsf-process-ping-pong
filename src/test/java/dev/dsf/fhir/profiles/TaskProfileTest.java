@@ -703,7 +703,8 @@ public class TaskProfileTest
 	private Task.TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			BigDecimal downloadSpeed, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code unit)
 	{
-		return PingStatusGenerator.createPingStatusOutput(target, statusCode, null, downloadSpeed, uploadSpeed, unit);
+		return PingStatusGenerator.createPingStatusOutput(target, statusCode, null, downloadSpeed, unit, uploadSpeed,
+				unit);
 	}
 
 	private Task.TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)

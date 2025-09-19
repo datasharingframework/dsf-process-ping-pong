@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.BpmnError;
@@ -77,18 +78,28 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 				Duration downloadedDuration = (Duration) variables
 						.getVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal downloadSpeed = calculateNetworkSpeed(downloadedBytes, downloadedDuration);
+				Optional<CodeSystem.DsfPingUnits.Code.SpeedAndUnit> downloadSpeedAndUnit = calculateNetworkSpeed(
+						downloadedBytes, downloadedDuration);
+				BigDecimal downloadSpeed = downloadSpeedAndUnit.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::speed)
+						.orElse(null);
+				CodeSystem.DsfPingUnits.Code downloadSpeedUnit = downloadSpeedAndUnit
+						.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::unit).orElse(null);
 
 				Long uploadedBytes = variables
 						.getLong(ExecutionVariables.uploadedBytes.correlatedValue(correlationKey));
 				Duration uploadedDurationMillis = (Duration) variables
 						.getVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey));
 
-				BigDecimal uploadSpeed = calculateNetworkSpeed(uploadedBytes, uploadedDurationMillis);
+				Optional<CodeSystem.DsfPingUnits.Code.SpeedAndUnit> uploadSpeedAndUnit = calculateNetworkSpeed(
+						uploadedBytes, uploadedDurationMillis);
+				BigDecimal uploadSpeed = uploadSpeedAndUnit.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::speed)
+						.orElse(null);
+				CodeSystem.DsfPingUnits.Code uploadSpeedUnit = uploadSpeedAndUnit
+						.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::unit).orElse(null);
 
 
 				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),
-						downloadSpeed, uploadSpeed, networkSpeedUnit));
+						downloadSpeed, downloadSpeedUnit, uploadSpeed, uploadSpeedUnit));
 			}
 			else // if slim-ping
 			{
@@ -104,23 +115,25 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
 	}
 
-	private BigDecimal calculateNetworkSpeed(Long downloadedBytes, Duration downloadedDuration)
+	private Optional<CodeSystem.DsfPingUnits.Code.SpeedAndUnit> calculateNetworkSpeed(Long transferredBytes,
+			Duration transferDuration)
 	{
-		BigDecimal downloadSpeed = null;
-		if (downloadedBytes != null && downloadedDuration != null)
+		if (transferredBytes != null && transferDuration != null)
 		{
 			if (Objects.isNull(networkSpeedUnit))
 			{
-				CodeSystem.DsfPingUnits.Code.SpeedAndUnit speedAndUnit = CodeSystem.DsfPingUnits.Code
-						.calculateSpeedWithFittingUnit(downloadedBytes, downloadedDuration);
-				downloadSpeed = speedAndUnit.speed();
-				networkSpeedUnit = speedAndUnit.unit();
+				return Optional.of(
+						CodeSystem.DsfPingUnits.Code.calculateSpeedWithFittingUnit(transferredBytes, transferDuration));
 			}
 			else
 			{
-				downloadSpeed = networkSpeedUnit.calculateSpeed(downloadedBytes, downloadedDuration);
+				return Optional.of(new CodeSystem.DsfPingUnits.Code.SpeedAndUnit(
+						networkSpeedUnit.calculateSpeed(transferredBytes, transferDuration), networkSpeedUnit));
 			}
 		}
-		return downloadSpeed;
+		else
+		{
+			return Optional.empty();
+		}
 	}
 }
