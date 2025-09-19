@@ -62,7 +62,7 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.mail.onPongProcessFailed:false}")
 	private boolean sendPongProcessFailedMail;
 
-	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
+	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (v1.x) ping process.", processNames = "dsfdev_ping, dsfdev_pong")
 	@Value("${dev.dsf.bpe.ping.max.download.size.bytes:400000000}")
 	private long maxDownloadSizeBytes;
 
@@ -71,7 +71,7 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.max.upload.size.bytes:400000000}")
 	private long maxUploadSizeBytes;
 
-	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". Default is \"mbps\".", processNames = {
+	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". If left empty, the process will try to fit the network speed to appropriate units.", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.network.speed.unit:#{null}}")
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
