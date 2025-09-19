@@ -43,7 +43,8 @@ public class SetPongTimeoutDuration extends AbstractServiceDelegate
 			{
 				throw new RuntimeException("Pong timeout duration is invalid");
 			}
-		} else
+		}
+		else
 		{
 			logger.debug("No pong timeout duration specified");
 		}

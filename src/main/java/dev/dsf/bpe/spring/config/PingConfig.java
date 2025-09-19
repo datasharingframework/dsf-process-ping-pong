@@ -63,17 +63,17 @@ public class PingConfig
 	private boolean sendPongProcessFailedMail;
 
 	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (\"old\") ping process.", processNames = "dsfdev_ping, dsfdev_pong")
-	@Value("${dev.dsf.bpe.ping.maxDownloadSizeBytes:400000000}")
+	@Value("${dev.dsf.bpe.ping.max.download.size.bytes:400000000}")
 	private long maxDownloadSizeBytes;
 
 	@ProcessDocumentation(description = "Sets the upload limit on resource uploads, essentially limiting the amount of data other ping instances are able to download from this instance.", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
-	@Value("${dev.dsf.bpe.ping.maxUploadSizeBytes:400000000}")
+	@Value("${dev.dsf.bpe.ping.max.upload.size.bytes:400000000}")
 	private long maxUploadSizeBytes;
 
 	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". Default is \"mbps\".", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
-	@Value("${dev.dsf.bpe.ping.networkSpeedUnit:#{null}}")
+	@Value("${dev.dsf.bpe.ping.network.speed.unit:#{null}}")
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
 	public CodeSystem.DsfPingUnits.Code getNetworkSpeedUnit()
