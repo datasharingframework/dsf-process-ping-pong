@@ -62,7 +62,8 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.mail.onPongProcessFailed:false}")
 	private boolean sendPongProcessFailedMail;
 
-	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (v1.x) ping process.", processNames = "dsfdev_ping, dsfdev_pong")
+	@ProcessDocumentation(description = "Sets the download limit on resource downloads, essentially limiting the amount of data downloaded from other ping instances. Setting this to a negative value will disable resource downloads, effectively resulting in running the slim (v1.x) ping process.", processNames = {
+			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.max.download.size.bytes:400000000}")
 	private long maxDownloadSizeBytes;
 
