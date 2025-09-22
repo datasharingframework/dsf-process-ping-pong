@@ -72,7 +72,7 @@ public class PingConfig
 	@Value("${dev.dsf.bpe.ping.max.upload.size.bytes:400000000}")
 	private long maxUploadSizeBytes;
 
-	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". If left empty, the process will try to fit the network speed to appropriate units.", processNames = {
+	@ProcessDocumentation(description = "Unit to display upload and download speeds in. Eligible values are: \"bps\", \"kbps\", \"Mbps\", \"Gbps\", \"Bps\", \"kBps\", \"MBps\", \"GBps\". If unset, the process will try to fit the network speed to appropriate units.", processNames = {
 			"dsfdev_ping", "dsfdev_pong" })
 	@Value("${dev.dsf.bpe.ping.network.speed.unit:#{null}}")
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
