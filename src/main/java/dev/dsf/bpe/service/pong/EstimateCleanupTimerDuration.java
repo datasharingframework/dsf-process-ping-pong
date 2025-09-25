@@ -35,7 +35,7 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 				: downloadedDuration.toMillis() * 10 + minTimerDurationMillis;
 
 		String cleanUpTimerDuration = Duration.ofMillis(timerDurationMillis).toString();
-		variables.setString("cleanupTimerDuration", cleanUpTimerDuration);
+		variables.setString(ExecutionVariables.cleanupTimerDuration.name(), cleanUpTimerDuration);
 
 		logger.debug("Estimated cleanup timer duration as {}", cleanUpTimerDuration);
 	}
