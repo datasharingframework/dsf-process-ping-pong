@@ -1,5 +1,6 @@
 package dev.dsf.bpe.util;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
@@ -65,17 +66,25 @@ public class BinaryResourceDownloader
 					.getWebserviceClient(webserviceUrl)
 					.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
+			long downloadStartTime = System.currentTimeMillis();
 			try (binaryResourceInputStream)
 			{
 				logger.info("Downloading resource for: '{}'. Requested resource size is {} bytes...",
 						downloadResourceReference.getReference(), downloadResourceSizeBytes);
-				long downloadStartTime = System.currentTimeMillis();
-				binaryResourceInputStream.skipNBytes(downloadResourceSizeBytes);
+				skipNBytes(downloadResourceSizeBytes, binaryResourceInputStream);
 				long downloadEndTime = System.currentTimeMillis();
 				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
 				downloadResult = new DownloadResult(downloadResourceSizeBytes, downloadedDuration);
 				logger.info("Finished downloading {} bytes. Took {}", downloadResourceSizeBytes,
 						downloadedDuration.toString());
+			}
+			catch (BytesSkippedEOFException e)
+			{
+				long downloadedBytes = e.getBytesSkipped();
+				long downloadEndTime = System.currentTimeMillis();
+				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
+				downloadResult = new DownloadResult(downloadedBytes, downloadedDuration);
+				logger.info("Finished downloading {} bytes. Took {}", downloadedBytes, downloadedDuration.toString());
 			}
 			catch (IOException e)
 			{
@@ -297,6 +306,51 @@ public class BinaryResourceDownloader
 
 		public record ErrorTuple(ProcessError errorLocal, ProcessError errorRemote)
 		{
+		}
+
+	}
+
+	private void skipNBytes(long bytes, InputStream inputStream) throws IOException
+	{
+		long start = bytes;
+		while (bytes > 0)
+		{
+			long ns = inputStream.skip(bytes);
+			if (ns > 0 && ns <= bytes)
+			{
+				// adjust number to skip
+				bytes -= ns;
+			}
+			else if (ns == 0)
+			{ // no bytes skipped
+				// read one byte to check for EOS
+				if (inputStream.read() == -1)
+				{
+					throw new BytesSkippedEOFException(start - bytes);
+				}
+				// one byte read so decrement number to skip
+				bytes--;
+			}
+			else
+			{ // skipped negative or too many bytes
+				throw new IOException("Unable to skip exactly");
+			}
+		}
+	}
+
+	private static class BytesSkippedEOFException extends EOFException
+	{
+		private final long bytesSkipped;
+
+		public BytesSkippedEOFException(long bytesSkipped)
+		{
+			super();
+			this.bytesSkipped = bytesSkipped;
+		}
+
+		public long getBytesSkipped()
+		{
+			return bytesSkipped;
 		}
 
 	}
