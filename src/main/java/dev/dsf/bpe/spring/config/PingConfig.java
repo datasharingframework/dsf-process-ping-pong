@@ -1,5 +1,6 @@
 package dev.dsf.bpe.spring.config;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +50,7 @@ import dev.dsf.bpe.variables.process_error.ProcessErrorValueSerializer;
 import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueSerializer;
 
 @Configuration
-public class PingConfig
+public class PingConfig implements InitializingBean
 {
 	@Autowired
 	private ProcessPluginApi api;
@@ -105,6 +106,12 @@ public class PingConfig
 	public void setMaxUploadSizeBytes(long maxUploadSizeBytes)
 	{
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		fixMaxResourceSizes();
 	}
 
 	@Bean
@@ -364,4 +371,12 @@ public class PingConfig
 	}
 
 	private static final String OBJECT_MAPPER_WITH_TIME_MODULE = "objectMapperWithJavaTimeModule";
+
+	private void fixMaxResourceSizes()
+	{
+		if (getMaxDownloadSizeBytes() < 0)
+			setMaxDownloadSizeBytes(0);
+		if (getMaxUploadSizeBytes() < 0)
+			setMaxUploadSizeBytes(0);
+	}
 }
