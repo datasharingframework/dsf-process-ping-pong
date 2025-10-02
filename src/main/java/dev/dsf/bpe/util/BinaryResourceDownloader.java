@@ -66,25 +66,17 @@ public class BinaryResourceDownloader
 					.getWebserviceClient(webserviceUrl)
 					.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
-			long downloadStartTime = System.currentTimeMillis();
 			try (binaryResourceInputStream)
 			{
 				logger.info("Downloading resource for: '{}'. Requested resource size is {} bytes...",
 						downloadResourceReference.getReference(), downloadResourceSizeBytes);
-				skipNBytes(downloadResourceSizeBytes, binaryResourceInputStream);
+				long downloadStartTime = System.currentTimeMillis();
+				long downloadedBytes = skipNBytes(downloadResourceSizeBytes, binaryResourceInputStream);
 				long downloadEndTime = System.currentTimeMillis();
 				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
 				downloadResult = new DownloadResult(downloadResourceSizeBytes, downloadedDuration);
-				logger.info("Finished downloading {} bytes. Took {}", downloadResourceSizeBytes,
+				logger.info("Finished downloading {} bytes. Took {}", downloadedBytes,
 						downloadedDuration.toString());
-			}
-			catch (BytesSkippedEOFException e)
-			{
-				long downloadedBytes = e.getBytesSkipped();
-				long downloadEndTime = System.currentTimeMillis();
-				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
-				downloadResult = new DownloadResult(downloadedBytes, downloadedDuration);
-				logger.info("Finished downloading {} bytes. Took {}", downloadedBytes, downloadedDuration.toString());
 			}
 			catch (IOException e)
 			{
@@ -310,7 +302,7 @@ public class BinaryResourceDownloader
 
 	}
 
-	private void skipNBytes(long bytes, InputStream inputStream) throws IOException
+	private long skipNBytes(long bytes, InputStream inputStream) throws IOException
 	{
 		long start = bytes;
 		while (bytes > 0)
@@ -326,7 +318,7 @@ public class BinaryResourceDownloader
 				// read one byte to check for EOS
 				if (inputStream.read() == -1)
 				{
-					throw new BytesSkippedEOFException(start - bytes);
+					return start - bytes;
 				}
 				// one byte read so decrement number to skip
 				bytes--;
@@ -336,22 +328,7 @@ public class BinaryResourceDownloader
 				throw new IOException("Unable to skip exactly");
 			}
 		}
-	}
 
-	private static class BytesSkippedEOFException extends EOFException
-	{
-		private final long bytesSkipped;
-
-		public BytesSkippedEOFException(long bytesSkipped)
-		{
-			super();
-			this.bytesSkipped = bytesSkipped;
-		}
-
-		public long getBytesSkipped()
-		{
-			return bytesSkipped;
-		}
-
+		return start;
 	}
 }
