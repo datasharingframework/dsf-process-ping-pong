@@ -8,14 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class LogAndSaveAndStoreError extends AbstractServiceDelegate
+public class LogAndSaveAndStoreError extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveAndStoreError.class);
 
@@ -25,7 +25,7 @@ public class LogAndSaveAndStoreError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();

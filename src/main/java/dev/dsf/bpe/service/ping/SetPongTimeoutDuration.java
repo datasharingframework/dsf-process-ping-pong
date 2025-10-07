@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SetPongTimeoutDuration extends AbstractServiceDelegate
+public class SetPongTimeoutDuration extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(SetPongTimeoutDuration.class);
 
@@ -25,7 +25,7 @@ public class SetPongTimeoutDuration extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws Exception
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws Exception
 	{
 		logger.debug("Setting pong timer duration...");
 		Task startTask = variables.getStartTask();

@@ -260,17 +260,18 @@ public final class PingStatusGenerator
 		return downloadSpeedExtension != null;
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors)
+	public static Optional<TaskOutputComponent> createPingStatusOutput(Target target,
+			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, null, null, null,
 				null, null, null, null, null);
 	}
 
-	public static TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code downloadUnit,
-			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code uploadUnit)
+	public static Optional<TaskOutputComponent> createPingStatusOutput(Target target,
+			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
+			CodeSystem.DsfPingUnits.Code downloadUnit, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code uploadUnit)
 	{
+
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, downloadSpeed,
 				downloadUnit != null ? downloadUnit.name() : null, CODESYSTEM_UCUM,
 				downloadUnit != null ? downloadUnit.toUcum() : null, uploadSpeed,
@@ -278,18 +279,22 @@ public final class PingStatusGenerator
 				uploadUnit != null ? uploadUnit.toUcum() : null);
 	}
 
-	public static TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors)
+	public static Optional<TaskOutputComponent> createPongStatusOutput(Target target,
+			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors, null, null, null,
 				null, null, null, null, null);
 	}
 
-	private static TaskOutputComponent createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter,
-			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
-			String downloadUnit, String downloadUnitSystem, String downloadUnitCode, BigDecimal uploadSpeed,
-			String uploadUnit, String uploadUnitSystem, String uploadUnitCode)
+	private static Optional<TaskOutputComponent> createStatusOutput(Target target,
+			CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode,
+			List<ProcessError> errors, BigDecimal downloadSpeed, String downloadUnit, String downloadUnitSystem,
+			String downloadUnitCode, BigDecimal uploadSpeed, String uploadUnit, String uploadUnitSystem,
+			String uploadUnitCode)
 	{
+		if (statusCode == null)
+			return Optional.empty();
+
 		TaskOutputComponent output = new TaskOutputComponent();
 		addStatus(output, outputParameter, statusCode);
 		addTarget(output, target);
@@ -297,7 +302,7 @@ public final class PingStatusGenerator
 		addNetworkSpeed(output, downloadSpeed, downloadUnit, downloadUnitSystem, downloadUnitCode, uploadSpeed,
 				uploadUnit, uploadUnitSystem, uploadUnitCode);
 
-		return output;
+		return Optional.of(output);
 	}
 
 	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent,

@@ -8,15 +8,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 
-public class LogAndSaveSendError extends AbstractServiceDelegate
+public class LogAndSaveSendError extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveSendError.class);
 
@@ -26,7 +27,7 @@ public class LogAndSaveSendError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		String correlationKey = variables.getTarget().getCorrelationKey();
 		ProcessError error = (ProcessError) execution.getVariableLocal(ExecutionVariables.error.name());

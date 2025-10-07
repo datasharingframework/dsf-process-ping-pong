@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SaveTimeoutError extends AbstractServiceDelegate
+public class SaveTimeoutError extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(SaveTimeoutError.class);
 
@@ -23,7 +23,7 @@ public class SaveTimeoutError extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		logger.debug("Storing timeout error...");
 

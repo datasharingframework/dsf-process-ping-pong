@@ -61,6 +61,8 @@ public final class ConstantsPing
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 
+	public static final String BPMN_ERROR_CODE_UNKNOWN_ERROR = "unknown-error";
+
 	public static final String POTENTIAL_FIX_URL_BASE = "https://dsf.dev/s";
 	public static final String POTENTIAL_FIX_URL_ERROR_HTTP = POTENTIAL_FIX_URL_BASE + "/error-http";
 	public static final String POTENTIAL_FIX_URL_READ_TIMEOUT = POTENTIAL_FIX_URL_BASE + "/read-timeout";

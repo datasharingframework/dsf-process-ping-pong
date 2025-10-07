@@ -18,13 +18,12 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
-public class GenerateAndStoreResource extends AbstractServiceDelegate implements InitializingBean
+public class GenerateAndStoreResource extends AbstractService implements InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(GenerateAndStoreResource.class);
 	private final long maxUploadSizeBytes;
@@ -42,7 +41,7 @@ public class GenerateAndStoreResource extends AbstractServiceDelegate implements
 		super.afterPropertiesSet();
 	}
 
-	public void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		logger.debug("Generating resource...");
 		long downloadResourceSizeBytes = getDownloadResourceSize(variables);

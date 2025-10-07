@@ -12,16 +12,16 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 import dev.dsf.fhir.client.FhirWebserviceClient;
 import jakarta.ws.rs.WebApplicationException;
 
-public class CheckPingTaskStatus extends AbstractServiceDelegate
+public class CheckPingTaskStatus extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckPingTaskStatus.class);
 
@@ -31,7 +31,7 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		logger.debug("Checking status of ping task...");
 
@@ -97,5 +97,17 @@ public class CheckPingTaskStatus extends AbstractServiceDelegate
 					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 		};
+	}
+
+	@Override
+	protected void handleException(DelegateExecution execution, Variables variables, Exception exception)
+			throws Exception
+	{
+		logger.error("Unexpected error while checking status of ping task.", exception);
+		String correlationKey = variables.getTarget().getCorrelationKey();
+		ErrorListUtils.add(
+				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
+				execution, correlationKey);
+		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNKNOWN_ERROR);
 	}
 }

@@ -29,14 +29,17 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
 import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SelectPingTargets extends AbstractServiceDelegate implements InitializingBean
+public class SelectPingTargets extends AbstractService implements InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectPingTargets.class);
 	private static final Pattern endpointResouceTypes = Pattern.compile(
@@ -48,7 +51,7 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables)
@@ -73,6 +76,17 @@ public class SelectPingTargets extends AbstractServiceDelegate implements Initia
 		}).collect(Collectors.toList());
 
 		variables.setTargets(variables.createTargets(targets));
+	}
+
+	@Override
+	protected void handleException(DelegateExecution execution, Variables variables, Exception exception)
+			throws Exception
+	{
+		logger.error("Unexpected error while selecting ping targets.", exception);
+		ErrorListUtils.add(
+				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
+				execution);
+		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNKNOWN_ERROR);
 	}
 
 	private Optional<UriComponents> getTargetEndpointsSearchParameter(Variables variables)

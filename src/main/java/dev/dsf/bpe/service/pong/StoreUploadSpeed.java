@@ -14,12 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class StoreUploadSpeed extends AbstractServiceDelegate
+public class StoreUploadSpeed extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreUploadSpeed.class);
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
@@ -31,7 +31,7 @@ public class StoreUploadSpeed extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		Task startTask = variables.getStartTask();
 		Task cleanup = variables.getLatestTask();

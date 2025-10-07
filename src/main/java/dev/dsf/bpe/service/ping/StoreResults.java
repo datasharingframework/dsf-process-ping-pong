@@ -98,12 +98,13 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::unit).orElse(null);
 
 
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(),
-						downloadSpeed, downloadSpeedUnit, uploadSpeed, uploadSpeedUnit));
+				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(), downloadSpeed,
+						downloadSpeedUnit, uploadSpeed, uploadSpeedUnit).ifPresent(task::addOutput);
 			}
 			else // if slim-ping
 			{
-				task.addOutput(PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries()));
+				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries())
+						.ifPresent(task::addOutput);
 			}
 			errorsPerTarget.put(target, errors.getEntries());
 		});

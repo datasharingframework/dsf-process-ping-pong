@@ -16,15 +16,15 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Target;
 import dev.dsf.bpe.v1.variables.Variables;
 import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
 import dev.dsf.bpe.variables.duration.DurationValueImpl;
 
-public class SavePong extends AbstractServiceDelegate
+public class SavePong extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(SavePong.class);
 
@@ -34,7 +34,7 @@ public class SavePong extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		Target target = variables.getTarget();
 		logger.debug("Pong received from {}. Saving pong information...", target.getEndpointUrl());

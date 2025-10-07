@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class LogPing extends AbstractServiceDelegate
+public class LogPing extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogPing.class);
 
@@ -23,7 +23,7 @@ public class LogPing extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		Task task = variables.getLatestTask();
 

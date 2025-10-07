@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
+public class EstimateCleanupTimerDuration extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(EstimateCleanupTimerDuration.class);
 
@@ -23,7 +23,7 @@ public class EstimateCleanupTimerDuration extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		logger.debug("Estimating cleanup timer duration...");
 		final long minTimerDurationMillis = 20000;

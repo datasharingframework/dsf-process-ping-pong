@@ -7,13 +7,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
+import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.ProcessError;
+import dev.dsf.bpe.service.AbstractService;
+import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SelectPongTarget extends AbstractServiceDelegate implements InitializingBean
+public class SelectPongTarget extends AbstractService implements InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectPongTarget.class);
 
@@ -23,7 +27,7 @@ public class SelectPongTarget extends AbstractServiceDelegate implements Initial
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
 		logger.debug("Selecting pong targets...");
 

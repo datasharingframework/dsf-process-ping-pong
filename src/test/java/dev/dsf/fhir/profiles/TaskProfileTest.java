@@ -288,8 +288,8 @@ public class TaskProfileTest
 		Task task = createValidTaskStartPingProcess();
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());
-		task.addOutput(PingStatusGenerator.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_MISSING,
-				processErrors(5)));
+		task.addOutput(PingStatusGenerator
+				.createPingStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_MISSING, processErrors(5)).get());
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -703,12 +703,12 @@ public class TaskProfileTest
 	private Task.TaskOutputComponent createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
 			BigDecimal downloadSpeed, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code unit)
 	{
-		return PingStatusGenerator.createPingStatusOutput(target, statusCode, null, downloadSpeed, unit, uploadSpeed,
-				unit);
+		return PingStatusGenerator
+				.createPingStatusOutput(target, statusCode, null, downloadSpeed, unit, uploadSpeed, unit).get();
 	}
 
 	private Task.TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)
 	{
-		return PingStatusGenerator.createPongStatusOutput(target, statusCode, null);
+		return PingStatusGenerator.createPongStatusOutput(target, statusCode, null).get();
 	}
 }

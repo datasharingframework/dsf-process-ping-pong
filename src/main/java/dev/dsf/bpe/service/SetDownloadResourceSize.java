@@ -12,10 +12,9 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
 import dev.dsf.bpe.v1.variables.Variables;
 
-public class SetDownloadResourceSize extends AbstractServiceDelegate
+public class SetDownloadResourceSize extends AbstractService
 {
 	private static final Logger logger = LoggerFactory.getLogger(SetDownloadResourceSize.class);
 	private final long maxDownloadResourceSizeBytes;
@@ -28,7 +27,7 @@ public class SetDownloadResourceSize extends AbstractServiceDelegate
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
 	{
 		logger.debug("Setting download resource size...");
 
