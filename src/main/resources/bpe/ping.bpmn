@@ -252,46 +252,11 @@
       <bpmn:errorEventDefinition id="ErrorEventDefinition_030thzb" errorRef="Error_0iukr7a" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_1mer14f" sourceRef="Event_1uju50a" targetRef="Activity_0802w0b" />
-    <bpmn:textAnnotation id="TextAnnotation_1ig0151">
-      <bpmn:text>Includes download speeds and errors of all pongs</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_1j1ytqy">
-      <bpmn:text>generates up to maxUploadSizeBystes</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_0dhecha">
-      <bpmn:text>Process Parameters
-- downloadResourceSizeBytes read from Input Paramater (default tbd)
-- maxDownloadSizeBytes read from environment variable (default tbd)
-- maxUpdloadSizeBytes read from environment variables (default tbd)</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_1plclrb">
-      <bpmn:text>Cleanup steps:
-- delete generated resource</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0xonsp5" sourceRef="Activity_0nwtf8o" targetRef="TextAnnotation_1j1ytqy" />
-    <bpmn:association id="Association_1f86scd" sourceRef="TextAnnotation_1plclrb" targetRef="Activity_0802w0b" />
-    <bpmn:association id="Association_02mkojs" sourceRef="SaveResults" targetRef="TextAnnotation_1ig0151" />
     <bpmn:textAnnotation id="TextAnnotation_02e4h2c">
       <bpmn:text>Log = logger
 Save = save as execution variable
 Store = store on DSF FHIR server either as separate resource or output parameter</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:textAnnotation id="TextAnnotation_0uc8utt">
-      <bpmn:text>Information in message:
-- dowloadResourceSize: long
-- downloadResourceReference: Reference</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_1c7vgba" sourceRef="Activity_0ri6fnv" targetRef="TextAnnotation_0uc8utt" />
-    <bpmn:textAnnotation id="TextAnnotation_0smygq5">
-      <bpmn:text>Information in message:
-- downloadDurationMillis: long
-- downloadedBytes: long</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_14iteoh" sourceRef="Activity_0vw65a2" targetRef="TextAnnotation_0smygq5" />
-    <bpmn:textAnnotation id="TextAnnotation_08ic0l2">
-      <bpmn:text>downloads up to maxDownloadSizeBytes</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0l3n1oc" sourceRef="TextAnnotation_08ic0l2" targetRef="Activity_0h9o9u7" />
   </bpmn:process>
   <bpmn:error id="Error_0tkfq65" name="resourceUploadError" errorCode="resourceUploadError" />
   <bpmn:error id="Error_1dhbjri" name="" />
@@ -523,36 +488,8 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="270" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="BPMNEdge_07aga42" bpmnElement="Association_0l3n1oc">
-        <di:waypoint x="2238" y="621" />
-        <di:waypoint x="2282" y="560" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1xojob2" bpmnElement="Association_14iteoh">
-        <di:waypoint x="2726" y="480" />
-        <di:waypoint x="2711" y="455" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_0diib78" bpmnElement="TextAnnotation_1ig0151">
-        <dc:Bounds x="3180" y="239" width="160" height="49" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0o5toqz" bpmnElement="TextAnnotation_1j1ytqy">
-        <dc:Bounds x="620" y="580" width="170" height="40" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0ne04k7" bpmnElement="TextAnnotation_0dhecha">
-        <dc:Bounds x="590" y="220" width="420" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0t4el3i" bpmnElement="TextAnnotation_1plclrb">
-        <dc:Bounds x="3170" y="479" width="200" height="41" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_19d2657" bpmnElement="TextAnnotation_02e4h2c" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
         <dc:Bounds x="420" y="80" width="420" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_12nm98a" bpmnElement="TextAnnotation_0uc8utt">
-        <dc:Bounds x="1460" y="220" width="250" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1uju50a_di" bpmnElement="Event_1uju50a">
@@ -626,30 +563,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="3160" y="810" />
         <di:waypoint x="3160" y="410" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_149mrr9" bpmnElement="Association_0xonsp5">
-        <di:waypoint x="729" y="540" />
-        <di:waypoint x="688" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0yofzg9" bpmnElement="Association_1f86scd">
-        <di:waypoint x="3253" y="479" />
-        <di:waypoint x="3194" y="410" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_08oczt4" bpmnElement="Association_02mkojs">
-        <di:waypoint x="3269" y="330" />
-        <di:waypoint x="3248" y="288" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0xtcxff" bpmnElement="Association_1c7vgba">
-        <di:waypoint x="1442" y="320" />
-        <di:waypoint x="1466" y="290" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_084zno2" bpmnElement="TextAnnotation_08ic0l2">
-        <dc:Bounds x="2140" y="621" width="170" height="37" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1h13c04" bpmnElement="TextAnnotation_0smygq5">
-        <dc:Bounds x="2580" y="400" width="240" height="55" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>
