@@ -74,7 +74,7 @@ public class BinaryResourceDownloader
 				long downloadedBytes = skipNBytes(downloadResourceSizeBytes, binaryResourceInputStream);
 				long downloadEndTime = System.currentTimeMillis();
 				Duration downloadedDuration = Duration.ofMillis(downloadEndTime - downloadStartTime);
-				downloadResult = new DownloadResult(downloadResourceSizeBytes, downloadedDuration);
+				downloadResult = new DownloadResult(downloadedBytes, downloadedDuration);
 				logger.info("Finished downloading {} bytes. Took {}", downloadedBytes, downloadedDuration.toString());
 			}
 			catch (IOException e)
