@@ -176,7 +176,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0vqsjzn" sourceRef="Activity_095j2gg" targetRef="Gateway_0ynhobb" />
     <bpmn:sequenceFlow id="Flow_0pp3r2w" sourceRef="Gateway_0ynhobb" targetRef="Activity_0i998dm" />
-    <bpmn:sequenceFlow id="Flow_1w3kcjh" sourceRef="Gateway_0ynhobb" targetRef="Activity_1umihbr">
+    <bpmn:sequenceFlow id="Flow_1w3kcjh" name="Error during download" sourceRef="Gateway_0ynhobb" targetRef="Activity_1umihbr">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('resourceDownloadError')}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_17x98wg" sourceRef="Gateway_1l5dkpz" targetRef="Event_0o4l2t4" />
@@ -187,7 +187,7 @@
       <bpmn:outgoing>Flow_15xatzp</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_17wqhp8" sourceRef="Gateway_06066hd" targetRef="Activity_0xcqxjs" />
-    <bpmn:sequenceFlow id="Flow_15xatzp" sourceRef="Gateway_06066hd" targetRef="Activity_1kb1v81">
+    <bpmn:sequenceFlow id="Flow_15xatzp" name="Error during resource generation" sourceRef="Gateway_06066hd" targetRef="Activity_1kb1v81">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('resourceUploadError')}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Activity_1kb1v81" name="Log And Save Error" camunda:class="dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong">
@@ -449,6 +449,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="1130" y="485" />
         <di:waypoint x="1130" y="570" />
         <di:waypoint x="1190" y="570" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1060" y="525" width="59" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_17x98wg_di" bpmnElement="Flow_17x98wg">
         <di:waypoint x="2250" y="435" />
@@ -467,6 +470,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="1590" y="485" />
         <di:waypoint x="1590" y="580" />
         <di:waypoint x="1700" y="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1510" y="530" width="59" height="40" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0dp8f59_di" bpmnElement="Flow_0dp8f59">
         <di:waypoint x="1800" y="580" />
