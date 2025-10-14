@@ -5,7 +5,6 @@ import static org.junit.Assert.assertThrows;
 
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Extension;
-import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.UrlType;
 import org.junit.Test;
 
