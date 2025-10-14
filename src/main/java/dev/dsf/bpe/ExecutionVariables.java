@@ -5,6 +5,7 @@ public enum ExecutionVariables
 	timerInterval,
 	stopTimer,
 	downloadResourceSizeBytes,
+	maxDownloadResourceSizeBytes,
 	downloadResource,
 	downloadResourceReference,
 	statusCode,

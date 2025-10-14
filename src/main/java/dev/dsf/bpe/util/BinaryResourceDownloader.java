@@ -39,7 +39,9 @@ public class BinaryResourceDownloader
 	{
 		DownloadResult downloadResult;
 
-		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
+		long downloadResourceSizeBytes = Math.min(
+				variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name()),
+				variables.getLong(ExecutionVariables.maxDownloadResourceSizeBytes.name()));
 
 		Optional<Reference> optDownloadResourceReference = api.getTaskHelper().getFirstInputParameterValue(task,
 				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE.getValue(),
