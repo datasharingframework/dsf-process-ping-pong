@@ -260,7 +260,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   </bpmn:process>
   <bpmn:error id="Error_0tkfq65" name="resourceUploadError" errorCode="resourceUploadError" />
   <bpmn:error id="Error_1dhbjri" name="" />
-  <bpmn:error id="Error_0iukr7a" name="unknown-error" errorCode="unknown-error" />
+  <bpmn:error id="Error_0iukr7a" name="unexpected-error" errorCode="unexpected-error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">

@@ -86,7 +86,7 @@ public class SelectPingTargets extends AbstractService implements InitializingBe
 		ErrorListUtils.add(
 				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
 				execution);
-		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNKNOWN_ERROR);
+		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR);
 	}
 
 	private Optional<UriComponents> getTargetEndpointsSearchParameter(Variables variables)

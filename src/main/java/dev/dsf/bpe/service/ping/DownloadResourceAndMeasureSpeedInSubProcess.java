@@ -65,6 +65,6 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		ErrorListUtils.add(
 				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
 				execution, correlationKey);
-		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNKNOWN_ERROR);
+		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR);
 	}
 }
