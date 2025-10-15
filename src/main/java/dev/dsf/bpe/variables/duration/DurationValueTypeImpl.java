@@ -1,5 +1,6 @@
 package dev.dsf.bpe.variables.duration;
 
+import java.io.Serial;
 import java.time.Duration;
 import java.util.Map;
 
@@ -7,6 +8,9 @@ import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
 
 public class DurationValueTypeImpl extends PrimitiveValueTypeImpl
 {
+	@Serial
+	private static final long serialVersionUID = 1L;
+
 	private static final Class<Duration> DURATION_CLASS = Duration.class;
 
 	public DurationValueTypeImpl()

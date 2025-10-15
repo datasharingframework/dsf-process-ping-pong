@@ -1,5 +1,6 @@
 package dev.dsf.bpe.variables.process_error;
 
+import java.io.Serial;
 import java.util.Map;
 
 import org.camunda.bpm.engine.variable.impl.type.PrimitiveValueTypeImpl;
@@ -9,6 +10,9 @@ import dev.dsf.bpe.ProcessError;
 
 public class ProcessErrorValueTypeImpl extends PrimitiveValueTypeImpl
 {
+	@Serial
+	private static final long serialVersionUID = 1L;
+
 	private static final Class<ProcessError> PROCESS_ERROR_CLASS = ProcessError.class;
 
 	public ProcessErrorValueTypeImpl()
