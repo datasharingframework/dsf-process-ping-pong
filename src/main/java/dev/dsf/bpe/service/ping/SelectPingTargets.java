@@ -53,7 +53,6 @@ public class SelectPingTargets extends AbstractService implements InitializingBe
 	@Override
 	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
 	{
-		Task startTask = variables.getStartTask();
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(variables)
 				.map(uriComponents -> searchForEndpoints(uriComponents)).orElse(allEndpoints())
 				.filter(isLocalEndpoint().negate());
