@@ -28,13 +28,7 @@ public class SendStartPing extends AbstractTaskMessageSend
 						.filter(i -> i.getType().getCoding().stream()
 								.anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
 										&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode()))),
-				Stream.of(getDownloadResourceSizeInputParameter(variables)));
-	}
-
-	private ParameterComponent getDownloadResourceSizeInputParameter(Variables variables)
-	{
-		return variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter).findFirst()
-				.orElseThrow();
+				variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter));
 	}
 
 	private boolean isDownloadResourceSizeParameter(ParameterComponent parameterComponent)
