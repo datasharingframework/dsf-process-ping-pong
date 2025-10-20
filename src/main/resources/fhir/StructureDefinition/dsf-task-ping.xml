@@ -135,7 +135,7 @@
       <max value="1"/>
       <binding>
         <strength value="required"/>
-        <valueSet value="http://dsf.dev/fhir/ValueSet/ping"/>
+        <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}"/>
       </binding>
     </element>
     <element id="Task.input:download-resource-size-bytes.type.coding">
