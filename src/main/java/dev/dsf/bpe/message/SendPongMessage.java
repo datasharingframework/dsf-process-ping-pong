@@ -1,7 +1,6 @@
 package dev.dsf.bpe.message;
 
 import java.time.Duration;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -13,7 +12,6 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessErrors;
-import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
@@ -31,21 +29,9 @@ public class SendPongMessage extends AbstractTaskMessageSend
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
 
-	private final AggregateErrorMailService errorMailService;
-
-	public SendPongMessage(ProcessPluginApi api, AggregateErrorMailService errorMailService)
+	public SendPongMessage(ProcessPluginApi api)
 	{
 		super(api);
-
-		this.errorMailService = errorMailService;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
-		super.afterPropertiesSet();
-
-		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
 	@Override

@@ -27,6 +27,7 @@ import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
+import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
 import dev.dsf.bpe.service.ping.SavePong;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
@@ -45,6 +46,7 @@ import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
+import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer;
 import dev.dsf.bpe.variables.duration.DurationValueSerializer;
 import dev.dsf.bpe.variables.process_error.ProcessErrorValueSerializer;
 import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueSerializer;
@@ -138,13 +140,15 @@ public class PingConfig implements InitializingBean
 	@Bean
 	public AggregateErrorMailService aggregateErrorMailServicePing()
 	{
-		return new AggregateErrorMailService(api, sendPingProcessFailedMail);
+		return new AggregateErrorMailService(api, sendPingProcessFailedMail,
+				AggregateErrorMailService.PING_PROCESS_HAS_ERRORS);
 	}
 
 	@Bean
 	public AggregateErrorMailService aggregateErrorMailServicePong()
 	{
-		return new AggregateErrorMailService(api, sendPongProcessFailedMail);
+		return new AggregateErrorMailService(api, sendPongProcessFailedMail,
+				AggregateErrorMailService.PONG_PROCESS_HAS_ERRORS);
 	}
 
 
@@ -201,7 +205,7 @@ public class PingConfig implements InitializingBean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SendPongMessage sendPong()
 	{
-		return new SendPongMessage(api, aggregateErrorMailServicePong());
+		return new SendPongMessage(api);
 	}
 
 	@Bean
@@ -297,9 +301,9 @@ public class PingConfig implements InitializingBean
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public dev.dsf.bpe.service.ping.LogAndSaveSendError logAndSaveSendError()
+	public LogAndSaveSendError logAndSaveSendError()
 	{
-		return new dev.dsf.bpe.service.ping.LogAndSaveSendError(api);
+		return new LogAndSaveSendError(api);
 	}
 
 	@Bean
@@ -320,7 +324,7 @@ public class PingConfig implements InitializingBean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreErrors storeErrors()
 	{
-		return new StoreErrors(api);
+		return new StoreErrors(api, aggregateErrorMailServicePong());
 	}
 
 	@Bean
@@ -338,9 +342,9 @@ public class PingConfig implements InitializingBean
 	}
 
 	@Bean
-	public dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer pingStatusCodeSerializer()
+	public CodeValueSerializer pingStatusCodeSerializer()
 	{
-		return new dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer();
+		return new CodeValueSerializer();
 	}
 
 	@Bean
