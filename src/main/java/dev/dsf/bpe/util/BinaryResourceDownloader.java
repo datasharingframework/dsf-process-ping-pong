@@ -127,6 +127,13 @@ public class BinaryResourceDownloader
 							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_502,
 							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 					break;
+				case 504:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_504,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_504,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
 				default:
 					error = new ProcessError(process,
 							CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_UNEXPECTED, null);
