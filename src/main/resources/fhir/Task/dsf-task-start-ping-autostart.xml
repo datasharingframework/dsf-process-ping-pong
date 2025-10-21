@@ -38,19 +38,41 @@
    <input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
-            <code value="target-endpoints"></code>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+		 	<version value="#{version}"/>
+            <code value="target-endpoints"/>
          </coding>
       </type>
-      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"></valueString>
+      <valueString value="Endpoint?status=active&amp;identifier=http://dsf.dev/sid/endpoint-identifier|"/>
    </input>
    <input>
       <type>
          <coding>
-            <system value="http://dsf.dev/fhir/CodeSystem/ping"></system>
-            <code value="timer-interval"></code>
+            <system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+		 	<version value="#{version}"/>
+            <code value="timer-interval"/>
          </coding>
       </type>
-      <valueString value="PT24H"></valueString>
+      <valueString value="PT24H"/>
    </input>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<version value="#{version}"/>
+				<code value="download-resource-size-bytes"/>
+			</coding>
+		</type>
+		<valueDecimal value="10000000"/>
+	</input>
+	<input>
+		<type>
+			<coding>
+				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
+				<version value="#{version}"/>
+				<code value="pong-timeout-duration"/>
+			</coding>
+		</type>
+		<valueString value="PT30S"/>
+	</input>
 </Task>

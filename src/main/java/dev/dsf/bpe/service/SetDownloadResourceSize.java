@@ -1,0 +1,59 @@
+package dev.dsf.bpe.service;
+
+import java.util.Optional;
+
+import org.camunda.bpm.engine.delegate.BpmnError;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.hl7.fhir.r4.model.DecimalType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.variables.Variables;
+
+public class SetDownloadResourceSize extends AbstractService
+{
+	private static final Logger logger = LoggerFactory.getLogger(SetDownloadResourceSize.class);
+	private final long maxDownloadResourceSizeBytes;
+
+	public SetDownloadResourceSize(ProcessPluginApi api, long maxDownloadResourceSizeBytes)
+	{
+		super(api);
+		if (maxDownloadResourceSizeBytes < 0)
+		{
+			this.maxDownloadResourceSizeBytes = 0L;
+		}
+		else
+		{
+			this.maxDownloadResourceSizeBytes = maxDownloadResourceSizeBytes;
+		}
+	}
+
+	@Override
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	{
+		logger.debug("Setting download resource size...");
+
+		long downloadResourceSizeBytes = getDownloadResourceSizeBytes(variables);
+		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), downloadResourceSizeBytes);
+
+		logger.debug("Set download resource size to " + downloadResourceSizeBytes);
+
+		variables.setLong(ExecutionVariables.maxDownloadResourceSizeBytes.name(), maxDownloadResourceSizeBytes);
+
+		logger.debug("Set maximum download resource size to " + maxDownloadResourceSizeBytes);
+	}
+
+	private long getDownloadResourceSizeBytes(Variables variables)
+	{
+		Optional<DecimalType> downloadResourceSizeType = api.getTaskHelper().getFirstInputParameterValue(
+				variables.getStartTask(), CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue(), DecimalType.class);
+
+		return downloadResourceSizeType.map(decimalType -> decimalType.getValue().longValue())
+				.orElse(Math.min(maxDownloadResourceSizeBytes, ConstantsPing.DOWNLOAD_RESOURCE_SIZE_BYTES_DEFAULT));
+	}
+}

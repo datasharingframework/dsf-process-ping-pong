@@ -1,0 +1,101 @@
+<StructureDefinition xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag"/>
+            <code value="ALL"/>
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/StructureDefinition/extension-error"/>
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="Error"/>
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+    <date value="#{date}" />
+    <fhirVersion value="4.0.1"/>
+    <kind value="complex-type"/>
+    <abstract value="false"/>
+    <context>
+        <type value="element"/>
+        <expression value="Extension"/>
+    </context>
+    <context>
+        <type value="element"/>
+        <expression value="Task.input"/>
+    </context>
+    <context>
+        <type value="element"/>
+        <expression value="Task.output"/>
+    </context>
+    <type value="Extension"/>
+    <baseDefinition value="http://hl7.org/fhir/StructureDefinition/Extension"/>
+    <derivation value="constraint"/>
+    <differential>
+        <element id="Extension.extension">
+            <path value="Extension.extension"/>
+            <slicing>
+                <discriminator>
+                    <type value="value"/>
+                    <path value="url"/>
+                </discriminator>
+                <rules value="open"/>
+            </slicing>
+            <min value="1"/>
+            <max value="2"/>
+        </element>
+        <element id="Extension.extension:error">
+            <path value="Extension.extension"/>
+            <sliceName value="error"/>
+            <min value="1"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:error.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="error"/>
+        </element>
+        <element id="Extension.extension:error.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="Coding"/>
+            </type>
+        </element>
+        <element id="Extension.extension:error.value[x].system">
+            <path value="Extension.extension.value[x].system"/>
+            <min value="1"/>
+        </element>
+        <element id="Extension.extension:error.value[x].code">
+            <path value="Extension.extension.value[x].code"/>
+            <min value="1"/>
+        </element>
+        <element id="Extension.extension:potential-fix">
+            <path value="Extension.extension"/>
+            <sliceName value="potential-fix"/>
+            <min value="0"/>
+            <max value="1"/>
+        </element>
+        <element id="Extension.extension:potential-fix.url">
+            <path value="Extension.extension.url"/>
+            <fixedUri value="potential-fix"/>
+        </element>
+        <element id="Extension.extension:potential-fix.value[x]">
+            <path value="Extension.extension.value[x]"/>
+            <min value="1"/>
+            <max value="1"/>
+            <type>
+                <code value="url"/>
+            </type>
+        </element>
+        <element id="Extension.url">
+            <path value="Extension.url"/>
+            <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-error"/>
+        </element>
+        <element id="Extension.value[x]">
+            <path value="Extension.value[x]"/>
+            <max value="0"/>
+        </element>
+    </differential>
+</StructureDefinition>
