@@ -122,6 +122,113 @@
         <code value="string"/>
       </type>
     </element>
+    <element id="Extension.extension:download-speed-from-remote">
+      <path value="Extension.extension"/>
+      <sliceName value="download-speed-from-remote"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="download-speed-from-remote"/>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="Quantity"/>
+      </type>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.value[x].unit">
+      <path value="Extension.extension.value[x].unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:download-speed-from-remote.value[x].code">
+      <path value="Extension.extension.value[x].code"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote">
+      <path value="Extension.extension"/>
+      <sliceName value="upload-speed-to-remote"/>
+      <min value="0"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="upload-speed-to-remote"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <min value="1"/>
+      <max value="1"/>
+      <type>
+        <code value="Quantity"/>
+      </type>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.value[x].value">
+      <path value="Extension.extension.value[x].value"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.value[x].unit">
+      <path value="Extension.extension.value[x].unit"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.value[x].system">
+      <path value="Extension.extension.value[x].system"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:upload-speed-to-remote.value[x].code">
+      <path value="Extension.extension.value[x].code"/>
+      <min value="1"/>
+      <max value="1"/>
+    </element>
+    <element id="Extension.extension:errors">
+      <path value="Extension.extension"/>
+      <sliceName value="error"/>
+      <min value="0"/>
+    </element>
+    <element id="Extension.extension:errors.extension">
+      <path value="Extension.extension.extension" />
+      <slicing>
+        <discriminator>
+          <type value="value" />
+          <path value="url" />
+        </discriminator>
+        <rules value="open" />
+      </slicing>
+    </element>
+    <element id="Extension.extension:errors.extension:error-extension">
+      <path value="Extension.extension.extension" />
+      <sliceName value="error-extension" />
+      <type>
+        <code value="Extension" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/extension-error|#{version}" />
+      </type>
+    </element>
+    <element id="Extension.extension:errors.url">
+      <path value="Extension.extension.url"/>
+      <fixedUri value="errors"/>
+    </element>
+    <element id="Extension.extension:errors.value[x]">
+      <path value="Extension.extension.value[x]"/>
+      <max value="0"/>
+    </element>
     <element id="Extension.url">
       <path value="Extension.url"/>
       <fixedUri value="http://dsf.dev/fhir/StructureDefinition/extension-ping-status"/>

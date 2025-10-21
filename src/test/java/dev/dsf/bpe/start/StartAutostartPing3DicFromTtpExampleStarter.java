@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
@@ -42,11 +43,10 @@ public class StartAutostartPing3DicFromTtpExampleStarter
 		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_START_PING_AUTOSTART_MESSAGE_NAME))
 				.getType().addCoding(BpmnMessage.messageName());
 		task.addInput().setValue(new StringType("Endpoint?identifier=http://dsf.dev/sid/endpoint-identifier|"))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
-		task.addInput().setValue(new StringType("PT7M")).getType().addCoding()
-				.setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TIMER_INTERVAL);
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
+		task.addInput().setValue(new StringType("PT7M")).getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TIMER_INTERVAL.getValue());
 
 		return task;
 	}

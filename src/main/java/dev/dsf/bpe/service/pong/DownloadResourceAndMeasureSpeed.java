@@ -1,0 +1,51 @@
+package dev.dsf.bpe.service.pong;
+
+import org.camunda.bpm.engine.delegate.BpmnError;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
+import org.hl7.fhir.r4.model.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.service.AbstractService;
+import dev.dsf.bpe.util.BinaryResourceDownloader;
+import dev.dsf.bpe.v1.ProcessPluginApi;
+import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.variables.duration.DurationValueImpl;
+
+public class DownloadResourceAndMeasureSpeed extends AbstractService
+{
+	private static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeed.class);
+
+	public DownloadResourceAndMeasureSpeed(ProcessPluginApi api)
+	{
+		super(api);
+	}
+
+	@Override
+	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	{
+		logger.debug("Starting resource download to measure speed...");
+
+		Task task = variables.getStartTask();
+
+		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
+				ConstantsPing.PROCESS_NAME_PONG).download(variables, api, task);
+
+		if (downloadResult.getErrorTuple() == null)
+		{
+			variables.setLong(ExecutionVariables.downloadedBytes.name(), downloadResult.getDownloadedBytes());
+			variables.setVariable(ExecutionVariables.downloadedDuration.name(),
+					new DurationValueImpl(downloadResult.getDownloadedDuration()));
+		}
+		else
+		{
+			delegateExecution.setVariable(ExecutionVariables.resourceDownloadError.name(),
+					downloadResult.getErrorTuple().errorLocal());
+			delegateExecution.setVariable(ExecutionVariables.resourceDownloadErrorRemote.name(),
+					downloadResult.getErrorTuple().errorRemote());
+		}
+		logger.debug("Completed resource download and measured speed.");
+	}
+}

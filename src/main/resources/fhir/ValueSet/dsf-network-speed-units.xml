@@ -1,0 +1,49 @@
+<ValueSet xmlns="http://hl7.org/fhir">
+    <meta>
+        <tag>
+            <system
+                    value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
+            <code value="ALL" />
+        </tag>
+    </meta>
+    <url value="http://dsf.dev/fhir/ValueSet/ping-units" />
+    <!-- version managed by bpe -->
+    <version value="#{version}" />
+    <name value="DSF_Ping_Units" />
+    <title value="DSF Ping Units" />
+    <!-- status managed by bpe -->
+    <status value="unknown" />
+    <experimental value="false" />
+    <!-- date managed by bpe -->
+    <date value="#{date}" />
+    <publisher value="DSF" />
+    <description value="ValueSet with ping download speed units" />
+    <immutable value="true" />
+    <compose>
+        <include>
+            <system value="http://unitsofmeasure.org" />
+            <version value="3.0.1"/>
+            <concept>
+                <code value="bit/s"/>
+            </concept>
+            <concept>
+                <code value="Kbit/s"/>
+            </concept>
+            <concept>
+                <code value="Mbit/s"/>
+            </concept>
+            <concept>
+                <code value="GBit/s"/>
+            </concept>
+            <concept>
+                <code value="By/s"/>
+            </concept>
+            <concept>
+                <code value="KBy/s"/>
+            </concept>
+            <concept>
+                <code value="MBy/s"/>
+            </concept>
+        </include>
+    </compose>
+</ValueSet>

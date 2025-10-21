@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 
+import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
@@ -45,8 +46,8 @@ public class PingTtpsFromDic1ExampleStarter
 				"OrganizationAffiliation?primary-organization:identifier=http://dsf.dev/sid/organization-identifier|highmed.org"
 						+ "&role=http://dsf.dev/fhir/CodeSystem/organization-role|TTP"
 						+ "&_include=OrganizationAffiliation:endpoint"))
-				.getType().addCoding().setSystem(ConstantsPing.CODESYSTEM_DSF_PING)
-				.setCode(ConstantsPing.CODESYSTEM_DSF_PING_VALUE_TARGET_ENDPOINTS);
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
 
 		return task;
 	}

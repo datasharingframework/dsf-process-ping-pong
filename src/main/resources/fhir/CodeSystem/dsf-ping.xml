@@ -46,4 +46,39 @@
 		<display value="Timer Interval" />
 		<definition value="Interval between two autostarts of the ping process" />
 	</concept>
+	<concept>
+		<code value="download-resource-size-bytes"/>
+		<display value="Download Resource Size Bytes"/>
+		<definition value="Size of the resource to download for speed measurements in bytes"/>
+	</concept>
+	<concept>
+		<code value="download-resource-reference" />
+		<display value="Download Resource Reference"/>
+		<definition value="Reference to the resource to be downloaded for measuring network speed" />
+	</concept>
+	<concept>
+		<code value="network-speed"/>
+		<display value="Network Speed"/>
+		<definition value="Network speed in both upload and download of a specific endpoint"/>
+	</concept>
+	<concept>
+		<code value="downloaded-bytes"/>
+		<display value="Downloaded Bytes"/>
+		<definition value="Amount of bytes downloaded to measure network speed"/>
+	</concept>
+	<concept>
+		<code value="downloaded-duration"/>
+		<display value="Downloaded Duration"/>
+		<definition value="Duration it took for the resource to be downloaded to measure network speed"/>
+	</concept>
+	<concept>
+		<code value="error"/>
+		<display value="Error"/>
+		<definition value="Error to be added as an output parameter in the Start Ping Task"/>
+	</concept>
+	<concept>
+		<code value="pong-timeout-duration"/>
+		<display value="Pong Timeout Duration"/>
+		<definition value="Time to wait until a pong message is received in ISO 8601 duration format e.g. PT1H5M30S for a duration of 1 hour, 5 minutes and 30 seconds"/>
+	</concept>
 </CodeSystem> 
