@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.variables.Target;
@@ -18,15 +17,19 @@ public class AggregateErrorMailService implements InitializingBean
 {
 	private static final Logger errorMailServiceLogger = LoggerFactory.getLogger("error-mail-service-logger");
 	private static final String MAIL_MESSAGE_INTRO = "Error(s) while executing ping-pong process:";
-	private static final String PING_PROCESS_HAS_ERRORS = "Ping process has errors";
+
+	public static final String PING_PROCESS_HAS_ERRORS = "Ping process has errors";
+	public static final String PONG_PROCESS_HAS_ERRORS = "Pong process has errors";
 
 	private final ProcessPluginApi api;
 	private final boolean sendProcessFailedMail;
+	private final String subject;
 
-	public AggregateErrorMailService(ProcessPluginApi api, boolean sendProcessFailedMail)
+	public AggregateErrorMailService(ProcessPluginApi api, boolean sendProcessFailedMail, String subject)
 	{
 		this.api = api;
 		this.sendProcessFailedMail = sendProcessFailedMail;
+		this.subject = subject;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class AggregateErrorMailService implements InitializingBean
 	{
 		if (sendProcessFailedMail)
 		{
-			api.getMailService().send(PING_PROCESS_HAS_ERRORS, buildMailMessage(taskId, errorsPerTarget));
+			api.getMailService().send(subject, buildMailMessage(taskId, errorsPerTarget));
 			errorMailServiceLogger.info("Sent e-mail with process errors");
 		}
 	}
@@ -72,40 +75,25 @@ public class AggregateErrorMailService implements InitializingBean
 
 		if (error != null && error.process() != null)
 		{
-			if (ConstantsPing.PROCESS_NAME_PING.equals(error.process()))
-			{
-				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
-				b.append('/');
-				b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
+			b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
+			b.append('/');
+			b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
 
-				b.append(" -> ");
+			b.append(" -> ");
 
-				b.append(target.getOrganizationIdentifierValue());
-				b.append('/');
-				b.append(target.getEndpointIdentifierValue());
+			b.append(target.getOrganizationIdentifierValue());
+			b.append('/');
+			b.append(target.getEndpointIdentifierValue());
 
-				b.append(":");
-			}
-			else
-			{
-				b.append(target.getOrganizationIdentifierValue());
-				b.append('/');
-				b.append(target.getEndpointIdentifierValue());
-
-				b.append(" -> ");
-
-				b.append(api.getOrganizationProvider().getLocalOrganizationIdentifierValue().orElse("?"));
-				b.append('/');
-				b.append(api.getEndpointProvider().getLocalEndpointIdentifierValue().orElse("?"));
-
-				b.append(": ");
-			}
+			b.append(":");
 			b.append("\n\t");
 			b.append("Description: ").append(error.concept().getDisplay());
 		}
 		else
 		{
-			b.append("Unable to display error because error is null or process is neither of 'ping' or 'pong'");
+			b.append("Other:");
+			b.append("\n\t");
+			b.append("Description: ").append(error.concept().getDisplay());
 		}
 
 		return b.toString();

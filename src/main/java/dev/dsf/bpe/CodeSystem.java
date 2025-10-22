@@ -387,6 +387,10 @@ public final class CodeSystem
 					"send-message-http-502",
 					"Sending a message to the remote instance resulted in HTTP status 502"
 			),
+			SEND_MESSAGE_HTTP_504(
+					"send-message-http-504",
+					"Sending a message to the remote instance resulted in HTTP status 504"
+			),
 			SEND_MESSAGE_HTTP_UNEXPECTED(
 					"send-message-http-unexpected",
 					"Sending a message to the remote instance resulted in an unexpected HTTP status code"
@@ -427,6 +431,10 @@ public final class CodeSystem
 			RECEIVE_MESSAGE_HTTP_502(
 					"receive-message-http-502",
 					"Received a message and responded with HTTP status 502"
+			),
+			RECEIVE_MESSAGE_HTTP_504(
+					"receive-message-http-504",
+					"Received a message and responded with HTTP status 504"
 			),
 			RECEIVE_MESSAGE_HTTP_UNEXPECTED(
 					"receive-message-http-unexpected",
@@ -477,6 +485,10 @@ public final class CodeSystem
 					"local-binary-delete-http-502",
 					"Local instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
+			LOCAL_BINARY_DELETE_HTTP_504(
+					"local-binary-delete-http-504",
+					"Local instance encountered a HTTP status 504 trying to clean up the binary resource"
+			),
 			LOCAL_BINARY_DELETE_HTTP_UNEXPECTED(
 					"local-binary-delete-http-unexpected",
 					"Local instance encountered an unexpected HTTP status code trying to clean up the binary resource"
@@ -510,6 +522,10 @@ public final class CodeSystem
 					"remote-binary-delete-http-502",
 					"Remote instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
+			REMOTE_BINARY_DELETE_HTTP_504(
+					"remote-binary-delete-http-504",
+					"Remote instance encountered a HTTP status 504 trying to clean up the binary resource"
+			),
 			REMOTE_BINARY_DELETE_HTTP_UNEXPECTED(
 					"remote-binary-delete-http-unexpected",
 					"Remote instance encountered an unexpected HTTP status code trying to clean up the binary resource"
@@ -534,6 +550,10 @@ public final class CodeSystem
 			LOCAL_BINARY_POST_HTTP_502(
 					"local-binary-post-http-502",
 					"Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+			),
+			LOCAL_BINARY_POST_HTTP_504(
+					"local-binary-post-http-504",
+					"Local instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_UNEXPECTED(
 					"local-binary-post-http-unexpected",
@@ -571,6 +591,10 @@ public final class CodeSystem
 			REMOTE_BINARY_POST_HTTP_502(
 					"remote-binary-post-http-502",
 					"Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_HTTP_504(
+					"remote-binary-post-http-504",
+					"Remote instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_UNEXPECTED(
 					"remote-binary-post-http-unexpected",
@@ -626,6 +650,10 @@ public final class CodeSystem
 					"response-message-timeout-http-502",
 					"Response message timed out. Received HTTP status 502 trying to check request status on the target"
 			),
+			RESPONSE_MESSAGE_TIMEOUT_HTTP_504(
+					"response-message-timeout-http-504",
+					"Response message timed out. Received HTTP status 504 trying to check request status on the target"
+			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED(
 					"response-message-timeout-http-unexpected",
 					"Response message timed out. Received an unexpected HTTP status code trying to check request status on the target"
@@ -654,7 +682,11 @@ public final class CodeSystem
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_502(
 					"local-binary-download-http-502",
-					"Local instance received HTTP status 500 trying to download the binary resource from the target"
+					"Local instance received HTTP status 502 trying to download the binary resource from the target"
+			),
+			LOCAL_BINARY_DOWNLOAD_HTTP_504(
+					"local-binary-download-http-504",
+					"Local instance received HTTP status 504 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"local-binary-download-http-unexpected",
@@ -696,6 +728,10 @@ public final class CodeSystem
 			REMOTE_BINARY_DOWNLOAD_HTTP_502(
 					"remote-binary-download-http-502",
 					"Remote instance received HTTP status 502 trying to download the binary resource from this server"
+			),
+			REMOTE_BINARY_DOWNLOAD_HTTP_504(
+					"remote-binary-download-http-504",
+					"Remote instance received HTTP status 504 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"remote-binary-download-http-unexpected",
