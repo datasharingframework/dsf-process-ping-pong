@@ -194,7 +194,7 @@ public final class CodeSystem
 				@Override
 				public String toUcum()
 				{
-					return "Kbit/s";
+					return "kbit/s";
 				}
 			},
 			Mbps
@@ -281,7 +281,7 @@ public final class CodeSystem
 				@Override
 				public String toUcum()
 				{
-					return "KBy/s";
+					return "kBy/s";
 				}
 			},
 			MBps
