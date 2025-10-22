@@ -36,6 +36,9 @@ public class CheckPingTaskStatus extends AbstractService
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
+		//Do not use getVariableLocal here. CheckPingTaskStatus gets executed in a child execution of the one that
+		//stored the variable. GetVariableLocal will only look in the child execution's variables and find nothing.
+		//GetVariable() or the DSF API's getString() does look for values in the parent execution's variables.
 		String taskId = variables.getString(ExecutionVariables.pingTaskId.name());
 
 		try
