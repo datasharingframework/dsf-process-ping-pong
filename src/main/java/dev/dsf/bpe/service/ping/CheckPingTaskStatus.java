@@ -1,7 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import java.util.Objects;
-
 import org.camunda.bpm.engine.delegate.BpmnError;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
@@ -40,26 +38,29 @@ public class CheckPingTaskStatus extends AbstractService
 
 		String taskId = variables.getString(ExecutionVariables.pingTaskId.name());
 
-		Objects.requireNonNull(taskId);
-		FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
-				.getWebserviceClient(target.getEndpointUrl());
 		try
 		{
-			Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
-			ProcessError error = switch (pingTask.getStatus())
+			if (taskId != null)
 			{
-				case COMPLETED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_COMPLETED, null);
-				case FAILED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_FAILED, null);
-				case INPROGRESS -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_IN_PROGRESS, null);
-				case REQUESTED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED, null);
-				default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
-						CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED, null);
-			};
-			ErrorListUtils.add(error, delegateExecution, correlationKey);
+				FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
+						.getWebserviceClient(target.getEndpointUrl());
+
+				Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
+				ProcessError error = switch (pingTask.getStatus())
+				{
+					case COMPLETED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_COMPLETED, null);
+					case FAILED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_FAILED, null);
+					case INPROGRESS -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_IN_PROGRESS, null);
+					case REQUESTED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_REQUESTED, null);
+					default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED, null);
+				};
+				ErrorListUtils.add(error, delegateExecution, correlationKey);
+			}
 		}
 		catch (WebApplicationException e)
 		{
