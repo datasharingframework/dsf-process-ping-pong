@@ -55,7 +55,9 @@
       </type>
       <valueString value="PT24H"/>
    </input>
-	<input>
+	<!--Resource will get updated in DeploymentStateListener because FHIR validation does not use the version of the CodeSystem
+    to differentiate between CodeSystems that differ from one plugin version to the next-->
+	<!--<input>
 		<type>
 			<coding>
 				<system value="http://dsf.dev/fhir/CodeSystem/ping"/>
@@ -74,5 +76,5 @@
 			</coding>
 		</type>
 		<valueString value="PT30S"/>
-	</input>
+	</input>-->
 </Task>
