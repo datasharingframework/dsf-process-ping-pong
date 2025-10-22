@@ -61,6 +61,8 @@ public final class ConstantsPing
 
 	public static final String TIMER_INTERVAL_DEFAULT_VALUE = "PT24H";
 
+	public static final String PONG_TIMEOUT_DURATION_DEFAULT_VALUE = "PT30S";
+
 	public static final String BPMN_ERROR_CODE_UNEXPECTED_ERROR = "unexpected-error";
 
 	public static final String POTENTIAL_FIX_URL_BASE = "https://dsf.dev/s";
