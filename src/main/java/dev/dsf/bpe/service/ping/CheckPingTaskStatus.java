@@ -38,7 +38,7 @@ public class CheckPingTaskStatus extends AbstractService
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
-		String taskId = (String) delegateExecution.getVariableLocal(ExecutionVariables.pingTaskId.name());
+		String taskId = variables.getString(ExecutionVariables.pingTaskId.name());
 
 		Objects.requireNonNull(taskId);
 		FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
