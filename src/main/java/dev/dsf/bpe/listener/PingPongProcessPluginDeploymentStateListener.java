@@ -1,5 +1,7 @@
 package dev.dsf.bpe.listener;
 
+import static dev.dsf.bpe.PingProcessPluginDefinition.RESOURCE_VERSION;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -20,7 +22,6 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.v1.ProcessPluginApi;
 import dev.dsf.bpe.v1.ProcessPluginDeploymentStateListener;
 import dev.dsf.fhir.client.FhirWebserviceClient;
@@ -66,13 +67,14 @@ public class PingPongProcessPluginDeploymentStateListener
 	{
 		FhirWebserviceClient client = api.getFhirWebserviceClientProvider().getLocalWebserviceClient();
 
-		List<String> draftTaskResourceProfiles = List.of("http://dsf.dev/fhir/StructureDefinition/task-start-ping",
-				"http://dsf.dev/fhir/StructureDefinition/task-start-ping-autostart");
+		String pingProcessPrefix = "http://dsf.dev/bpe/Process/ping/" + RESOURCE_VERSION;
+		List<String> draftTaskResourceIdentifiers = List.of(pingProcessPrefix + "/task-start-ping",
+				pingProcessPrefix + "task-start-ping-autostart");
 
-		for (String profile : draftTaskResourceProfiles)
+		for (String identifier : draftTaskResourceIdentifiers)
 		{
-			Optional<Task> optionalTask = searchTask(profile, PingProcessPluginDefinition.RESOURCE_VERSION).getEntry()
-					.stream().map(Bundle.BundleEntryComponent::getResource).map(Task.class::cast).findFirst();
+			Optional<Task> optionalTask = searchTask(identifier).getEntry().stream()
+					.map(Bundle.BundleEntryComponent::getResource).map(Task.class::cast).findFirst();
 
 			if (optionalTask.isPresent())
 			{
@@ -88,7 +90,7 @@ public class PingPongProcessPluginDeploymentStateListener
 		Coding downloadResourceSizeBytesCoding = new Coding();
 		downloadResourceSizeBytesCoding.setSystem(dev.dsf.bpe.CodeSystem.DsfPing.URL)
 				.setCode(dev.dsf.bpe.CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue())
-				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+				.setVersion(RESOURCE_VERSION);
 
 		Optional<Task.ParameterComponent> optInput = api.getTaskHelper().getFirstInputParameter(task,
 				downloadResourceSizeBytesCoding, DecimalType.class);
@@ -103,7 +105,7 @@ public class PingPongProcessPluginDeploymentStateListener
 		Coding pongTimeoutDurationCoding = new Coding();
 		pongTimeoutDurationCoding.setSystem(dev.dsf.bpe.CodeSystem.DsfPing.URL)
 				.setCode(dev.dsf.bpe.CodeSystem.DsfPing.Code.PONG_TIMEOUT_DURATION_ISO_8601.getValue())
-				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+				.setVersion(RESOURCE_VERSION);
 
 		optInput = api.getTaskHelper().getFirstInputParameter(task, pongTimeoutDurationCoding, StringType.class);
 		if (optInput.isEmpty())
@@ -135,10 +137,10 @@ public class PingPongProcessPluginDeploymentStateListener
 				Map.of("url", List.of(url)));
 	}
 
-	private Bundle searchTask(String profile, String version)
+	private Bundle searchTask(String identifier)
 	{
 		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().search(Task.class,
-				Map.of("_profile", List.of(profile + "|" + version), "status", List.of("draft")));
+				Map.of("identifier", List.of(identifier), "status", List.of("draft")));
 	}
 
 	private <T extends MetadataResource> List<T> extractAndSortResources(Bundle bundle, Class<T> type, String url)
@@ -167,8 +169,7 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private boolean currentIsNewestResource(List<? extends MetadataResource> resources)
 	{
-		return !resources.isEmpty() && PingProcessPluginDefinition.RESOURCE_VERSION
-				.equals(resources.get(resources.size() - 1).getVersion());
+		return !resources.isEmpty() && RESOURCE_VERSION.equals(resources.get(resources.size() - 1).getVersion());
 	}
 
 	private <T> Optional<T> getNewestResource(List<T> resources)
