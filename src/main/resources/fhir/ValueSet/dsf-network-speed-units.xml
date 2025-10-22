@@ -27,19 +27,19 @@
                 <code value="bit/s"/>
             </concept>
             <concept>
-                <code value="Kbit/s"/>
+                <code value="kbit/s"/>
             </concept>
             <concept>
                 <code value="Mbit/s"/>
             </concept>
             <concept>
-                <code value="GBit/s"/>
+                <code value="Gbit/s"/>
             </concept>
             <concept>
                 <code value="By/s"/>
             </concept>
             <concept>
-                <code value="KBy/s"/>
+                <code value="kBy/s"/>
             </concept>
             <concept>
                 <code value="MBy/s"/>
