@@ -286,8 +286,7 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_401,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
-					case 403 ->
-					{
+					case 403 -> {
 						if (messageWithReference)
 						{
 							yield new ProcessErrorWithStatusCode(
@@ -332,8 +331,7 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_401,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
-					case 403 ->
-					{
+					case 403 -> {
 						if (messageWithReference)
 						{
 							yield new ProcessErrorWithStatusCode(
