@@ -172,11 +172,6 @@ public class PingPongProcessPluginDeploymentStateListener
 		return !resources.isEmpty() && RESOURCE_VERSION.equals(resources.get(resources.size() - 1).getVersion());
 	}
 
-	private <T> Optional<T> getNewestResource(List<T> resources)
-	{
-		return resources.isEmpty() ? Optional.empty() : Optional.of(resources.get(resources.size() - 1));
-	}
-
 	private MinorMajorVersion getMajorMinorVersion(String version)
 	{
 		if (version.matches("\\d\\.\\d"))
