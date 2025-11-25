@@ -68,8 +68,9 @@ public class PingPongProcessPluginDeploymentStateListener
 		FhirWebserviceClient client = api.getFhirWebserviceClientProvider().getLocalWebserviceClient();
 
 		String pingProcessPrefix = "http://dsf.dev/bpe/Process/ping/" + RESOURCE_VERSION;
+		String pingAutostartProcessPrefix = "http://dsf.dev/bpe/Process/pingAutostart/" + RESOURCE_VERSION;
 		List<String> draftTaskResourceIdentifiers = List.of(pingProcessPrefix + "/task-start-ping",
-				pingProcessPrefix + "task-start-ping-autostart");
+				pingAutostartProcessPrefix + "/task-start-ping-autostart");
 
 		for (String identifier : draftTaskResourceIdentifiers)
 		{
