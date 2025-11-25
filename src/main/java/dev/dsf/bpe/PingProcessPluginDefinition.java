@@ -11,9 +11,9 @@ import dev.dsf.bpe.v1.ProcessPluginDefinition;
 public class PingProcessPluginDefinition implements ProcessPluginDefinition
 {
 	public static final String RESOURCE_VERSION = "2.0";
-	public static final String NON_RESOURCE_VERSION = "0.1";
+	public static final String NON_RESOURCE_VERSION = "0.2";
 	public static final String VERSION = RESOURCE_VERSION + "." + NON_RESOURCE_VERSION;
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2025, 10, 22);
+	public static final LocalDate RELEASE_DATE = LocalDate.of(2025, 11, 25);
 
 	@Override
 	public String getName()
