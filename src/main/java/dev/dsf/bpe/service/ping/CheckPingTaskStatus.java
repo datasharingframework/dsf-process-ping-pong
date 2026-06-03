@@ -97,6 +97,12 @@ public class CheckPingTaskStatus extends AbstractService
 			case 502 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_502,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 503 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_503,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 504 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_504,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 			default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);

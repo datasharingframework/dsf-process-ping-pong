@@ -314,6 +314,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_502,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+					case 503 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_503,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 504 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_504,
@@ -359,6 +364,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_502,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+					case 503 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_503,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 504 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_504,
@@ -397,6 +407,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_502,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+					case 503 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_503,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 504 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_504,
@@ -427,6 +442,11 @@ public final class SendTaskErrorConverter
 					case 502 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_502,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
+					case 503 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_503,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_REACHABLE);
 					case 504 -> new ProcessErrorWithStatusCode(
