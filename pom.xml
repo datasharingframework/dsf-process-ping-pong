@@ -332,7 +332,7 @@
 						<artifactId>maven-dependency-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup</id>
+								<id>copy-process-plugin-to-docker-dev-setup-3dic-ttp/dic1</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -345,11 +345,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic1/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic1</id>
+								<id>copy-process-plugin-to-docker-dev-setup-3dic-ttp/dic2</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -362,11 +362,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic1/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic2/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic2</id>
+								<id>copy-process-plugin-to-docker-dev-setup-3dic-ttp/dic3</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -379,11 +379,11 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic2/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic3/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/dic3</id>
+								<id>copy-process-plugin-to-docker-dev-setup-3dic-ttp/ttp</id>
 								<phase>package</phase>
 								<goals>
 									<goal>copy</goal>
@@ -396,24 +396,7 @@
 											<version>${project.version}</version>
 										</artifactItem>
 									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic3/bpe/process</outputDirectory>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-process-plugin-to-docker-test-setup-3dic-ttp/ttp</id>
-								<phase>package</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<artifactItem>
-											<groupId>${project.groupId}</groupId>
-											<artifactId>${project.artifactId}</artifactId>
-											<version>${project.version}</version>
-										</artifactItem>
-									</artifactItems>
-									<outputDirectory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/ttp/bpe/process</outputDirectory>
+									<outputDirectory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/ttp/bpe/process</outputDirectory>
 								</configuration>
 							</execution>
 						</executions>
@@ -424,35 +407,35 @@
 						<configuration>
 							<filesets>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-dev-setup/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic1/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic1/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic2/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic2/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/dic3/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/dic3/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
 									<followSymlinks>false</followSymlinks>
 								</fileset>
 								<fileset>
-									<directory>${dsf.location}/dsf-docker-test-setup-3dic-ttp/ttp/bpe/process</directory>
+									<directory>${dsf.location}/dsf-docker-dev-setup-3dic-ttp/ttp/bpe/process</directory>
 									<includes>
 										<include>${project.artifactId}-${project.version}.jar</include>
 									</includes>
