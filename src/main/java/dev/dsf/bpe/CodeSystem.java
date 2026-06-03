@@ -387,6 +387,10 @@ public final class CodeSystem
 					"send-message-http-502",
 					"Sending a message to the remote instance resulted in HTTP status 502"
 			),
+			SEND_MESSAGE_HTTP_503(
+					"send-message-http-503",
+					"Sending a message to the remote instance resulted in HTTP status 503"
+			),
 			SEND_MESSAGE_HTTP_504(
 					"send-message-http-504",
 					"Sending a message to the remote instance resulted in HTTP status 504"
@@ -431,6 +435,10 @@ public final class CodeSystem
 			RECEIVE_MESSAGE_HTTP_502(
 					"receive-message-http-502",
 					"Received a message and responded with HTTP status 502"
+			),
+			RECEIVE_MESSAGE_HTTP_503(
+					"receive-message-http-503",
+					"Received a message and responded with HTTP status 503"
 			),
 			RECEIVE_MESSAGE_HTTP_504(
 					"receive-message-http-504",
@@ -485,6 +493,10 @@ public final class CodeSystem
 					"local-binary-delete-http-502",
 					"Local instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
+			LOCAL_BINARY_DELETE_HTTP_503(
+					"local-binary-delete-http-503",
+					"Local instance encountered a HTTP status 503 trying to clean up the binary resource"
+			),
 			LOCAL_BINARY_DELETE_HTTP_504(
 					"local-binary-delete-http-504",
 					"Local instance encountered a HTTP status 504 trying to clean up the binary resource"
@@ -522,6 +534,10 @@ public final class CodeSystem
 					"remote-binary-delete-http-502",
 					"Remote instance encountered a HTTP status 502 trying to clean up the binary resource"
 			),
+			REMOTE_BINARY_DELETE_HTTP_503(
+					"remote-binary-delete-http-503",
+					"Remote instance encountered a HTTP status 503 trying to clean up the binary resource"
+			),
 			REMOTE_BINARY_DELETE_HTTP_504(
 					"remote-binary-delete-http-504",
 					"Remote instance encountered a HTTP status 504 trying to clean up the binary resource"
@@ -550,6 +566,10 @@ public final class CodeSystem
 			LOCAL_BINARY_POST_HTTP_502(
 					"local-binary-post-http-502",
 					"Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+			),
+			LOCAL_BINARY_POST_HTTP_503(
+					"local-binary-post-http-503",
+					"Local instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_504(
 					"local-binary-post-http-504",
@@ -591,6 +611,10 @@ public final class CodeSystem
 			REMOTE_BINARY_POST_HTTP_502(
 					"remote-binary-post-http-502",
 					"Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_HTTP_503(
+					"remote-binary-post-http-503",
+					"Remote instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_504(
 					"remote-binary-post-http-504",
@@ -650,6 +674,10 @@ public final class CodeSystem
 					"response-message-timeout-http-502",
 					"Response message timed out. Received HTTP status 502 trying to check request status on the target"
 			),
+			RESPONSE_MESSAGE_TIMEOUT_HTTP_503(
+					"response-message-timeout-http-503",
+					"Response message timed out. Received HTTP status 503 trying to check request status on the target"
+			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_504(
 					"response-message-timeout-http-504",
 					"Response message timed out. Received HTTP status 504 trying to check request status on the target"
@@ -683,6 +711,10 @@ public final class CodeSystem
 			LOCAL_BINARY_DOWNLOAD_HTTP_502(
 					"local-binary-download-http-502",
 					"Local instance received HTTP status 502 trying to download the binary resource from the target"
+			),
+			LOCAL_BINARY_DOWNLOAD_HTTP_503(
+					"local-binary-download-http-503",
+					"Local instance received HTTP status 503 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_504(
 					"local-binary-download-http-504",
@@ -728,6 +760,10 @@ public final class CodeSystem
 			REMOTE_BINARY_DOWNLOAD_HTTP_502(
 					"remote-binary-download-http-502",
 					"Remote instance received HTTP status 502 trying to download the binary resource from this server"
+			),
+			REMOTE_BINARY_DOWNLOAD_HTTP_503(
+					"remote-binary-download-http-503",
+					"Remote instance received HTTP status 503 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_504(
 					"remote-binary-download-http-504",

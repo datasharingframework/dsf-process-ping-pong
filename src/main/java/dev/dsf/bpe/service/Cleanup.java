@@ -142,6 +142,10 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 			case 502 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_502,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 503 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_503,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 504 -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_504,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 			default -> new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_UNEXPECTED,
 					null);
 		};
