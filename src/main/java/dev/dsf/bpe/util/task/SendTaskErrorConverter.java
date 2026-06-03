@@ -304,6 +304,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 					}
+					case 407 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_407,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_500,
@@ -354,6 +359,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 						}
 					}
+					case 407 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_407,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_500,
@@ -397,6 +407,11 @@ public final class SendTaskErrorConverter
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_403,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
+					case 407 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_407,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.SEND_MESSAGE_HTTP_500,
@@ -432,6 +447,11 @@ public final class SendTaskErrorConverter
 					case 403 -> new ProcessErrorWithStatusCode(
 							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_403,
+									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
+							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
+					case 407 -> new ProcessErrorWithStatusCode(
+							new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
+									CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_407,
 									ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP),
 							CodeSystem.DsfPingStatus.Code.NOT_ALLOWED);
 					case 500 -> new ProcessErrorWithStatusCode(

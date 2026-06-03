@@ -379,6 +379,10 @@ public final class CodeSystem
 					"send-reference-message-http-403",
 					"Sending a message including a reference to the remote instance resulted in HTTP status 403"
 			),
+			SEND_MESSAGE_HTTP_407(
+					"send-message-http-407",
+					"Sending a message to the remote instance resulted in HTTP status 407"
+			),
 			SEND_MESSAGE_HTTP_500(
 					"send-message-http-500",
 					"Sending a message to the remote instance resulted in HTTP status 500"
@@ -427,6 +431,10 @@ public final class CodeSystem
 			RECEIVE_REFERENCE_MESSAGE_HTTP_403(
 					"receive-reference-message-http-403",
 					"Received a message including a reference and responded with HTTP status 403"
+			),
+			RECEIVE_MESSAGE_HTTP_407(
+					"receive-message-http-407",
+					"Received a message and responded with HTTP status 407"
 			),
 			RECEIVE_MESSAGE_HTTP_500(
 					"receive-message-http-500",
@@ -485,6 +493,10 @@ public final class CodeSystem
 					"local-binary-delete-http-403",
 					"Local instance encountered a HTTP status 403 trying to clean up the binary resource"
 			),
+			LOCAL_BINARY_DELETE_HTTP_407(
+					"local-binary-delete-http-407",
+					"Local instance encountered a HTTP status 407 trying to clean up the binary resource"
+			),
 			LOCAL_BINARY_DELETE_HTTP_500(
 					"local-binary-delete-http-500",
 					"Local instance encountered a HTTP status 500 trying to clean up the binary resource"
@@ -526,6 +538,10 @@ public final class CodeSystem
 					"remote-binary-delete-http-403",
 					"Remote instance encountered a HTTP status 403 trying to clean up the binary resource"
 			),
+			REMOTE_BINARY_DELETE_HTTP_407(
+					"remote-binary-delete-http-407",
+					"Remote instance encountered a HTTP status 407 trying to clean up the binary resource"
+			),
 			REMOTE_BINARY_DELETE_HTTP_500(
 					"remote-binary-delete-http-500",
 					"Remote instance encountered a HTTP status 500 trying to clean up the binary resource"
@@ -554,6 +570,10 @@ public final class CodeSystem
 			LOCAL_BINARY_POST_HTTP_403(
 					"local-binary-post-http-403",
 					"Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
+			),
+			LOCAL_BINARY_POST_HTTP_407(
+					"local-binary-post-http-407",
+					"Local instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_413(
 					"local-binary-post-http-413",
@@ -599,6 +619,10 @@ public final class CodeSystem
 			REMOTE_BINARY_POST_HTTP_403(
 					"remote-binary-post-http-403",
 					"Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
+			),
+			REMOTE_BINARY_POST_HTTP_407(
+					"remote-binary-post-http-407",
+					"Remote instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_413(
 					"remote-binary-post-http-413",
@@ -666,6 +690,10 @@ public final class CodeSystem
 					"response-message-timeout-http-403",
 					"Response message timed out. Received HTTP status 403 trying to check request status on the target"
 			),
+			RESPONSE_MESSAGE_TIMEOUT_HTTP_407(
+					"response-message-timeout-http-407",
+					"Response message timed out. Received HTTP status 407 trying to check request status on the target"
+			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_500(
 					"response-message-timeout-http-500",
 					"Response message timed out. Received HTTP status 500 trying to check request status on the target"
@@ -703,6 +731,10 @@ public final class CodeSystem
 			LOCAL_BINARY_DOWNLOAD_HTTP_403(
 					"local-binary-download-http-403",
 					"Local instance received HTTP status 403 trying to download the binary resource from the target"
+			),
+			LOCAL_BINARY_DOWNLOAD_HTTP_407(
+					"local-binary-download-http-407",
+					"Local instance received HTTP status 407 trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_500(
 					"local-binary-download-http-500",
@@ -752,6 +784,10 @@ public final class CodeSystem
 			REMOTE_BINARY_DOWNLOAD_HTTP_403(
 					"remote-binary-download-http-403",
 					"Remote instance received HTTP status 403 trying to download the binary resource from this server"
+			),
+			REMOTE_BINARY_DOWNLOAD_HTTP_407(
+					"remote-binary-download-http-407",
+					"Remote instance received HTTP status 407 trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_500(
 					"remote-binary-download-http-500",

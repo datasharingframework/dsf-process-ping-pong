@@ -93,6 +93,12 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_403,
 							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 					break;
+				case 407:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_407,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_407,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
 				case 413:
 					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_413,
 							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);

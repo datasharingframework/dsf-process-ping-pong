@@ -91,6 +91,9 @@ public class CheckPingTaskStatus extends AbstractService
 			case 403 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_403,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+			case 407 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_407,
+					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 			case 500 -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 					CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_500,
 					ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);

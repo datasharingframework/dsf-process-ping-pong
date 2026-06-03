@@ -1,5 +1,7 @@
 package dev.dsf.fhir.profiles;
 
+import static dev.dsf.bpe.ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP;
+import static dev.dsf.bpe.ConstantsPing.PROCESS_NAME_PING;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -218,7 +220,7 @@ public class TaskProfileTest
 		for (int i = 0; i < amount; i++)
 		{
 			CodeSystem.DsfPingError.Concept[] concepts = CodeSystem.DsfPingError.Concept.values();
-			errors.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING, concepts[i % concepts.length], null));
+			errors.add(new ProcessError(PROCESS_NAME_PING, concepts[i % concepts.length], null));
 		}
 		return errors;
 	}
@@ -378,6 +380,64 @@ public class TaskProfileTest
 		ValidationSupportRule.logValidationMessages(logger, result);
 
 		assertEquals(1, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskStartPingWithHttp503Errors()
+	{
+		Task task = createValidTaskStartPingProcess();
+
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DELETE_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_503, POTENTIAL_FIX_URL_ERROR_HTTP)));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskStartPingWithHttp407Errors()
+	{
+		Task task = createValidTaskStartPingProcess();
+
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_POST_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DELETE_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.RECEIVE_MESSAGE_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DELETE_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+		task.addOutput(createPingErrorOutput(new ProcessError(PROCESS_NAME_PING,
+				CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_HTTP_407, POTENTIAL_FIX_URL_ERROR_HTTP)));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
@@ -710,5 +770,10 @@ public class TaskProfileTest
 	private Task.TaskOutputComponent createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		return PingStatusGenerator.createPongStatusOutput(target, statusCode, null).get();
+	}
+
+	private Task.TaskOutputComponent createPingErrorOutput(ProcessError processError)
+	{
+		return ProcessError.toTaskOutput(processError);
 	}
 }
