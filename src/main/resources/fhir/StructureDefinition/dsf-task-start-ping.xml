@@ -133,6 +133,13 @@
       <min value="1" />
       <fixedCode value="download-resource-size-bytes" />
     </element>
+    <element id="Task.input:download-resource-size-bytes.value[x]">
+      <path value="Task.input.value[x]" />
+      <min value="1" />
+      <type>
+        <code value="decimal" />
+      </type>
+    </element>
     <element id="Task.input:pong-timeout-duration">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
         <valueString value="Parameter" />
