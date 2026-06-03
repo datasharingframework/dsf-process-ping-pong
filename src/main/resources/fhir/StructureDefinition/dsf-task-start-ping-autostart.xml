@@ -221,6 +221,11 @@
         <valueSet value="http://dsf.dev/fhir/ValueSet/ping|#{version}" />
       </binding>
     </element>
+    <element id="Task.input:download-resource-size-bytes.type.coding">
+      <path value="Task.input.type.coding" />
+      <min value="1" />
+      <max value="1" />
+    </element>
     <element id="Task.input:download-resource-size-bytes.type.coding.system">
       <path value="Task.input.type.coding.system" />
       <min value="1" />
