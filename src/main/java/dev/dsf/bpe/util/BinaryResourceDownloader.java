@@ -113,6 +113,13 @@ public class BinaryResourceDownloader
 							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_403,
 							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
 					break;
+				case 407:
+					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_407,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					errorRemote = new ProcessError(process,
+							CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_HTTP_407,
+							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
+					break;
 				case 500:
 					error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_HTTP_500,
 							ConstantsPing.POTENTIAL_FIX_URL_ERROR_HTTP);
