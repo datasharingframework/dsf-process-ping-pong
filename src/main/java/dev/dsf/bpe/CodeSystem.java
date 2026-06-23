@@ -369,35 +369,35 @@ public final class CodeSystem
 		{
 			SEND_MESSAGE_HTTP_401(
 					"send-message-http-401",
-					"Sending a message to the remote instance resulted in HTTP status 401"
+					"Sending a message to the remote instance resulted in HTTP status 401 - Unauthorized"
 			),
 			SEND_MESSAGE_HTTP_403(
 					"send-message-http-403",
-					"Sending a message to the remote instance resulted in HTTP status 403"
+					"Sending a message to the remote instance resulted in HTTP status 403 - Forbidden"
 			),
 			SEND_REFERENCE_MESSAGE_HTTP_403(
 					"send-reference-message-http-403",
-					"Sending a message including a reference to the remote instance resulted in HTTP status 403"
+					"Sending a message including a reference to the remote instance resulted in HTTP status 403 - Forbidden"
 			),
 			SEND_MESSAGE_HTTP_407(
 					"send-message-http-407",
-					"Sending a message to the remote instance resulted in HTTP status 407"
+					"Sending a message to the remote instance resulted in HTTP status 407 - Proxy Authentication Required"
 			),
 			SEND_MESSAGE_HTTP_500(
 					"send-message-http-500",
-					"Sending a message to the remote instance resulted in HTTP status 500"
+					"Sending a message to the remote instance resulted in HTTP status 500 - Internal Server Error"
 			),
 			SEND_MESSAGE_HTTP_502(
 					"send-message-http-502",
-					"Sending a message to the remote instance resulted in HTTP status 502"
+					"Sending a message to the remote instance resulted in HTTP status 502 - Bad Gateway"
 			),
 			SEND_MESSAGE_HTTP_503(
 					"send-message-http-503",
-					"Sending a message to the remote instance resulted in HTTP status 503"
+					"Sending a message to the remote instance resulted in HTTP status 503 - Service Unavailable"
 			),
 			SEND_MESSAGE_HTTP_504(
 					"send-message-http-504",
-					"Sending a message to the remote instance resulted in HTTP status 504"
+					"Sending a message to the remote instance resulted in HTTP status 504 - Gateway Timeout"
 			),
 			SEND_MESSAGE_HTTP_UNEXPECTED(
 					"send-message-http-unexpected",
@@ -422,35 +422,35 @@ public final class CodeSystem
 
 			RECEIVE_MESSAGE_HTTP_401(
 					"receive-message-http-401",
-					"Received a message and responded with HTTP status 401"
+					"Received a message and responded with HTTP status 401 - Unauthorized"
 			),
 			RECEIVE_MESSAGE_HTTP_403(
 					"receive-message-http-403",
-					"Received a message and responded with HTTP status 403"
+					"Received a message and responded with HTTP status 403 - Forbidden"
 			),
 			RECEIVE_REFERENCE_MESSAGE_HTTP_403(
 					"receive-reference-message-http-403",
-					"Received a message including a reference and responded with HTTP status 403"
+					"Received a message including a reference and responded with HTTP status 403 - Forbidden"
 			),
 			RECEIVE_MESSAGE_HTTP_407(
 					"receive-message-http-407",
-					"Received a message and responded with HTTP status 407"
+					"Received a message and responded with HTTP status 407 - Proxy Authentication Required"
 			),
 			RECEIVE_MESSAGE_HTTP_500(
 					"receive-message-http-500",
-					"Received a message and responded with HTTP status 500"
+					"Received a message and responded with HTTP status 500 - Internal Server Error"
 			),
 			RECEIVE_MESSAGE_HTTP_502(
 					"receive-message-http-502",
-					"Received a message and responded with HTTP status 502"
+					"Received a message and responded with HTTP status 502 - Bad Gateway"
 			),
 			RECEIVE_MESSAGE_HTTP_503(
 					"receive-message-http-503",
-					"Received a message and responded with HTTP status 503"
+					"Received a message and responded with HTTP status 503 - Service Unavailable"
 			),
 			RECEIVE_MESSAGE_HTTP_504(
 					"receive-message-http-504",
-					"Received a message and responded with HTTP status 504"
+					"Received a message and responded with HTTP status 504 - Gateway Timeout"
 			),
 			RECEIVE_MESSAGE_HTTP_UNEXPECTED(
 					"receive-message-http-unexpected",
@@ -487,31 +487,31 @@ public final class CodeSystem
 			),
 			LOCAL_BINARY_DELETE_HTTP_401(
 					"local-binary-delete-http-401",
-					"Local instance encountered a HTTP status 401 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 401 - Unauthorized trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_403(
 					"local-binary-delete-http-403",
-					"Local instance encountered a HTTP status 403 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 403 - Forbidden trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_407(
 					"local-binary-delete-http-407",
-					"Local instance encountered a HTTP status 407 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 407 - Proxy Authentication Required trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_500(
 					"local-binary-delete-http-500",
-					"Local instance encountered a HTTP status 500 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 500 - Internal Server Error trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_502(
 					"local-binary-delete-http-502",
-					"Local instance encountered a HTTP status 502 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 502 - Bad Gateway trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_503(
 					"local-binary-delete-http-503",
-					"Local instance encountered a HTTP status 503 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 503 - Service Unavailable trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_504(
 					"local-binary-delete-http-504",
-					"Local instance encountered a HTTP status 504 trying to clean up the binary resource"
+					"Local instance encountered a HTTP status 504 - Gateway Timeout trying to clean up the binary resource"
 			),
 			LOCAL_BINARY_DELETE_HTTP_UNEXPECTED(
 					"local-binary-delete-http-unexpected",
@@ -532,31 +532,31 @@ public final class CodeSystem
 			),
 			REMOTE_BINARY_DELETE_HTTP_401(
 					"remote-binary-delete-http-401",
-					"Remote instance encountered a HTTP status 401 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 401 - Unauthorized trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_403(
 					"remote-binary-delete-http-403",
-					"Remote instance encountered a HTTP status 403 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 403 - Forbidden trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_407(
 					"remote-binary-delete-http-407",
-					"Remote instance encountered a HTTP status 407 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 407 - Proxy Authentication Required trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_500(
 					"remote-binary-delete-http-500",
-					"Remote instance encountered a HTTP status 500 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 500 - Internal Server Error trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_502(
 					"remote-binary-delete-http-502",
-					"Remote instance encountered a HTTP status 502 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 502 - Bad Gateway trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_503(
 					"remote-binary-delete-http-503",
-					"Remote instance encountered a HTTP status 503 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 503 - Service Unavailable trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_504(
 					"remote-binary-delete-http-504",
-					"Remote instance encountered a HTTP status 504 trying to clean up the binary resource"
+					"Remote instance encountered a HTTP status 504 - Gateway Timeout trying to clean up the binary resource"
 			),
 			REMOTE_BINARY_DELETE_HTTP_UNEXPECTED(
 					"remote-binary-delete-http-unexpected",
@@ -565,35 +565,35 @@ public final class CodeSystem
 
 			LOCAL_BINARY_POST_HTTP_401(
 					"local-binary-post-http-401",
-					"Local instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 401 - Unauthorized trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_403(
 					"local-binary-post-http-403",
-					"Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 403 - Forbidden trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_407(
 					"local-binary-post-http-407",
-					"Local instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 407 - Proxy Authentication Required trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_413(
 					"local-binary-post-http-413",
-					"Local instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 413 - Payload Too Large trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_500(
 					"local-binary-post-http-500",
-					"Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 500 - Internal Server Error trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_502(
 					"local-binary-post-http-502",
-					"Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 502 - Bad Gateway trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_503(
 					"local-binary-post-http-503",
-					"Local instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 503 - Service Unavailable trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_504(
 					"local-binary-post-http-504",
-					"Local instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"
+					"Local instance encountered a HTTP status 504 - Gateway Timeout trying to post the binary resource to its own FHIR server"
 			),
 			LOCAL_BINARY_POST_HTTP_UNEXPECTED(
 					"local-binary-post-http-unexpected",
@@ -614,35 +614,35 @@ public final class CodeSystem
 
 			REMOTE_BINARY_POST_HTTP_401(
 					"remote-binary-post-http-401",
-					"Remote instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 401 - Unauthorized trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_403(
 					"remote-binary-post-http-403",
-					"Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 403 - Forbidden trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_407(
 					"remote-binary-post-http-407",
-					"Remote instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 407 - Proxy Authentication Required trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_413(
 					"remote-binary-post-http-413",
-					"Remote instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 413 - Payload Too Large trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_500(
 					"remote-binary-post-http-500",
-					"Remote instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 500 - Internal Server Error trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_502(
 					"remote-binary-post-http-502",
-					"Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 502 - Bad Gateway trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_503(
 					"remote-binary-post-http-503",
-					"Remote instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 503 - Service Unavailable trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_504(
 					"remote-binary-post-http-504",
-					"Remote instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"
+					"Remote instance encountered a HTTP status 504 - Gateway Timeout trying to post the binary resource to its own FHIR server"
 			),
 			REMOTE_BINARY_POST_HTTP_UNEXPECTED(
 					"remote-binary-post-http-unexpected",
@@ -684,31 +684,31 @@ public final class CodeSystem
 
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_401(
 					"response-message-timeout-http-401",
-					"Response message timed out. Received HTTP status 401 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 401 - Unauthorized trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_403(
 					"response-message-timeout-http-403",
-					"Response message timed out. Received HTTP status 403 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 403 - Forbidden trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_407(
 					"response-message-timeout-http-407",
-					"Response message timed out. Received HTTP status 407 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 407 - Proxy Authentication Required trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_500(
 					"response-message-timeout-http-500",
-					"Response message timed out. Received HTTP status 500 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 500 - Internal Server Error trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_502(
 					"response-message-timeout-http-502",
-					"Response message timed out. Received HTTP status 502 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 502 - Bad Gateway trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_503(
 					"response-message-timeout-http-503",
-					"Response message timed out. Received HTTP status 503 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 503 - Service Unavailable trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_504(
 					"response-message-timeout-http-504",
-					"Response message timed out. Received HTTP status 504 trying to check request status on the target"
+					"Response message timed out. Received HTTP status 504 - Gateway Timeout trying to check request status on the target"
 			),
 			RESPONSE_MESSAGE_TIMEOUT_HTTP_UNEXPECTED(
 					"response-message-timeout-http-unexpected",
@@ -726,31 +726,31 @@ public final class CodeSystem
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_401(
 					"local-binary-download-http-401",
-					"Local instance received HTTP status 401 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 401 - Unauthorized trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_403(
 					"local-binary-download-http-403",
-					"Local instance received HTTP status 403 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 403 - Forbidden trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_407(
 					"local-binary-download-http-407",
-					"Local instance received HTTP status 407 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 407 - Proxy Authentication Required trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_500(
 					"local-binary-download-http-500",
-					"Local instance received HTTP status 500 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 500 - Internal Server Error trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_502(
 					"local-binary-download-http-502",
-					"Local instance received HTTP status 502 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 502 - Bad Gateway trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_503(
 					"local-binary-download-http-503",
-					"Local instance received HTTP status 503 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 503 - Service Unavailable trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_504(
 					"local-binary-download-http-504",
-					"Local instance received HTTP status 504 trying to download the binary resource from the target"
+					"Local instance Received HTTP status 504 - Gateway Timeout trying to download the binary resource from the target"
 			),
 			LOCAL_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"local-binary-download-http-unexpected",
@@ -779,31 +779,31 @@ public final class CodeSystem
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_401(
 					"remote-binary-download-http-401",
-					"Remote instance received HTTP status 401 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 401 - Unauthorized trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_403(
 					"remote-binary-download-http-403",
-					"Remote instance received HTTP status 403 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 403 - Forbidden trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_407(
 					"remote-binary-download-http-407",
-					"Remote instance received HTTP status 407 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 407 - Proxy Authentication Required trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_500(
 					"remote-binary-download-http-500",
-					"Remote instance received HTTP status 500 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 500 - Internal Server Error trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_502(
 					"remote-binary-download-http-502",
-					"Remote instance received HTTP status 502 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 502 - Bad Gateway trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_503(
 					"remote-binary-download-http-503",
-					"Remote instance received HTTP status 503 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 503 - Service Unavailable trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_504(
 					"remote-binary-download-http-504",
-					"Remote instance received HTTP status 504 trying to download the binary resource from this server"
+					"Remote instance Received HTTP status 504 - Gateway Timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_HTTP_UNEXPECTED(
 					"remote-binary-download-http-unexpected",

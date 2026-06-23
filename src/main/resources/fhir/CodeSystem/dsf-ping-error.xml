@@ -23,35 +23,35 @@
     <content value="complete" />
     <concept>
         <code value="send-message-http-401"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 401"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 401 - Unauthorized"/>
     </concept>
     <concept>
         <code value="send-message-http-403"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 403"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 403 - Forbidden"/>
     </concept>
     <concept>
         <code value="send-reference-message-http-403"/>
-        <display value="Sending a message including a reference to the remote instance resulted in HTTP status 403"/>
+        <display value="Sending a message including a reference to the remote instance resulted in HTTP status 403 - Forbidden"/>
     </concept>
     <concept>
         <code value="send-message-http-407"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 407"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 407 - Proxy Authentication Required"/>
     </concept>
     <concept>
         <code value="send-message-http-500"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 500"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 500 - Internal Server Error"/>
     </concept>
     <concept>
         <code value="send-message-http-502"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 502"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 502 - Bad Gateway"/>
     </concept>
     <concept>
         <code value="send-message-http-503"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 503"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 503 - Service Unavailable"/>
     </concept>
     <concept>
         <code value="send-message-http-504"/>
-        <display value="Sending a message to the remote instance resulted in HTTP status 504"/>
+        <display value="Sending a message to the remote instance resulted in HTTP status 504 - Gateway Timeout"/>
     </concept>
     <concept>
         <code value="send-message-http-unexpected"/>
@@ -77,35 +77,35 @@
 
     <concept>
         <code value="receive-message-http-401"/>
-        <display value="Received a message and responded with HTTP status 401"/>
+        <display value="Received a message and responded with HTTP status 401 - Unauthorized"/>
     </concept>
     <concept>
         <code value="receive-message-http-403"/>
-        <display value="Received a message and responded with HTTP status 403"/>
+        <display value="Received a message and responded with HTTP status 403 - Forbidden"/>
     </concept>
     <concept>
         <code value="receive-reference-message-http-403"/>
-        <display value="Received a message including a reference and responded with HTTP status 403"/>
+        <display value="Received a message including a reference and responded with HTTP status 403 - Forbidden"/>
     </concept>
     <concept>
         <code value="receive-message-http-407"/>
-        <display value="Received a message and responded with HTTP status 407"/>
+        <display value="Received a message and responded with HTTP status 407 - Proxy Authentication Required"/>
     </concept>
     <concept>
         <code value="receive-message-http-500"/>
-        <display value="Received a message and responded with HTTP status 500"/>
+        <display value="Received a message and responded with HTTP status 500 - Internal Server Error"/>
     </concept>
     <concept>
         <code value="receive-message-http-502"/>
-        <display value="Received a message and responded with HTTP status 502"/>
+        <display value="Received a message and responded with HTTP status 502 - Bad Gateway"/>
     </concept>
     <concept>
         <code value="receive-message-http-503"/>
-        <display value="Received a message and responded with HTTP status 503"/>
+        <display value="Received a message and responded with HTTP status 503 - Service Unavailable"/>
     </concept>
     <concept>
         <code value="receive-message-http-504"/>
-        <display value="Received a message and responded with HTTP status 504"/>
+        <display value="Received a message and responded with HTTP status 504 - Gateway Timeout"/>
     </concept>
     <concept>
         <code value="receive-message-http-unexpected"/>
@@ -142,31 +142,31 @@
     </concept>
     <concept>
         <code value="local-binary-delete-http-401"/>
-        <display value="Local instance encountered a HTTP status 401 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 401 - Unauthorized trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-403"/>
-        <display value="Local instance encountered a HTTP status 403 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 403 - Forbidden trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-407"/>
-        <display value="Local instance encountered a HTTP status 407 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 407 - Proxy Authentication Required trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-500"/>
-        <display value="Local instance encountered a HTTP status 500 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 500 - Internal Server Error trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-502"/>
-        <display value="Local instance encountered a HTTP status 502 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 502 - Bad Gateway trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-503"/>
-        <display value="Local instance encountered a HTTP status 503 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 503 - Service Unavailable trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-504"/>
-        <display value="Local instance encountered a HTTP status 504 trying to clean up the binary resource"/>
+        <display value="Local instance encountered a HTTP status 504 - Gateway Timeout trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="local-binary-delete-http-unexpected"/>
@@ -187,31 +187,31 @@
     </concept>
     <concept>
         <code value="remote-binary-delete-http-401"/>
-        <display value="Remote instance encountered a HTTP status 401 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 401 - Unauthorized trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-403"/>
-        <display value="Remote instance encountered a HTTP status 403 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 403 - Forbidden trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-407"/>
-        <display value="Remote instance encountered a HTTP status 407 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 407 - Proxy Authentication Required trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-500"/>
-        <display value="Remote instance encountered a HTTP status 500 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 500 - Internal Server Error trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-502"/>
-        <display value="Remote instance encountered a HTTP status 502 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 502 - Bad Gateway trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-503"/>
-        <display value="Remote instance encountered a HTTP status 503 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 503 - Service Unavailable trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-504"/>
-        <display value="Remote instance encountered a HTTP status 504 trying to clean up the binary resource"/>
+        <display value="Remote instance encountered a HTTP status 504 - Gateway Timeout trying to clean up the binary resource"/>
     </concept>
     <concept>
         <code value="remote-binary-delete-http-unexpected"/>
@@ -220,35 +220,35 @@
 
     <concept>
         <code value="local-binary-post-http-401"/>
-        <display value="Local instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 401 - Unauthorized trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-403"/>
-        <display value="Local instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 403 - Forbidden trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-407"/>
-        <display value="Local instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 407 - Proxy Authentication Required trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-413"/>
-        <display value="Local instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 413 - Payload Too Large trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-500"/>
-        <display value="Local instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 500 - Internal Server Error trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-502"/>
-        <display value="Local instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 502 - Bad Gateway trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-503"/>
-        <display value="Local instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 503 - Service Unavailable trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-504"/>
-        <display value="Local instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"/>
+        <display value="Local instance encountered a HTTP status 504 - Gateway Timeout trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="local-binary-post-http-unexpected"/>
@@ -269,35 +269,35 @@
 
     <concept>
         <code value="remote-binary-post-http-401"/>
-        <display value="Remote instance encountered a HTTP status 401 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 401 - Unauthorized trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-403"/>
-        <display value="Remote instance encountered a HTTP status 403 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 403 - Forbidden trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-407"/>
-        <display value="Remote instance encountered a HTTP status 407 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 407 - Proxy Authentication Required trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-413"/>
-        <display value="Remote instance encountered a HTTP status 413 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 413 - Payload Too Large trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-500"/>
-        <display value="Remote instance encountered a HTTP status 500 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 500 - Internal Server Error trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-502"/>
-        <display value="Remote instance encountered a HTTP status 502 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 502 - Bad Gateway trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-503"/>
-        <display value="Remote instance encountered a HTTP status 503 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 503 - Service Unavailable trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-504"/>
-        <display value="Remote instance encountered a HTTP status 504 trying to post the binary resource to its own FHIR server"/>
+        <display value="Remote instance encountered a HTTP status 504 - Gateway Timeout trying to post the binary resource to its own FHIR server"/>
     </concept>
     <concept>
         <code value="remote-binary-post-http-unexpected"/>
@@ -339,31 +339,31 @@
 
     <concept>
         <code value="response-message-timeout-http-401"/>
-        <display value="Response message timed out. Received HTTP status 401 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 401 - Unauthorized trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-403"/>
-        <display value="Response message timed out. Received HTTP status 403 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 403 - Forbidden trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-407"/>
-        <display value="Response message timed out. Received HTTP status 407 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 407 - Proxy Authentication Required trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-500"/>
-        <display value="Response message timed out. Received HTTP status 500 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 500 - Internal Server Error trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-502"/>
-        <display value="Response message timed out. Received HTTP status 502 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 502 - Bad Gateway trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-503"/>
-        <display value="Response message timed out. Received HTTP status 503 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 503 - Service Unavailable trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-504"/>
-        <display value="Response message timed out. Received HTTP status 504 trying to check request status on the target"/>
+        <display value="Response message timed out. Received HTTP status 504 - Gateway Timeout trying to check request status on the target"/>
     </concept>
     <concept>
         <code value="response-message-timeout-http-unexpected"/>
@@ -381,31 +381,31 @@
     </concept>
     <concept>
         <code value="local-binary-download-http-401"/>
-        <display value="Local instance received HTTP status 401 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 401 - Unauthorized trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-403"/>
-        <display value="Local instance received HTTP status 403 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 403 - Forbidden trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-407"/>
-        <display value="Local instance received HTTP status 407 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 407 - Proxy Authentication Required trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-500"/>
-        <display value="Local instance received HTTP status 500 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 500 - Internal Server Error trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-502"/>
-        <display value="Local instance received HTTP status 502 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 502 - Bad Gateway trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-503"/>
-        <display value="Local instance received HTTP status 503 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 503 - Service Unavailable trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-504"/>
-        <display value="Local instance received HTTP status 504 trying to download the binary resource from the target"/>
+        <display value="Local instance Received HTTP status 504 - Gateway Timeout trying to download the binary resource from the target"/>
     </concept>
     <concept>
         <code value="local-binary-download-http-unexpected"/>
@@ -434,31 +434,31 @@
     </concept>
     <concept>
         <code value="remote-binary-download-http-401"/>
-        <display value="Remote instance received HTTP status 401 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 401 - Unauthorized trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-403"/>
-        <display value="Remote instance received HTTP status 403 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 403 - Forbidden trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-407"/>
-        <display value="Remote instance received HTTP status 407 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 407 - Proxy Authentication Required trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-500"/>
-        <display value="Remote instance received HTTP status 500 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 500 - Internal Server Error trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-502"/>
-        <display value="Remote instance received HTTP status 502 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 502 - Bad Gateway trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-503"/>
-        <display value="Remote instance received HTTP status 503 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 503 - Service Unavailable trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-504"/>
-        <display value="Remote instance received HTTP status 504 trying to download the binary resource from this server"/>
+        <display value="Remote instance Received HTTP status 504 - Gateway Timeout trying to download the binary resource from this server"/>
     </concept>
     <concept>
         <code value="remote-binary-download-http-unexpected"/>
