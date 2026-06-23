@@ -13,8 +13,8 @@
 		<compileSource>17</compileSource>
 		<compileTarget>17</compileTarget>
 
-		<dsf.version>1.9.0</dsf.version>
-		<spring.version>6.2.12</spring.version>
+		<dsf.version>2.1.0</dsf.version>
+		<spring.version>7.0.8</spring.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
 
@@ -39,13 +39,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-api-v1</artifactId>
+			<artifactId>dsf-bpe-process-api-v2</artifactId>
 			<version>${dsf.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
+			<artifactId>spring-context</artifactId>
 			<version>${spring.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -71,13 +71,6 @@
 		</dependency>
 
 		<!-- testing -->
-		<dependency>
-			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-api-v1</artifactId>
-			<version>${dsf.version}</version>
-			<scope>test</scope>
-			<type>test-jar</type>
-		</dependency>
 		<dependency>
 			<groupId>dev.dsf</groupId>
 			<artifactId>dsf-fhir-validation</artifactId>
@@ -200,19 +193,19 @@
 			</plugin>
 			<plugin>
 				<groupId>dev.dsf</groupId>
-				<artifactId>dsf-tools-documentation-generator</artifactId>
+				<artifactId>dsf-maven-plugin</artifactId>
 				<version>${dsf.version}</version>
 				<executions>
 					<execution>
 						<goals>
-							<goal>generate</goal>
+							<goal>generate-config-doc</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<workingPackages>
-						<workingPackage>dev.dsf.bpe</workingPackage>
-					</workingPackages>
+					<configDocPackages>
+						dev.dsf.bpe.spring.config
+					</configDocPackages>
 				</configuration>
 			</plugin>
 			<plugin>
