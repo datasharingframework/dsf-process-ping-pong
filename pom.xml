@@ -143,6 +143,9 @@
 									<includes>
 										<include>**</include>
 									</includes>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+									</excludes>
 								</filter>
 							</filters>
 						</configuration>
