@@ -75,7 +75,7 @@ public class CleanupPongMessage implements MessageSendTask
 				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
 						errorAndStatus.error().concept().getDisplay());
 
-				return e;
+				return null;
 			}
 		};
 	}
