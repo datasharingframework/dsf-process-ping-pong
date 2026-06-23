@@ -22,12 +22,12 @@ import org.hl7.fhir.r4.model.Task;
 import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.ProcessPluginDeploymentStateListener;
-import dev.dsf.fhir.client.FhirWebserviceClient;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.ProcessPluginDeploymentListener;
+import dev.dsf.bpe.v2.client.dsf.DsfClient;
 
 public class PingPongProcessPluginDeploymentStateListener
-		implements ProcessPluginDeploymentStateListener, InitializingBean
+		implements ProcessPluginDeploymentListener, InitializingBean
 {
 	private final ProcessPluginApi api;
 
@@ -65,7 +65,7 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private void updateDraftTaskResources()
 	{
-		FhirWebserviceClient client = api.getFhirWebserviceClientProvider().getLocalWebserviceClient();
+		DsfClient client = api.getDsfClientProvider().getLocal();
 
 		String pingProcessPrefix = "http://dsf.dev/bpe/Process/ping/" + RESOURCE_VERSION;
 		String pingAutostartProcessPrefix = "http://dsf.dev/bpe/Process/pingAutostart/" + RESOURCE_VERSION;
@@ -134,13 +134,13 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private Bundle search(Class<? extends Resource> type, String url)
 	{
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().search(type,
+		return api.getDsfClientProvider().getLocal().search(type,
 				Map.of("url", List.of(url)));
 	}
 
 	private Bundle searchTask(String identifier)
 	{
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().search(Task.class,
+		return api.getDsfClientProvider().getLocal().search(Task.class,
 				Map.of("identifier", List.of(identifier), "status", List.of("draft")));
 	}
 
@@ -230,7 +230,7 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private void updateResources(List<? extends MetadataResource> resources)
 	{
-		resources.forEach(m -> api.getFhirWebserviceClientProvider().getLocalWebserviceClient().update(m));
+		resources.forEach(m -> api.getDsfClientProvider().getLocal().update(m));
 	}
 
 	private record MinorMajorVersion(int major, int minor)
