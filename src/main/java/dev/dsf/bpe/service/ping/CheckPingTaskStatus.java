@@ -123,7 +123,7 @@ public class CheckPingTaskStatus implements ServiceTask
 				ErrorListUtils.add(
 						new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
 						variables, correlationKey);
-				throw new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
 			}
 		};
 	}
