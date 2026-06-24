@@ -1,7 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,25 +8,22 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.duration.DurationValueImpl;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.error.ServiceTaskErrorHandler;
+import dev.dsf.bpe.v2.error.impl.DefaultServiceTaskErrorHandler;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
+public class DownloadResourceAndMeasureSpeedInSubProcess implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeedInSubProcess.class);
 
-	public DownloadResourceAndMeasureSpeedInSubProcess(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Starting resource download to measure speed...");
 
@@ -44,12 +39,12 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 		{
 			variables.setLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey),
 					downloadResult.getDownloadedBytes());
-			variables.setVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey),
-					new DurationValueImpl(downloadResult.getDownloadedDuration()));
+			variables.setJsonVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey),
+					downloadResult.getDownloadedDuration());
 		}
 		else
 		{
-			delegateExecution.setVariableLocal(ExecutionVariables.resourceDownloadError.name(),
+			variables.setJsonVariableLocal(ExecutionVariables.resourceDownloadError.name(),
 					downloadResult.getErrorTuple().errorLocal());
 		}
 
@@ -57,14 +52,19 @@ public class DownloadResourceAndMeasureSpeedInSubProcess extends AbstractService
 	}
 
 	@Override
-	protected void handleException(DelegateExecution execution, Variables variables, Exception exception)
-			throws Exception
+	public ServiceTaskErrorHandler getErrorHandler()
 	{
-		logger.error("Unexpected error while downloading resource and measuring speed.", exception);
-		String correlationKey = variables.getTarget().getCorrelationKey();
-		ErrorListUtils.add(
-				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
-				execution, correlationKey);
-		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR);
+		return new DefaultServiceTaskErrorHandler() {
+			@Override
+			public Exception handleException(ProcessPluginApi api, Variables variables, Exception exception)
+			{
+				logger.error("Unexpected error while downloading resource and measuring speed.", exception);
+				String correlationKey = variables.getTarget().getCorrelationKey();
+				ErrorListUtils.add(
+						new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
+						variables, correlationKey);
+				throw new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+			}
+		};
 	}
 }
