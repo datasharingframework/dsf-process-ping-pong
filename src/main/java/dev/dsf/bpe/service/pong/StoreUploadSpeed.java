@@ -5,8 +5,6 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.DecimalType;
 import org.hl7.fhir.r4.model.PrimitiveType;
 import org.hl7.fhir.r4.model.Task;
@@ -14,31 +12,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class StoreUploadSpeed extends AbstractService
+public class StoreUploadSpeed implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreUploadSpeed.class);
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public StoreUploadSpeed(ProcessPluginApi api, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
+	public StoreUploadSpeed(CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
-		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
 	}
 
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Task startTask = variables.getStartTask();
 		Task cleanup = variables.getLatestTask();
 		logger.debug("Storing upload speed...");
 
-		Optional<DecimalType> uploadedBytesTaskInput = getUploadedBytes(cleanup);
-		Optional<org.hl7.fhir.r4.model.Duration> uploadedDurationTaskInput = getUploadedDuration(cleanup);
+		Optional<DecimalType> uploadedBytesTaskInput = getUploadedBytes(api, cleanup);
+		Optional<org.hl7.fhir.r4.model.Duration> uploadedDurationTaskInput = getUploadedDuration(api, cleanup);
 		long uploadedBytes = uploadedBytesTaskInput.map(PrimitiveType::getValue).orElse(BigDecimal.valueOf(0))
 				.longValue();
 		Duration uploadedDuration = uploadedDurationTaskInput
@@ -66,13 +64,13 @@ public class StoreUploadSpeed extends AbstractService
 		logger.debug("Stored upload speed: " + uploadSpeed + " " + networkSpeedUnit);
 	}
 
-	private Optional<DecimalType> getUploadedBytes(Task task)
+	private Optional<DecimalType> getUploadedBytes(ProcessPluginApi api, Task task)
 	{
 		return api.getTaskHelper().getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
 				CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);
 	}
 
-	private Optional<org.hl7.fhir.r4.model.Duration> getUploadedDuration(Task task)
+	private Optional<org.hl7.fhir.r4.model.Duration> getUploadedDuration(ProcessPluginApi api, Task task)
 	{
 		return api.getTaskHelper().getFirstInputParameterValue(task, CodeSystem.DsfPing.URL,
 				CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(), org.hl7.fhir.r4.model.Duration.class);
