@@ -19,9 +19,9 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
-import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
-import dev.dsf.bpe.v1.variables.Target;
+import dev.dsf.bpe.v2.constants.NamingSystems.EndpointIdentifier;
+import dev.dsf.bpe.v2.constants.NamingSystems.OrganizationIdentifier;
+import dev.dsf.bpe.v2.variables.Target;
 
 public final class PingStatusGenerator
 {
