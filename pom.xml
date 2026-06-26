@@ -9,6 +9,8 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<project.build.outputTimestamp>2026-07-05T12:00:00+02:00</project.build.outputTimestamp>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<compileSource>17</compileSource>
 		<compileTarget>17</compileTarget>
@@ -21,6 +23,10 @@
 	<name>dsf-process-ping-pong</name>
 	<description>DSF ping-pong process for connection tests between DSF instances</description>
 	<url>https://github.com/datasharingframework/dsf-process-ping-pong</url>
+	<organization>
+		<name>Data Sharing Framework</name>
+		<url>dsf.dev</url>
+	</organization>
 
 	<scm>
 		<connection>scm:git:git://github.com/datasharingframework/dsf-process-ping-pong.git</connection>
