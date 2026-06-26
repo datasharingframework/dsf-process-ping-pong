@@ -44,12 +44,9 @@ import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
-import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer;
-import dev.dsf.bpe.variables.duration.DurationValueSerializer;
-import dev.dsf.bpe.variables.process_error.ProcessErrorValueSerializer;
-import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueSerializer;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.documentation.ProcessDocumentation;
+import dev.dsf.bpe.v2.spring.ActivityPrototypeBeanCreator;
 
 @Configuration
 public class PingConfig implements InitializingBean
@@ -117,24 +114,23 @@ public class PingConfig implements InitializingBean
 	}
 
 	@Bean
+	public static ActivityPrototypeBeanCreator activityPrototypeBeanCreator()
+	{
+		return new ActivityPrototypeBeanCreator(SetTargetAndConfigureTimer.class, SendStartPing.class,
+				SetPongTimeoutDuration.class, SelectPingTargets.class, SendPingMessage.class,
+				SetCorrelationKeyListener.class, LogPing.class, SelectPongTarget.class, SendPongMessage.class,
+				CheckPingTaskStatus.class, CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
+				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
+				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
+				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
+				LogAndSaveUploadErrorPong.class);
+	}
+
+	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public PingPongProcessPluginDeploymentStateListener pingPongProcessPluginDeploymentStateListener()
 	{
 		return new PingPongProcessPluginDeploymentStateListener(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
-	{
-		return new SetTargetAndConfigureTimer(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendStartPing sendStartPing()
-	{
-		return new SendStartPing(api);
 	}
 
 	@Bean
@@ -151,230 +147,48 @@ public class PingConfig implements InitializingBean
 				AggregateErrorMailService.PONG_PROCESS_HAS_ERRORS);
 	}
 
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetPongTimeoutDuration setPongTimeoutDuration()
-	{
-		return new SetPongTimeoutDuration(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SelectPingTargets selectPingTargets()
-	{
-		return new SelectPingTargets(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPingMessage sendPing()
-	{
-		return new SendPingMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetCorrelationKeyListener setCorrelationKeyListener()
-	{
-		return new SetCorrelationKeyListener(api);
-	}
-
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreResults savePingResults()
 	{
-		return new StoreResults(api, aggregateErrorMailServicePing(), networkSpeedUnit);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogPing logPing()
-	{
-		return new LogPing(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SelectPongTarget selectPongTarget()
-	{
-		return new SelectPongTarget(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPongMessage sendPong()
-	{
-		return new SendPongMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CheckPingTaskStatus logAndSaveNoResponse()
-	{
-		return new CheckPingTaskStatus(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CleanupPongMessage cleanupPongMessage()
-	{
-		return new CleanupPongMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DownloadResourceAndMeasureSpeed downloadResourceAndMeasureSpeed()
-	{
-		return new DownloadResourceAndMeasureSpeed(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
-	{
-		return new DownloadResourceAndMeasureSpeedInSubProcess(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public Cleanup cleanup()
-	{
-		return new Cleanup(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveAndStoreError logAndSaveAndStoreError()
-	{
-		return new LogAndSaveAndStoreError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveError logAndSaveError()
-	{
-		return new LogAndSaveError(api);
+		return new StoreResults(aggregateErrorMailServicePing(), networkSpeedUnit);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreUploadSpeed storeDownloadSpeeds()
 	{
-		return new StoreUploadSpeed(api, networkSpeedUnit);
+		return new StoreUploadSpeed(networkSpeedUnit);
 	}
 
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EstimateCleanupTimerDuration estimateCleanupTimerDuration()
-	{
-		return new EstimateCleanupTimerDuration(api);
-	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetDownloadResourceSize setDownloadResourceSize()
 	{
-		return new SetDownloadResourceSize(api, maxDownloadSizeBytes);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SavePong savePong()
-	{
-		return new SavePong(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetEndpointIdentifier setEndpointIdentifier()
-	{
-		return new SetEndpointIdentifier(api);
+		return new SetDownloadResourceSize(maxDownloadSizeBytes);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreDownloadSpeed storeDownloadSpeed()
 	{
-		return new StoreDownloadSpeed(api, networkSpeedUnit);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveSendError logAndSaveSendError()
-	{
-		return new LogAndSaveSendError(api);
+		return new StoreDownloadSpeed(networkSpeedUnit);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public GenerateAndStoreResource generateAndStoreResource()
 	{
-		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SaveTimeoutError saveTimeoutError()
-	{
-		return new SaveTimeoutError(api);
+		return new GenerateAndStoreResource(maxUploadSizeBytes);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public StoreErrors storeErrors()
 	{
-		return new StoreErrors(api, aggregateErrorMailServicePong());
+		return new StoreErrors(aggregateErrorMailServicePong());
 	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveUploadErrorPing logAndSaveUploadErrorPing()
-	{
-		return new LogAndSaveUploadErrorPing(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveUploadErrorPong logAndSaveUploadErrorPong()
-	{
-		return new LogAndSaveUploadErrorPong(api);
-	}
-
-	@Bean
-	public CodeValueSerializer pingStatusCodeSerializer()
-	{
-		return new CodeValueSerializer();
-	}
-
-	@Bean
-	public DurationValueSerializer durationValueSerializer(
-			@Qualifier(OBJECT_MAPPER_WITH_TIME_MODULE) ObjectMapper objectMapper)
-	{
-		return new DurationValueSerializer(objectMapper);
-	}
-
-	@Bean
-	public ProcessErrorValueSerializer processErrorValueSerializer()
-	{
-		return new ProcessErrorValueSerializer();
-	}
-
-	@Bean
-	public ProcessErrorsValueSerializer processErrorsValueSerializer()
-	{
-		return new ProcessErrorsValueSerializer();
-	}
-
-	@Bean(name = OBJECT_MAPPER_WITH_TIME_MODULE)
-	public ObjectMapper objectMapperWithJavaTimeModule()
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		return objectMapper;
-	}
-
-	private static final String OBJECT_MAPPER_WITH_TIME_MODULE = "objectMapperWithJavaTimeModule";
 
 	private void fixMaxResourceSizes()
 	{
