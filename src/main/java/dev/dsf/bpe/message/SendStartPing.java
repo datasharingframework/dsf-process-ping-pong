@@ -8,14 +8,14 @@ import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.v2.ProcessPluginApi;
-import dev.dsf.bpe.v2.activity.MessageSendTask;
+import dev.dsf.bpe.v2.activity.MessageIntermediateThrowEvent;
 import dev.dsf.bpe.v2.activity.task.BusinessKeyStrategies;
 import dev.dsf.bpe.v2.activity.task.BusinessKeyStrategy;
 import dev.dsf.bpe.v2.activity.values.SendTaskValues;
 import dev.dsf.bpe.v2.variables.Target;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class SendStartPing implements MessageSendTask
+public class SendStartPing implements MessageIntermediateThrowEvent
 {
 	@Override
 	public List<ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
