@@ -36,7 +36,8 @@ public class SelectPongTarget implements ServiceTask
 					logger.warn(
 							"Pong response target (organization {}, endpoint {}) not found locally or not active, not sending pong",
 							targetOrganizationIdentifierValue, targetEndpointIdentifierValue);
-					return new ErrorBoundaryEvent(BPMN_ERROR_CODE_TARGET_NOT_ALLOWED, BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED);
+					return new ErrorBoundaryEvent(BPMN_ERROR_CODE_TARGET_NOT_ALLOWED,
+							BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED);
 				});
 
 		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,
