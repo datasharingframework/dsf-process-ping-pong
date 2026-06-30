@@ -38,10 +38,8 @@ public class Cleanup implements ServiceTask
 		{
 			try
 			{
-				api.getDsfClientProvider().getLocal().delete(Binary.class,
-						downloadResourceId);
-				api.getDsfClientProvider().getLocal().deletePermanently(Binary.class,
-						downloadResourceId);
+				api.getDsfClientProvider().getLocal().delete(Binary.class, downloadResourceId);
+				api.getDsfClientProvider().getLocal().deletePermanently(Binary.class, downloadResourceId);
 				logger.debug("Deleted Binary resource with ID {}", downloadResourceId);
 			}
 			catch (ProcessingException e)
