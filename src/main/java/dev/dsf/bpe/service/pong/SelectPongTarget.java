@@ -1,5 +1,8 @@
 package dev.dsf.bpe.service.pong;
 
+import static dev.dsf.bpe.ConstantsPing.BPMN_ERROR_CODE_TARGET_NOT_ALLOWED;
+import static dev.dsf.bpe.ConstantsPing.BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED;
+
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +36,7 @@ public class SelectPongTarget implements ServiceTask
 					logger.warn(
 							"Pong response target (organization {}, endpoint {}) not found locally or not active, not sending pong",
 							targetOrganizationIdentifierValue, targetEndpointIdentifierValue);
-					return new ErrorBoundaryEvent("target_not_allowed", null );
+					return new ErrorBoundaryEvent(BPMN_ERROR_CODE_TARGET_NOT_ALLOWED, BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED);
 				});
 
 		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,
