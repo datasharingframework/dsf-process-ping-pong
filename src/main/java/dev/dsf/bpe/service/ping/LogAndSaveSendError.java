@@ -23,8 +23,7 @@ public class LogAndSaveSendError implements ServiceTask
 	{
 		String correlationKey = variables.getTarget().getCorrelationKey();
 		ProcessError error = variables.getVariableLocal(ExecutionVariables.error.name());
-		CodeSystem.DsfPingStatus.Code status = variables
-				.getVariableLocal(ExecutionVariables.statusCode.name());
+		CodeSystem.DsfPingStatus.Code status = variables.getVariableLocal(ExecutionVariables.statusCode.name());
 		Objects.requireNonNull(status, "status");
 
 		ErrorListUtils.add(error, variables, correlationKey);

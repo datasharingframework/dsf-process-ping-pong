@@ -24,8 +24,9 @@ public class SendStartPing implements MessageSendTask
 		List<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
 		variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType)
-				.filter(i -> i.getType().getCoding().stream().anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
-						&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode())))
+				.filter(i -> i.getType().getCoding().stream()
+						.anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
+								&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode())))
 				.forEach(additionalInputParameters::add);
 
 		variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter)
@@ -36,8 +37,8 @@ public class SendStartPing implements MessageSendTask
 
 	private boolean isDownloadResourceSizeParameter(ParameterComponent parameterComponent)
 	{
-		return parameterComponent.getType().getCoding().stream().anyMatch(
-				t -> CodeSystem.DsfPing.URL.equals(t.getSystem())
+		return parameterComponent.getType().getCoding().stream()
+				.anyMatch(t -> CodeSystem.DsfPing.URL.equals(t.getSystem())
 						&& CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue().equals(t.getCode()));
 	}
 

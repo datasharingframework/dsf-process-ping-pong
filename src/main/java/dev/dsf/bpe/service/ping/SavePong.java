@@ -39,9 +39,9 @@ public class SavePong implements ServiceTask
 				.getFirstInputParameterValue(pong, CodeSystem.DsfPing.URL,
 						CodeSystem.DsfPing.Code.DOWNLOADED_DURATION_MILLIS.getValue(),
 						org.hl7.fhir.r4.model.Duration.class);
-		optDownloadedDuration.ifPresent(
-				duration -> variables.setJsonVariable(ExecutionVariables.uploadedDuration.correlatedValue(correlationKey),
-						Duration.ofMillis(duration.getValue().longValue())));
+		optDownloadedDuration.ifPresent(duration -> variables.setJsonVariable(
+				ExecutionVariables.uploadedDuration.correlatedValue(correlationKey),
+				Duration.ofMillis(duration.getValue().longValue())));
 
 		Optional<DecimalType> optDownloadedBytes = api.getTaskHelper().getFirstInputParameterValue(pong,
 				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOADED_BYTES.getValue(), DecimalType.class);

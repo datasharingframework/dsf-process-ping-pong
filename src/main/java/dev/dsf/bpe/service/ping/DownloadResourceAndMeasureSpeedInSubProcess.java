@@ -54,16 +54,17 @@ public class DownloadResourceAndMeasureSpeedInSubProcess implements ServiceTask
 	@Override
 	public ServiceTaskErrorHandler getErrorHandler()
 	{
-		return new DefaultServiceTaskErrorHandler() {
+		return new DefaultServiceTaskErrorHandler()
+		{
 			@Override
 			public Exception handleException(ProcessPluginApi api, Variables variables, Exception exception)
 			{
 				logger.error("Unexpected error while downloading resource and measuring speed.", exception);
 				String correlationKey = variables.getTarget().getCorrelationKey();
-				ErrorListUtils.add(
-						new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
-						variables, correlationKey);
-				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+				ErrorListUtils.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null), variables, correlationKey);
+				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR,
+						ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
 			}
 		};
 	}

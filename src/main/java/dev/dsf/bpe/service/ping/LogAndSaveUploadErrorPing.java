@@ -30,7 +30,8 @@ public class LogAndSaveUploadErrorPing implements ServiceTask
 	@Override
 	public ServiceTaskErrorHandler getErrorHandler()
 	{
-		return new DefaultServiceTaskErrorHandler() {
+		return new DefaultServiceTaskErrorHandler()
+		{
 			@Override
 			public Exception handleException(ProcessPluginApi api, Variables variables, Exception exception)
 			{

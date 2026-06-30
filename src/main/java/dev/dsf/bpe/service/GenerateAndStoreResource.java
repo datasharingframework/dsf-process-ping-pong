@@ -144,8 +144,7 @@ public class GenerateAndStoreResource implements ServiceTask
 				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							errorRemote);
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else if (e.getCause() instanceof ConnectTimeoutException)
@@ -156,8 +155,7 @@ public class GenerateAndStoreResource implements ServiceTask
 				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							errorRemote);
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else if (e.getCause() instanceof HttpHostConnectException)
@@ -168,8 +166,7 @@ public class GenerateAndStoreResource implements ServiceTask
 				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							errorRemote);
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else
@@ -180,8 +177,7 @@ public class GenerateAndStoreResource implements ServiceTask
 				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							errorRemote);
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 				logger.error("Unexpected error: {}", e.getMessage());
 			}
@@ -268,8 +264,8 @@ public class GenerateAndStoreResource implements ServiceTask
 
 	private IdType storeBinary(ProcessPluginApi api, RandomByteInputStream downloadResourceContent)
 	{
-		return api.getDsfClientProvider().getLocal().withMinimalReturn().createBinary(
-				downloadResourceContent, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
+		return api.getDsfClientProvider().getLocal().withMinimalReturn().createBinary(downloadResourceContent,
+				ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
 				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 

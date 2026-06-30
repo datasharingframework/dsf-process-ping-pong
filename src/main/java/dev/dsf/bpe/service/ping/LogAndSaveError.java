@@ -21,8 +21,7 @@ public class LogAndSaveError implements ServiceTask
 	{
 		Target target = variables.getTarget();
 
-		ProcessError error = variables
-				.getVariableLocal(ExecutionVariables.resourceDownloadError.name());
+		ProcessError error = variables.getVariableLocal(ExecutionVariables.resourceDownloadError.name());
 
 		ErrorListUtils.add(error, variables, target.getCorrelationKey());
 

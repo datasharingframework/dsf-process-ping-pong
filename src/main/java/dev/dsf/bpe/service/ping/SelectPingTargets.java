@@ -75,15 +75,16 @@ public class SelectPingTargets implements ServiceTask
 	@Override
 	public ServiceTaskErrorHandler getErrorHandler()
 	{
-		return new DefaultServiceTaskErrorHandler() {
+		return new DefaultServiceTaskErrorHandler()
+		{
 			@Override
 			public Exception handleException(ProcessPluginApi api, Variables variables, Exception exception)
 			{
 				logger.error("Unexpected error while selecting ping targets.", exception);
-				ErrorListUtils.add(
-						new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
-						variables);
-				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+				ErrorListUtils.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null), variables);
+				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR,
+						ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
 			}
 		};
 	}
@@ -102,7 +103,8 @@ public class SelectPingTargets implements ServiceTask
 		return searchForEndpoints(api, searchParameters, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters, int page, int currentTotal)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters, int page,
+			int currentTotal)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
 			return Stream.empty();
@@ -115,8 +117,8 @@ public class SelectPingTargets implements ServiceTask
 		queryParameters.putAll(searchParameters.getQueryParams());
 		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
 
-		Bundle searchResult = api.getDsfClientProvider().getLocal()
-				.searchWithStrictHandling(resourceType.get(), queryParameters);
+		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(resourceType.get(),
+				queryParameters);
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
 			return Stream.concat(toEndpoints(searchResult),
@@ -158,8 +160,7 @@ public class SelectPingTargets implements ServiceTask
 
 	private Stream<Endpoint> allEndpoints(ProcessPluginApi api, int page, int currentTotal)
 	{
-		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(
-				Endpoint.class,
+		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(Endpoint.class,
 				Map.of("status", Collections.singletonList("active"), "identifier",
 						Collections.singletonList("http://dsf.dev/sid/endpoint-identifier|"), "_page",
 						Collections.singletonList(String.valueOf(page))));

@@ -21,8 +21,7 @@ public class LogAndSaveUploadErrorPong implements ServiceTask
 		ProcessError error = variables.getVariable(ExecutionVariables.resourceUploadError.name());
 		ErrorListUtils.add(error, variables);
 
-		ProcessError errorRemote = variables
-				.getVariable(ExecutionVariables.resourceUploadErrorRemote.name());
+		ProcessError errorRemote = variables.getVariable(ExecutionVariables.resourceUploadErrorRemote.name());
 		ErrorListUtils.addRemote(errorRemote, variables);
 
 		logger.info("Error while storing binary resource for download: {}", error.concept().getDisplay());
