@@ -44,6 +44,7 @@ import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.documentation.ProcessDocumentation;
 import dev.dsf.bpe.v2.spring.ActivityPrototypeBeanCreator;
@@ -118,8 +119,8 @@ public class PingConfig implements InitializingBean
 	{
 		return new ActivityPrototypeBeanCreator(SetTargetAndConfigureTimer.class, SendStartPing.class,
 				SetPongTimeoutDuration.class, SelectPingTargets.class, SendPingMessage.class,
-				SetCorrelationKeyListener.class, LogPing.class, SelectPongTarget.class, SendPongMessage.class,
-				CheckPingTaskStatus.class, CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
+				SetCorrelationKeyListener.class, LogPing.class, SelectPongTarget.class, CheckPingTaskStatus.class,
+				CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
 				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
 				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
 				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
@@ -131,6 +132,19 @@ public class PingConfig implements InitializingBean
 	public PingPongProcessPluginDeploymentStateListener pingPongProcessPluginDeploymentStateListener()
 	{
 		return new PingPongProcessPluginDeploymentStateListener(api);
+	}
+
+	@Bean
+	public PingStatusGenerator pingStatusGenerator()
+	{
+		return new PingStatusGenerator(api.getProcessPluginDefinition().getResourceVersion());
+	}
+
+	@Bean
+	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+	public SendPongMessage sendPongMessage(PingStatusGenerator pingStatusGenerator)
+	{
+		return new SendPongMessage(pingStatusGenerator);
 	}
 
 	@Bean
@@ -149,16 +163,16 @@ public class PingConfig implements InitializingBean
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreResults savePingResults()
+	public StoreResults savePingResults(PingStatusGenerator pingStatusGenerator)
 	{
-		return new StoreResults(aggregateErrorMailServicePing(), networkSpeedUnit);
+		return new StoreResults(aggregateErrorMailServicePing(), networkSpeedUnit, pingStatusGenerator);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreUploadSpeed storeDownloadSpeeds()
+	public StoreUploadSpeed storeUploadSpeed(PingStatusGenerator pingStatusGenerator)
 	{
-		return new StoreUploadSpeed(networkSpeedUnit);
+		return new StoreUploadSpeed(networkSpeedUnit, pingStatusGenerator);
 	}
 
 
@@ -171,9 +185,9 @@ public class PingConfig implements InitializingBean
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreDownloadSpeed storeDownloadSpeed()
+	public StoreDownloadSpeed storeDownloadSpeed(PingStatusGenerator pingStatusGenerator)
 	{
-		return new StoreDownloadSpeed(networkSpeedUnit);
+		return new StoreDownloadSpeed(networkSpeedUnit, pingStatusGenerator);
 	}
 
 	@Bean
@@ -185,9 +199,9 @@ public class PingConfig implements InitializingBean
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreErrors storeErrors()
+	public StoreErrors storeErrors(PingStatusGenerator pingStatusGenerator)
 	{
-		return new StoreErrors(aggregateErrorMailServicePong());
+		return new StoreErrors(aggregateErrorMailServicePong(), pingStatusGenerator);
 	}
 
 	private void fixMaxResourceSizes()

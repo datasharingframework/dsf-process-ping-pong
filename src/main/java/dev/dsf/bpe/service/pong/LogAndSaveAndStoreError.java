@@ -17,6 +17,12 @@ import dev.dsf.bpe.v2.variables.Variables;
 public class LogAndSaveAndStoreError implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(LogAndSaveAndStoreError.class);
+	private final PingStatusGenerator pingStatusGenerator;
+
+	public LogAndSaveAndStoreError(PingStatusGenerator pingStatusGenerator)
+	{
+		this.pingStatusGenerator = pingStatusGenerator;
+	}
 
 	@Override
 	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
@@ -24,16 +30,13 @@ public class LogAndSaveAndStoreError implements ServiceTask
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();
 
-		ProcessError error = variables
-				.getVariable(ExecutionVariables.resourceDownloadError.name());
+		ProcessError error = variables.getVariable(ExecutionVariables.resourceDownloadError.name());
 		ErrorListUtils.add(error, variables);
 
-		ProcessError errorRemote = variables
-				.getVariable(ExecutionVariables.resourceDownloadErrorRemote.name());
+		ProcessError errorRemote = variables.getVariable(ExecutionVariables.resourceDownloadErrorRemote.name());
 		ErrorListUtils.addRemote(errorRemote, variables);
 
-		PingStatusGenerator.updatePongStatusOutput(startTask,
-				ErrorListUtils.getErrorList(variables).getEntries());
+		pingStatusGenerator.updatePongStatusOutput(startTask, ErrorListUtils.getErrorList(variables).getEntries());
 		variables.updateTask(startTask);
 
 		logger.info("Error while trying to download resource from {}: {}", target.getEndpointUrl(),

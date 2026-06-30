@@ -30,6 +30,12 @@ import dev.dsf.bpe.v2.variables.Variables;
 public class SendPongMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
+	private final PingStatusGenerator pingStatusGenerator;
+
+	public SendPongMessage(PingStatusGenerator pingStatusGenerator)
+	{
+		this.pingStatusGenerator = pingStatusGenerator;
+	}
 
 	@Override
 	public List<Task.ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
@@ -37,31 +43,33 @@ public class SendPongMessage implements MessageSendTask
 	{
 		ProcessErrors errorListRemote = ErrorListUtils.getErrorListRemote(variables);
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 		if (downloadResourceSizeBytes >= 0)
 		{
 			Long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
-			Duration downloadedDuration = variables
-					.getVariable(ExecutionVariables.downloadedDuration.name());
+			Duration downloadedDuration = variables.getVariable(ExecutionVariables.downloadedDuration.name());
 			String downloadResourceReference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 
 			ArrayList<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
 			if (downloadedBytes != null)
-				additionalInputParameters.add(DownloadedBytesGenerator.create(downloadedBytes));
+				additionalInputParameters.add(DownloadedBytesGenerator.create(downloadedBytes, resourceVersion));
 
 			if (downloadedDuration != null)
-				additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration));
+				additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration, resourceVersion));
 
 			if (downloadResourceReference != null)
-				additionalInputParameters.add(DownloadResourceReferenceGenerator.create(downloadResourceReference));
+				additionalInputParameters
+						.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
 
-			additionalInputParameters.addAll(ErrorInputComponentGenerator.create(errorListRemote.getEntries()));
+			additionalInputParameters
+					.addAll(ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion));
 
 			return additionalInputParameters;
 		}
 		else
 		{
-			return ErrorInputComponentGenerator.create(errorListRemote.getEntries());
+			return ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion);
 		}
 	}
 
@@ -71,9 +79,8 @@ public class SendPongMessage implements MessageSendTask
 	{
 		Target target = variables.getTarget();
 		Task mainTask = variables.getStartTask();
-		variables.setJsonVariable(ExecutionVariables.statusCode.name(),
-				CodeSystem.DsfPingStatus.Code.PONG_SENT);
-		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
+		variables.setJsonVariable(ExecutionVariables.statusCode.name(), CodeSystem.DsfPingStatus.Code.PONG_SENT);
+		pingStatusGenerator.updatePongStatusOutput(mainTask, target);
 		variables.updateTask(mainTask);
 		MessageSendTask.super.execute(api, variables, sendTaskValues);
 	}

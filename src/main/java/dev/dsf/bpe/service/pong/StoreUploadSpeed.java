@@ -21,11 +21,13 @@ import dev.dsf.bpe.v2.variables.Variables;
 public class StoreUploadSpeed implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreUploadSpeed.class);
+	private final PingStatusGenerator pingStatusGenerator;
 	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
 
-	public StoreUploadSpeed(CodeSystem.DsfPingUnits.Code networkSpeedUnit)
+	public StoreUploadSpeed(CodeSystem.DsfPingUnits.Code networkSpeedUnit, PingStatusGenerator pingStatusGenerator)
 	{
 		this.networkSpeedUnit = networkSpeedUnit;
+		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class StoreUploadSpeed implements ServiceTask
 			}
 		}
 
-		PingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
+		pingStatusGenerator.updatePongStatusOutputUploadSpeed(startTask, uploadSpeed, networkSpeedUnit);
 
 		variables.updateTask(startTask);
 		logger.debug("Stored upload speed: " + uploadSpeed + " " + networkSpeedUnit);

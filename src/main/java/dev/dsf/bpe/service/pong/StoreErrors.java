@@ -25,10 +25,12 @@ public class StoreErrors implements ServiceTask, InitializingBean
 	private static final Logger logger = LoggerFactory.getLogger(StoreErrors.class);
 
 	private final AggregateErrorMailService errorMailService;
+	private final PingStatusGenerator pingStatusGenerator;
 
-	public StoreErrors(AggregateErrorMailService errorMailService)
+	public StoreErrors(AggregateErrorMailService errorMailService, PingStatusGenerator pingStatusGenerator)
 	{
 		this.errorMailService = errorMailService;
+		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
 	@Override
@@ -44,11 +46,10 @@ public class StoreErrors implements ServiceTask, InitializingBean
 		logger.debug("Storing errors...");
 
 		ProcessErrors errors = ErrorListUtils.getErrorList(variables);
-		PingStatusGenerator.updatePongStatusOutput(startTask, errors.getEntries());
+		pingStatusGenerator.updatePongStatusOutput(startTask, errors.getEntries());
 
-		CodeSystem.DsfPingStatus.Code status = variables
-				.getVariable(ExecutionVariables.statusCode.name());
-		PingStatusGenerator.updatePongStatusOutput(startTask, status);
+		CodeSystem.DsfPingStatus.Code status = variables.getVariable(ExecutionVariables.statusCode.name());
+		pingStatusGenerator.updatePongStatusOutput(startTask, status);
 
 		variables.updateTask(startTask);
 

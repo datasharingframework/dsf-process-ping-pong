@@ -40,11 +40,13 @@ public class CleanupPongMessage implements MessageSendTask
 
 		List<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
+
 		if (downloadedBytes != null)
-			additionalInputParameters.add(DownloadedBytesGenerator.create(downloadedBytes));
+			additionalInputParameters.add(DownloadedBytesGenerator.create(downloadedBytes, resourceVersion));
 
 		if (downloadedDuration != null)
-			additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration));
+			additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration, resourceVersion));
 
 		return additionalInputParameters;
 	}
@@ -69,8 +71,9 @@ public class CleanupPongMessage implements MessageSendTask
 				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
 						.convertLocal(e, false, ConstantsPing.PROCESS_NAME_PING);
 
-				variables.setJsonVariableLocal(ExecutionVariables.error.name(),errorAndStatus.error());
-				variables.setStringLocal(ExecutionVariables.statusCode.name(), CodeSystem.DsfPing.Code.ERROR.getValue());
+				variables.setJsonVariableLocal(ExecutionVariables.error.name(), errorAndStatus.error());
+				variables.setStringLocal(ExecutionVariables.statusCode.name(),
+						CodeSystem.DsfPing.Code.ERROR.getValue());
 
 				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
 						errorAndStatus.error().concept().getDisplay());
@@ -83,7 +86,8 @@ public class CleanupPongMessage implements MessageSendTask
 	@Override
 	public TaskSender getTaskSender(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
 	{
-		return new DefaultTaskSender(api, variables, sendTaskValues, this.getBusinessKeyStrategy()) {
+		return new DefaultTaskSender(api, variables, sendTaskValues, this.getBusinessKeyStrategy())
+		{
 			@Override
 			protected Target getTarget()
 			{

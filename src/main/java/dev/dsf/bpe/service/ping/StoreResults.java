@@ -33,12 +33,14 @@ public class StoreResults implements ServiceTask, InitializingBean
 	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 	private final AggregateErrorMailService errorMailService;
 	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
+	private final PingStatusGenerator pingStatusGenerator;
 
-	public StoreResults(AggregateErrorMailService errorMailService,
-			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
+	public StoreResults(AggregateErrorMailService errorMailService, CodeSystem.DsfPingUnits.Code networkSpeedUnit,
+			PingStatusGenerator pingStatusGenerator)
 	{
 		this.networkSpeedUnit = networkSpeedUnit;
 		this.errorMailService = errorMailService;
+		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
 	@Override
@@ -48,15 +50,17 @@ public class StoreResults implements ServiceTask, InitializingBean
 	}
 
 	@Override
-	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Storing results for process started with Task {}",
 				variables.getStartTask().getIdElement().getValue());
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(variables).getEntries()).forEach(task::addOutput);
+		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(variables).getEntries(), resourceVersion)
+				.forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
@@ -93,12 +97,12 @@ public class StoreResults implements ServiceTask, InitializingBean
 						.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::unit).orElse(null);
 
 
-				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(), downloadSpeed,
+				pingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(), downloadSpeed,
 						downloadSpeedUnit, uploadSpeed, uploadSpeedUnit).ifPresent(task::addOutput);
 			}
 			else // if slim-ping
 			{
-				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries())
+				pingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries())
 						.ifPresent(task::addOutput);
 			}
 			errorsPerTarget.put(target, errors.getEntries());

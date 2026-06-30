@@ -42,16 +42,18 @@ public class SendPingMessage implements MessageSendTask
 
 		List<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
-		if (downloadResourceReference != null)
-			additionalInputParameters.add(DownloadResourceReferenceGenerator.create(downloadResourceReference));
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-		additionalInputParameters.add(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes));
+		if (downloadResourceReference != null)
+			additionalInputParameters
+					.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
+
+		additionalInputParameters.add(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes, resourceVersion));
 
 		Task.ParameterComponent endpointIdentifierComponent = api.getTaskHelper().createInput(
 				new Reference().setIdentifier(getLocalEndpointIdentifier(api)).setType(ResourceType.Endpoint.name()),
-				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue(), api.getProcessPluginDefinition().getResourceVersion());
-		endpointIdentifierComponent.getType().getCodingFirstRep()
-				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue(), resourceVersion);
+		endpointIdentifierComponent.getType().getCodingFirstRep().setVersion(resourceVersion);
 
 		additionalInputParameters.add(endpointIdentifierComponent);
 
@@ -61,7 +63,8 @@ public class SendPingMessage implements MessageSendTask
 	@Override
 	public TaskSender getTaskSender(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
 	{
-		return new DefaultTaskSender(api, variables, sendTaskValues, getBusinessKeyStrategy()) {
+		return new DefaultTaskSender(api, variables, sendTaskValues, getBusinessKeyStrategy())
+		{
 			@Override
 			protected IdType doSend(Task task, String targetEndpointUrl)
 			{
@@ -96,8 +99,7 @@ public class SendPingMessage implements MessageSendTask
 						.convertLocal(e, true, ConstantsPing.PROCESS_NAME_PING);
 
 				variables.setJsonVariableLocal(ExecutionVariables.error.name(), errorAndStatus.error());
-				variables.setJsonVariableLocal(ExecutionVariables.statusCode.name(),
-						errorAndStatus.statusCode());
+				variables.setJsonVariableLocal(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
 
 				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
 						errorAndStatus.error().concept().getDisplay());
