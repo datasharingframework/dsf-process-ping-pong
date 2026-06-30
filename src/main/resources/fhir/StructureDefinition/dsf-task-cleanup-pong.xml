@@ -1,6 +1,6 @@
 <StructureDefinition xmlns="http://hl7.org/fhir">
     <meta>
-        <profile value="http://dsf.dev/fhir/StructureDefinition/task|2.0.0" />
+        <profile value="http://dsf.dev/fhir/StructureDefinition/structure-definition" />
         <tag>
             <system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
             <code value="ALL" />
