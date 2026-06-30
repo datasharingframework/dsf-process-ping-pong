@@ -12,8 +12,8 @@
 		<project.build.outputTimestamp>2026-07-05T12:00:00+02:00</project.build.outputTimestamp>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<compileSource>17</compileSource>
-		<compileTarget>17</compileTarget>
+		<compileSource>25</compileSource>
+		<compileTarget>25</compileTarget>
 
 		<dsf.version>2.1.0</dsf.version>
 		<spring.version>7.0.8</spring.version>
@@ -84,6 +84,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>dev.dsf</groupId>
+			<artifactId>dsf-bpe-process-api-v2-impl</artifactId>
+			<version>${dsf.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
@@ -92,6 +98,22 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>plugin.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>plugin.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
