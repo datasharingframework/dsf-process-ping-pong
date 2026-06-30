@@ -63,8 +63,7 @@ public class BinaryResourceDownloader
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
 		try
 		{
-			InputStream binaryResourceInputStream = api.getDsfClientProvider()
-					.getByEndpointUrl(webserviceUrl)
+			InputStream binaryResourceInputStream = api.getDsfClientProvider().getByEndpointUrl(webserviceUrl)
 					.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
 			try (binaryResourceInputStream)
