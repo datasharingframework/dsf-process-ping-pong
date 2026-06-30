@@ -43,10 +43,10 @@ public class CheckPingTaskStatus implements ServiceTask
 		{
 			if (taskId != null)
 			{
-				DsfClient dsfClient = api.getDsfClientProvider()
-						.getByEndpointUrl(target.getEndpointUrl());
+				DsfClient dsfClient = api.getDsfClientProvider().getByEndpointUrl(target.getEndpointUrl());
 
-				Task pingTask = dsfClient.withRetry(3, DelayStrategy.constant(Duration.ofSeconds(1))).read(Task.class, taskId);
+				Task pingTask = dsfClient.withRetry(3, DelayStrategy.constant(Duration.ofSeconds(1))).read(Task.class,
+						taskId);
 				ProcessError error = switch (pingTask.getStatus())
 				{
 					case COMPLETED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
@@ -120,10 +120,10 @@ public class CheckPingTaskStatus implements ServiceTask
 			{
 				logger.error("Unexpected error while checking status of ping task.", e);
 				String correlationKey = variables.getTarget().getCorrelationKey();
-				ErrorListUtils.add(
-						new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
-						variables, correlationKey);
-				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR, ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+				ErrorListUtils.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null), variables, correlationKey);
+				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR,
+						ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
 			}
 		};
 	}
