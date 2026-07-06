@@ -12,6 +12,9 @@ import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.UrlType;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public record ProcessError(String process, CodeSystem.DsfPingError.Concept concept, String potentialFixUrl)
 		implements Serializable
 {
