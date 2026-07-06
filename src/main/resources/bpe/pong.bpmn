@@ -35,7 +35,10 @@
       <bpmn:incoming>Flow_1o3n9u6</bpmn:incoming>
       <bpmn:outgoing>Flow_0fzmjzb</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:exclusiveGateway id="Gateway_0eiy9fm" default="Flow_1bzjspe">
+    <bpmn:exclusiveGateway id="Gateway_0eiy9fm" name="Pong Status Gateway" default="Flow_1bzjspe">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="dev.dsf.bpe.listener.PongStatusGatewayListener" event="start" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0fzmjzb</bpmn:incoming>
       <bpmn:outgoing>Flow_0h8flp6</bpmn:outgoing>
       <bpmn:outgoing>Flow_1bzjspe</bpmn:outgoing>
@@ -99,7 +102,7 @@
     <bpmn:sequenceFlow id="Flow_1o3n9u6" sourceRef="Gateway_1ggdr8l" targetRef="Activity_005ywv2" />
     <bpmn:sequenceFlow id="Flow_0fzmjzb" sourceRef="Activity_005ywv2" targetRef="Gateway_0eiy9fm" />
     <bpmn:sequenceFlow id="Flow_0h8flp6" name="Pong returned error  status" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp;  (statusCode.getValue() == 'not-reachable' || statusCode.getValue() == 'not-allowed')}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCodeString') &amp;&amp;  (statusCodeString == 'not-reachable' || statusCodeString == 'not-allowed')}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1bzjspe" sourceRef="Gateway_0eiy9fm" targetRef="Gateway_1l5dkpz" />
     <bpmn:sequenceFlow id="Flow_00t1ck1" name="Slim Ping" sourceRef="Gateway_0eiy9fm" targetRef="Activity_0otptjn">
@@ -231,6 +234,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0eiy9fm_di" bpmnElement="Gateway_0eiy9fm" isMarkerVisible="true">
         <dc:Bounds x="2225" y="285" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2180" y="266" width="60" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_12p2jrx_di" bpmnElement="Gateway_1l5dkpz">
         <dc:Bounds x="2225" y="385" width="50" height="50" />
@@ -241,12 +247,25 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="2471" y="438" width="42" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0o4l2t4_di" bpmnElement="Event_0o4l2t4">
+        <dc:Bounds x="2472" y="532" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0fvmtve_di" bpmnElement="Gateway_0fvmtve" isMarkerVisible="true">
         <dc:Bounds x="1325" y="435" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1imd3tw_di" bpmnElement="Activity_1umihbr">
+        <dc:Bounds x="1190" y="530" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pmiy6i_di" bpmnElement="Activity_0otptjn">
+        <dc:Bounds x="2850" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1m4wavi_di" bpmnElement="Activity_1m4wavi">
         <dc:Bounds x="1420" y="420" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06klx97_di" bpmnElement="Activity_0xcqxjs">
+        <dc:Bounds x="1700" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wlxsbv_di" bpmnElement="Activity_1wdftvk">
         <dc:Bounds x="430" y="270" width="100" height="80" />
@@ -255,8 +274,26 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="Activity_1u5xx7p_di" bpmnElement="Activity_13ypt7i">
         <dc:Bounds x="590" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0i1din5_di" bpmnElement="Event_0i1din5">
+        <dc:Bounds x="3142" y="292" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1wktaap_di" bpmnElement="Gateway_1wktaap" isMarkerVisible="true">
+        <dc:Bounds x="2805" y="385" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ntyg74_di" bpmnElement="Activity_1gd1tfz">
+        <dc:Bounds x="2630" y="370" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04wfxfo_di" bpmnElement="Activity_0i998dm">
         <dc:Bounds x="1190" y="420" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0e5vsn7_di" bpmnElement="Activity_1wt8irk">
+        <dc:Bounds x="2550" y="510" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ff4lt7_di" bpmnElement="Activity_0lxtmlg">
+        <dc:Bounds x="2990" y="270" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1m1s18a" bpmnElement="Activity_02rqshk">
@@ -275,37 +312,6 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_06066hd_di" bpmnElement="Gateway_06066hd" isMarkerVisible="true">
         <dc:Bounds x="1565" y="435" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1imd3tw_di" bpmnElement="Activity_1umihbr">
-        <dc:Bounds x="1190" y="530" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0o4l2t4_di" bpmnElement="Event_0o4l2t4">
-        <dc:Bounds x="2472" y="532" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ntyg74_di" bpmnElement="Activity_1gd1tfz">
-        <dc:Bounds x="2630" y="370" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0e5vsn7_di" bpmnElement="Activity_1wt8irk">
-        <dc:Bounds x="2550" y="510" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0i1din5_di" bpmnElement="Event_0i1din5">
-        <dc:Bounds x="3142" y="292" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ff4lt7_di" bpmnElement="Activity_0lxtmlg">
-        <dc:Bounds x="2990" y="270" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pmiy6i_di" bpmnElement="Activity_0otptjn">
-        <dc:Bounds x="2850" y="270" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1wktaap_di" bpmnElement="Gateway_1wktaap" isMarkerVisible="true">
-        <dc:Bounds x="2805" y="385" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_06klx97_di" bpmnElement="Activity_0xcqxjs">
-        <dc:Bounds x="1700" y="420" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0pjdm6v_di" bpmnElement="Activity_1kb1v81">
         <dc:Bounds x="1700" y="540" width="100" height="80" />

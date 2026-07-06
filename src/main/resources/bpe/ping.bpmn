@@ -42,7 +42,10 @@
         <bpmn:incoming>Flow_1fjeq2h</bpmn:incoming>
         <bpmn:outgoing>Flow_136htek</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:exclusiveGateway id="Gateway_0z5gz96" default="Flow_1j54c2s">
+      <bpmn:exclusiveGateway id="Gateway_0z5gz96" name="Ping Status Gateway" default="Flow_1j54c2s">
+        <bpmn:extensionElements>
+          <camunda:executionListener class="dev.dsf.bpe.listener.PingStatusGatewayListener" event="start" />
+        </bpmn:extensionElements>
         <bpmn:incoming>Flow_08vgmf6</bpmn:incoming>
         <bpmn:outgoing>Flow_1j54c2s</bpmn:outgoing>
         <bpmn:outgoing>Flow_101sqed</bpmn:outgoing>
@@ -122,7 +125,7 @@
       <bpmn:sequenceFlow id="Flow_136htek" sourceRef="LogNoResponse" targetRef="Gateway_09z7b0z" />
       <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="Activity_0ri6fnv" targetRef="Gateway_0z5gz96" />
       <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Activity_0p5edt9">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCode') &amp;&amp; (statusCode.getValue() == 'not-allowed' || statusCode.getValue() == 'not-reachable')}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCodeString') &amp;&amp; (statusCodeString == 'not-allowed' || statusCodeString == 'not-reachable')}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
       <bpmn:sequenceFlow id="Flow_13u1nzy" name="Slim Ping" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">
@@ -290,9 +293,15 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1ipvtcp" bpmnElement="Gateway_0z5gz96" isMarkerVisible="true">
         <dc:Bounds x="1505" y="335" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1503" y="305" width="57" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0zk1xt7" bpmnElement="Gateway_09z7b0z" isMarkerVisible="true">
         <dc:Bounds x="1945" y="425" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_19as0g5" bpmnElement="SubProcessEndEvent">
+        <dc:Bounds x="2022" y="432" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_004x7xw" bpmnElement="Activity_0ri6fnv">
         <dc:Bounds x="1360" y="320" width="100" height="80" />
@@ -323,23 +332,20 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="2010" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0de83s3_di" bpmnElement="Gateway_0de83s3" isMarkerVisible="true">
-        <dc:Bounds x="2385" y="495" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0p0eucz_di" bpmnElement="Activity_0p5edt9">
         <dc:Bounds x="1710" y="600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0de83s3_di" bpmnElement="Gateway_0de83s3" isMarkerVisible="true">
+        <dc:Bounds x="2385" y="495" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0bz58lj_di" bpmnElement="Event_0bz58lj">
         <dc:Bounds x="1872" y="572" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_19as0g5" bpmnElement="SubProcessEndEvent">
-        <dc:Bounds x="2022" y="432" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0nhk812_di" bpmnElement="Event_1fj0h7y">
+        <dc:Bounds x="2342" y="542" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0b695o8_di" bpmnElement="Event_1seqq9b">
         <dc:Bounds x="1872" y="472" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0nhk812_di" bpmnElement="Event_1fj0h7y">
-        <dc:Bounds x="2342" y="542" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_1hlvqjb" bpmnElement="Flow_10epxa2">
         <di:waypoint x="1288" y="360" />

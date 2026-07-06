@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Scope;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.listener.PingPongProcessPluginDeploymentStateListener;
+import dev.dsf.bpe.listener.PingStatusGatewayListener;
+import dev.dsf.bpe.listener.PongStatusGatewayListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
@@ -120,7 +122,7 @@ public class PingConfig implements InitializingBean
 				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
 				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
 				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
-				LogAndSaveUploadErrorPong.class);
+				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class);
 	}
 
 	@Bean
