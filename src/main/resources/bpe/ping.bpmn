@@ -38,7 +38,7 @@
         <bpmn:outgoing>Flow_0y9usku</bpmn:outgoing>
         <bpmn:outgoing>Flow_1lghrxh</bpmn:outgoing>
       </bpmn:eventBasedGateway>
-      <bpmn:serviceTask id="LogNoResponse" name="Check Ping Task Status" camunda:class="dev.dsf.bpe.service.ping.CheckPingTaskStatus">
+      <bpmn:serviceTask id="CheckPingTaskStatusServiceTask" name="Check Ping Task Status" camunda:class="dev.dsf.bpe.service.ping.CheckPingTaskStatus">
         <bpmn:incoming>Flow_1fjeq2h</bpmn:incoming>
         <bpmn:outgoing>Flow_136htek</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -61,7 +61,7 @@
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1ho1hys</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sendTask id="Activity_0ri6fnv" name="Ping" camunda:class="dev.dsf.bpe.message.SendPingMessage">
+      <bpmn:sendTask id="PingMessageSendTask" name="Ping" camunda:class="dev.dsf.bpe.message.SendPingMessage">
         <bpmn:extensionElements>
           <camunda:field name="instantiatesCanonical">
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
@@ -81,11 +81,11 @@
         <bpmn:outgoing>Flow_13u1nzy</bpmn:outgoing>
         <bpmn:outgoing>Flow_1yt9547</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:serviceTask id="Activity_0h9o9u7" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess">
+      <bpmn:serviceTask id="DownloadResourceAndMeasureSpeedServiceTask" name="Download Resource And Measure Speed" camunda:class="dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess">
         <bpmn:incoming>Flow_1yt9547</bpmn:incoming>
         <bpmn:outgoing>Flow_1ncztgo</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sendTask id="Activity_0vw65a2" name="Cleanup Pong" camunda:class="dev.dsf.bpe.message.CleanupPongMessage">
+      <bpmn:sendTask id="CleanupPongMessageSendTask" name="Cleanup Pong" camunda:class="dev.dsf.bpe.message.CleanupPongMessage">
         <bpmn:extensionElements>
           <camunda:field name="profile">
             <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong|#{version}</camunda:string>
@@ -101,7 +101,7 @@
         <bpmn:incoming>Flow_18wxsor</bpmn:incoming>
         <bpmn:outgoing>Flow_0klalf8</bpmn:outgoing>
       </bpmn:sendTask>
-      <bpmn:serviceTask id="Activity_0akr23c" name="Log and Save Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveError">
+      <bpmn:serviceTask id="DownloadResourceLogAndSaveErrorServiceTask" name="Log and Save Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveError">
         <bpmn:incoming>Flow_0qif01p</bpmn:incoming>
         <bpmn:outgoing>Flow_0jcfur3</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -117,32 +117,32 @@
         <bpmn:incoming>Flow_03nx6rk</bpmn:incoming>
         <bpmn:incoming>Flow_0c6l9ff</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_10epxa2" sourceRef="SubProcessStartEvent" targetRef="Activity_0ri6fnv" />
+      <bpmn:sequenceFlow id="Flow_10epxa2" sourceRef="SubProcessStartEvent" targetRef="PingMessageSendTask" />
       <bpmn:sequenceFlow id="Flow_0y9usku" sourceRef="EventBasedGateway" targetRef="PongTimer" />
-      <bpmn:sequenceFlow id="Flow_1fjeq2h" sourceRef="PongTimer" targetRef="LogNoResponse" />
+      <bpmn:sequenceFlow id="Flow_1fjeq2h" sourceRef="PongTimer" targetRef="CheckPingTaskStatusServiceTask" />
       <bpmn:sequenceFlow id="Flow_1lghrxh" sourceRef="EventBasedGateway" targetRef="PongCatchEvent" />
       <bpmn:sequenceFlow id="Flow_1j54c2s" sourceRef="Gateway_0z5gz96" targetRef="EventBasedGateway" />
-      <bpmn:sequenceFlow id="Flow_136htek" sourceRef="LogNoResponse" targetRef="Gateway_09z7b0z" />
-      <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="Activity_0ri6fnv" targetRef="Gateway_0z5gz96" />
-      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="Activity_0p5edt9">
+      <bpmn:sequenceFlow id="Flow_136htek" sourceRef="CheckPingTaskStatusServiceTask" targetRef="Gateway_09z7b0z" />
+      <bpmn:sequenceFlow id="Flow_08vgmf6" sourceRef="PingMessageSendTask" targetRef="Gateway_0z5gz96" />
+      <bpmn:sequenceFlow id="Flow_101sqed" name="not-allowed or not-reachable" sourceRef="Gateway_0z5gz96" targetRef="LogAndSaveSendErrorServiceTask">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('statusCodeString') &amp;&amp; (statusCodeString == 'not-allowed' || statusCodeString == 'not-reachable')}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1ho1hys" sourceRef="Gateway_09z7b0z" targetRef="SubProcessEndEvent" />
       <bpmn:sequenceFlow id="Flow_13u1nzy" name="Slim Ping" sourceRef="Gateway_0p0be0a" targetRef="Gateway_02orad4">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="Activity_0h9o9u7" />
-      <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="Activity_0akr23c" targetRef="Activity_0vw65a2" />
-      <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="Activity_0vw65a2" targetRef="Gateway_02orad4" />
-      <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongCatchEvent" targetRef="Activity_081me01" />
-      <bpmn:serviceTask id="Activity_081me01" name="Save Pong" camunda:class="dev.dsf.bpe.service.ping.SavePong">
+      <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="DownloadResourceAndMeasureSpeedServiceTask" />
+      <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="DownloadResourceLogAndSaveErrorServiceTask" targetRef="CleanupPongMessageSendTask" />
+      <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="CleanupPongMessageSendTask" targetRef="Gateway_02orad4" />
+      <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongCatchEvent" targetRef="SavePongServiceTask" />
+      <bpmn:serviceTask id="SavePongServiceTask" name="Save Pong" camunda:class="dev.dsf.bpe.service.ping.SavePong">
         <bpmn:incoming>Flow_1ewmc79</bpmn:incoming>
         <bpmn:outgoing>Flow_1jwekqw</bpmn:outgoing>
       </bpmn:serviceTask>
-      <bpmn:sequenceFlow id="Flow_1jwekqw" sourceRef="Activity_081me01" targetRef="Gateway_0p0be0a" />
+      <bpmn:sequenceFlow id="Flow_1jwekqw" sourceRef="SavePongServiceTask" targetRef="Gateway_0p0be0a" />
       <bpmn:sequenceFlow id="Flow_03nx6rk" sourceRef="Gateway_02orad4" targetRef="Event_1foycg9" />
-      <bpmn:sequenceFlow id="Flow_0upu487" sourceRef="Activity_0p5edt9" targetRef="Gateway_09z7b0z" />
-      <bpmn:serviceTask id="Activity_0p5edt9" name="Log And Save Send Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveSendError">
+      <bpmn:sequenceFlow id="Flow_0upu487" sourceRef="LogAndSaveSendErrorServiceTask" targetRef="Gateway_09z7b0z" />
+      <bpmn:serviceTask id="LogAndSaveSendErrorServiceTask" name="Log And Save Send Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveSendError">
         <bpmn:incoming>Flow_101sqed</bpmn:incoming>
         <bpmn:outgoing>Flow_0upu487</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -151,12 +151,12 @@
         <bpmn:outgoing>Flow_0qif01p</bpmn:outgoing>
         <bpmn:outgoing>Flow_18wxsor</bpmn:outgoing>
       </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_1ncztgo" sourceRef="Activity_0h9o9u7" targetRef="Gateway_0de83s3" />
-      <bpmn:sequenceFlow id="Flow_0qif01p" sourceRef="Gateway_0de83s3" targetRef="Activity_0akr23c">
+      <bpmn:sequenceFlow id="Flow_1ncztgo" sourceRef="DownloadResourceAndMeasureSpeedServiceTask" targetRef="Gateway_0de83s3" />
+      <bpmn:sequenceFlow id="Flow_0qif01p" sourceRef="Gateway_0de83s3" targetRef="DownloadResourceLogAndSaveErrorServiceTask">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('resourceDownloadError')}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_18wxsor" sourceRef="Gateway_0de83s3" targetRef="Activity_0vw65a2" />
-      <bpmn:boundaryEvent id="Event_1seqq9b" attachedToRef="LogNoResponse">
+      <bpmn:sequenceFlow id="Flow_18wxsor" sourceRef="Gateway_0de83s3" targetRef="CleanupPongMessageSendTask" />
+      <bpmn:boundaryEvent id="Event_1seqq9b" attachedToRef="CheckPingTaskStatusServiceTask">
         <bpmn:outgoing>Flow_1m5uggy</bpmn:outgoing>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0v07u5e" errorRef="Error_0iukr7a" />
       </bpmn:boundaryEvent>
@@ -164,13 +164,13 @@
         <bpmn:incoming>Flow_1m5uggy</bpmn:incoming>
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_1m5uggy" sourceRef="Event_1seqq9b" targetRef="Event_0bz58lj" />
-      <bpmn:boundaryEvent id="Event_1fj0h7y" attachedToRef="Activity_0h9o9u7">
+      <bpmn:boundaryEvent id="Event_1fj0h7y" attachedToRef="DownloadResourceAndMeasureSpeedServiceTask">
         <bpmn:outgoing>Flow_0c6l9ff</bpmn:outgoing>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_1jlsvr4" errorRef="Error_0iukr7a" />
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_0c6l9ff" sourceRef="Event_1fj0h7y" targetRef="Event_1foycg9" />
     </bpmn:subProcess>
-    <bpmn:serviceTask id="Activity_0nwtf8o" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
+    <bpmn:serviceTask id="GenerateAndStoreResourceServiceTask" name="Generate And Store Resource" camunda:class="dev.dsf.bpe.service.GenerateAndStoreResource">
       <bpmn:extensionElements>
         <camunda:field name="process">
           <camunda:string>ping</camunda:string>
@@ -179,7 +179,7 @@
       <bpmn:incoming>Flow_152nb9r</bpmn:incoming>
       <bpmn:outgoing>Flow_1op4sei</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0802w0b" name="Cleanup" camunda:class="dev.dsf.bpe.service.Cleanup">
+    <bpmn:serviceTask id="CleanupServiceTask" name="Cleanup" camunda:class="dev.dsf.bpe.service.Cleanup">
       <bpmn:extensionElements>
         <camunda:field name="process">
           <camunda:string>ping</camunda:string>
@@ -189,7 +189,7 @@
       <bpmn:incoming>Flow_1mer14f</bpmn:incoming>
       <bpmn:outgoing>Flow_0gubpgz</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="SaveResults" name="Store Results" camunda:class="dev.dsf.bpe.service.ping.StoreResults">
+    <bpmn:serviceTask id="SaveResultsServiceTask" name="Store Results" camunda:class="dev.dsf.bpe.service.ping.StoreResults">
       <bpmn:incoming>Flow_0gubpgz</bpmn:incoming>
       <bpmn:outgoing>Flow_1du5wys</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -202,7 +202,7 @@
       <bpmn:incoming>Flow_1qyomuj</bpmn:incoming>
       <bpmn:outgoing>Flow_1c15ef2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="SelectPingTargets" name="Select Targets" camunda:class="dev.dsf.bpe.service.ping.SelectPingTargets">
+    <bpmn:serviceTask id="SelectPingTargetsServiceTask" name="Select Targets" camunda:class="dev.dsf.bpe.service.ping.SelectPingTargets">
       <bpmn:incoming>Flow_1c15ef2</bpmn:incoming>
       <bpmn:outgoing>Flow_0j92st0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -215,22 +215,22 @@
       <bpmn:outgoing>Flow_1hor4v7</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1t2j917" messageRef="Message_1pklz6t" />
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0j92st0" sourceRef="SelectPingTargets" targetRef="SubProcess" />
-    <bpmn:sequenceFlow id="Flow_1bfs68o" sourceRef="SubProcess" targetRef="Activity_0802w0b" />
-    <bpmn:sequenceFlow id="Flow_152nb9r" sourceRef="Gateway_0xw5i5v" targetRef="Activity_0nwtf8o" />
-    <bpmn:sequenceFlow id="Flow_0gubpgz" sourceRef="Activity_0802w0b" targetRef="SaveResults" />
-    <bpmn:sequenceFlow id="Flow_1du5wys" sourceRef="SaveResults" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_0j92st0" sourceRef="SelectPingTargetsServiceTask" targetRef="SubProcess" />
+    <bpmn:sequenceFlow id="Flow_1bfs68o" sourceRef="SubProcess" targetRef="CleanupServiceTask" />
+    <bpmn:sequenceFlow id="Flow_152nb9r" sourceRef="Gateway_0xw5i5v" targetRef="GenerateAndStoreResourceServiceTask" />
+    <bpmn:sequenceFlow id="Flow_0gubpgz" sourceRef="CleanupServiceTask" targetRef="SaveResultsServiceTask" />
+    <bpmn:sequenceFlow id="Flow_1du5wys" sourceRef="SaveResultsServiceTask" targetRef="EndEvent" />
     <bpmn:sequenceFlow id="Flow_0iuuyo1" name="Slim Ping" sourceRef="Gateway_0xw5i5v" targetRef="Gateway_0bifi5h">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1c15ef2" sourceRef="Gateway_0bifi5h" targetRef="SelectPingTargets" />
-    <bpmn:sequenceFlow id="Flow_0fxlsv3" sourceRef="Activity_1wdftvk" targetRef="Gateway_0xw5i5v" />
-    <bpmn:serviceTask id="Activity_1wdftvk" name="Set Download Resource Size" camunda:class="dev.dsf.bpe.service.SetDownloadResourceSize">
+    <bpmn:sequenceFlow id="Flow_1c15ef2" sourceRef="Gateway_0bifi5h" targetRef="SelectPingTargetsServiceTask" />
+    <bpmn:sequenceFlow id="Flow_0fxlsv3" sourceRef="SetDownloadResourceSizeServiceTask" targetRef="Gateway_0xw5i5v" />
+    <bpmn:serviceTask id="SetDownloadResourceSizeServiceTask" name="Set Download Resource Size" camunda:class="dev.dsf.bpe.service.SetDownloadResourceSize">
       <bpmn:incoming>Flow_0xy3953</bpmn:incoming>
       <bpmn:outgoing>Flow_0fxlsv3</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0ejw9k5" sourceRef="Activity_1ddl5dm" targetRef="Gateway_0bifi5h" />
-    <bpmn:serviceTask id="Activity_1ddl5dm" name="Log And Save Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing">
+    <bpmn:sequenceFlow id="Flow_0ejw9k5" sourceRef="GenerateResourceLogAndSaveErrorServiceTask" targetRef="Gateway_0bifi5h" />
+    <bpmn:serviceTask id="GenerateResourceLogAndSaveErrorServiceTask" name="Log And Save Error" camunda:class="dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing">
       <bpmn:incoming>Flow_0z3dgxw</bpmn:incoming>
       <bpmn:outgoing>Flow_0ejw9k5</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -239,22 +239,22 @@
       <bpmn:outgoing>Flow_0z3dgxw</bpmn:outgoing>
       <bpmn:outgoing>Flow_1qyomuj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1op4sei" sourceRef="Activity_0nwtf8o" targetRef="Gateway_1nb10cc" />
-    <bpmn:sequenceFlow id="Flow_0z3dgxw" sourceRef="Gateway_1nb10cc" targetRef="Activity_1ddl5dm">
+    <bpmn:sequenceFlow id="Flow_1op4sei" sourceRef="GenerateAndStoreResourceServiceTask" targetRef="Gateway_1nb10cc" />
+    <bpmn:sequenceFlow id="Flow_0z3dgxw" sourceRef="Gateway_1nb10cc" targetRef="GenerateResourceLogAndSaveErrorServiceTask">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('resourceUploadError')}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1qyomuj" sourceRef="Gateway_1nb10cc" targetRef="Gateway_0bifi5h" />
-    <bpmn:sequenceFlow id="Flow_1hor4v7" sourceRef="StartPingMessageStartEvent" targetRef="Activity_0ox0y7r" />
-    <bpmn:sequenceFlow id="Flow_0xy3953" sourceRef="Activity_0ox0y7r" targetRef="Activity_1wdftvk" />
-    <bpmn:serviceTask id="Activity_0ox0y7r" name="Set Pong Timeout Duration" camunda:class="dev.dsf.bpe.service.ping.SetPongTimeoutDuration">
+    <bpmn:sequenceFlow id="Flow_1hor4v7" sourceRef="StartPingMessageStartEvent" targetRef="SetPongTimeoutDurationServiceTask" />
+    <bpmn:sequenceFlow id="Flow_0xy3953" sourceRef="SetPongTimeoutDurationServiceTask" targetRef="SetDownloadResourceSizeServiceTask" />
+    <bpmn:serviceTask id="SetPongTimeoutDurationServiceTask" name="Set Pong Timeout Duration" camunda:class="dev.dsf.bpe.service.ping.SetPongTimeoutDuration">
       <bpmn:incoming>Flow_1hor4v7</bpmn:incoming>
       <bpmn:outgoing>Flow_0xy3953</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_1uju50a" attachedToRef="SelectPingTargets">
+    <bpmn:boundaryEvent id="Event_1uju50a" attachedToRef="SelectPingTargetsServiceTask">
       <bpmn:outgoing>Flow_1mer14f</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_030thzb" errorRef="Error_0iukr7a" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1mer14f" sourceRef="Event_1uju50a" targetRef="Activity_0802w0b" />
+    <bpmn:sequenceFlow id="Flow_1mer14f" sourceRef="Event_1uju50a" targetRef="CleanupServiceTask" />
     <bpmn:textAnnotation id="TextAnnotation_02e4h2c">
       <bpmn:text>Log = logger
 Save = save as execution variable
@@ -287,7 +287,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_01k7kv3" bpmnElement="EventBasedGateway">
         <dc:Bounds x="1605" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0icju6y" bpmnElement="LogNoResponse">
+      <bpmndi:BPMNShape id="BPMNShape_0icju6y" bpmnElement="CheckPingTaskStatusServiceTask">
         <dc:Bounds x="1790" y="410" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -303,22 +303,22 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_19as0g5" bpmnElement="SubProcessEndEvent">
         <dc:Bounds x="2022" y="432" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_004x7xw" bpmnElement="Activity_0ri6fnv">
+      <bpmndi:BPMNShape id="BPMNShape_004x7xw" bpmnElement="PingMessageSendTask">
         <dc:Bounds x="1360" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0gumkp5" bpmnElement="Gateway_0p0be0a" isMarkerVisible="true">
         <dc:Bounds x="2155" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_14o9c36" bpmnElement="Activity_0h9o9u7">
+      <bpmndi:BPMNShape id="BPMNShape_14o9c36" bpmnElement="DownloadResourceAndMeasureSpeedServiceTask">
         <dc:Bounds x="2260" y="480" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1uxa2sw" bpmnElement="Activity_0vw65a2">
+      <bpmndi:BPMNShape id="BPMNShape_1uxa2sw" bpmnElement="CleanupPongMessageSendTask">
         <dc:Bounds x="2700" y="480" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0djpma6" bpmnElement="Activity_0akr23c">
+      <bpmndi:BPMNShape id="BPMNShape_0djpma6" bpmnElement="DownloadResourceLogAndSaveErrorServiceTask">
         <dc:Bounds x="2470" y="600" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -328,11 +328,11 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_1pe00wg" bpmnElement="Event_1foycg9">
         <dc:Bounds x="2962" y="342" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_187dy31_di" bpmnElement="Activity_081me01">
+      <bpmndi:BPMNShape id="Activity_187dy31_di" bpmnElement="SavePongServiceTask">
         <dc:Bounds x="2010" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0p0eucz_di" bpmnElement="Activity_0p5edt9">
+      <bpmndi:BPMNShape id="Activity_0p0eucz_di" bpmnElement="LogAndSaveSendErrorServiceTask">
         <dc:Bounds x="1710" y="600" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0de83s3_di" bpmnElement="Gateway_0de83s3" isMarkerVisible="true">
@@ -450,14 +450,14 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="2980" y="720" />
         <di:waypoint x="2980" y="378" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_0fhb8wi" bpmnElement="Activity_0nwtf8o">
+      <bpmndi:BPMNShape id="BPMNShape_0fhb8wi" bpmnElement="GenerateAndStoreResourceServiceTask">
         <dc:Bounds x="720" y="460" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0zyba7l" bpmnElement="Activity_0802w0b">
+      <bpmndi:BPMNShape id="BPMNShape_0zyba7l" bpmnElement="CleanupServiceTask">
         <dc:Bounds x="3110" y="330" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_19d4kn6" bpmnElement="SaveResults">
+      <bpmndi:BPMNShape id="BPMNShape_19d4kn6" bpmnElement="SaveResultsServiceTask">
         <dc:Bounds x="3240" y="330" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -467,7 +467,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_0ob9la3" bpmnElement="Gateway_0bifi5h" isMarkerVisible="true">
         <dc:Bounds x="1005" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0wi2en6" bpmnElement="SelectPingTargets">
+      <bpmndi:BPMNShape id="BPMNShape_0wi2en6" bpmnElement="SelectPingTargetsServiceTask">
         <dc:Bounds x="1090" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -480,17 +480,17 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="151" y="385" width="44" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wlxsbv_di" bpmnElement="Activity_1wdftvk">
+      <bpmndi:BPMNShape id="Activity_0wlxsbv_di" bpmnElement="SetDownloadResourceSizeServiceTask">
         <dc:Bounds x="450" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="Activity_1ddl5dm">
+      <bpmndi:BPMNShape id="Activity_0v585g9_di" bpmnElement="GenerateResourceLogAndSaveErrorServiceTask">
         <dc:Bounds x="980" y="580" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0a51zrr" bpmnElement="Gateway_1nb10cc" isMarkerVisible="true">
         <dc:Bounds x="855" y="475" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1blajk7_di" bpmnElement="Activity_0ox0y7r">
+      <bpmndi:BPMNShape id="Activity_1blajk7_di" bpmnElement="SetPongTimeoutDurationServiceTask">
         <dc:Bounds x="270" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
