@@ -31,7 +31,6 @@ public class SavePong implements ServiceTask
 		Target target = variables.getTarget();
 		logger.debug("Pong received from {}. Saving pong information...", target.getEndpointUrl());
 		String correlationKey = target.getCorrelationKey();
-		variables.setJsonVariable("statusCode", null);
 
 		Task pong = variables.getLatestTask();
 
