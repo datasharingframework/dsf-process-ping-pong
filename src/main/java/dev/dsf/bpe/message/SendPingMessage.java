@@ -61,7 +61,8 @@ public class SendPingMessage implements MessageSendTask
 	@Override
 	public TaskSender getTaskSender(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
 	{
-		return new DefaultTaskSender(api, variables, sendTaskValues, getBusinessKeyStrategy())
+		return new DefaultTaskSender(api, variables, sendTaskValues, getBusinessKeyStrategy(),
+				target -> getAdditionalInputParameters(api, variables, sendTaskValues, target))
 		{
 			@Override
 			protected IdType doSend(Task task, String targetEndpointUrl)
