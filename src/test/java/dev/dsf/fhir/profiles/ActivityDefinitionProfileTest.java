@@ -16,7 +16,6 @@ import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.ValidationResult;
 import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.v2.service.process.ProcessAuthorizationHelper;
-import dev.dsf.bpe.v2.service.process.ProcessAuthorizationHelperImpl;
 import dev.dsf.fhir.validation.ResourceValidator;
 import dev.dsf.fhir.validation.ResourceValidatorImpl;
 import dev.dsf.fhir.validation.ValidationSupportRule;
@@ -68,8 +67,7 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
-				orgIdentifier -> true, organizationRole -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, _ -> true, _ -> true, _ -> true, _ -> true));
 	}
 
 	@Test
@@ -84,8 +82,7 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
-				orgIdentifier -> true, organizationRole -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, _ -> true, _ -> true, _ -> true, _ -> true));
 	}
 
 	@Test
@@ -100,7 +97,6 @@ public class ActivityDefinitionProfileTest
 		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 
-		assertTrue(processAuthorizationHelper.isValid(ad, taskProfile -> true, practitionerRole -> true,
-				orgIdentifier -> true, organizationRole -> true));
+		assertTrue(processAuthorizationHelper.isValid(ad, _ -> true, _ -> true, _ -> true, _ -> true));
 	}
 }

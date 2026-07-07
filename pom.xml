@@ -63,12 +63,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-api-v2-impl</artifactId>
-			<version>${dsf.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.13.2</version>
@@ -200,9 +194,10 @@
 			<plugin>
 				<groupId>net.revelc.code</groupId>
 				<artifactId>impsort-maven-plugin</artifactId>
-				<version>1.12.0</version>
+				<version>1.13.0</version>
 				<configuration>
-					<compliance>17</compliance>
+					<compliance>24</compliance>
+					<removeUnused>true</removeUnused>
 					<groups>java.,javax.,org.,com.</groups>
 					<staticGroups>java,*</staticGroups>
 				</configuration>
