@@ -1,8 +1,8 @@
 package dev.dsf.bpe;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -21,7 +21,14 @@ public class ProcessErrors
 	@JsonCreator
 	public ProcessErrors(@JsonProperty("entries") Collection<ProcessError> entries)
 	{
-		this.entries = new ArrayList<>(entries);
+		if (Objects.nonNull(entries))
+		{
+			this.entries = new Vector<>(entries);
+		}
+		else
+		{
+			this.entries = new Vector<>();
+		}
 	}
 
 	@JsonProperty("entries")
