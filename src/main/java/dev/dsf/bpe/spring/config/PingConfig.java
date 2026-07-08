@@ -2,18 +2,16 @@ package dev.dsf.bpe.spring.config;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.listener.PingPongProcessPluginDeploymentStateListener;
+import dev.dsf.bpe.listener.PingStatusGatewayListener;
+import dev.dsf.bpe.listener.PongStatusGatewayListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
@@ -44,12 +42,10 @@ import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
 import dev.dsf.bpe.service.pong.StoreUploadSpeed;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.documentation.ProcessDocumentation;
-import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueSerializer;
-import dev.dsf.bpe.variables.duration.DurationValueSerializer;
-import dev.dsf.bpe.variables.process_error.ProcessErrorValueSerializer;
-import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueSerializer;
+import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.documentation.ProcessDocumentation;
+import dev.dsf.bpe.v2.spring.ActivityPrototypeBeanCreator;
 
 @Configuration
 public class PingConfig implements InitializingBean
@@ -117,6 +113,19 @@ public class PingConfig implements InitializingBean
 	}
 
 	@Bean
+	public static ActivityPrototypeBeanCreator activityPrototypeBeanCreator()
+	{
+		return new ActivityPrototypeBeanCreator(SetTargetAndConfigureTimer.class, SendStartPing.class,
+				SetPongTimeoutDuration.class, SelectPingTargets.class, SendPingMessage.class,
+				SetCorrelationKeyListener.class, LogPing.class, SelectPongTarget.class, CheckPingTaskStatus.class,
+				CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
+				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
+				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
+				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
+				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class);
+	}
+
+	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public PingPongProcessPluginDeploymentStateListener pingPongProcessPluginDeploymentStateListener()
 	{
@@ -124,17 +133,16 @@ public class PingConfig implements InitializingBean
 	}
 
 	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetTargetAndConfigureTimer setTargetAndConfigureTimer()
+	public PingStatusGenerator pingStatusGenerator()
 	{
-		return new SetTargetAndConfigureTimer(api);
+		return new PingStatusGenerator(api.getProcessPluginDefinition().getResourceVersion());
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendStartPing sendStartPing()
+	public SendPongMessage sendPongMessage(PingStatusGenerator pingStatusGenerator)
 	{
-		return new SendStartPing(api);
+		return new SendPongMessage(pingStatusGenerator);
 	}
 
 	@Bean
@@ -151,230 +159,48 @@ public class PingConfig implements InitializingBean
 				AggregateErrorMailService.PONG_PROCESS_HAS_ERRORS);
 	}
 
-
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetPongTimeoutDuration setPongTimeoutDuration()
+	public StoreResults savePingResults(PingStatusGenerator pingStatusGenerator)
 	{
-		return new SetPongTimeoutDuration(api);
+		return new StoreResults(aggregateErrorMailServicePing(), networkSpeedUnit, pingStatusGenerator);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SelectPingTargets selectPingTargets()
+	public StoreUploadSpeed storeUploadSpeed(PingStatusGenerator pingStatusGenerator)
 	{
-		return new SelectPingTargets(api);
+		return new StoreUploadSpeed(networkSpeedUnit, pingStatusGenerator);
 	}
 
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPingMessage sendPing()
-	{
-		return new SendPingMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetCorrelationKeyListener setCorrelationKeyListener()
-	{
-		return new SetCorrelationKeyListener(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreResults savePingResults()
-	{
-		return new StoreResults(api, aggregateErrorMailServicePing(), networkSpeedUnit);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogPing logPing()
-	{
-		return new LogPing(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SelectPongTarget selectPongTarget()
-	{
-		return new SelectPongTarget(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SendPongMessage sendPong()
-	{
-		return new SendPongMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CheckPingTaskStatus logAndSaveNoResponse()
-	{
-		return new CheckPingTaskStatus(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public CleanupPongMessage cleanupPongMessage()
-	{
-		return new CleanupPongMessage(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DownloadResourceAndMeasureSpeed downloadResourceAndMeasureSpeed()
-	{
-		return new DownloadResourceAndMeasureSpeed(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public DownloadResourceAndMeasureSpeedInSubProcess downloadResourceAndMeasureSpeedInSubProcess()
-	{
-		return new DownloadResourceAndMeasureSpeedInSubProcess(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public Cleanup cleanup()
-	{
-		return new Cleanup(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveAndStoreError logAndSaveAndStoreError()
-	{
-		return new LogAndSaveAndStoreError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveError logAndSaveError()
-	{
-		return new LogAndSaveError(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreUploadSpeed storeDownloadSpeeds()
-	{
-		return new StoreUploadSpeed(api, networkSpeedUnit);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public EstimateCleanupTimerDuration estimateCleanupTimerDuration()
-	{
-		return new EstimateCleanupTimerDuration(api);
-	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public SetDownloadResourceSize setDownloadResourceSize()
 	{
-		return new SetDownloadResourceSize(api, maxDownloadSizeBytes);
+		return new SetDownloadResourceSize(maxDownloadSizeBytes);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SavePong savePong()
+	public StoreDownloadSpeed storeDownloadSpeed(PingStatusGenerator pingStatusGenerator)
 	{
-		return new SavePong(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SetEndpointIdentifier setEndpointIdentifier()
-	{
-		return new SetEndpointIdentifier(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreDownloadSpeed storeDownloadSpeed()
-	{
-		return new StoreDownloadSpeed(api, networkSpeedUnit);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveSendError logAndSaveSendError()
-	{
-		return new LogAndSaveSendError(api);
+		return new StoreDownloadSpeed(networkSpeedUnit, pingStatusGenerator);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 	public GenerateAndStoreResource generateAndStoreResource()
 	{
-		return new GenerateAndStoreResource(api, maxUploadSizeBytes);
+		return new GenerateAndStoreResource(maxUploadSizeBytes);
 	}
 
 	@Bean
 	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public SaveTimeoutError saveTimeoutError()
+	public StoreErrors storeErrors(PingStatusGenerator pingStatusGenerator)
 	{
-		return new SaveTimeoutError(api);
+		return new StoreErrors(aggregateErrorMailServicePong(), pingStatusGenerator);
 	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public StoreErrors storeErrors()
-	{
-		return new StoreErrors(api, aggregateErrorMailServicePong());
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveUploadErrorPing logAndSaveUploadErrorPing()
-	{
-		return new LogAndSaveUploadErrorPing(api);
-	}
-
-	@Bean
-	@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-	public LogAndSaveUploadErrorPong logAndSaveUploadErrorPong()
-	{
-		return new LogAndSaveUploadErrorPong(api);
-	}
-
-	@Bean
-	public CodeValueSerializer pingStatusCodeSerializer()
-	{
-		return new CodeValueSerializer();
-	}
-
-	@Bean
-	public DurationValueSerializer durationValueSerializer(
-			@Qualifier(OBJECT_MAPPER_WITH_TIME_MODULE) ObjectMapper objectMapper)
-	{
-		return new DurationValueSerializer(objectMapper);
-	}
-
-	@Bean
-	public ProcessErrorValueSerializer processErrorValueSerializer()
-	{
-		return new ProcessErrorValueSerializer();
-	}
-
-	@Bean
-	public ProcessErrorsValueSerializer processErrorsValueSerializer()
-	{
-		return new ProcessErrorsValueSerializer();
-	}
-
-	@Bean(name = OBJECT_MAPPER_WITH_TIME_MODULE)
-	public ObjectMapper objectMapperWithJavaTimeModule()
-	{
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.registerModule(new JavaTimeModule());
-		return objectMapper;
-	}
-
-	private static final String OBJECT_MAPPER_WITH_TIME_MODULE = "objectMapperWithJavaTimeModule";
 
 	private void fixMaxResourceSizes()
 	{

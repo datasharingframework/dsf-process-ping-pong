@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,50 +21,52 @@ import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Targets;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Targets;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class StoreResults extends AbstractServiceDelegate implements InitializingBean
+public class StoreResults implements ServiceTask, InitializingBean
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 	private final AggregateErrorMailService errorMailService;
-	private CodeSystem.DsfPingUnits.Code networkSpeedUnit;
+	private final CodeSystem.DsfPingUnits.Code networkSpeedUnit;
+	private final PingStatusGenerator pingStatusGenerator;
 
-	public StoreResults(ProcessPluginApi api, AggregateErrorMailService errorMailService,
-			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
+	public StoreResults(AggregateErrorMailService errorMailService, CodeSystem.DsfPingUnits.Code networkSpeedUnit,
+			PingStatusGenerator pingStatusGenerator)
 	{
-		super(api);
 		this.networkSpeedUnit = networkSpeedUnit;
 		this.errorMailService = errorMailService;
+		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		super.afterPropertiesSet();
-
 		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Storing results for process started with Task {}",
 				variables.getStartTask().getIdElement().getValue());
 		Task task = variables.getStartTask();
 		Targets targets = variables.getTargets();
 		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(execution).getEntries()).forEach(task::addOutput);
+		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(variables).getEntries(), resourceVersion)
+				.forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
 			String correlationKey = target.getCorrelationKey();
 
-			ProcessErrors errors = ErrorListUtils.getErrorList(execution, correlationKey);
+			ProcessErrors errors = ErrorListUtils.getErrorList(variables, correlationKey);
 			CodeSystem.DsfPingStatus.Code statusCode = (CodeSystem.DsfPingStatus.Code) variables
 					.getVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey));
 			long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
@@ -97,12 +97,12 @@ public class StoreResults extends AbstractServiceDelegate implements Initializin
 						.map(CodeSystem.DsfPingUnits.Code.SpeedAndUnit::unit).orElse(null);
 
 
-				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(), downloadSpeed,
+				pingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries(), downloadSpeed,
 						downloadSpeedUnit, uploadSpeed, uploadSpeedUnit).ifPresent(task::addOutput);
 			}
 			else // if slim-ping
 			{
-				PingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries())
+				pingStatusGenerator.createPingStatusOutput(target, statusCode, errors.getEntries())
 						.ifPresent(task::addOutput);
 			}
 			errorsPerTarget.put(target, errors.getEntries());

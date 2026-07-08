@@ -9,18 +9,24 @@
 	<packaging>jar</packaging>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<compileSource>17</compileSource>
-		<compileTarget>17</compileTarget>
+		<project.build.outputTimestamp>2026-07-05T12:00:00+02:00</project.build.outputTimestamp>
 
-		<dsf.version>1.9.0</dsf.version>
-		<spring.version>6.2.12</spring.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<compileSource>25</compileSource>
+		<compileTarget>25</compileTarget>
+
+		<dsf.version>2.1.0</dsf.version>
+		<spring.version>7.0.8</spring.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
 
 	<name>dsf-process-ping-pong</name>
 	<description>DSF ping-pong process for connection tests between DSF instances</description>
 	<url>https://github.com/datasharingframework/dsf-process-ping-pong</url>
+	<organization>
+		<name>Data Sharing Framework</name>
+		<url>dsf.dev</url>
+	</organization>
 
 	<scm>
 		<connection>scm:git:git://github.com/datasharingframework/dsf-process-ping-pong.git</connection>
@@ -39,7 +45,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-api-v1</artifactId>
+			<artifactId>dsf-bpe-process-api-v2</artifactId>
 			<version>${dsf.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -47,37 +53,9 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.20.0</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- testing -->
-		<dependency>
-			<groupId>dev.dsf</groupId>
-			<artifactId>dsf-bpe-process-api-v1</artifactId>
-			<version>${dsf.version}</version>
-			<scope>test</scope>
-			<type>test-jar</type>
-		</dependency>
 		<dependency>
 			<groupId>dev.dsf</groupId>
 			<artifactId>dsf-fhir-validation</artifactId>
@@ -93,6 +71,30 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>plugin.properties</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>plugin.properties</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/doc</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>*.md</include>
+				</includes>
+				<targetPath>doc</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -107,6 +109,24 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.4</version>
+			</plugin>
+			<plugin>
+				<groupId>com.coderplus.maven.plugins</groupId>
+				<artifactId>copy-rename-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<id>copy-plugin-documentation</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>rename</goal>
+						</goals>
+						<configuration>
+							<sourceFile>target/ConfigDoc_dev.dsf.bpe.spring.config.md</sourceFile>
+							<destinationFile>target/classes/doc/configuration.md</destinationFile>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -128,7 +148,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>3.6.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -136,15 +156,27 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
 							<filters>
 								<filter>
-									<artifact>com.fasterxml.jackson.datatype:jackson-datatype-jsr310</artifact>
-									<includes>
-										<include>**</include>
-									</includes>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+										<exclude>META-INF/*.MF</exclude>
+										<exclude>META-INF/NOTICE</exclude>
+										<exclude>META-INF/versions/9/module-info.class</exclude>
+										<exclude>META-INF/notice.txt</exclude>
+										<exclude>META-INF/spring/aot.factories</exclude>
+									</excludes>
 								</filter>
 							</filters>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+							<minimizeJar>true</minimizeJar>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
+							</transformers>
 						</configuration>
 					</execution>
 				</executions>
@@ -188,28 +220,29 @@
 			<plugin>
 				<groupId>net.revelc.code</groupId>
 				<artifactId>impsort-maven-plugin</artifactId>
-				<version>1.12.0</version>
+				<version>1.13.0</version>
 				<configuration>
-					<compliance>17</compliance>
+					<compliance>24</compliance>
+					<removeUnused>true</removeUnused>
 					<groups>java.,javax.,org.,com.</groups>
 					<staticGroups>java,*</staticGroups>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>dev.dsf</groupId>
-				<artifactId>dsf-tools-documentation-generator</artifactId>
+				<artifactId>dsf-maven-plugin</artifactId>
 				<version>${dsf.version}</version>
 				<executions>
 					<execution>
 						<goals>
-							<goal>generate</goal>
+							<goal>generate-config-doc</goal>
 						</goals>
 					</execution>
 				</executions>
 				<configuration>
-					<workingPackages>
-						<workingPackage>dev.dsf.bpe</workingPackage>
-					</workingPackages>
+					<configDocPackages>
+						dev.dsf.bpe.spring.config
+					</configDocPackages>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -9,6 +9,7 @@ public enum ExecutionVariables
 	downloadResource,
 	downloadResourceReference,
 	statusCode,
+	statusCodeString,
 	error,
 	errorLocal,
 	errorRemote,

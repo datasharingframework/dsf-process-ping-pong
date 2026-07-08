@@ -17,21 +17,22 @@ import org.hl7.fhir.r4.model.Type;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.v1.constants.NamingSystems.EndpointIdentifier;
-import dev.dsf.bpe.v1.constants.NamingSystems.OrganizationIdentifier;
-import dev.dsf.bpe.v1.variables.Target;
+import dev.dsf.bpe.v2.constants.NamingSystems.EndpointIdentifier;
+import dev.dsf.bpe.v2.constants.NamingSystems.OrganizationIdentifier;
+import dev.dsf.bpe.v2.variables.Target;
 
 public final class PingStatusGenerator
 {
-	private static final String CODESYSTEM_UCUM = "http://unitsofmeasure.org";
+	private final String CODESYSTEM_UCUM = "http://unitsofmeasure.org";
+	private final String resourceVersion;
 
-	private PingStatusGenerator()
+	public PingStatusGenerator(String resourceVersion)
 	{
+		this.resourceVersion = resourceVersion;
 	}
 
-	public static Task updatePongStatusOutput(Task task, List<ProcessError> errors)
+	public Task updatePongStatusOutput(Task task, List<ProcessError> errors)
 	{
 		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
 				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
@@ -54,7 +55,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	public static TaskOutputComponent updateStatusOutput(TaskOutputComponent output, List<ProcessError> errors)
+	public TaskOutputComponent updateStatusOutput(TaskOutputComponent output, List<ProcessError> errors)
 	{
 		if (output != null)
 		{
@@ -74,7 +75,7 @@ public final class PingStatusGenerator
 		return output;
 	}
 
-	public static Task updatePongStatusOutput(Task task, CodeSystem.DsfPingStatus.Code statusCode)
+	public Task updatePongStatusOutput(Task task, CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		List<Task.TaskOutputComponent> pongStatusOutputs = getOutputsByExtensionUrlAndCodes(task,
 				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
@@ -97,7 +98,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	private static TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent,
+	private TaskOutputComponent updatePongStatusOutput(TaskOutputComponent outputComponent,
 			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (hasStatusCodeSet(outputComponent))
@@ -112,7 +113,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePongStatusOutput(Task task, Target target)
+	public Task updatePongStatusOutput(Task task, Target target)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
 				CodeSystem.DsfPing.Code.PONG_STATUS.getValue());
@@ -135,7 +136,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	private static TaskOutputComponent updateStatusOutput(TaskOutputComponent outputComponent, Target target)
+	private TaskOutputComponent updateStatusOutput(TaskOutputComponent outputComponent, Target target)
 	{
 		if (hasTargetSet(outputComponent))
 		{
@@ -148,7 +149,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed,
+	public Task updatePongStatusOutputDownloadSpeed(Task task, BigDecimal downloadSpeed,
 			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
@@ -172,7 +173,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	private static TaskOutputComponent updateStatusOutputDownloadSpeed(TaskOutputComponent outputComponent,
+	private TaskOutputComponent updateStatusOutputDownloadSpeed(TaskOutputComponent outputComponent,
 			BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
@@ -190,7 +191,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	public static Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed,
+	public Task updatePongStatusOutputUploadSpeed(Task task, BigDecimal uploadSpeed,
 			CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		List<Task.TaskOutputComponent> outputs = getOutputsByExtensionUrlAndCodes(task,
@@ -214,7 +215,7 @@ public final class PingStatusGenerator
 		return task;
 	}
 
-	private static TaskOutputComponent updateStatusOutputUploadSpeed(TaskOutputComponent outputComponent,
+	private TaskOutputComponent updateStatusOutputUploadSpeed(TaskOutputComponent outputComponent,
 			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code networkSpeedUnit)
 	{
 		if (hasDownloadSpeedSet(outputComponent))
@@ -231,7 +232,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static boolean hasTargetSet(TaskOutputComponent outputComponent)
+	private boolean hasTargetSet(TaskOutputComponent outputComponent)
 	{
 		List<Extension> correlationKeyExtensions = outputComponent
 				.getExtensionsByUrl(ConstantsPing.EXTENSION_URL_CORRELATION_KEY);
@@ -243,7 +244,7 @@ public final class PingStatusGenerator
 				|| !endpointIdentifierExtensions.isEmpty();
 	}
 
-	private static boolean hasStatusCodeSet(TaskOutputComponent outputComponent)
+	private boolean hasStatusCodeSet(TaskOutputComponent outputComponent)
 	{
 		Type valueType = outputComponent.getValue();
 		List<Coding> outputTypeCodings = outputComponent.getType().getCoding();
@@ -252,7 +253,7 @@ public final class PingStatusGenerator
 				|| outputTypeCodings.stream().anyMatch(coding -> CodeSystem.DsfPing.URL.equals(coding.getSystem()));
 	}
 
-	private static boolean hasDownloadSpeedSet(TaskOutputComponent outputComponent)
+	private boolean hasDownloadSpeedSet(TaskOutputComponent outputComponent)
 	{
 		Extension extension = getOrCreatePingStatusExtension(outputComponent);
 		Extension downloadSpeedExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_DOWNLOAD_SPEED);
@@ -260,16 +261,16 @@ public final class PingStatusGenerator
 		return downloadSpeedExtension != null;
 	}
 
-	public static Optional<TaskOutputComponent> createPingStatusOutput(Target target,
-			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors)
+	public Optional<TaskOutputComponent> createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
+			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, null, null, null,
 				null, null, null, null, null);
 	}
 
-	public static Optional<TaskOutputComponent> createPingStatusOutput(Target target,
-			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
-			CodeSystem.DsfPingUnits.Code downloadUnit, BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code uploadUnit)
+	public Optional<TaskOutputComponent> createPingStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
+			List<ProcessError> errors, BigDecimal downloadSpeed, CodeSystem.DsfPingUnits.Code downloadUnit,
+			BigDecimal uploadSpeed, CodeSystem.DsfPingUnits.Code uploadUnit)
 	{
 
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PING_STATUS, statusCode, errors, downloadSpeed,
@@ -279,18 +280,17 @@ public final class PingStatusGenerator
 				uploadUnit != null ? uploadUnit.toUcum() : null);
 	}
 
-	public static Optional<TaskOutputComponent> createPongStatusOutput(Target target,
-			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors)
+	public Optional<TaskOutputComponent> createPongStatusOutput(Target target, CodeSystem.DsfPingStatus.Code statusCode,
+			List<ProcessError> errors)
 	{
 		return createStatusOutput(target, CodeSystem.DsfPing.Code.PONG_STATUS, statusCode, errors, null, null, null,
 				null, null, null, null, null);
 	}
 
-	private static Optional<TaskOutputComponent> createStatusOutput(Target target,
-			CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode,
-			List<ProcessError> errors, BigDecimal downloadSpeed, String downloadUnit, String downloadUnitSystem,
-			String downloadUnitCode, BigDecimal uploadSpeed, String uploadUnit, String uploadUnitSystem,
-			String uploadUnitCode)
+	private Optional<TaskOutputComponent> createStatusOutput(Target target, CodeSystem.DsfPing.Code outputParameter,
+			CodeSystem.DsfPingStatus.Code statusCode, List<ProcessError> errors, BigDecimal downloadSpeed,
+			String downloadUnit, String downloadUnitSystem, String downloadUnitCode, BigDecimal uploadSpeed,
+			String uploadUnit, String uploadUnitSystem, String uploadUnitCode)
 	{
 		if (statusCode == null)
 			return Optional.empty();
@@ -305,31 +305,30 @@ public final class PingStatusGenerator
 		return Optional.of(output);
 	}
 
-	private static TaskOutputComponent addStatus(TaskOutputComponent outputComponent,
-			CodeSystem.DsfPing.Code outputParameter, CodeSystem.DsfPingStatus.Code statusCode)
+	private TaskOutputComponent addStatus(TaskOutputComponent outputComponent, CodeSystem.DsfPing.Code outputParameter,
+			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		if (outputParameter != null && statusCode != null)
 		{
-			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode));
-			outputComponent.getType().addCoding(CodeSystem.DsfPing.fromCode(outputParameter));
+			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode, resourceVersion));
+			outputComponent.getType().addCoding(CodeSystem.DsfPing.fromCode(outputParameter, resourceVersion));
 			sortStatusOutputExtensions(outputComponent);
 		}
 
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateStatus(TaskOutputComponent outputComponent, String outputParameter,
+	private TaskOutputComponent updateStatus(TaskOutputComponent outputComponent, String outputParameter,
 			CodeSystem.DsfPingStatus.Code statusCode)
 	{
 		Type valueType = outputComponent.getValue();
 		if (valueType instanceof Coding coding)
 		{
-			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode.getValue())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			coding.setSystem(CodeSystem.DsfPingStatus.URL).setCode(statusCode.getValue()).setVersion(resourceVersion);
 		}
 		else
 		{
-			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode));
+			outputComponent.setValue(CodeSystem.DsfPingStatus.fromCode(statusCode, resourceVersion));
 		}
 
 		List<Coding> outputTypeCodings = outputComponent.getType().getCoding();
@@ -355,7 +354,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent addTarget(TaskOutputComponent outputComponent, Target target)
+	private TaskOutputComponent addTarget(TaskOutputComponent outputComponent, Target target)
 	{
 		if (target != null)
 		{
@@ -373,7 +372,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateTarget(TaskOutputComponent outputComponent, Target target)
+	private TaskOutputComponent updateTarget(TaskOutputComponent outputComponent, Target target)
 	{
 		Extension extension = getOrCreatePingStatusExtension(outputComponent);
 
@@ -415,7 +414,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent addErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
+	private TaskOutputComponent addErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
 	{
 		if (errors != null && !errors.isEmpty())
 		{
@@ -423,21 +422,21 @@ public final class PingStatusGenerator
 			Extension errorsExtension = getOrCreateErrorsExtension(extension);
 			for (ProcessError error : errors)
 			{
-				errorsExtension.addExtension(ProcessError.toExtension(error));
+				errorsExtension.addExtension(ProcessError.toExtension(error, resourceVersion));
 			}
 		}
 		sortStatusOutputExtensions(outputComponent);
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
+	private TaskOutputComponent updateErrors(TaskOutputComponent outputComponent, List<ProcessError> errors)
 	{
 		Extension extension = getOrCreatePingStatusExtension(outputComponent);
 		Extension errorsExtension = getOrCreateErrorsExtension(extension);
 
 		if (errors != null)
 		{
-			List<Extension> newErrorExtensions = errors.stream().map(ProcessError::toExtension)
+			List<Extension> newErrorExtensions = errors.stream().map(e -> ProcessError.toExtension(e, resourceVersion))
 					.collect(Collectors.toCollection(ArrayList::new));
 			errorsExtension.setExtension(newErrorExtensions);
 		}
@@ -446,7 +445,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent addNetworkSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
+	private TaskOutputComponent addNetworkSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
 			String downloadUnit, String downloadUnitSystem, String downloadUnitCode, BigDecimal uploadSpeed,
 			String uploadUnit, String uploadUnitSystem, String uploadUnitCode)
 	{
@@ -456,7 +455,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent addDownloadSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
+	private TaskOutputComponent addDownloadSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
 			String unit, String unitSystem, String unitCode)
 	{
 		if (downloadSpeed != null && unit != null && unitSystem != null && unitCode != null)
@@ -476,8 +475,8 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateDownloadSpeed(TaskOutputComponent outputComponent,
-			BigDecimal downloadSpeed, String unit, String unitSystem, String unitCode)
+	private TaskOutputComponent updateDownloadSpeed(TaskOutputComponent outputComponent, BigDecimal downloadSpeed,
+			String unit, String unitSystem, String unitCode)
 	{
 		if (downloadSpeed != null && unit != null && unitSystem != null && unitCode != null)
 		{
@@ -508,8 +507,8 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent addUploadSpeed(TaskOutputComponent outputComponent, BigDecimal uploadSpeed,
-			String unit, String unitSystem, String unitCode)
+	private TaskOutputComponent addUploadSpeed(TaskOutputComponent outputComponent, BigDecimal uploadSpeed, String unit,
+			String unitSystem, String unitCode)
 	{
 		if (uploadSpeed != null && unit != null && unitSystem != null && unitCode != null)
 		{
@@ -527,7 +526,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static TaskOutputComponent updateUploadSpeed(TaskOutputComponent outputComponent, BigDecimal uploadSpeed,
+	private TaskOutputComponent updateUploadSpeed(TaskOutputComponent outputComponent, BigDecimal uploadSpeed,
 			String unit, String unitSystem, String unitCode)
 	{
 		if (uploadSpeed != null && unit != null && unitSystem != null && unitCode != null)
@@ -561,7 +560,7 @@ public final class PingStatusGenerator
 		return outputComponent;
 	}
 
-	private static Extension getOrCreatePingStatusExtension(TaskOutputComponent outputComponent)
+	private Extension getOrCreatePingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		Optional<Extension> optionalExtension = getPingStatusExtension(outputComponent);
 		if (optionalExtension.isPresent())
@@ -576,7 +575,7 @@ public final class PingStatusGenerator
 		}
 	}
 
-	private static Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
+	private Optional<Extension> getPingStatusExtension(TaskOutputComponent outputComponent)
 	{
 		List<Extension> pingStatusExtensions = outputComponent.getExtension().stream().filter(
 				extension -> ConstantsPing.STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS.equals(extension.getUrl()))
@@ -599,7 +598,7 @@ public final class PingStatusGenerator
 		}
 	}
 
-	private static Extension getOrCreateErrorsExtension(Extension extension)
+	private Extension getOrCreateErrorsExtension(Extension extension)
 	{
 		Optional<Extension> optionalExtension = getErrorsExtension(extension);
 		if (optionalExtension.isPresent())
@@ -614,7 +613,7 @@ public final class PingStatusGenerator
 		}
 	}
 
-	private static Optional<Extension> getErrorsExtension(Extension extension)
+	private Optional<Extension> getErrorsExtension(Extension extension)
 	{
 		List<Extension> errorsExtensions = extension.getExtension().stream()
 				.filter(ex -> ConstantsPing.EXTENSION_URL_ERRORS.equals(ex.getUrl())).toList();
@@ -635,7 +634,7 @@ public final class PingStatusGenerator
 		}
 	}
 
-	private static List<Task.TaskOutputComponent> getOutputsByExtensionUrlAndCodes(Task task, String... codes)
+	private List<Task.TaskOutputComponent> getOutputsByExtensionUrlAndCodes(Task task, String... codes)
 	{
 		return task.getOutput().stream()
 				.filter(outputComponent -> outputComponent.getType().getCoding().stream()
@@ -647,7 +646,7 @@ public final class PingStatusGenerator
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	private static void sortStatusOutputExtensions(TaskOutputComponent outputComponent)
+	private void sortStatusOutputExtensions(TaskOutputComponent outputComponent)
 	{
 		Optional<Extension> optPingStatusExtension = getPingStatusExtension(outputComponent);
 		if (optPingStatusExtension.isPresent())
