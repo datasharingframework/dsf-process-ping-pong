@@ -40,7 +40,7 @@ public class AggregateErrorMailService implements InitializingBean
 
 	public void send(IdType taskId, Map<Target, List<ProcessError>> errorsPerTarget)
 	{
-		if (sendProcessFailedMail)
+		if (sendProcessFailedMail && hasErrors(errorsPerTarget))
 		{
 			api.getMailService().send(subject, buildMailMessage(taskId, errorsPerTarget));
 			errorMailServiceLogger.info("Sent e-mail with process errors");
@@ -97,5 +97,10 @@ public class AggregateErrorMailService implements InitializingBean
 		}
 
 		return b.toString();
+	}
+
+	private boolean hasErrors(Map<Target, List<ProcessError>> errorsPerTarget)
+	{
+		return errorsPerTarget.values().stream().anyMatch(errors -> !errors.isEmpty());
 	}
 }
