@@ -195,6 +195,7 @@
     </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent">
       <bpmn:incoming>Flow_1du5wys</bpmn:incoming>
+      <bpmn:incoming>Flow_07qvbbh</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_0bifi5h">
       <bpmn:incoming>Flow_0iuuyo1</bpmn:incoming>
@@ -254,7 +255,12 @@
       <bpmn:outgoing>Flow_1mer14f</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_030thzb" errorRef="Error_0iukr7a" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1mer14f" sourceRef="Event_1uju50a" targetRef="CleanupServiceTask" />
+    <bpmn:sequenceFlow id="Flow_1mer14f" name="unexpted error" sourceRef="Event_1uju50a" targetRef="CleanupServiceTask" />
+    <bpmn:boundaryEvent id="Event_08ldh4h" attachedToRef="SelectPingTargetsServiceTask">
+      <bpmn:outgoing>Flow_07qvbbh</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0afje3b" errorRef="Error_14xet40" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_07qvbbh" name="no targets" sourceRef="Event_08ldh4h" targetRef="EndEvent" />
     <bpmn:textAnnotation id="TextAnnotation_02e4h2c">
       <bpmn:text>Log = logger
 Save = save as execution variable
@@ -264,6 +270,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   <bpmn:error id="Error_0tkfq65" name="resourceUploadError" errorCode="resourceUploadError" />
   <bpmn:error id="Error_1dhbjri" name="" />
   <bpmn:error id="Error_0iukr7a" name="unexpected-error" errorCode="unexpected-error" />
+  <bpmn:error id="Error_14xet40" name="no_targets" errorCode="no_targets" camunda:errorMessage="" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">
@@ -494,6 +501,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="270" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ejgxix_di" bpmnElement="Event_08ldh4h">
+        <dc:Bounds x="1072" y="382" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_19d2657" bpmnElement="TextAnnotation_02e4h2c" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
         <dc:Bounds x="420" y="80" width="420" height="70" />
         <bpmndi:BPMNLabel />
@@ -568,6 +578,18 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="1190" y="810" />
         <di:waypoint x="3160" y="810" />
         <di:waypoint x="3160" y="410" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2140" y="792" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07qvbbh_di" bpmnElement="Flow_07qvbbh">
+        <di:waypoint x="1090" y="418" />
+        <di:waypoint x="1090" y="880" />
+        <di:waypoint x="3380" y="880" />
+        <di:waypoint x="3380" y="388" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2195" y="862" width="49" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

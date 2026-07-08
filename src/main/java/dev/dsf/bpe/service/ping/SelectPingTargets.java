@@ -14,11 +14,13 @@ import java.util.stream.Stream;
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Bundle.BundleEntryComponent;
+import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Endpoint;
 import org.hl7.fhir.r4.model.Endpoint.EndpointStatus;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Organization;
 import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.constants.CodeSystems;
 import dev.dsf.bpe.v2.constants.NamingSystems.EndpointIdentifier;
 import dev.dsf.bpe.v2.constants.NamingSystems.OrganizationIdentifier;
 import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
@@ -49,8 +52,8 @@ public class SelectPingTargets implements ServiceTask
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(api, variables)
-				.map(uriComponents -> searchForEndpoints(api, uriComponents)).orElse(allEndpoints(api))
-				.filter(isLocalEndpoint(api).negate());
+				.map(uriComponents -> searchForEndpoints(api, variables, uriComponents))
+				.orElse(allEndpoints(api, variables)).filter(isLocalEndpoint(api).negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
 		Map<String, Identifier> organizationIdentifierByOrganizationId = remoteOrganizations.stream().collect(
@@ -98,13 +101,14 @@ public class SelectPingTargets implements ServiceTask
 				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
+			UriComponents searchParameters)
 	{
-		return searchForEndpoints(api, searchParameters, 1, 0);
+		return searchForEndpoints(api, variables, searchParameters, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters, int page,
-			int currentTotal)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
+			UriComponents searchParameters, int page, int currentTotal)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
 			return Stream.empty();
@@ -120,9 +124,12 @@ public class SelectPingTargets implements ServiceTask
 		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(resourceType.get(),
 				queryParameters);
 
+		if (searchResult.getTotal() == 0)
+			failProcessNoEndpoints(api, variables, searchParameters.toUriString());
+
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
-			return Stream.concat(toEndpoints(searchResult),
-					searchForEndpoints(api, searchParameters, page + 1, currentTotal + searchResult.getEntry().size()));
+			return Stream.concat(toEndpoints(searchResult), searchForEndpoints(api, variables, searchParameters,
+					page + 1, currentTotal + searchResult.getEntry().size()));
 		else
 			return toEndpoints(searchResult);
 	}
@@ -148,9 +155,9 @@ public class SelectPingTargets implements ServiceTask
 		}
 	}
 
-	private Stream<Endpoint> allEndpoints(ProcessPluginApi api)
+	private Stream<Endpoint> allEndpoints(ProcessPluginApi api, Variables variables)
 	{
-		return allEndpoints(api, 1, 0);
+		return allEndpoints(api, variables, 1, 0);
 	}
 
 	private Predicate<? super Endpoint> isLocalEndpoint(ProcessPluginApi api)
@@ -158,16 +165,19 @@ public class SelectPingTargets implements ServiceTask
 		return e -> Objects.equals(api.getEndpointProvider().getLocalEndpointAddress(), e.getAddress());
 	}
 
-	private Stream<Endpoint> allEndpoints(ProcessPluginApi api, int page, int currentTotal)
+	private Stream<Endpoint> allEndpoints(ProcessPluginApi api, Variables variables, int page, int currentTotal)
 	{
 		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(Endpoint.class,
 				Map.of("status", Collections.singletonList("active"), "identifier",
 						Collections.singletonList("http://dsf.dev/sid/endpoint-identifier|"), "_page",
 						Collections.singletonList(String.valueOf(page))));
 
+		if (searchResult.getTotal() == 0)
+			failProcessNoEndpoints(api, variables, "Endpoint");
+
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
 			return Stream.concat(toEndpoints(searchResult),
-					allEndpoints(api, page + 1, currentTotal + searchResult.getEntry().size()));
+					allEndpoints(api, variables, page + 1, currentTotal + searchResult.getEntry().size()));
 		else
 			return toEndpoints(searchResult);
 	}
@@ -191,5 +201,25 @@ public class SelectPingTargets implements ServiceTask
 				.ofNullable(organizationIdentifierByOrganizationId
 						.get(endpoint.getManagingOrganization().getReferenceElement().getIdPart()))
 				.map(Identifier::getValue);
+	}
+
+	private void failProcessNoEndpoints(ProcessPluginApi api, Variables variables, String query)
+	{
+		Task startTask = variables.getStartTask();
+		startTask.setStatus(Task.TaskStatus.FAILED);
+
+		String errorMessage = "Endpoint search query '" + query + "' had 0 results";
+
+		startTask.addOutput(new Task.TaskOutputComponent(new CodeableConcept(CodeSystems.BpmnMessage.error()),
+				new StringType(errorMessage)));
+
+		variables.updateTask(updateTaskOnServer(api, startTask));
+
+		throw new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_NO_TARGETS, errorMessage);
+	}
+
+	private Task updateTaskOnServer(ProcessPluginApi api, Task task)
+	{
+		return api.getDsfClientProvider().getLocal().update(task);
 	}
 }
