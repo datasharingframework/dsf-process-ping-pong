@@ -1,168 +1,166 @@
 package dev.dsf.bpe.util;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
-import dev.dsf.bpe.variables.process_errors.ProcessErrorsValueImpl;
+import dev.dsf.bpe.v2.variables.Variables;
 
 public class ErrorListUtils
 {
-	public static void addAll(ProcessErrors errors, DelegateExecution execution)
+	public static void addAll(ProcessErrors errors, Variables variables)
 	{
-		ProcessErrors errorList = getErrorList(execution);
+		ProcessErrors errorList = getErrorList(variables);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
-			saveErrorList(errorList, execution, null);
+			saveErrorList(errorList, variables, null);
 		}
 	}
 
-	public static void addAll(ProcessErrors errors, DelegateExecution execution, String correlationKey)
+	public static void addAll(ProcessErrors errors, Variables variables, String correlationKey)
 	{
-		ProcessErrors errorList = correlationKey != null ? getErrorList(execution, correlationKey)
-				: getErrorList(execution);
+		ProcessErrors errorList = correlationKey != null ? getErrorList(variables, correlationKey)
+				: getErrorList(variables);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
-			saveErrorList(errorList, execution, correlationKey);
+			saveErrorList(errorList, variables, correlationKey);
 		}
 	}
 
-	public static void addAllRemote(ProcessErrors errors, DelegateExecution execution)
+	public static void addAllRemote(ProcessErrors errors, Variables variables)
 	{
-		ProcessErrors errorList = getErrorListRemote(execution);
+		ProcessErrors errorList = getErrorListRemote(variables);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
-			saveErrorListRemote(errorList, execution, null);
+			saveErrorListRemote(errorList, variables, null);
 		}
 	}
 
-	public static void addAllRemote(ProcessErrors errors, DelegateExecution execution, String correlationKey)
+	public static void addAllRemote(ProcessErrors errors, Variables variables, String correlationKey)
 	{
-		ProcessErrors errorList = correlationKey != null ? getErrorListRemote(execution, correlationKey)
-				: getErrorListRemote(execution);
+		ProcessErrors errorList = correlationKey != null ? getErrorListRemote(variables, correlationKey)
+				: getErrorListRemote(variables);
 		if (errors != null)
 		{
 			errorList.addAll(errors);
-			saveErrorListRemote(errorList, execution, correlationKey);
+			saveErrorListRemote(errorList, variables, correlationKey);
 		}
 	}
 
-	public static void add(ProcessError error, DelegateExecution execution)
+	public static void add(ProcessError error, Variables variables)
 	{
-		add(error, execution, null);
+		add(error, variables, null);
 	}
 
-	public static void add(ProcessError error, DelegateExecution execution, String correlationKey)
-	{
-		if (correlationKey != null)
-		{
-			add(error, ExecutionVariables.errors.correlatedValue(correlationKey), execution);
-		}
-		else
-		{
-			add(error, ExecutionVariables.errors.name(), execution);
-		}
-	}
-
-	public static void addRemote(ProcessError error, DelegateExecution execution)
-	{
-		addRemote(error, execution, null);
-	}
-
-	public static void addRemote(ProcessError error, DelegateExecution execution, String correlationKey)
+	public static void add(ProcessError error, Variables variables, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			add(error, ExecutionVariables.errorsRemote.correlatedValue(correlationKey), execution);
+			add(error, ExecutionVariables.errors.correlatedValue(correlationKey), variables);
 		}
 		else
 		{
-			add(error, ExecutionVariables.errorsRemote.name(), execution);
+			add(error, ExecutionVariables.errors.name(), variables);
 		}
 	}
 
-	public static ProcessErrors getErrorList(DelegateExecution execution)
+	public static void addRemote(ProcessError error, Variables variables)
 	{
-		return getErrorList(execution, null);
+		addRemote(error, variables, null);
 	}
 
-	public static ProcessErrors getErrorList(DelegateExecution execution, String correlationKey)
+	public static void addRemote(ProcessError error, Variables variables, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			return getErrorList(ExecutionVariables.errors.correlatedValue(correlationKey), execution);
+			add(error, ExecutionVariables.errorsRemote.correlatedValue(correlationKey), variables);
 		}
 		else
 		{
-			return getErrorList(ExecutionVariables.errors.name(), execution);
+			add(error, ExecutionVariables.errorsRemote.name(), variables);
 		}
 	}
 
-	public static ProcessErrors getErrorListRemote(DelegateExecution execution)
+	public static ProcessErrors getErrorList(Variables variables)
 	{
-		return getErrorListRemote(execution, null);
+		return getErrorList(variables, null);
 	}
 
-	public static ProcessErrors getErrorListRemote(DelegateExecution execution, String correlationKey)
+	public static ProcessErrors getErrorList(Variables variables, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			return getErrorList(ExecutionVariables.errorsRemote.correlatedValue(correlationKey), execution);
+			return getErrorList(ExecutionVariables.errors.correlatedValue(correlationKey), variables);
 		}
 		else
 		{
-			return getErrorList(ExecutionVariables.errorsRemote.name(), execution);
+			return getErrorList(ExecutionVariables.errors.name(), variables);
 		}
 	}
 
-	public static ProcessErrors getErrorList(String variableName, DelegateExecution execution)
+	public static ProcessErrors getErrorListRemote(Variables variables)
 	{
-		ProcessErrors errors = (ProcessErrors) execution.getVariable(variableName);
+		return getErrorListRemote(variables, null);
+	}
+
+	public static ProcessErrors getErrorListRemote(Variables variables, String correlationKey)
+	{
+		if (correlationKey != null)
+		{
+			return getErrorList(ExecutionVariables.errorsRemote.correlatedValue(correlationKey), variables);
+		}
+		else
+		{
+			return getErrorList(ExecutionVariables.errorsRemote.name(), variables);
+		}
+	}
+
+	public static ProcessErrors getErrorList(String variableName, Variables variables)
+	{
+		ProcessErrors errors = variables.getVariable(variableName);
 		if (errors == null)
 		{
 			errors = new ProcessErrors();
-			saveErrorList(errors, variableName, execution);
+			saveErrorList(errors, variableName, variables);
 		}
 		return errors;
 	}
 
-	public static void add(ProcessError error, String variableName, DelegateExecution execution)
+	public static void add(ProcessError error, String variableName, Variables variables)
 	{
-		ProcessErrors errors = getErrorList(variableName, execution);
+		ProcessErrors errors = getErrorList(variableName, variables);
 		errors.add(error);
-		saveErrorList(errors, variableName, execution);
+		saveErrorList(errors, variableName, variables);
 	}
 
-	private static void saveErrorList(ProcessErrors errors, DelegateExecution execution, String correlationKey)
+	private static void saveErrorList(ProcessErrors errors, Variables variables, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			saveErrorList(errors, ExecutionVariables.errors.correlatedValue(correlationKey), execution);
+			saveErrorList(errors, ExecutionVariables.errors.correlatedValue(correlationKey), variables);
 		}
 		else
 		{
-			saveErrorList(errors, ExecutionVariables.errors.name(), execution);
+			saveErrorList(errors, ExecutionVariables.errors.name(), variables);
 		}
 	}
 
-	private static void saveErrorListRemote(ProcessErrors errors, DelegateExecution execution, String correlationKey)
+	private static void saveErrorListRemote(ProcessErrors errors, Variables variables, String correlationKey)
 	{
 		if (correlationKey != null)
 		{
-			saveErrorList(errors, ExecutionVariables.errorsRemote.correlatedValue(correlationKey), execution);
+			saveErrorList(errors, ExecutionVariables.errorsRemote.correlatedValue(correlationKey), variables);
 		}
 		else
 		{
-			saveErrorList(errors, ExecutionVariables.errorsRemote.name(), execution);
+			saveErrorList(errors, ExecutionVariables.errorsRemote.name(), variables);
 		}
 	}
 
-	private static void saveErrorList(ProcessErrors errors, String variableName, DelegateExecution execution)
+	private static void saveErrorList(ProcessErrors errors, String variableName, Variables variables)
 	{
-		execution.setVariable(variableName, new ProcessErrorsValueImpl(errors));
+		variables.setJsonVariable(variableName, errors);
 	}
 }

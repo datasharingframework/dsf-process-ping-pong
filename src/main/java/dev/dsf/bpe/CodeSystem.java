@@ -57,10 +57,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.getValue())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.getValue()).setVersion(resourceVersion);
 		}
 
 		public enum Code implements SingleStringValueEnum
@@ -104,10 +103,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.getValue())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.getValue()).setVersion(resourceVersion);
 		}
 
 		public enum Code implements SingleStringValueEnum
@@ -146,10 +144,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.toUcum())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.toUcum()).setVersion(resourceVersion);
 		}
 
 		public enum Code
@@ -359,10 +356,10 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromConcept(Concept concept)
+		public static Coding fromConcept(Concept concept, String resourceVersion)
 		{
 			return new Coding().setSystem(URL).setCode(concept.getCode()).setDisplay(concept.getDisplay())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+					.setVersion(resourceVersion);
 		}
 
 		public enum Concept

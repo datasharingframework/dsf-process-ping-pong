@@ -1,44 +1,14 @@
 package dev.dsf.bpe;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import dev.dsf.bpe.spring.config.PingConfig;
-import dev.dsf.bpe.v1.ProcessPluginDefinition;
+import dev.dsf.bpe.v2.AbstractProcessPluginDefinition;
 
-public class PingProcessPluginDefinition implements ProcessPluginDefinition
+public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 {
-	public static final String RESOURCE_VERSION = "2.1";
-	public static final String NON_RESOURCE_VERSION = "0.0";
-	public static final String VERSION = RESOURCE_VERSION + "." + NON_RESOURCE_VERSION;
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2025, 11, 25);
-
-	@Override
-	public String getName()
-	{
-		return "dsf-process-ping-pong";
-	}
-
-	@Override
-	public String getVersion()
-	{
-		return VERSION;
-	}
-
-	@Override
-	public String getResourceVersion()
-	{
-		return RESOURCE_VERSION;
-	}
-
-	@Override
-	public LocalDate getReleaseDate()
-	{
-		return RELEASE_DATE;
-	}
-
 	@Override
 	public List<String> getProcessModels()
 	{
