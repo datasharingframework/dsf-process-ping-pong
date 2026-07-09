@@ -59,8 +59,9 @@ public class StoreResults implements ServiceTask, InitializingBean
 		Map<Target, List<ProcessError>> errorsPerTarget = new HashMap<>();
 		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-		ProcessError.toTaskOutput(ErrorListUtils.getErrorList(variables).getEntries(), resourceVersion)
-				.forEach(task::addOutput);
+		List<ProcessError> localProcessErrors = ErrorListUtils.getErrorList(variables).getEntries();
+
+		ProcessError.toTaskOutput(localProcessErrors, resourceVersion).forEach(task::addOutput);
 
 		targets.getEntries().stream().sorted(Comparator.comparing(Target::getEndpointIdentifierValue)).forEach(target ->
 		{
@@ -110,7 +111,7 @@ public class StoreResults implements ServiceTask, InitializingBean
 
 		variables.updateTask(task);
 
-		errorMailService.send(task.getIdElement(), errorsPerTarget);
+		errorMailService.send(task.getIdElement(), localProcessErrors, errorsPerTarget);
 
 		logger.debug("Successfully stored results for task {}", variables.getStartTask().getIdElement().getValue());
 	}

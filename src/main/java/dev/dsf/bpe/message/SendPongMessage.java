@@ -103,11 +103,12 @@ public class SendPongMessage implements MessageSendTask
 			{
 				Target target = variables.getTarget();
 				Task startTask = variables.getStartTask();
+				String correlationKey = target.getCorrelationKey();
 
 				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
 						.convertLocal(e, true, ConstantsPing.PROCESS_NAME_PONG);
 
-				ErrorListUtils.add(errorAndStatus.error(), variables);
+				ErrorListUtils.add(errorAndStatus.error(), variables, correlationKey);
 				variables.setJsonVariable(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
 				variables.updateTask(startTask);
 

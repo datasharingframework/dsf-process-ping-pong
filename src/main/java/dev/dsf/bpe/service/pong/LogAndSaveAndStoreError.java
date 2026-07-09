@@ -29,9 +29,10 @@ public class LogAndSaveAndStoreError implements ServiceTask
 	{
 		Target target = variables.getTarget();
 		Task startTask = variables.getStartTask();
+		String correlationKey = target.getCorrelationKey();
 
 		ProcessError error = variables.getVariable(ExecutionVariables.resourceDownloadError.name());
-		ErrorListUtils.add(error, variables);
+		ErrorListUtils.add(error, variables, correlationKey);
 
 		ProcessError errorRemote = variables.getVariable(ExecutionVariables.resourceDownloadErrorRemote.name());
 		ErrorListUtils.addRemote(errorRemote, variables);

@@ -1,5 +1,6 @@
 package dev.dsf.bpe.service.pong;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.util.ErrorListUtils;
@@ -40,21 +42,26 @@ public class StoreErrors implements ServiceTask, InitializingBean
 	}
 
 	@Override
-	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Task startTask = variables.getStartTask();
+		Target target = variables.getTarget();
+		String correlationKey = target.getCorrelationKey();
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 		logger.debug("Storing errors...");
 
-		ProcessErrors errors = ErrorListUtils.getErrorList(variables);
-		pingStatusGenerator.updatePongStatusOutput(startTask, errors.getEntries());
+		List<ProcessError> localProcessErrors = ErrorListUtils.getErrorList(variables).getEntries();
+		ProcessError.toTaskOutput(localProcessErrors, resourceVersion).forEach(startTask::addOutput);
+
+		ProcessErrors targetErrors = ErrorListUtils.getErrorList(variables, correlationKey);
+		pingStatusGenerator.updatePongStatusOutput(startTask, targetErrors.getEntries());
 
 		CodeSystem.DsfPingStatus.Code status = variables.getVariable(ExecutionVariables.statusCode.name());
 		pingStatusGenerator.updatePongStatusOutput(startTask, status);
 
 		variables.updateTask(startTask);
 
-		Target target = variables.getTarget();
-		errorMailService.send(startTask.getIdElement(), Map.of(target, errors.getEntries()));
+		errorMailService.send(startTask.getIdElement(), localProcessErrors, Map.of(target, targetErrors.getEntries()));
 
 		logger.debug("Stored errors in task: " + startTask.getIdElement().getValue());
 	}

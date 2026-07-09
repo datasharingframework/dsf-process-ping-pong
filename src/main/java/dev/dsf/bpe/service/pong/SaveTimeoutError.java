@@ -21,10 +21,12 @@ public class SaveTimeoutError implements ServiceTask
 	{
 		logger.debug("Storing timeout error...");
 
+		String correlationKey = variables.getTarget().getCorrelationKey();
+
 		ProcessError error = new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 				CodeSystem.DsfPingError.Concept.CLEANUP_MESSAGE_TIMEOUT, null);
 
-		ErrorListUtils.add(error, variables);
+		ErrorListUtils.add(error, variables, correlationKey);
 
 		logger.debug("Stored timeout error: {}", error.concept().getDisplay());
 	}

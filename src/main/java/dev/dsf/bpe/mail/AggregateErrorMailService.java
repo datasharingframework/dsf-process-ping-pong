@@ -38,29 +38,39 @@ public class AggregateErrorMailService implements InitializingBean
 		Objects.requireNonNull(api, "api");
 	}
 
-	public void send(IdType taskId, Map<Target, List<ProcessError>> errorsPerTarget)
+	public void send(IdType taskId, List<ProcessError> localProcessErrors,
+			Map<Target, List<ProcessError>> errorsPerTarget)
 	{
-		if (sendProcessFailedMail && hasErrors(errorsPerTarget))
+		if (sendProcessFailedMail && (!localProcessErrors.isEmpty() || hasErrors(errorsPerTarget)))
 		{
-			api.getMailService().send(subject, buildMailMessage(taskId, errorsPerTarget));
+			api.getMailService().send(subject, buildMailMessage(taskId, localProcessErrors, errorsPerTarget));
 			errorMailServiceLogger.info("Sent e-mail with process errors");
 		}
 	}
 
-	protected String buildMailMessage(IdType taskId, Map<Target, List<ProcessError>> errorsPerTarget)
+	protected String buildMailMessage(IdType taskId, List<ProcessError> localProcessErrors,
+			Map<Target, List<ProcessError>> errorsPerTarget)
 	{
 		StringBuilder mailMessage = new StringBuilder();
 
 		mailMessage.append(MAIL_MESSAGE_INTRO);
 		mailMessage.append("\n\n");
 
-		errorsPerTarget.entrySet().stream()
-				.map(entry -> entry.getValue().stream().map(error -> createMessage(entry.getKey(), error)))
-				.forEach(messageStream -> messageStream.forEach(message ->
-				{
-					mailMessage.append(message);
-					mailMessage.append("\n\n");
-				}));
+		if (localProcessErrors != null)
+			localProcessErrors.stream().map(this::createMessage).forEach(message ->
+			{
+				mailMessage.append(message);
+				mailMessage.append("\n\n");
+			});
+
+		if (errorsPerTarget != null)
+			errorsPerTarget.entrySet().stream()
+					.map(entry -> entry.getValue().stream().map(error -> createMessage(entry.getKey(), error)))
+					.forEach(messageStream -> messageStream.forEach(message ->
+					{
+						mailMessage.append(message);
+						mailMessage.append("\n\n");
+					}));
 
 		mailMessage.append("Process started by: ");
 		mailMessage.append(taskId.toVersionless()
@@ -92,6 +102,20 @@ public class AggregateErrorMailService implements InitializingBean
 		else
 		{
 			b.append("Other:");
+			b.append("\n\t");
+			b.append("Description: ").append(error.concept().getDisplay());
+		}
+
+		return b.toString();
+	}
+
+	protected String createMessage(ProcessError error)
+	{
+		StringBuilder b = new StringBuilder();
+
+		if (error != null && error.concept() != null)
+		{
+			b.append("Error during local process execution:");
 			b.append("\n\t");
 			b.append("Description: ").append(error.concept().getDisplay());
 		}
