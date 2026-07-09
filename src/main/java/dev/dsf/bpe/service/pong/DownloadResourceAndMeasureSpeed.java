@@ -1,30 +1,23 @@
 package dev.dsf.bpe.service.pong;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.BinaryResourceDownloader;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.duration.DurationValueImpl;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class DownloadResourceAndMeasureSpeed extends AbstractService
+public class DownloadResourceAndMeasureSpeed implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(DownloadResourceAndMeasureSpeed.class);
 
-	public DownloadResourceAndMeasureSpeed(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Starting resource download to measure speed...");
 
@@ -36,14 +29,14 @@ public class DownloadResourceAndMeasureSpeed extends AbstractService
 		if (downloadResult.getErrorTuple() == null)
 		{
 			variables.setLong(ExecutionVariables.downloadedBytes.name(), downloadResult.getDownloadedBytes());
-			variables.setVariable(ExecutionVariables.downloadedDuration.name(),
-					new DurationValueImpl(downloadResult.getDownloadedDuration()));
+			variables.setJsonVariable(ExecutionVariables.downloadedDuration.name(),
+					downloadResult.getDownloadedDuration());
 		}
 		else
 		{
-			delegateExecution.setVariable(ExecutionVariables.resourceDownloadError.name(),
+			variables.setJsonVariable(ExecutionVariables.resourceDownloadError.name(),
 					downloadResult.getErrorTuple().errorLocal());
-			delegateExecution.setVariable(ExecutionVariables.resourceDownloadErrorRemote.name(),
+			variables.setJsonVariable(ExecutionVariables.resourceDownloadErrorRemote.name(),
 					downloadResult.getErrorTuple().errorRemote());
 		}
 		logger.debug("Completed resource download and measured speed.");

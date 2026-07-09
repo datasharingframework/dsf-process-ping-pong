@@ -19,8 +19,8 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.variables.Variables;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
@@ -63,8 +63,7 @@ public class BinaryResourceDownloader
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
 		try
 		{
-			InputStream binaryResourceInputStream = api.getFhirWebserviceClientProvider()
-					.getWebserviceClient(webserviceUrl)
+			InputStream binaryResourceInputStream = api.getDsfClientProvider().getByEndpointUrl(webserviceUrl)
 					.readBinary(downloadResourceReferenceId, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE);
 
 			try (binaryResourceInputStream)

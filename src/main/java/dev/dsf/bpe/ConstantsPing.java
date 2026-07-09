@@ -64,6 +64,12 @@ public final class ConstantsPing
 	public static final String PONG_TIMEOUT_DURATION_DEFAULT_VALUE = "PT30S";
 
 	public static final String BPMN_ERROR_CODE_UNEXPECTED_ERROR = "unexpected-error";
+	public static final String BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR = "An unexpected error has occurred";
+
+	public static final String BPMN_ERROR_CODE_TARGET_NOT_ALLOWED = "target_not_allowed";
+	public static final String BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED = "target_not_allowed";
+
+	public static final String BPMN_ERROR_CODE_NO_TARGETS = "no_targets";
 
 	public static final String POTENTIAL_FIX_URL_BASE = "https://dsf.dev/s";
 	public static final String POTENTIAL_FIX_URL_ERROR_HTTP = POTENTIAL_FIX_URL_BASE + "/error-http";

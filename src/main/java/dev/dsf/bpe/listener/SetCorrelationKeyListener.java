@@ -1,41 +1,24 @@
 package dev.dsf.bpe.listener;
 
-import java.util.Objects;
-
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.constants.BpmnExecutionVariables;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ExecutionListener;
+import dev.dsf.bpe.v2.constants.BpmnExecutionVariables;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SetCorrelationKeyListener implements ExecutionListener, InitializingBean
+public class SetCorrelationKeyListener implements ExecutionListener
 {
 	private static final Logger logger = LoggerFactory.getLogger(SetCorrelationKeyListener.class);
-	private final ProcessPluginApi api;
-
-	public SetCorrelationKeyListener(ProcessPluginApi api)
-	{
-		this.api = api;
-	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
+	public void notify(ProcessPluginApi processPluginApi, Variables variables) throws Exception
 	{
-		Objects.requireNonNull(api, "api");
-	}
-
-	@Override
-	public void notify(DelegateExecution execution) throws Exception
-	{
-		logger.debug("Setting correlation key for subprocess instance {}", execution.getProcessInstanceId());
-		Variables variables = api.getVariables(execution);
+		logger.debug("Setting correlation key for subprocess instance {}", variables.getActivityInstanceId());
 		Target target = variables.getTarget();
 
-		execution.setVariableLocal(BpmnExecutionVariables.CORRELATION_KEY, target.getCorrelationKey());
+		variables.setStringLocal(BpmnExecutionVariables.CORRELATION_KEY, target.getCorrelationKey());
 	}
 }

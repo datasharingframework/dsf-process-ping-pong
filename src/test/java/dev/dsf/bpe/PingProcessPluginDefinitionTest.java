@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import dev.dsf.bpe.v1.ProcessPluginDefinition;
+import dev.dsf.bpe.v2.ProcessPluginDefinition;
 
 public class PingProcessPluginDefinitionTest
 {

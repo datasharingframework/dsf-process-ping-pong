@@ -1,9 +1,9 @@
 package dev.dsf.bpe.message;
 
 import java.time.Duration;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,82 +19,104 @@ import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.MessageSendTask;
+import dev.dsf.bpe.v2.activity.values.SendTaskValues;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.error.MessageSendTaskErrorHandler;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SendPongMessage extends AbstractTaskMessageSend
+public class SendPongMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
+	private final PingStatusGenerator pingStatusGenerator;
 
-	public SendPongMessage(ProcessPluginApi api)
+	public SendPongMessage(PingStatusGenerator pingStatusGenerator)
 	{
-		super(api);
+		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
 	@Override
-	protected Stream<Task.ParameterComponent> getAdditionalInputParameters(DelegateExecution execution,
-			Variables variables)
+	public List<Task.ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
+			SendTaskValues sendTaskValues, Target target)
 	{
-		ProcessErrors errorListRemote = ErrorListUtils.getErrorListRemote(execution);
+		ProcessErrors errorListRemote = ErrorListUtils.getErrorListRemote(variables);
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 		if (downloadResourceSizeBytes >= 0)
 		{
 			Long downloadedBytes = variables.getLong(ExecutionVariables.downloadedBytes.name());
-			Duration downloadedDuration = (Duration) variables
-					.getVariable(ExecutionVariables.downloadedDuration.name());
+			Duration downloadedDuration = variables.getVariable(ExecutionVariables.downloadedDuration.name());
 			String downloadResourceReference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 
-			Stream<Task.ParameterComponent> downloadedBytesParameter = downloadedBytes != null
-					? Stream.of(DownloadedBytesGenerator.create(downloadedBytes))
-					: Stream.empty();
-			Stream<Task.ParameterComponent> downloadedDurationParameter = downloadedDuration != null
-					? Stream.of(DownloadedDurationGenerator.create(downloadedDuration))
-					: Stream.empty();
-			Stream<Task.ParameterComponent> downloadedResourceReferenceParameter = downloadResourceReference != null
-					? Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference))
-					: Stream.empty();
+			ArrayList<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
-			return Stream
-					.of(downloadedBytesParameter, downloadedDurationParameter, downloadedResourceReferenceParameter,
-							ErrorInputComponentGenerator.create(errorListRemote.getEntries()).stream())
-					.flatMap(stream -> stream);
+			if (downloadedBytes != null)
+				additionalInputParameters.add(DownloadedBytesGenerator.create(downloadedBytes, resourceVersion));
+
+			if (downloadedDuration != null)
+				additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration, resourceVersion));
+
+			if (downloadResourceReference != null)
+				additionalInputParameters
+						.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
+
+			additionalInputParameters
+					.addAll(ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion));
+
+			return additionalInputParameters;
 		}
 		else
 		{
-			return ErrorInputComponentGenerator.create(errorListRemote.getEntries()).stream();
+			return ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion);
 		}
 	}
 
 	@Override
-	protected void doExecute(DelegateExecution execution, Variables variables) throws Exception
+	public void execute(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
+			throws ErrorBoundaryEvent, Exception
 	{
 		Target target = variables.getTarget();
 		Task mainTask = variables.getStartTask();
-		variables.setVariable(ExecutionVariables.statusCode.name(),
-				new CodeValueImpl(CodeSystem.DsfPingStatus.Code.PONG_SENT));
-		PingStatusGenerator.updatePongStatusOutput(mainTask, target);
+		variables.setJsonVariable(ExecutionVariables.statusCode.name(), CodeSystem.DsfPingStatus.Code.PONG_SENT);
+		pingStatusGenerator.updatePongStatusOutput(mainTask, target);
 		variables.updateTask(mainTask);
-		super.doExecute(execution, variables);
+		MessageSendTask.super.execute(api, variables, sendTaskValues);
 	}
 
 	@Override
-	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
-			String errorMessage)
+	public MessageSendTaskErrorHandler getErrorHandler()
 	{
-		Target target = variables.getTarget();
-		Task startTask = variables.getStartTask();
+		return new MessageSendTaskErrorHandler()
+		{
+			@Override
+			public ErrorBoundaryEvent handleErrorBoundaryEvent(ProcessPluginApi processPluginApi, Variables variables,
+					ErrorBoundaryEvent errorBoundaryEvent)
+			{
+				return errorBoundaryEvent;
+			}
 
-		SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
-				.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PONG);
+			@Override
+			public Exception handleException(ProcessPluginApi processPluginApi, Variables variables,
+					SendTaskValues sendTaskValues, Exception e)
+			{
+				Target target = variables.getTarget();
+				Task startTask = variables.getStartTask();
+				String correlationKey = target.getCorrelationKey();
 
-		ErrorListUtils.add(errorAndStatus.error(), execution);
-		variables.setVariable(ExecutionVariables.statusCode.name(), new CodeValueImpl(errorAndStatus.statusCode()));
-		variables.updateTask(startTask);
+				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
+						.convertLocal(e, true, ConstantsPing.PROCESS_NAME_PONG);
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
-				errorAndStatus.error().concept().getDisplay());
+				ErrorListUtils.add(errorAndStatus.error(), variables, correlationKey);
+				variables.setJsonVariable(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
+				variables.updateTask(startTask);
+
+				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
+						errorAndStatus.error().concept().getDisplay());
+
+				return null;
+			}
+		};
 	}
 }
