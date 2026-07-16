@@ -46,8 +46,7 @@ public class PingTtpsFromDic1ExampleStarter
 				"OrganizationAffiliation?primary-organization:identifier=http://dsf.dev/sid/organization-identifier|highmed.org"
 						+ "&role=http://dsf.dev/fhir/CodeSystem/organization-role|TTP"
 						+ "&_include=OrganizationAffiliation:endpoint"))
-				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
-				.setCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
+				.getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.TARGET_ENDPOINTS));
 
 		return task;
 	}
