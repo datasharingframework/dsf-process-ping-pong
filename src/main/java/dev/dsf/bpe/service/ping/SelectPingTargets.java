@@ -1,5 +1,10 @@
 package dev.dsf.bpe.service.ping;
 
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +29,6 @@ import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
@@ -52,8 +55,8 @@ public class SelectPingTargets implements ServiceTask
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(api, variables)
-				.map(uriComponents -> searchForEndpoints(api, variables, uriComponents))
-				.orElse(allEndpoints(api, variables)).filter(isLocalEndpoint(api).negate());
+				.map(uri -> searchForEndpoints(api, variables, uri)).orElse(allEndpoints(api, variables))
+				.filter(isLocalEndpoint(api).negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
 		Map<String, Identifier> organizationIdentifierByOrganizationId = remoteOrganizations.stream().collect(
@@ -92,25 +95,22 @@ public class SelectPingTargets implements ServiceTask
 		};
 	}
 
-	private Optional<UriComponents> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
+	private Optional<URI> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
 	{
 		Task mainTask = variables.getStartTask();
-		return api.getTaskHelper()
-				.getFirstInputParameterStringValue(mainTask, CodeSystem.DsfPing.URL,
-						CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue())
-				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
+		return api.getTaskHelper().getFirstInputParameterStringValue(mainTask, CodeSystem.DsfPing.URL,
+				CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue()).map(this::encodedUri);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
-			UriComponents searchParameters)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables, URI searchParameters)
 	{
 		return searchForEndpoints(api, variables, searchParameters, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
-			UriComponents searchParameters, int page, int currentTotal)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables, URI searchParameters,
+			int page, int currentTotal)
 	{
-		if (searchParameters.getPathSegments().isEmpty())
+		if (searchParameters.getPath() == null || searchParameters.getPath().isBlank())
 			return Stream.empty();
 
 		Optional<Class<? extends Resource>> resourceType = getResourceType(searchParameters);
@@ -118,14 +118,14 @@ public class SelectPingTargets implements ServiceTask
 			return Stream.empty();
 
 		Map<String, List<String>> queryParameters = new HashMap<>();
-		queryParameters.putAll(searchParameters.getQueryParams());
+		queryParameters.putAll(parseUrlQuery(searchParameters.getQuery()));
 		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
 
 		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(resourceType.get(),
 				queryParameters);
 
 		if (searchResult.getTotal() == 0)
-			failProcessNoEndpoints(api, variables, searchParameters.toUriString());
+			failProcessNoEndpoints(api, variables, searchParameters.toString());
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
 			return Stream.concat(toEndpoints(searchResult), searchForEndpoints(api, variables, searchParameters,
@@ -135,12 +135,13 @@ public class SelectPingTargets implements ServiceTask
 	}
 
 	@SuppressWarnings("unchecked")
-	private Optional<Class<? extends Resource>> getResourceType(UriComponents searchParameters)
+	private Optional<Class<? extends Resource>> getResourceType(URI searchParameters)
 	{
-		if (searchParameters.getPathSegments().isEmpty())
+		if (searchParameters.getPath() == null || searchParameters.getPath().isBlank())
 			return Optional.empty();
 
-		String type = searchParameters.getPathSegments().get(searchParameters.getPathSegments().size() - 1);
+		String[] pathSegments = searchParameters.getPath().split("/");
+		String type = pathSegments[pathSegments.length - 1];
 		if (!endpointResouceTypes.matcher(type).matches())
 			return Optional.empty();
 
@@ -221,5 +222,50 @@ public class SelectPingTargets implements ServiceTask
 	private Task updateTaskOnServer(ProcessPluginApi api, Task task)
 	{
 		return api.getDsfClientProvider().getLocal().update(task);
+	}
+
+	private Map<String, List<String>> parseUrlQuery(String query)
+	{
+		Map<String, List<String>> queryParams = new HashMap<>();
+
+		String[] rawQueryParams = query.split("&");
+		for (String param : rawQueryParams)
+		{
+			String[] parts = param.split("=");
+			if (parts.length == 2)
+			{
+				String name = parts[0];
+				String value = parts[1];
+				if (queryParams.containsKey(name))
+				{
+					queryParams.get(name).add(value);
+				}
+				else
+				{
+					ArrayList<String> values = new ArrayList<>();
+					values.add(value);
+					queryParams.put(name, values);
+				}
+			}
+		}
+
+		return queryParams;
+	}
+
+	private URI encodedUri(String uri)
+	{
+		String[] parts = uri.split("\\?");
+		if (parts.length == 2)
+		{
+			String rest = parts[0];
+			String query = parts[1];
+			query = URLEncoder.encode(query, StandardCharsets.UTF_8);
+
+			return URI.create(rest + "?" + query);
+		}
+		else
+		{
+			return URI.create(uri);
+		}
 	}
 }

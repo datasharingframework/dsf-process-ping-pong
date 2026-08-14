@@ -15,7 +15,7 @@
 		<compileSource>25</compileSource>
 		<compileTarget>25</compileTarget>
 
-		<dsf.version>2.1.0</dsf.version>
+		<dsf.version>2.1.1</dsf.version>
 		<spring.version>7.0.8</spring.version>
 		<dsf.location>../dsf</dsf.location>
 	</properties>
@@ -48,11 +48,6 @@
 			<artifactId>dsf-bpe-process-api-v2</artifactId>
 			<version>${dsf.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 
 		<!-- testing -->
@@ -144,42 +139,6 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.6.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<filters>
-								<filter>
-									<artifact>*:*</artifact>
-									<excludes>
-										<exclude>META-INF/*.SF</exclude>
-										<exclude>META-INF/*.DSA</exclude>
-										<exclude>META-INF/*.RSA</exclude>
-										<exclude>META-INF/*.MF</exclude>
-										<exclude>META-INF/NOTICE</exclude>
-										<exclude>META-INF/versions/9/module-info.class</exclude>
-										<exclude>META-INF/notice.txt</exclude>
-										<exclude>META-INF/spring/aot.factories</exclude>
-									</excludes>
-								</filter>
-							</filters>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<minimizeJar>true</minimizeJar>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer"/>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
