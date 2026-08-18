@@ -44,7 +44,7 @@ public class DownloadResourceAndMeasureSpeedInSubProcess implements ServiceTask
 		}
 		else
 		{
-			variables.setJsonVariableLocal(ExecutionVariables.resourceDownloadError.name(),
+			variables.setJsonVariable(ExecutionVariables.resourceDownloadError.name(),
 					downloadResult.getErrorTuple().errorLocal());
 		}
 
