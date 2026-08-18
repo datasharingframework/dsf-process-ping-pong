@@ -1,7 +1,6 @@
 package dev.dsf.bpe.service.ping;
 
 import java.net.URI;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ import dev.dsf.bpe.v2.variables.Variables;
 public class SelectPingTargets implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectPingTargets.class);
-	private static final Pattern endpointResouceTypes = Pattern.compile(
+	private static final Pattern endpointResourceTypes = Pattern.compile(
 			"Endpoint|HealthcareService|ImagingStudy|InsurancePlan|Location|Organization|OrganizationAffiliation|PractitionerRole");
 
 	@Override
@@ -142,7 +141,7 @@ public class SelectPingTargets implements ServiceTask
 
 		String[] pathSegments = searchParameters.getPath().split("/");
 		String type = pathSegments[pathSegments.length - 1];
-		if (!endpointResouceTypes.matcher(type).matches())
+		if (!endpointResourceTypes.matcher(type).matches())
 			return Optional.empty();
 
 		try
