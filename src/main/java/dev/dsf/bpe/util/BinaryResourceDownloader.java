@@ -5,13 +5,10 @@ import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.time.Duration;
 import java.util.Locale;
-import java.util.Optional;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +31,7 @@ public class BinaryResourceDownloader
 		this.process = process;
 	}
 
-	public DownloadResult download(Variables variables, ProcessPluginApi api, Task task)
+	public DownloadResult download(Variables variables, ProcessPluginApi api, String downloadResourceReference)
 	{
 		DownloadResult downloadResult;
 
@@ -42,23 +39,7 @@ public class BinaryResourceDownloader
 				variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name()),
 				variables.getLong(ExecutionVariables.maxDownloadResourceSizeBytes.name()));
 
-		Optional<Reference> optDownloadResourceReference = api.getTaskHelper().getFirstInputParameterValue(task,
-				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_REFERENCE.getValue(),
-				Reference.class);
-
-		if (optDownloadResourceReference.isEmpty())
-		{
-			ProcessError error = new ProcessError(process,
-					CodeSystem.DsfPingError.Concept.LOCAL_BINARY_DOWNLOAD_MISSING_REFERENCE, null);
-			ProcessError errorRemote = new ProcessError(process,
-					CodeSystem.DsfPingError.Concept.REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE, null);
-			logDownloadError("Missing binary reference");
-			downloadResult = new DownloadResult(error, errorRemote);
-			return downloadResult;
-		}
-
-		Reference downloadResourceReference = optDownloadResourceReference.get();
-		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference.getReference());
+		IdType downloadResourceReferenceIdType = new IdType(downloadResourceReference);
 		String downloadResourceReferenceId = downloadResourceReferenceIdType.getIdPart();
 		String webserviceUrl = downloadResourceReferenceIdType.getBaseUrl();
 		try
@@ -69,7 +50,7 @@ public class BinaryResourceDownloader
 			try (binaryResourceInputStream)
 			{
 				logger.info("Downloading resource for: '{}'. Requested resource size is {} bytes...",
-						downloadResourceReference.getReference(), downloadResourceSizeBytes);
+						downloadResourceReference, downloadResourceSizeBytes);
 				long downloadStartTime = System.currentTimeMillis();
 				long downloadedBytes = skipNBytes(downloadResourceSizeBytes, binaryResourceInputStream);
 				long downloadEndTime = System.currentTimeMillis();

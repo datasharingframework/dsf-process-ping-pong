@@ -30,6 +30,12 @@ import dev.dsf.bpe.v2.variables.Variables;
 public class SendPingMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPingMessage.class);
+	private boolean includeReference;
+
+	public void setIncludeReference(boolean includeReference)
+	{
+		this.includeReference = includeReference;
+	}
 
 	@Override
 	public List<Task.ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
@@ -42,9 +48,11 @@ public class SendPingMessage implements MessageSendTask
 
 		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-		if (downloadResourceReference != null)
+		if (includeReference && downloadResourceReference != null)
+		{
 			additionalInputParameters
 					.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
+		}
 
 		additionalInputParameters.add(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes, resourceVersion));
 
@@ -95,10 +103,13 @@ public class SendPingMessage implements MessageSendTask
 			{
 				Target target = variables.getTarget();
 				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
-						.convertLocal(e, true, ConstantsPing.PROCESS_NAME_PING);
+						.convertLocal(e, includeReference, ConstantsPing.PROCESS_NAME_PING);
 
 				variables.setJsonVariableLocal(ExecutionVariables.error.name(), errorAndStatus.error());
 				variables.setJsonVariableLocal(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
+
+				String rawHttpStatus = errorAndStatus.rawHttpStatus();
+				variables.setStringLocal(ExecutionVariables.rawHttpStatus.name(), rawHttpStatus);
 
 				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
 						errorAndStatus.error().concept().getDisplay());

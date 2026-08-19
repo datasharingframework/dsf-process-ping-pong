@@ -23,5 +23,9 @@ public class PingStatusGatewayListener implements ExecutionListener
 		{
 			variables.setStringLocal(ExecutionVariables.statusCodeString.name(), statusCode.getValue());
 		}
+		else
+		{
+			variables.setStringLocal(ExecutionVariables.statusCodeString.name(), null);
+		}
 	}
 }

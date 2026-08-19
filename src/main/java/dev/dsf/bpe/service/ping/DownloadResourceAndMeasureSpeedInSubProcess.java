@@ -1,6 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +26,13 @@ public class DownloadResourceAndMeasureSpeedInSubProcess implements ServiceTask
 	{
 		logger.debug("Starting resource download to measure speed...");
 
-		Task task = variables.getLatestTask();
 		Target target = variables.getTarget();
 		String correlationKey = target.getCorrelationKey();
 
+		String reference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 
 		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
-				ConstantsPing.PROCESS_NAME_PING).download(variables, api, task);
+				ConstantsPing.PROCESS_NAME_PING).download(variables, api, reference);
 
 		if (downloadResult.getErrorTuple() == null)
 		{

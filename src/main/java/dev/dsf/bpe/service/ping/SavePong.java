@@ -14,6 +14,7 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
+import dev.dsf.bpe.service.variables.DownloadResourceReference;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
@@ -47,6 +48,7 @@ public class SavePong implements ServiceTask
 		optDownloadedBytes.ifPresent(decimalType -> variables.setLong(
 				ExecutionVariables.uploadedBytes.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
+		DownloadResourceReference.setFromTask(api, variables, pong);
 
 		ProcessErrors errorList = new ProcessErrors(parseInputs(pong));
 

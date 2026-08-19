@@ -483,6 +483,15 @@
     </concept>
 
     <concept>
+        <code value="remote-org-missing-ping-install-or-local-org-not-in-remote-allowlist"/>
+        <display value="Remote instance either does not have the ping pong process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"/>
+    </concept>
+    <concept>
+        <code value="remote-org-fhir-server-reference-resolution"/>
+        <display value="The DSF FHIR server of the remote instance was unable to resolve a reference on the local DSF FHIR server"/>
+    </concept>
+
+    <concept>
         <code value="local-unknown"/>
         <display value="An unknown error was encountered by the local instance"/>
     </concept>

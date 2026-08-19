@@ -23,11 +23,14 @@ import dev.dsf.bpe.service.GenerateAndStoreResource;
 import dev.dsf.bpe.service.SetDownloadResourceSize;
 import dev.dsf.bpe.service.autostart.SetTargetAndConfigureTimer;
 import dev.dsf.bpe.service.ping.CheckPingTaskStatus;
+import dev.dsf.bpe.service.ping.ClearPingStatus;
 import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
+import dev.dsf.bpe.service.ping.SavePingInstallOrAllowlistError;
 import dev.dsf.bpe.service.ping.SavePong;
+import dev.dsf.bpe.service.ping.SaveRemoteFhirServerReferenceResolutionError;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.SetPongTimeoutDuration;
 import dev.dsf.bpe.service.ping.StoreResults;
@@ -38,6 +41,7 @@ import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
 import dev.dsf.bpe.service.pong.LogPing;
 import dev.dsf.bpe.service.pong.SaveTimeoutError;
 import dev.dsf.bpe.service.pong.SelectPongTarget;
+import dev.dsf.bpe.service.pong.SetDownloadResourceReference;
 import dev.dsf.bpe.service.pong.SetEndpointIdentifier;
 import dev.dsf.bpe.service.pong.StoreDownloadSpeed;
 import dev.dsf.bpe.service.pong.StoreErrors;
@@ -122,7 +126,9 @@ public class PingConfig implements InitializingBean
 				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
 				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
 				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
-				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class);
+				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class,
+				SaveRemoteFhirServerReferenceResolutionError.class, SavePingInstallOrAllowlistError.class,
+				ClearPingStatus.class, SetDownloadResourceReference.class);
 	}
 
 	@Bean

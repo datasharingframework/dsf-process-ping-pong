@@ -819,8 +819,18 @@ public final class CodeSystem
 					"Remote instance encountered a read timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE(
-					"remote-binary-download-http-host-connect",
-					"Remote instance was unable to download the binary resource from the local DSF FHIR server because the connection was refused"
+					"remote-binary-download-missing-reference",
+					"Remote instance was unable to download the binary resource from this server because the reference was missing"
+			),
+
+			REMOTE_ORG_MISSING_PING_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST(
+					"remote-org-missing-ping-install-or-local-org-not-in-remote-allowlist",
+					"Remote instance either does not have the ping pong process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
+			),
+
+			REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION(
+					"remote-org-fhir-server-reference-resolution",
+					"The DSF FHIR server of the remote instance was unable to resolve a reference on the local DSF FHIR server"
 			),
 
 			LOCAL_UNKNOWN(
