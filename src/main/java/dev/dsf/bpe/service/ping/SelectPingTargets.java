@@ -1,9 +1,5 @@
 package dev.dsf.bpe.service.ping;
 
-import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +29,7 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
+import dev.dsf.bpe.util.FhirSearchQuery;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
 import dev.dsf.bpe.v2.constants.CodeSystems;
@@ -53,9 +50,9 @@ public class SelectPingTargets implements ServiceTask
 	@Override
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
-		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(api, variables)
-				.map(uri -> searchForEndpoints(api, variables, uri)).orElse(allEndpoints(api, variables))
-				.filter(isLocalEndpoint(api).negate());
+		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(api, variables).map(FhirSearchQuery::new)
+				.map(fhirSearchQuery -> searchForEndpoints(api, variables, fhirSearchQuery))
+				.orElse(allEndpoints(api, variables)).filter(isLocalEndpoint(api).negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
 		Map<String, Identifier> organizationIdentifierByOrganizationId = remoteOrganizations.stream().collect(
@@ -94,52 +91,53 @@ public class SelectPingTargets implements ServiceTask
 		};
 	}
 
-	private Optional<URI> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
+	private Optional<String> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
 	{
 		Task mainTask = variables.getStartTask();
 		return api.getTaskHelper().getFirstInputParameterStringValue(mainTask, CodeSystem.DsfPing.URL,
-				CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue()).map(this::encodedUri);
+				CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue());
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables, URI searchParameters)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
+			FhirSearchQuery fhirSearchQuery)
 	{
-		return searchForEndpoints(api, variables, searchParameters, 1, 0);
+		return searchForEndpoints(api, variables, fhirSearchQuery, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables, URI searchParameters,
-			int page, int currentTotal)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, Variables variables,
+			FhirSearchQuery fhirSearchQuery, int page, int currentTotal)
 	{
-		if (searchParameters.getPath() == null || searchParameters.getPath().isBlank())
+		if (fhirSearchQuery.getPath() == null || fhirSearchQuery.getPath().isBlank())
 			return Stream.empty();
 
-		Optional<Class<? extends Resource>> resourceType = getResourceType(searchParameters);
+		Optional<Class<? extends Resource>> resourceType = getResourceType(fhirSearchQuery);
 		if (resourceType.isEmpty())
 			return Stream.empty();
 
 		Map<String, List<String>> queryParameters = new HashMap<>();
-		queryParameters.putAll(parseUrlQuery(searchParameters.getQuery()));
+		queryParameters.putAll(fhirSearchQuery.getQueryParams());
 		queryParameters.put("_page", Collections.singletonList(String.valueOf(page)));
 
 		Bundle searchResult = api.getDsfClientProvider().getLocal().searchWithStrictHandling(resourceType.get(),
 				queryParameters);
 
 		if (searchResult.getTotal() == 0)
-			failProcessNoEndpoints(api, variables, searchParameters.toString());
+			failProcessNoEndpoints(api, variables, fhirSearchQuery.toString());
 
 		if (searchResult.getTotal() > currentTotal + searchResult.getEntry().size())
-			return Stream.concat(toEndpoints(searchResult), searchForEndpoints(api, variables, searchParameters,
+			return Stream.concat(toEndpoints(searchResult), searchForEndpoints(api, variables, fhirSearchQuery,
 					page + 1, currentTotal + searchResult.getEntry().size()));
 		else
 			return toEndpoints(searchResult);
 	}
 
 	@SuppressWarnings("unchecked")
-	private Optional<Class<? extends Resource>> getResourceType(URI searchParameters)
+	private Optional<Class<? extends Resource>> getResourceType(FhirSearchQuery fhirSearchQuery)
 	{
-		if (searchParameters.getPath() == null || searchParameters.getPath().isBlank())
+		if (fhirSearchQuery.getPath() == null || fhirSearchQuery.getPath().isBlank())
 			return Optional.empty();
 
-		String[] pathSegments = searchParameters.getPath().split("/");
+		String[] pathSegments = fhirSearchQuery.getPath().split("/");
 		String type = pathSegments[pathSegments.length - 1];
 		if (!endpointResourceTypes.matcher(type).matches())
 			return Optional.empty();
@@ -221,50 +219,5 @@ public class SelectPingTargets implements ServiceTask
 	private Task updateTaskOnServer(ProcessPluginApi api, Task task)
 	{
 		return api.getDsfClientProvider().getLocal().update(task);
-	}
-
-	private Map<String, List<String>> parseUrlQuery(String query)
-	{
-		Map<String, List<String>> queryParams = new HashMap<>();
-
-		String[] rawQueryParams = query.split("&");
-		for (String param : rawQueryParams)
-		{
-			String[] parts = param.split("=");
-			if (parts.length == 2)
-			{
-				String name = parts[0];
-				String value = parts[1];
-				if (queryParams.containsKey(name))
-				{
-					queryParams.get(name).add(value);
-				}
-				else
-				{
-					ArrayList<String> values = new ArrayList<>();
-					values.add(value);
-					queryParams.put(name, values);
-				}
-			}
-		}
-
-		return queryParams;
-	}
-
-	private URI encodedUri(String uri)
-	{
-		String[] parts = uri.split("\\?");
-		if (parts.length == 2)
-		{
-			String rest = parts[0];
-			String query = parts[1];
-			query = URLEncoder.encode(query, StandardCharsets.UTF_8);
-
-			return URI.create(rest + "?" + query);
-		}
-		else
-		{
-			return URI.create(uri);
-		}
 	}
 }
