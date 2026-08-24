@@ -40,6 +40,8 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
 		var sCleanupPong = "fhir/StructureDefinition/dsf-task-cleanup-pong.xml";
 		var sErrorExtension = "fhir/StructureDefinition/dsf-extension-error.xml";
+		var sBasicConnectionTestPong = "fhir/StructureDefinition/dsf-task-basic-connection-test-pong.xml";
+		var sReferenceResolutionTestPong = "fhir/StructureDefinition/dsf-task-reference-resolution-test-pong.xml";
 
 		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 		var tStartPingAutoStart = "fhir/Task/dsf-task-start-ping-autostart.xml";
@@ -50,9 +52,10 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 		var vPingStatus = "fhir/ValueSet/dsf-ping-status.xml";
 		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
 
-		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
-				Arrays.asList(aPing, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sStartPing, sPong,
-						sCleanupPong, tStartPing, vPing, vPingStatus, vPingUnits),
+		return Map.of(
+				ConstantsPing.PROCESS_NAME_FULL_PING, Arrays.asList(aPing, cPing, cPingStatus, cPingError,
+						sErrorExtension, sPingStatus, sStartPing, sPong, sCleanupPong, sBasicConnectionTestPong,
+						sReferenceResolutionTestPong, tStartPing, vPing, vPingStatus, vPingUnits),
 				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
