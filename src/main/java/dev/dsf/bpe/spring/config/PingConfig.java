@@ -15,8 +15,10 @@ import dev.dsf.bpe.listener.PongStatusGatewayListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
+import dev.dsf.bpe.message.SendBasicConnectionTestPongMessage;
 import dev.dsf.bpe.message.SendPingMessage;
 import dev.dsf.bpe.message.SendPongMessage;
+import dev.dsf.bpe.message.SendReferenceResolutionTestPongMessage;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
 import dev.dsf.bpe.service.GenerateAndStoreResource;
@@ -28,17 +30,21 @@ import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
-import dev.dsf.bpe.service.ping.SavePingInstallOrAllowlistError;
 import dev.dsf.bpe.service.ping.SavePong;
-import dev.dsf.bpe.service.ping.SaveRemoteFhirServerReferenceResolutionError;
+import dev.dsf.bpe.service.ping.SavePongInstallOrAllowlistError;
+import dev.dsf.bpe.service.ping.SaveReferenceResolutionErrorPing;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.SetPongTimeoutDuration;
 import dev.dsf.bpe.service.ping.StoreResults;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
+import dev.dsf.bpe.service.pong.LogAndSaveSendErrorPong;
 import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
 import dev.dsf.bpe.service.pong.LogPing;
+import dev.dsf.bpe.service.pong.LogReferenceResolutionSuccess;
+import dev.dsf.bpe.service.pong.SavePingInstallOrAllowlistError;
+import dev.dsf.bpe.service.pong.SaveReferenceResolutionErrorPong;
 import dev.dsf.bpe.service.pong.SaveTimeoutError;
 import dev.dsf.bpe.service.pong.SelectPongTarget;
 import dev.dsf.bpe.service.pong.SetDownloadResourceReference;
@@ -127,8 +133,10 @@ public class PingConfig implements InitializingBean
 				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
 				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
 				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class,
-				SaveRemoteFhirServerReferenceResolutionError.class, SavePingInstallOrAllowlistError.class,
-				ClearPingStatus.class, SetDownloadResourceReference.class);
+				SaveReferenceResolutionErrorPing.class, SavePongInstallOrAllowlistError.class, ClearPingStatus.class,
+				SetDownloadResourceReference.class, LogAndSaveSendErrorPong.class, LogReferenceResolutionSuccess.class,
+				SavePingInstallOrAllowlistError.class, SaveReferenceResolutionErrorPong.class,
+				SendBasicConnectionTestPongMessage.class, SendReferenceResolutionTestPongMessage.class);
 	}
 
 	@Bean

@@ -20,7 +20,7 @@ public class PingProcessPluginDefinitionTest
 
 		var ping = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING);
 		assertNotNull(ping);
-		assertEquals(13, ping.stream().filter(this::exists).count());
+		assertEquals(15, ping.stream().filter(this::exists).count());
 
 		var pingAutostart = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART);
 		assertNotNull(pingAutostart);

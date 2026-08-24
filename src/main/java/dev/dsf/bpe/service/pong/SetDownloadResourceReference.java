@@ -4,6 +4,7 @@ import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.service.variables.DownloadResourceReference;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
@@ -22,5 +23,6 @@ public class SetDownloadResourceReference implements ServiceTask
 		Task task = variables.getStartTask();
 
 		DownloadResourceReference.setFromTask(api, variables, task);
+		variables.setBoolean(ExecutionVariables.includeReferencePong.name(), true);
 	}
 }

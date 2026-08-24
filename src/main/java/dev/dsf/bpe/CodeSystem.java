@@ -74,7 +74,8 @@ public final class CodeSystem
 			DOWNLOADED_BYTES("downloaded-bytes"),
 			DOWNLOAD_RESOURCE_REFERENCE("download-resource-reference"),
 			ERROR("error"),
-			PONG_TIMEOUT_DURATION_ISO_8601("pong-timeout-duration");
+			PONG_TIMEOUT_DURATION_ISO_8601("pong-timeout-duration"),
+			TEST_REFERENCE("test-reference");
 
 			private final String value;
 
@@ -823,14 +824,24 @@ public final class CodeSystem
 					"Remote instance was unable to download the binary resource from this server because the reference was missing"
 			),
 
+			REMOTE_ORG_MISSING_PONG_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST(
+					"remote-org-missing-pong-install-or-local-org-not-in-remote-allowlist",
+					"Remote instance either does not have the pong process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
+			),
+
 			REMOTE_ORG_MISSING_PING_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST(
 					"remote-org-missing-ping-install-or-local-org-not-in-remote-allowlist",
-					"Remote instance either does not have the ping pong process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
+					"Remote instance either does not have the ping process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
 			),
 
 			REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION(
 					"remote-org-fhir-server-reference-resolution",
 					"The DSF FHIR server of the remote instance was unable to resolve a reference on the local DSF FHIR server"
+			),
+
+			LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION(
+					"local-org-fhir-server-reference-resolution",
+					"The local DSF FHIR server was unable to resolve a reference on the DSF FHIR server of the remote instance"
 			),
 
 			LOCAL_UNKNOWN(

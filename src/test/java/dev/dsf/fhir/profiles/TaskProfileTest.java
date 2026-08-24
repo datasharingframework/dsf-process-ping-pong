@@ -43,6 +43,7 @@ import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.util.task.input.generator.ErrorInputComponentGenerator;
+import dev.dsf.bpe.util.task.input.generator.TestReferenceGenerator;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.bpe.v2.constants.CodeSystems.BpmnMessage;
 import dev.dsf.bpe.v2.constants.NamingSystems.EndpointIdentifier;
@@ -65,7 +66,8 @@ public class TaskProfileTest
 			Arrays.asList("dsf-task-2.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
 					"dsf-task-ping.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
 					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
-					"dsf-task-cleanup-pong.xml"),
+					"dsf-task-cleanup-pong.xml", "dsf-task-basic-connection-test-pong.xml",
+					"dsf-task-reference-resolution-test-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-2.0.0.xml", "dsf-bpmn-message-2.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml"),
 			Arrays.asList("dsf-read-access-tag-2.0.0.xml", "dsf-bpmn-message-2.0.0.xml", "dsf-ping-1_0.xml",
@@ -688,6 +690,78 @@ public class TaskProfileTest
 
 		task.addInput(DownloadedBytesGenerator.create(1000, def.getResourceVersion()));
 		task.addInput(DownloadedDurationGenerator.create(Duration.ofMillis(1000), def.getResourceVersion()));
+		return task;
+	}
+
+	@Test
+	public void testValidTaskBasicConnectionTestPong()
+	{
+		Task task = createValidTaskBasicConnectionTestPong();
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	private Task createValidTaskBasicConnectionTestPong()
+	{
+		Task task = new Task();
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_BASIC_CONNECTION_TEST_PONG);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI + "|" + def.getResourceVersion());
+		task.setStatus(TaskStatus.REQUESTED);
+		task.setIntent(TaskIntent.ORDER);
+		task.setAuthoredOn(new Date());
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
+
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_BASIC_CONNECTION_TEST_PONG_MESSAGE_NAME))
+				.getType().addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
+
+		return task;
+	}
+
+	@Test
+	public void testValidTaskReferenceResolutionTestPong()
+	{
+		Task task = createValidReferenceResolutionTestPong();
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	private Task createValidReferenceResolutionTestPong()
+	{
+		Task task = new Task();
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_REFERENCE_RESOLUTION_TEST_PONG);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PING_PROCESS_URI + "|" + def.getResourceVersion());
+		task.setStatus(TaskStatus.REQUESTED);
+		task.setIntent(TaskIntent.ORDER);
+		task.setAuthoredOn(new Date());
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
+
+		task.addInput()
+				.setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_REFERENCE_RESOLUTION_TEST_PONG_MESSAGE_NAME))
+				.getType().addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
+		task.addInput(TestReferenceGenerator.create("https://test.endpoint.org/fhir/Binary", def.getResourceVersion()));
+
 		return task;
 	}
 

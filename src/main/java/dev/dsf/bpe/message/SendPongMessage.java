@@ -31,10 +31,16 @@ public class SendPongMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
 	private final PingStatusGenerator pingStatusGenerator;
+	private boolean includeReference;
 
 	public SendPongMessage(PingStatusGenerator pingStatusGenerator)
 	{
 		this.pingStatusGenerator = pingStatusGenerator;
+	}
+
+	public void setIncludeReference(boolean includeReference)
+	{
+		this.includeReference = includeReference;
 	}
 
 	@Override
@@ -58,9 +64,11 @@ public class SendPongMessage implements MessageSendTask
 			if (downloadedDuration != null)
 				additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration, resourceVersion));
 
-			if (downloadResourceReference != null)
+			if (includeReference && downloadResourceReference != null)
+			{
 				additionalInputParameters
 						.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
+			}
 
 			additionalInputParameters
 					.addAll(ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion));

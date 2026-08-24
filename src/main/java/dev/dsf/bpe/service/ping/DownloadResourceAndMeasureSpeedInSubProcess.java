@@ -31,23 +31,32 @@ public class DownloadResourceAndMeasureSpeedInSubProcess implements ServiceTask
 
 		String reference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 
-		BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
-				ConstantsPing.PROCESS_NAME_PING).download(variables, api, reference);
-
-		if (downloadResult.getErrorTuple() == null)
+		if (reference != null)
 		{
-			variables.setLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey),
-					downloadResult.getDownloadedBytes());
-			variables.setJsonVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey),
-					downloadResult.getDownloadedDuration());
+			BinaryResourceDownloader.DownloadResult downloadResult = new BinaryResourceDownloader(
+					ConstantsPing.PROCESS_NAME_PING).download(variables, api, reference);
+
+			if (downloadResult.getErrorTuple() == null)
+			{
+				variables.setLong(ExecutionVariables.downloadedBytes.correlatedValue(correlationKey),
+						downloadResult.getDownloadedBytes());
+				variables.setJsonVariable(ExecutionVariables.downloadedDuration.correlatedValue(correlationKey),
+						downloadResult.getDownloadedDuration());
+			}
+			else
+			{
+				variables.setJsonVariable(ExecutionVariables.resourceDownloadError.name(),
+						downloadResult.getErrorTuple().errorLocal());
+			}
+
+			logger.debug("Completed resource download and measured speed.");
 		}
 		else
 		{
-			variables.setJsonVariable(ExecutionVariables.resourceDownloadError.name(),
-					downloadResult.getErrorTuple().errorLocal());
+			logger.debug(
+					"No download resource reference found. Skipping resource download for endpoint {} of organization {}",
+					target.getEndpointIdentifierValue(), target.getOrganizationIdentifierValue());
 		}
-
-		logger.debug("Completed resource download and measured speed.");
 	}
 
 	@Override

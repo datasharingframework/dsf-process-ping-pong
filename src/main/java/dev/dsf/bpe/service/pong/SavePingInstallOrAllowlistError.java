@@ -1,8 +1,4 @@
-package dev.dsf.bpe.service.ping;
-
-import static dev.dsf.bpe.ConstantsPing.POTENTIAL_FIX_URL_REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION;
-
-import java.util.Objects;
+package dev.dsf.bpe.service.pong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,15 +21,16 @@ public class SavePingInstallOrAllowlistError implements ServiceTask
 	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		String correlationKey = variables.getTarget().getCorrelationKey();
-		ProcessError error = new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+		ProcessError error = new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
 				CodeSystem.DsfPingError.Concept.REMOTE_ORG_MISSING_PING_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST,
-				POTENTIAL_FIX_URL_REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION);
-		CodeSystem.DsfPingStatus.Code status = variables.getVariableLocal(ExecutionVariables.statusCode.name());
-		Objects.requireNonNull(status, "status");
+				null);
 
 		ErrorListUtils.add(error, variables, correlationKey);
-		variables.setJsonVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey), status);
-		logger.debug("Saved error when trying to send second ping message without reference. Error message: {}",
+
+		variables.setBoolean(ExecutionVariables.sendPong.name(), false);
+
+		logger.debug(
+				"Sending a message with a reference failed with HTTP 403, sending a message without a reference also failed with HTTP 403: {}",
 				error.concept().getDisplay());
 	}
 }

@@ -43,6 +43,12 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_MESSAGE_NAME = "cleanupPong";
 
+	public static final String PROFILE_DSF_TASK_BASIC_CONNECTION_TEST_PONG = "http://dsf.dev/fhir/StructureDefinition/task-basic-connection-test-pong";
+	public static final String PROFILE_DSF_TASK_BASIC_CONNECTION_TEST_PONG_MESSAGE_NAME = "basicConnectionTestPong";
+
+	public static final String PROFILE_DSF_TASK_REFERENCE_RESOLUTION_TEST_PONG = "http://dsf.dev/fhir/StructureDefinition/task-reference-resolution-test-pong";
+	public static final String PROFILE_DSF_TASK_REFERENCE_RESOLUTION_TEST_PONG_MESSAGE_NAME = "referenceResolutionTestPong";
+
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_PING_STATUS = "http://dsf.dev/fhir/StructureDefinition/extension-ping-status";
 	public static final String STRUCTURE_DEFINITION_URL_EXTENSION_ERROR = "http://dsf.dev/fhir/StructureDefinition/extension-error";
 
@@ -80,4 +86,5 @@ public final class ConstantsPing
 	public static final String POTENTIAL_FIX_URL_UNKNOWN_HOST = POTENTIAL_FIX_URL_BASE + "/unknown-host";
 	public static final String POTENTIAL_FIX_URL_REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION = POTENTIAL_FIX_URL_BASE
 			+ "/fhir-reference-resolution";
+	public static final String POTENTIAL_FIX_URL_LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION = POTENTIAL_FIX_URL_REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION;
 }

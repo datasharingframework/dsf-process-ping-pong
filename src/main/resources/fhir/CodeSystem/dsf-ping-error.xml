@@ -490,6 +490,10 @@
         <code value="remote-org-fhir-server-reference-resolution"/>
         <display value="The DSF FHIR server of the remote instance was unable to resolve a reference on the local DSF FHIR server"/>
     </concept>
+    <concept>
+        <code value="local-org-fhir-server-reference-resolution"/>
+        <display value="The local DSF FHIR server was unable to resolve a reference on the DSF FHIR server of the remote instance"/>
+    </concept>
 
     <concept>
         <code value="local-unknown"/>

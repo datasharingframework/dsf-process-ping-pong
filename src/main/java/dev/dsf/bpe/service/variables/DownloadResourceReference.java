@@ -37,6 +37,7 @@ public final class DownloadResourceReference
 		}
 		else
 		{
+			variables.setString(ExecutionVariables.downloadResourceReference.name(), null);
 			logger.debug("No download resource reference found in task {}",
 					api.getTaskHelper().getLocalVersionlessAbsoluteUrl(task));
 		}

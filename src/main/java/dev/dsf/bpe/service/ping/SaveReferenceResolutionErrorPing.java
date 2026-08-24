@@ -15,9 +15,9 @@ import dev.dsf.bpe.v2.activity.ServiceTask;
 import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class SaveRemoteFhirServerReferenceResolutionError implements ServiceTask
+public class SaveReferenceResolutionErrorPing implements ServiceTask
 {
-	private static final Logger logger = LoggerFactory.getLogger(SaveRemoteFhirServerReferenceResolutionError.class);
+	private static final Logger logger = LoggerFactory.getLogger(SaveReferenceResolutionErrorPing.class);
 
 	@Override
 	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
