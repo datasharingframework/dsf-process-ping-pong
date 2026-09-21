@@ -64,7 +64,7 @@ public class TaskProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-2.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
-					"dsf-task-ping.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
+					"dsf-task-ping-first-try.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
 					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml", "dsf-task-basic-connection-test-pong.xml",
 					"dsf-task-reference-resolution-test-pong.xml"),
@@ -464,9 +464,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingValid()
+	public void testTaskPingFirstTryValid()
 	{
-		Task task = createValidTaskPing();
+		Task task = createValidTaskPingFirstTry();
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -476,7 +476,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingValidWithPingStatusOutput() throws Exception
+	public void testTaskPingFirstTryValidWithPingStatusOutput() throws Exception
 	{
 		Target target = new Target()
 		{
@@ -504,7 +504,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPing();
+		Task task = createValidTaskPingFirstTry();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -515,7 +515,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
+	public void testTaskPingFirstTryValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
 			throws Exception
 	{
 		Target target = new Target()
@@ -544,7 +544,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPing();
+		Task task = createValidTaskPingFirstTry();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000, def.getResourceVersion()));
@@ -558,10 +558,10 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	public static Task createValidTaskPing()
+	public static Task createValidTaskPingFirstTry()
 	{
 		Task task = new Task();
-		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING);
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING_FIRST_TRY);
 		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PONG_PROCESS_URI + "|" + def.getResourceVersion());
 		task.setStatus(TaskStatus.REQUESTED);
 		task.setIntent(TaskIntent.ORDER);

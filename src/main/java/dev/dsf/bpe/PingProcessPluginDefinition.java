@@ -33,7 +33,7 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 		var cPingError = "fhir/CodeSystem/dsf-ping-error.xml";
 
 		var sPingStatus = "fhir/StructureDefinition/dsf-extension-ping-status.xml";
-		var sPing = "fhir/StructureDefinition/dsf-task-ping.xml";
+		var sPingFirstTry = "fhir/StructureDefinition/dsf-task-ping-first-try.xml";
 		var sPong = "fhir/StructureDefinition/dsf-task-pong.xml";
 		var sStartPing = "fhir/StructureDefinition/dsf-task-start-ping.xml";
 		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
@@ -60,6 +60,6 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
 				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingError,
-						sErrorExtension, sPingStatus, sPing, vPing, vPongStatus, vPingUnits));
+						sErrorExtension, sPingStatus, sPingFirstTry, vPing, vPongStatus, vPingUnits));
 	}
 }

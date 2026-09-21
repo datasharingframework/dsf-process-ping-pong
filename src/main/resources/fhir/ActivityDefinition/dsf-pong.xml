@@ -8,10 +8,10 @@
 	</meta>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="ping" />
+			<valueString value="pingFirstTry" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-first-try|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

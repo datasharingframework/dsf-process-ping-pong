@@ -31,9 +31,9 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_START_PING = "http://dsf.dev/fhir/StructureDefinition/task-start-ping";
 	public static final String PROFILE_DSF_TASK_START_PING_MESSAGE_NAME = "startPing";
 
-	public static final String PROFILE_DSF_TASK_PING = "http://dsf.dev/fhir/StructureDefinition/task-ping";
+	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY = "http://dsf.dev/fhir/StructureDefinition/task-ping-first-try";
 	public static final String PROFILE_DSF_TASK_PING_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING;
-	public static final String PROFILE_DSF_TASK_PING_MESSAGE_NAME = "ping";
+	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY_MESSAGE_NAME = "pingFirstTry";
 
 	public static final String PROFILE_DSF_TASK_PONG_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong";
 	public static final String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;

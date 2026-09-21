@@ -6,7 +6,7 @@
       <code value="ALL" />
     </tag>
   </meta>
-  <url value="http://dsf.dev/fhir/StructureDefinition/task-ping" />
+  <url value="http://dsf.dev/fhir/StructureDefinition/task-ping-first-try" />
   <!-- version managed by bpe -->
   <version value="#{version}" />
   <name value="TaskPing" />
@@ -43,7 +43,7 @@
     </element>
     <element id="Task.input:message-name.value[x]">
       <path value="Task.input.value[x]" />
-      <fixedString value="ping" />
+      <fixedString value="pingFirstTry" />
     </element>
     <element id="Task.input:business-key">
       <extension url="http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name">
