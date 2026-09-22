@@ -7,22 +7,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
 import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class LogPing implements ServiceTask
+public class LogPingSecondTry implements ServiceTask
 {
-	private static final Logger logger = LoggerFactory.getLogger(LogPing.class);
+	private static final Logger logger = LoggerFactory.getLogger(LogPingSecondTry.class);
 
 	@Override
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Task task = variables.getLatestTask();
+		String pingTry = "2";
 
-		logger.info("PING from {} (endpoint: {})", task.getRequester().getIdentifier().getValue(),
-				getEndpointIdentifierValue(api, task));
+		variables.setString(ExecutionVariables.pingTry.name(), pingTry);
+		logger.info("PING from {} (endpoint: {}, try: {})", task.getRequester().getIdentifier().getValue(),
+				getEndpointIdentifierValue(api, task), pingTry);
 	}
 
 	private String getEndpointIdentifierValue(ProcessPluginApi api, Task task)

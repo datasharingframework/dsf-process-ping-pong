@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_127i10h" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.39.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="dsfdev_pong" name="Send Pong" isExecutable="true" camunda:versionTag="#{version}" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="PingMessageStartEvent" name="ping">
+    <bpmn:startEvent id="PingFirstTryMessageStartEvent" name="pingFirstTry">
       <bpmn:outgoing>Flow_19b3cp4</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_128t2ek" messageRef="Message_0u91abp" />
     </bpmn:startEvent>
@@ -104,10 +104,10 @@
       <bpmn:outgoing>Flow_0gvrnxd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_10z0d4x" sourceRef="Gateway_1jwjxzn" targetRef="DownloadResourceServiceTask">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &gt;= 0 &amp;&amp; execution.hasVariable('downloadResourceReference') &amp;&amp; downloadResourceReference != null}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &gt;= 0 &amp;&amp; pingTry == '1'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_08gidyv" name="Slim Ping or Fat Ping without reference" sourceRef="Gateway_1jwjxzn" targetRef="Gateway_1ggdr8l">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0 || !execution.hasVariable('downloadResourceReference') || execution.hasVariable('downloadResourceReference') &amp;&amp; downloadResourceReference == null}</bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="Flow_08gidyv" name="Slim Ping" sourceRef="Gateway_1jwjxzn" targetRef="Gateway_1ggdr8l">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0gvrnxd" sourceRef="EstimateCleanupTimerDurationServiceTask" targetRef="SendReferenceResolutionTestMessageSendTask" />
     <bpmn:sequenceFlow id="Flow_1o3n9u6" sourceRef="Gateway_1ggdr8l" targetRef="Gateway_0atzn8q" />
@@ -120,18 +120,18 @@
     <bpmn:sequenceFlow id="Flow_1jehvly" sourceRef="LogAndSaveeAndStoreErrorServiceTask" targetRef="Gateway_0fvmtve" />
     <bpmn:sequenceFlow id="Flow_0x7t1ii" sourceRef="Gateway_0fvmtve" targetRef="GenerateResourceServiceTask" />
     <bpmn:serviceTask id="SetDownloadResourceSizeServiceTask" name="Set Download Resource Size" camunda:class="dev.dsf.bpe.service.SetDownloadResourceSize">
-      <bpmn:incoming>Flow_1j5lf0u</bpmn:incoming>
-      <bpmn:outgoing>Flow_1oo1n55</bpmn:outgoing>
+      <bpmn:incoming>Flow_056envp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wmgh6b</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:serviceTask id="SetEndpointIdentifierServiceTask" name="Set Endpoint Identifier" camunda:class="dev.dsf.bpe.service.pong.SetEndpointIdentifier">
-      <bpmn:incoming>Flow_1oo1n55</bpmn:incoming>
-      <bpmn:outgoing>Flow_1fzloso</bpmn:outgoing>
+      <bpmn:incoming>Flow_00cd8dk</bpmn:incoming>
+      <bpmn:incoming>Flow_1wgg65s</bpmn:incoming>
+      <bpmn:outgoing>Flow_056envp</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1oo1n55" sourceRef="SetDownloadResourceSizeServiceTask" targetRef="SetEndpointIdentifierServiceTask" />
     <bpmn:endEvent id="Event_0i1din5">
       <bpmn:incoming>Flow_1bgedez</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_19b3cp4" sourceRef="PingMessageStartEvent" targetRef="LogPingServiceTask" />
+    <bpmn:sequenceFlow id="Flow_19b3cp4" sourceRef="PingFirstTryMessageStartEvent" targetRef="LogPingFirstTryServiceTask" />
     <bpmn:sequenceFlow id="Flow_0zib7wr" sourceRef="CleanupServiceTask" targetRef="StoreErrorsServiceTask" />
     <bpmn:exclusiveGateway id="Gateway_1wktaap">
       <bpmn:incoming>Flow_1eh8lho</bpmn:incoming>
@@ -161,13 +161,12 @@
       <bpmn:incoming>Flow_0zib7wr</bpmn:incoming>
       <bpmn:outgoing>Flow_1bgedez</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="LogPingServiceTask" name="Log Ping" camunda:class="dev.dsf.bpe.service.pong.LogPing">
+    <bpmn:serviceTask id="LogPingFirstTryServiceTask" name="Log Ping First Try" camunda:class="dev.dsf.bpe.service.pong.LogPingFirstTry">
       <bpmn:incoming>Flow_19b3cp4</bpmn:incoming>
-      <bpmn:outgoing>Flow_1j5lf0u</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13fed4z</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1j5lf0u" sourceRef="LogPingServiceTask" targetRef="SetDownloadResourceSizeServiceTask" />
     <bpmn:serviceTask id="SelectPongTargetServiceTask" name="Select Pong Target" camunda:class="dev.dsf.bpe.service.pong.SelectPongTarget">
-      <bpmn:incoming>Flow_0hw9ke3</bpmn:incoming>
+      <bpmn:incoming>Flow_0wmgh6b</bpmn:incoming>
       <bpmn:outgoing>Flow_1gap0hi</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_11q3y8a">
@@ -178,7 +177,6 @@
       <bpmn:errorEventDefinition id="ErrorEventDefinition_16rvc25" errorRef="Error_1j0t9ud" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0qxt5zo" sourceRef="Event_1jkcqo6" targetRef="Event_11q3y8a" />
-    <bpmn:sequenceFlow id="Flow_1fzloso" sourceRef="SetEndpointIdentifierServiceTask" targetRef="SetDownloadResourceReference" />
     <bpmn:sequenceFlow id="Flow_1gap0hi" sourceRef="SelectPongTargetServiceTask" targetRef="Gateway_1jwjxzn" />
     <bpmn:exclusiveGateway id="Gateway_0ynhobb" default="Flow_0pp3r2w">
       <bpmn:incoming>Flow_0vqsjzn</bpmn:incoming>
@@ -206,10 +204,9 @@
       <bpmn:outgoing>Flow_0dp8f59</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0dp8f59" sourceRef="LogAndSaveErrorServiceTask" targetRef="Gateway_1ggdr8l" />
-    <bpmn:sequenceFlow id="Flow_0hw9ke3" sourceRef="SetDownloadResourceReference" targetRef="SelectPongTargetServiceTask" />
     <bpmn:serviceTask id="SetDownloadResourceReference" name="Set Download Resource Reference" camunda:class="dev.dsf.bpe.service.pong.SetDownloadResourceReference">
-      <bpmn:incoming>Flow_1fzloso</bpmn:incoming>
-      <bpmn:outgoing>Flow_0hw9ke3</bpmn:outgoing>
+      <bpmn:incoming>Flow_13fed4z</bpmn:incoming>
+      <bpmn:outgoing>Flow_00cd8dk</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sendTask id="SendReferenceResolutionTestMessageSendTask" name="Send Reference Resolution Test" camunda:class="dev.dsf.bpe.message.SendReferenceResolutionTestPongMessage">
       <bpmn:extensionElements>
@@ -303,15 +300,29 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${execution.hasVariable('sendPong') &amp;&amp; !sendPong}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0hiak5p" sourceRef="Gateway_1jwjxzn" targetRef="GenerateResourceServiceTask">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &gt;= 0  &amp;&amp; (!execution.hasVariable('downloadResourceReference') || execution.hasVariable('downloadResourceReference') &amp;&amp; downloadResourceReference == null)}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &gt;= 0 &amp;&amp; pingTry == '2'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:startEvent id="PingSecondTryMessageStartEvent" name="pingSecondTry">
+      <bpmn:outgoing>Flow_11rhooj</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0w8atr6" messageRef="Message_0u91abp" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="LogPingSecondTryServiceTask" name="Log Ping Second Try" camunda:class="dev.dsf.bpe.service.pong.LogPingSecondTry">
+      <bpmn:incoming>Flow_11rhooj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wgg65s</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_11rhooj" sourceRef="PingSecondTryMessageStartEvent" targetRef="LogPingSecondTryServiceTask" />
+    <bpmn:sequenceFlow id="Flow_13fed4z" sourceRef="LogPingFirstTryServiceTask" targetRef="SetDownloadResourceReference" />
+    <bpmn:sequenceFlow id="Flow_00cd8dk" sourceRef="SetDownloadResourceReference" targetRef="SetEndpointIdentifierServiceTask" />
+    <bpmn:sequenceFlow id="Flow_056envp" sourceRef="SetEndpointIdentifierServiceTask" targetRef="SetDownloadResourceSizeServiceTask" />
+    <bpmn:sequenceFlow id="Flow_0wmgh6b" sourceRef="SetDownloadResourceSizeServiceTask" targetRef="SelectPongTargetServiceTask" />
+    <bpmn:sequenceFlow id="Flow_1wgg65s" sourceRef="LogPingSecondTryServiceTask" targetRef="SetEndpointIdentifierServiceTask" />
     <bpmn:textAnnotation id="TextAnnotation_02e4h2c">
       <bpmn:text>Log = logger
 Save = save as execution variable
 Store = store on DSF FHIR server either as separate resource or output parameter</bpmn:text>
     </bpmn:textAnnotation>
   </bpmn:process>
-  <bpmn:message id="Message_0u91abp" name="ping" />
+  <bpmn:message id="Message_0u91abp" name="pingSecondTry" />
   <bpmn:message id="Message_2m36ftq" name="cleanupPong" />
   <bpmn:error id="Error_1jmenbm" name="resourceDownloadError" errorCode="resourceDownloadError" />
   <bpmn:error id="Error_1j0t9ud" name="target_not_allowed" errorCode="target_not_allowed" />
@@ -319,100 +330,17 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   <bpmn:error id="Error_14jfki4" name="unexpected-error" errorCode="unexpected-error" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_pong">
+      <bpmndi:BPMNShape id="StartEvent_1qh431z_di" bpmnElement="PingFirstTryMessageStartEvent">
+        <dc:Bounds x="152" y="312" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="141" y="355" width="59" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1jwjxzn_di" bpmnElement="Gateway_1jwjxzn" isMarkerVisible="true">
         <dc:Bounds x="1105" y="305" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_095j2gg_di" bpmnElement="DownloadResourceServiceTask">
-        <dc:Bounds x="1180" y="440" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0fvmtve_di" bpmnElement="Gateway_0fvmtve" isMarkerVisible="true">
-        <dc:Bounds x="1525" y="455" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1imd3tw_di" bpmnElement="LogAndSaveeAndStoreErrorServiceTask">
-        <dc:Bounds x="1390" y="550" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1m4wavi_di" bpmnElement="GenerateResourceServiceTask">
-        <dc:Bounds x="1620" y="440" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_04wfxfo_di" bpmnElement="StoreDownloadSpeed">
-        <dc:Bounds x="1390" y="440" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_022yft3" bpmnElement="SelectPongTargetServiceTask">
-        <dc:Bounds x="950" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0nbrkyz" bpmnElement="Event_11q3y8a">
-        <dc:Bounds x="1032" y="615" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0ynhobb_di" bpmnElement="Gateway_0ynhobb" isMarkerVisible="true">
-        <dc:Bounds x="1305" y="455" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_06066hd_di" bpmnElement="Gateway_06066hd" isMarkerVisible="true">
-        <dc:Bounds x="1765" y="455" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="StartEvent_1qh431z_di" bpmnElement="PingMessageStartEvent">
-        <dc:Bounds x="152" y="312" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="160" y="355" width="21" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1m1s18a" bpmnElement="LogPingServiceTask">
-        <dc:Bounds x="260" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0wlxsbv_di" bpmnElement="SetDownloadResourceSizeServiceTask">
-        <dc:Bounds x="430" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1u5xx7p_di" bpmnElement="SetEndpointIdentifierServiceTask">
-        <dc:Bounds x="600" y="290" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0abawjc_di" bpmnElement="SetDownloadResourceReference">
-        <dc:Bounds x="770" y="290" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pjdm6v_di" bpmnElement="LogAndSaveErrorServiceTask">
-        <dc:Bounds x="1890" y="440" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_06klx97_di" bpmnElement="EstimateCleanupTimerDurationServiceTask">
-        <dc:Bounds x="1740" y="580" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0hkvmj2_di" bpmnElement="SendReferenceResolutionTestMessageSendTask">
-        <dc:Bounds x="1740" y="730" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_084qmnm_di" bpmnElement="Gateway_084qmnm" isMarkerVisible="true">
-        <dc:Bounds x="1915" y="745" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1tep6lx_di" bpmnElement="SendDsfConnectionTestMessageSendTask">
-        <dc:Bounds x="1890" y="870" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_194fb83_di" bpmnElement="Activity_003hb01">
-        <dc:Bounds x="1890" y="580" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0hp9p8m_di" bpmnElement="Activity_0j8t2et">
-        <dc:Bounds x="2040" y="730" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0lu6phu_di" bpmnElement="Gateway_0lu6phu" isMarkerVisible="true">
-        <dc:Bounds x="2065" y="885" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1r1hob1" bpmnElement="Gateway_1ggdr8l" isMarkerVisible="true">
         <dc:Bounds x="2385" y="305" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1o3482x_di" bpmnElement="Activity_1n9ygo9">
-        <dc:Bounds x="2190" y="870" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1w4w04k_di" bpmnElement="Activity_1d12fdp">
-        <dc:Bounds x="2040" y="1020" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1h1lrei_di" bpmnElement="PongMessageSendTask">
         <dc:Bounds x="2660" y="290" width="100" height="80" />
@@ -439,6 +367,9 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="Activity_0pmiy6i_di" bpmnElement="CleanupServiceTask">
         <dc:Bounds x="3470" y="290" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1u5xx7p_di" bpmnElement="SetEndpointIdentifierServiceTask">
+        <dc:Bounds x="600" y="290" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0i1din5_di" bpmnElement="Event_0i1din5">
         <dc:Bounds x="3762" y="312" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -460,8 +391,102 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="3610" y="290" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1m1s18a" bpmnElement="LogPingFirstTryServiceTask">
+        <dc:Bounds x="260" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_022yft3" bpmnElement="SelectPongTargetServiceTask">
+        <dc:Bounds x="950" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0nbrkyz" bpmnElement="Event_11q3y8a">
+        <dc:Bounds x="1032" y="615" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ynhobb_di" bpmnElement="Gateway_0ynhobb" isMarkerVisible="true">
+        <dc:Bounds x="1305" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0atzn8q_di" bpmnElement="Gateway_0atzn8q" isMarkerVisible="true">
         <dc:Bounds x="2505" y="305" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0lvewjv" bpmnElement="PingSecondTryMessageStartEvent">
+        <dc:Bounds x="152" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="133" y="535" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1lsowy4" bpmnElement="LogPingSecondTryServiceTask">
+        <dc:Bounds x="260" y="470" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0abawjc_di" bpmnElement="SetDownloadResourceReference">
+        <dc:Bounds x="430" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wlxsbv_di" bpmnElement="SetDownloadResourceSizeServiceTask">
+        <dc:Bounds x="770" y="290" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_095j2gg_di" bpmnElement="DownloadResourceServiceTask">
+        <dc:Bounds x="1170" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1o3482x_di" bpmnElement="Activity_1n9ygo9">
+        <dc:Bounds x="2200" y="870" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0lu6phu_di" bpmnElement="Gateway_0lu6phu" isMarkerVisible="true">
+        <dc:Bounds x="2075" y="885" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hp9p8m_di" bpmnElement="Activity_0j8t2et">
+        <dc:Bounds x="2050" y="730" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1w4w04k_di" bpmnElement="Activity_1d12fdp">
+        <dc:Bounds x="2050" y="1020" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tep6lx_di" bpmnElement="SendDsfConnectionTestMessageSendTask">
+        <dc:Bounds x="1900" y="870" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pjdm6v_di" bpmnElement="LogAndSaveErrorServiceTask">
+        <dc:Bounds x="1900" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m4wavi_di" bpmnElement="GenerateResourceServiceTask">
+        <dc:Bounds x="1640" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0fvmtve_di" bpmnElement="Gateway_0fvmtve" isMarkerVisible="true">
+        <dc:Bounds x="1545" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04wfxfo_di" bpmnElement="StoreDownloadSpeed">
+        <dc:Bounds x="1400" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1imd3tw_di" bpmnElement="LogAndSaveeAndStoreErrorServiceTask">
+        <dc:Bounds x="1400" y="550" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_06066hd_di" bpmnElement="Gateway_06066hd" isMarkerVisible="true">
+        <dc:Bounds x="1795" y="455" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06klx97_di" bpmnElement="EstimateCleanupTimerDurationServiceTask">
+        <dc:Bounds x="1770" y="580" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hkvmj2_di" bpmnElement="SendReferenceResolutionTestMessageSendTask">
+        <dc:Bounds x="1770" y="730" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_194fb83_di" bpmnElement="Activity_003hb01">
+        <dc:Bounds x="1900" y="580" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_084qmnm_di" bpmnElement="Gateway_084qmnm" isMarkerVisible="true">
+        <dc:Bounds x="1925" y="745" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_19d2657" bpmnElement="TextAnnotation_02e4h2c" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="560" y="100" width="420" height="70" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1jslfi1" bpmnElement="Event_1jkcqo6">
         <dc:Bounds x="1032" y="352" width="36" height="36" />
@@ -469,18 +494,10 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="946" y="393" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_19d2657" bpmnElement="TextAnnotation_02e4h2c" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="560" y="100" width="420" height="70" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_1gap0hi_di" bpmnElement="Flow_1gap0hi">
-        <di:waypoint x="1050" y="330" />
-        <di:waypoint x="1105" y="330" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10z0d4x_di" bpmnElement="Flow_10z0d4x">
         <di:waypoint x="1130" y="355" />
         <di:waypoint x="1130" y="480" />
-        <di:waypoint x="1180" y="480" />
+        <di:waypoint x="1170" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08gidyv_di" bpmnElement="Flow_08gidyv">
         <di:waypoint x="1130" y="305" />
@@ -488,148 +505,16 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <di:waypoint x="2410" y="180" />
         <di:waypoint x="2410" y="305" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1732" y="130" width="79" height="40" />
+          <dc:Bounds x="1748" y="143" width="47" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0vqsjzn_di" bpmnElement="Flow_0vqsjzn">
-        <di:waypoint x="1280" y="480" />
-        <di:waypoint x="1305" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1jehvly_di" bpmnElement="Flow_1jehvly">
-        <di:waypoint x="1490" y="590" />
-        <di:waypoint x="1550" y="590" />
-        <di:waypoint x="1550" y="505" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0yujsot_di" bpmnElement="Flow_0yujsot">
-        <di:waypoint x="1490" y="480" />
-        <di:waypoint x="1525" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0x7t1ii_di" bpmnElement="Flow_0x7t1ii">
-        <di:waypoint x="1575" y="480" />
-        <di:waypoint x="1620" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1w3kcjh_di" bpmnElement="Flow_1w3kcjh">
-        <di:waypoint x="1330" y="505" />
-        <di:waypoint x="1330" y="590" />
-        <di:waypoint x="1390" y="590" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1260" y="545" width="59" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_033lqly_di" bpmnElement="Flow_033lqly">
-        <di:waypoint x="1720" y="480" />
-        <di:waypoint x="1765" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0pp3r2w_di" bpmnElement="Flow_0pp3r2w">
-        <di:waypoint x="1355" y="480" />
-        <di:waypoint x="1390" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0hw9ke3_di" bpmnElement="Flow_0hw9ke3">
-        <di:waypoint x="870" y="330" />
-        <di:waypoint x="950" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0jfh43l" bpmnElement="Flow_0qxt5zo">
-        <di:waypoint x="1050" y="388" />
-        <di:waypoint x="1050" y="615" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_17wqhp8_di" bpmnElement="Flow_17wqhp8">
-        <di:waypoint x="1790" y="505" />
-        <di:waypoint x="1790" y="580" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_15xatzp_di" bpmnElement="Flow_15xatzp">
-        <di:waypoint x="1815" y="480" />
-        <di:waypoint x="1890" y="480" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1820" y="420" width="59" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19b3cp4_di" bpmnElement="Flow_19b3cp4">
-        <di:waypoint x="188" y="330" />
-        <di:waypoint x="260" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1j5lf0u_di" bpmnElement="Flow_1j5lf0u">
-        <di:waypoint x="360" y="330" />
-        <di:waypoint x="430" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1oo1n55_di" bpmnElement="Flow_1oo1n55">
-        <di:waypoint x="530" y="330" />
-        <di:waypoint x="600" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1fzloso_di" bpmnElement="Flow_1fzloso">
-        <di:waypoint x="700" y="330" />
-        <di:waypoint x="770" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0dp8f59_di" bpmnElement="Flow_0dp8f59">
-        <di:waypoint x="1990" y="480" />
-        <di:waypoint x="2410" y="480" />
-        <di:waypoint x="2410" y="355" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gvrnxd_di" bpmnElement="Flow_0gvrnxd">
-        <di:waypoint x="1790" y="660" />
-        <di:waypoint x="1790" y="730" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1fa0dxg_di" bpmnElement="Flow_1fa0dxg">
-        <di:waypoint x="1840" y="770" />
-        <di:waypoint x="1915" y="770" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0wyx3tv_di" bpmnElement="Flow_0wyx3tv">
-        <di:waypoint x="1940" y="795" />
-        <di:waypoint x="1940" y="870" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0xkwzuk_di" bpmnElement="Flow_0xkwzuk">
-        <di:waypoint x="1940" y="745" />
-        <di:waypoint x="1940" y="660" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1rdwyke_di" bpmnElement="Flow_1rdwyke">
-        <di:waypoint x="1965" y="770" />
-        <di:waypoint x="2040" y="770" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qxyk7d_di" bpmnElement="Flow_1qxyk7d">
-        <di:waypoint x="1990" y="910" />
-        <di:waypoint x="2065" y="910" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1f3e0l8_di" bpmnElement="Flow_1f3e0l8">
-        <di:waypoint x="1990" y="620" />
-        <di:waypoint x="2410" y="620" />
-        <di:waypoint x="2410" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0i9lcdn_di" bpmnElement="Flow_0i9lcdn">
-        <di:waypoint x="2090" y="885" />
-        <di:waypoint x="2090" y="810" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02ce1ef_di" bpmnElement="Flow_02ce1ef">
-        <di:waypoint x="2140" y="770" />
-        <di:waypoint x="2410" y="770" />
-        <di:waypoint x="2410" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1pwm8ia_di" bpmnElement="Flow_1pwm8ia">
-        <di:waypoint x="2090" y="935" />
-        <di:waypoint x="2090" y="1020" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1gto3jh_di" bpmnElement="Flow_1gto3jh">
-        <di:waypoint x="2115" y="910" />
-        <di:waypoint x="2190" y="910" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1543khd_di" bpmnElement="Flow_1543khd">
-        <di:waypoint x="2140" y="1060" />
-        <di:waypoint x="2410" y="1060" />
-        <di:waypoint x="2410" y="355" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1cnastk_di" bpmnElement="Flow_1cnastk">
-        <di:waypoint x="2290" y="910" />
-        <di:waypoint x="2410" y="910" />
-        <di:waypoint x="2410" y="355" />
+        <di:waypoint x="1820" y="660" />
+        <di:waypoint x="1820" y="730" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1o3n9u6_di" bpmnElement="Flow_1o3n9u6">
         <di:waypoint x="2435" y="330" />
         <di:waypoint x="2505" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1grsnya_di" bpmnElement="Flow_1grsnya">
-        <di:waypoint x="2555" y="330" />
-        <di:waypoint x="2660" y="330" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2580" y="312" width="55" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0fzmjzb_di" bpmnElement="Flow_0fzmjzb">
         <di:waypoint x="2760" y="330" />
@@ -646,6 +531,158 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="3160" y="312" width="47" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rj915n_di" bpmnElement="Flow_0rj915n">
+        <di:waypoint x="2895" y="430" />
+        <di:waypoint x="3092" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jehvly_di" bpmnElement="Flow_1jehvly">
+        <di:waypoint x="1500" y="590" />
+        <di:waypoint x="1570" y="590" />
+        <di:waypoint x="1570" y="505" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x7t1ii_di" bpmnElement="Flow_0x7t1ii">
+        <di:waypoint x="1595" y="480" />
+        <di:waypoint x="1640" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19b3cp4_di" bpmnElement="Flow_19b3cp4">
+        <di:waypoint x="188" y="330" />
+        <di:waypoint x="260" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zib7wr_di" bpmnElement="Flow_0zib7wr">
+        <di:waypoint x="3570" y="330" />
+        <di:waypoint x="3610" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xfk4ds_di" bpmnElement="Flow_1xfk4ds">
+        <di:waypoint x="3128" y="570" />
+        <di:waypoint x="3230" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ttsk1o_di" bpmnElement="Flow_1ttsk1o">
+        <di:waypoint x="3128" y="430" />
+        <di:waypoint x="3230" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eh8lho_di" bpmnElement="Flow_1eh8lho">
+        <di:waypoint x="3330" y="430" />
+        <di:waypoint x="3425" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lfcycx_di" bpmnElement="Flow_1lfcycx">
+        <di:waypoint x="3475" y="430" />
+        <di:waypoint x="3520" y="430" />
+        <di:waypoint x="3520" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yujsot_di" bpmnElement="Flow_0yujsot">
+        <di:waypoint x="1500" y="480" />
+        <di:waypoint x="1545" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n4fb8d_di" bpmnElement="Flow_1n4fb8d">
+        <di:waypoint x="3330" y="570" />
+        <di:waypoint x="3450" y="570" />
+        <di:waypoint x="3450" y="455" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bgedez_di" bpmnElement="Flow_1bgedez">
+        <di:waypoint x="3710" y="330" />
+        <di:waypoint x="3762" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0jfh43l" bpmnElement="Flow_0qxt5zo">
+        <di:waypoint x="1050" y="388" />
+        <di:waypoint x="1050" y="615" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gap0hi_di" bpmnElement="Flow_1gap0hi">
+        <di:waypoint x="1050" y="330" />
+        <di:waypoint x="1105" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0vqsjzn_di" bpmnElement="Flow_0vqsjzn">
+        <di:waypoint x="1270" y="480" />
+        <di:waypoint x="1305" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pp3r2w_di" bpmnElement="Flow_0pp3r2w">
+        <di:waypoint x="1355" y="480" />
+        <di:waypoint x="1400" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w3kcjh_di" bpmnElement="Flow_1w3kcjh">
+        <di:waypoint x="1330" y="505" />
+        <di:waypoint x="1330" y="590" />
+        <di:waypoint x="1400" y="590" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1260" y="545" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17x98wg_di" bpmnElement="Flow_17x98wg">
+        <di:waypoint x="2870" y="455" />
+        <di:waypoint x="2870" y="570" />
+        <di:waypoint x="3092" y="570" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_033lqly_di" bpmnElement="Flow_033lqly">
+        <di:waypoint x="1740" y="480" />
+        <di:waypoint x="1795" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17wqhp8_di" bpmnElement="Flow_17wqhp8">
+        <di:waypoint x="1820" y="505" />
+        <di:waypoint x="1820" y="580" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15xatzp_di" bpmnElement="Flow_15xatzp">
+        <di:waypoint x="1845" y="480" />
+        <di:waypoint x="1900" y="480" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1840" y="420" width="59" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dp8f59_di" bpmnElement="Flow_0dp8f59">
+        <di:waypoint x="2000" y="480" />
+        <di:waypoint x="2410" y="480" />
+        <di:waypoint x="2410" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fa0dxg_di" bpmnElement="Flow_1fa0dxg">
+        <di:waypoint x="1870" y="770" />
+        <di:waypoint x="1925" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wyx3tv_di" bpmnElement="Flow_0wyx3tv">
+        <di:waypoint x="1950" y="795" />
+        <di:waypoint x="1950" y="870" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xkwzuk_di" bpmnElement="Flow_0xkwzuk">
+        <di:waypoint x="1950" y="745" />
+        <di:waypoint x="1950" y="660" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rdwyke_di" bpmnElement="Flow_1rdwyke">
+        <di:waypoint x="1975" y="770" />
+        <di:waypoint x="2050" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1f3e0l8_di" bpmnElement="Flow_1f3e0l8">
+        <di:waypoint x="2000" y="620" />
+        <di:waypoint x="2410" y="620" />
+        <di:waypoint x="2410" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02ce1ef_di" bpmnElement="Flow_02ce1ef">
+        <di:waypoint x="2150" y="770" />
+        <di:waypoint x="2410" y="770" />
+        <di:waypoint x="2410" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qxyk7d_di" bpmnElement="Flow_1qxyk7d">
+        <di:waypoint x="2000" y="910" />
+        <di:waypoint x="2075" y="910" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i9lcdn_di" bpmnElement="Flow_0i9lcdn">
+        <di:waypoint x="2100" y="885" />
+        <di:waypoint x="2100" y="810" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pwm8ia_di" bpmnElement="Flow_1pwm8ia">
+        <di:waypoint x="2100" y="935" />
+        <di:waypoint x="2100" y="1020" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1543khd_di" bpmnElement="Flow_1543khd">
+        <di:waypoint x="2150" y="1060" />
+        <di:waypoint x="2410" y="1060" />
+        <di:waypoint x="2410" y="355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gto3jh_di" bpmnElement="Flow_1gto3jh">
+        <di:waypoint x="2125" y="910" />
+        <di:waypoint x="2200" y="910" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cnastk_di" bpmnElement="Flow_1cnastk">
+        <di:waypoint x="2300" y="910" />
+        <di:waypoint x="2410" y="910" />
+        <di:waypoint x="2410" y="355" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0fx0uvf_di" bpmnElement="Flow_0fx0uvf">
         <di:waypoint x="2870" y="305" />
         <di:waypoint x="2870" y="210" />
@@ -655,27 +692,12 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="3160" y="166" width="71" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0rj915n_di" bpmnElement="Flow_0rj915n">
-        <di:waypoint x="2895" y="430" />
-        <di:waypoint x="3092" y="430" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_17x98wg_di" bpmnElement="Flow_17x98wg">
-        <di:waypoint x="2870" y="455" />
-        <di:waypoint x="2870" y="570" />
-        <di:waypoint x="3092" y="570" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ttsk1o_di" bpmnElement="Flow_1ttsk1o">
-        <di:waypoint x="3128" y="430" />
-        <di:waypoint x="3230" y="430" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1xfk4ds_di" bpmnElement="Flow_1xfk4ds">
-        <di:waypoint x="3128" y="570" />
-        <di:waypoint x="3230" y="570" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1lfcycx_di" bpmnElement="Flow_1lfcycx">
-        <di:waypoint x="3475" y="430" />
-        <di:waypoint x="3520" y="430" />
-        <di:waypoint x="3520" y="370" />
+      <bpmndi:BPMNEdge id="Flow_1grsnya_di" bpmnElement="Flow_1grsnya">
+        <di:waypoint x="2555" y="330" />
+        <di:waypoint x="2660" y="330" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2580" y="312" width="55" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0024nr7_di" bpmnElement="Flow_0024nr7">
         <di:waypoint x="2530" y="305" />
@@ -686,27 +708,35 @@ Store = store on DSF FHIR server either as separate resource or output parameter
           <dc:Bounds x="2985" y="82" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0zib7wr_di" bpmnElement="Flow_0zib7wr">
-        <di:waypoint x="3570" y="330" />
-        <di:waypoint x="3610" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1bgedez_di" bpmnElement="Flow_1bgedez">
-        <di:waypoint x="3710" y="330" />
-        <di:waypoint x="3762" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1eh8lho_di" bpmnElement="Flow_1eh8lho">
-        <di:waypoint x="3330" y="430" />
-        <di:waypoint x="3425" y="430" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1n4fb8d_di" bpmnElement="Flow_1n4fb8d">
-        <di:waypoint x="3330" y="570" />
-        <di:waypoint x="3450" y="570" />
-        <di:waypoint x="3450" y="455" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0hiak5p_di" bpmnElement="Flow_0hiak5p">
         <di:waypoint x="1155" y="330" />
-        <di:waypoint x="1670" y="330" />
-        <di:waypoint x="1670" y="440" />
+        <di:waypoint x="1690" y="330" />
+        <di:waypoint x="1690" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0qf0wzh" bpmnElement="Flow_11rhooj">
+        <di:waypoint x="188" y="510" />
+        <di:waypoint x="260" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13fed4z_di" bpmnElement="Flow_13fed4z">
+        <di:waypoint x="360" y="330" />
+        <di:waypoint x="430" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00cd8dk_di" bpmnElement="Flow_00cd8dk">
+        <di:waypoint x="530" y="330" />
+        <di:waypoint x="600" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_056envp_di" bpmnElement="Flow_056envp">
+        <di:waypoint x="700" y="330" />
+        <di:waypoint x="770" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wmgh6b_di" bpmnElement="Flow_0wmgh6b">
+        <di:waypoint x="870" y="330" />
+        <di:waypoint x="950" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wgg65s_di" bpmnElement="Flow_1wgg65s">
+        <di:waypoint x="360" y="510" />
+        <di:waypoint x="650" y="510" />
+        <di:waypoint x="650" y="370" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

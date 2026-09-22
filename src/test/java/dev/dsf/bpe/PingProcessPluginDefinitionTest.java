@@ -28,7 +28,7 @@ public class PingProcessPluginDefinitionTest
 
 		var pong = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PONG);
 		assertNotNull(pong);
-		assertEquals(10, pong.stream().filter(this::exists).count());
+		assertEquals(11, pong.stream().filter(this::exists).count());
 	}
 
 	private boolean exists(String file)

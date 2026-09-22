@@ -34,6 +34,32 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
+			<valueString value="pingSecondTry" />
+		</extension>
+		<extension url="task-profile">
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-second-try|#{version}" />
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="REMOTE_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="recipient">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+	</extension>
+	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
+		<extension url="message-name">
 			<valueString value="cleanupPong" />
 		</extension>
 		<extension url="task-profile">

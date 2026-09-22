@@ -41,7 +41,8 @@ import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
 import dev.dsf.bpe.service.pong.LogAndSaveSendErrorPong;
 import dev.dsf.bpe.service.pong.LogAndSaveUploadErrorPong;
-import dev.dsf.bpe.service.pong.LogPing;
+import dev.dsf.bpe.service.pong.LogPingFirstTry;
+import dev.dsf.bpe.service.pong.LogPingSecondTry;
 import dev.dsf.bpe.service.pong.LogReferenceResolutionSuccess;
 import dev.dsf.bpe.service.pong.SavePingInstallOrAllowlistError;
 import dev.dsf.bpe.service.pong.SaveReferenceResolutionErrorPong;
@@ -127,7 +128,7 @@ public class PingConfig implements InitializingBean
 	{
 		return new ActivityPrototypeBeanCreator(SetTargetAndConfigureTimer.class, SendStartPing.class,
 				SetPongTimeoutDuration.class, SelectPingTargets.class, SendPingMessage.class,
-				SetCorrelationKeyListener.class, LogPing.class, SelectPongTarget.class, CheckPingTaskStatus.class,
+				SetCorrelationKeyListener.class, LogPingFirstTry.class, LogPingSecondTry.class, SelectPongTarget.class, CheckPingTaskStatus.class,
 				CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
 				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
 				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,

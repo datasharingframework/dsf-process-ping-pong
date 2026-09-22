@@ -64,7 +64,7 @@ public class TaskProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-2.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
-					"dsf-task-ping-first-try.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
+					"dsf-task-ping-first-try.xml", "dsf-task-ping-second-try.xml", "dsf-task-pong.xml", "dsf-task-start-ping.xml",
 					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
 					"dsf-task-cleanup-pong.xml", "dsf-task-basic-connection-test-pong.xml",
 					"dsf-task-reference-resolution-test-pong.xml"),
@@ -571,7 +571,128 @@ public class TaskProfileTest
 		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
 				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
 
-		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_MESSAGE_NAME)).getType()
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_FIRST_TRY_MESSAGE_NAME)).getType()
+				.addCoding(BpmnMessage.messageName());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.businessKey());
+		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
+				.addCoding(BpmnMessage.correlationKey());
+		task.addInput()
+				.setValue(new Reference().setType(ResourceType.Endpoint.name())
+						.setIdentifier(EndpointIdentifier.withValue("endpoint.target.org")))
+				.getType().addCoding().setSystem(CodeSystem.DsfPing.URL)
+				.setCode(CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue()).setVersion(def.getResourceVersion());
+
+		return task;
+	}
+
+	@Test
+	public void testTaskPingSecondTryValid()
+	{
+		Task task = createValidTaskPingSecondTry();
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskPingSecondTryValidWithPingStatusOutput() throws Exception
+	{
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
+
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
+		Task task = createValidTaskPingSecondTry();
+		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	@Test
+	public void testTaskPingSecondTryValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
+			throws Exception
+	{
+		Target target = new Target()
+		{
+			@Override
+			public String getOrganizationIdentifierValue()
+			{
+				return "target.org";
+			}
+
+			@Override
+			public String getEndpointUrl()
+			{
+				return "https://endpoint.target.org/fhir";
+			}
+
+			@Override
+			public String getEndpointIdentifierValue()
+			{
+				return "endpoint.target.org";
+			}
+
+			@Override
+			public String getCorrelationKey()
+			{
+				return UUID.randomUUID().toString();
+			}
+		};
+		Task task = createValidTaskPingSecondTry();
+		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
+
+		task.addInput(DownloadResourceSizeGenerator.create(1000, def.getResourceVersion()));
+
+		ValidationResult result = resourceValidator.validate(task);
+		ValidationSupportRule.logValidationMessages(logger, result);
+
+		assertEquals(0, result.getMessages().stream().filter(m -> ResultSeverityEnum.ERROR.equals(m.getSeverity())
+				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
+	}
+
+	public static Task createValidTaskPingSecondTry()
+	{
+		Task task = new Task();
+		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING_SECOND_TRY);
+		task.setInstantiatesCanonical(ConstantsPing.PROFILE_DSF_TASK_PONG_PROCESS_URI + "|" + def.getResourceVersion());
+		task.setStatus(TaskStatus.REQUESTED);
+		task.setIntent(TaskIntent.ORDER);
+		task.setAuthoredOn(new Date());
+		task.getRequester().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("TTP"));
+		task.getRestriction().addRecipient().setType(ResourceType.Organization.name())
+				.setIdentifier(OrganizationIdentifier.withValue("DIC 1"));
+
+		task.addInput().setValue(new StringType(ConstantsPing.PROFILE_DSF_TASK_PING_SECOND_TRY_MESSAGE_NAME)).getType()
 				.addCoding(BpmnMessage.messageName());
 		task.addInput().setValue(new StringType(UUID.randomUUID().toString())).getType()
 				.addCoding(BpmnMessage.businessKey());

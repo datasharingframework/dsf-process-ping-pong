@@ -70,13 +70,10 @@
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="messageName">
-            <camunda:string>ping</camunda:string>
+            <camunda:string>pingFirstTry</camunda:string>
           </camunda:field>
           <camunda:field name="profile">
-            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping|#{version}</camunda:string>
-          </camunda:field>
-          <camunda:field name="includeReference">
-            <camunda:expression>${downloadResourceSizeBytes &gt;= 0}</camunda:expression>
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-first-try|#{version}</camunda:string>
           </camunda:field>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_10epxa2</bpmn:incoming>
@@ -177,13 +174,10 @@
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="messageName">
-            <camunda:string>ping</camunda:string>
+            <camunda:string>pingSecondTry</camunda:string>
           </camunda:field>
           <camunda:field name="profile">
-            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping|#{version}</camunda:string>
-          </camunda:field>
-          <camunda:field name="includeReference">
-            <camunda:expression>${false}</camunda:expression>
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-second-try|#{version}</camunda:string>
           </camunda:field>
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_1w07q5n</bpmn:incoming>

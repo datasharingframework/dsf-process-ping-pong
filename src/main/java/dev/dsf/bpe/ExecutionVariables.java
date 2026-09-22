@@ -29,7 +29,8 @@ public enum ExecutionVariables
 	pingTaskId,
 	cleanupTimerDuration,
 	sendPong,
-	includeReferencePong;
+	includeReferencePong,
+	pingTry;
 
 	public String correlatedValue(String correlationKey)
 	{
