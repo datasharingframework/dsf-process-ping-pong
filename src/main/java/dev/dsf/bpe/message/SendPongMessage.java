@@ -115,7 +115,12 @@ public class SendPongMessage implements MessageSendTask
 				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
 						.convertLocal(e, true, ConstantsPing.PROCESS_NAME_PONG);
 
-				ErrorListUtils.add(errorAndStatus.error(), variables, correlationKey);
+				// Only add the error to the error list if it is not an HTTP 403 error. A 403 will cause
+				// a second pong attempt, and depending on the outcome, service tasks after the second attempt
+				// will save an appropriate error
+				if (!"403".equals(errorAndStatus.rawHttpStatus()))
+					ErrorListUtils.add(errorAndStatus.error(), variables, correlationKey);
+
 				variables.setJsonVariable(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
 				variables.setString(ExecutionVariables.rawHttpStatus.name(), errorAndStatus.rawHttpStatus());
 
