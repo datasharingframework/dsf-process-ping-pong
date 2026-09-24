@@ -15,10 +15,8 @@ import dev.dsf.bpe.listener.PongStatusGatewayListener;
 import dev.dsf.bpe.listener.SetCorrelationKeyListener;
 import dev.dsf.bpe.mail.AggregateErrorMailService;
 import dev.dsf.bpe.message.CleanupPongMessage;
-import dev.dsf.bpe.message.SendBasicConnectionTestPongMessage;
 import dev.dsf.bpe.message.SendPingMessage;
 import dev.dsf.bpe.message.SendPongMessage;
-import dev.dsf.bpe.message.SendReferenceResolutionTestPongMessage;
 import dev.dsf.bpe.message.SendStartPing;
 import dev.dsf.bpe.service.Cleanup;
 import dev.dsf.bpe.service.GenerateAndStoreResource;
@@ -30,12 +28,14 @@ import dev.dsf.bpe.service.ping.DownloadResourceAndMeasureSpeedInSubProcess;
 import dev.dsf.bpe.service.ping.LogAndSaveError;
 import dev.dsf.bpe.service.ping.LogAndSaveSendError;
 import dev.dsf.bpe.service.ping.LogAndSaveUploadErrorPing;
-import dev.dsf.bpe.service.ping.SavePong;
+import dev.dsf.bpe.service.ping.SavePongFirstTry;
 import dev.dsf.bpe.service.ping.SavePongInstallOrAllowlistError;
+import dev.dsf.bpe.service.ping.SavePongSecondTry;
 import dev.dsf.bpe.service.ping.SaveReferenceResolutionErrorPing;
 import dev.dsf.bpe.service.ping.SelectPingTargets;
 import dev.dsf.bpe.service.ping.SetPongTimeoutDuration;
 import dev.dsf.bpe.service.ping.StoreResults;
+import dev.dsf.bpe.service.pong.ClearPongStatus;
 import dev.dsf.bpe.service.pong.DownloadResourceAndMeasureSpeed;
 import dev.dsf.bpe.service.pong.EstimateCleanupTimerDuration;
 import dev.dsf.bpe.service.pong.LogAndSaveAndStoreError;
@@ -128,16 +128,16 @@ public class PingConfig implements InitializingBean
 	{
 		return new ActivityPrototypeBeanCreator(SetTargetAndConfigureTimer.class, SendStartPing.class,
 				SetPongTimeoutDuration.class, SelectPingTargets.class, SendPingMessage.class,
-				SetCorrelationKeyListener.class, LogPingFirstTry.class, LogPingSecondTry.class, SelectPongTarget.class, CheckPingTaskStatus.class,
-				CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
+				SetCorrelationKeyListener.class, LogPingFirstTry.class, LogPingSecondTry.class, SelectPongTarget.class,
+				CheckPingTaskStatus.class, CleanupPongMessage.class, DownloadResourceAndMeasureSpeed.class,
 				DownloadResourceAndMeasureSpeedInSubProcess.class, Cleanup.class, LogAndSaveAndStoreError.class,
-				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePong.class, SetEndpointIdentifier.class,
-				LogAndSaveSendError.class, SaveTimeoutError.class, LogAndSaveUploadErrorPing.class,
-				LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class, PongStatusGatewayListener.class,
-				SaveReferenceResolutionErrorPing.class, SavePongInstallOrAllowlistError.class, ClearPingStatus.class,
-				SetDownloadResourceReference.class, LogAndSaveSendErrorPong.class, LogReferenceResolutionSuccess.class,
-				SavePingInstallOrAllowlistError.class, SaveReferenceResolutionErrorPong.class,
-				SendBasicConnectionTestPongMessage.class, SendReferenceResolutionTestPongMessage.class);
+				LogAndSaveError.class, EstimateCleanupTimerDuration.class, SavePongFirstTry.class,
+				SavePongSecondTry.class, SetEndpointIdentifier.class, LogAndSaveSendError.class, SaveTimeoutError.class,
+				LogAndSaveUploadErrorPing.class, LogAndSaveUploadErrorPong.class, PingStatusGatewayListener.class,
+				PongStatusGatewayListener.class, SaveReferenceResolutionErrorPing.class,
+				SavePongInstallOrAllowlistError.class, ClearPingStatus.class, SetDownloadResourceReference.class,
+				LogAndSaveSendErrorPong.class, LogReferenceResolutionSuccess.class,
+				SavePingInstallOrAllowlistError.class, SaveReferenceResolutionErrorPong.class);
 	}
 
 	@Bean

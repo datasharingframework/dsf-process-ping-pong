@@ -40,10 +40,10 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pong" />
+			<valueString value="pongFirstTry" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-first-try|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -66,36 +66,10 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="basicConnectionTestPong" />
+			<valueString value="pongSecondTry" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-basic-connection-test-pong|#{version}" />
-		</extension>
-		<extension url="requester">
-			<valueCoding>
-				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
-				<code value="REMOTE_ALL" />
-			</valueCoding>
-		</extension>
-		<extension url="requester">
-			<valueCoding>
-				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
-				<code value="LOCAL_ALL" />
-			</valueCoding>
-		</extension>
-		<extension url="recipient">
-			<valueCoding>
-				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
-				<code value="LOCAL_ALL" />
-			</valueCoding>
-		</extension>
-	</extension>
-	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
-		<extension url="message-name">
-			<valueString value="referenceResolutionTestPong" />
-		</extension>
-		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-reference-resolution-test-pong|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-second-try|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

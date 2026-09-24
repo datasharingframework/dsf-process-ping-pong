@@ -37,9 +37,11 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY_MESSAGE_NAME = "pingFirstTry";
 	public static final String PROFILE_DSF_TASK_PING_SECOND_TRY_MESSAGE_NAME = "pingSecondTry";
 
-	public static final String PROFILE_DSF_TASK_PONG_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong";
+	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-first-try";
 	public static final String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
-	public static final String PROFILE_DSF_TASK_PONG_MESSAGE_NAME = "pong";
+	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_MESSAGE_NAME = "pongFirstTry";
+	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-second-try";
+	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_MESSAGE_NAME = "pongSecondTry";
 
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG = "http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong";
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
