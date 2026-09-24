@@ -31,16 +31,16 @@ public class SendPongMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPongMessage.class);
 	private final PingStatusGenerator pingStatusGenerator;
-	private boolean includeReference;
+	private int pongTry;
 
 	public SendPongMessage(PingStatusGenerator pingStatusGenerator)
 	{
 		this.pingStatusGenerator = pingStatusGenerator;
 	}
 
-	public void setIncludeReference(boolean includeReference)
+	public void setPongTry(Long pongTry)
 	{
-		this.includeReference = includeReference;
+		this.pongTry = Math.toIntExact(pongTry);
 	}
 
 	@Override
@@ -64,11 +64,9 @@ public class SendPongMessage implements MessageSendTask
 			if (downloadedDuration != null)
 				additionalInputParameters.add(DownloadedDurationGenerator.create(downloadedDuration, resourceVersion));
 
-			if (includeReference && downloadResourceReference != null)
-			{
+			if (pongTry == 1 && downloadResourceReference != null)
 				additionalInputParameters
 						.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
-			}
 
 			additionalInputParameters
 					.addAll(ErrorInputComponentGenerator.create(errorListRemote.getEntries(), resourceVersion));
@@ -86,10 +84,12 @@ public class SendPongMessage implements MessageSendTask
 			throws ErrorBoundaryEvent, Exception
 	{
 		Target target = variables.getTarget();
-		Task mainTask = variables.getStartTask();
+		Task startTask = variables.getStartTask();
 		variables.setJsonVariable(ExecutionVariables.statusCode.name(), CodeSystem.DsfPingStatus.Code.PONG_SENT);
-		pingStatusGenerator.updatePongStatusOutput(mainTask, target);
-		variables.updateTask(mainTask);
+		variables.setString(ExecutionVariables.statusCodeString.name(),
+				CodeSystem.DsfPingStatus.Code.PONG_SENT.getValue());
+		pingStatusGenerator.updatePongStatusOutput(startTask, target);
+		variables.updateTask(startTask);
 		MessageSendTask.super.execute(api, variables, sendTaskValues);
 	}
 
@@ -110,7 +110,6 @@ public class SendPongMessage implements MessageSendTask
 					SendTaskValues sendTaskValues, Exception e)
 			{
 				Target target = variables.getTarget();
-				Task startTask = variables.getStartTask();
 				String correlationKey = target.getCorrelationKey();
 
 				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
@@ -118,7 +117,7 @@ public class SendPongMessage implements MessageSendTask
 
 				ErrorListUtils.add(errorAndStatus.error(), variables, correlationKey);
 				variables.setJsonVariable(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
-				variables.updateTask(startTask);
+				variables.setString(ExecutionVariables.rawHttpStatus.name(), errorAndStatus.rawHttpStatus());
 
 				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
 						errorAndStatus.error().concept().getDisplay());
