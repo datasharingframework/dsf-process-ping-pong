@@ -29,7 +29,7 @@ public class SavePingInstallOrAllowlistError implements ServiceTask
 
 		variables.setBoolean(ExecutionVariables.sendPong.name(), false);
 
-		logger.debug(
+		logger.info(
 				"Sending a message with a reference failed with HTTP 403, sending a message without a reference also failed with HTTP 403: {}",
 				error.concept().getDisplay());
 	}
