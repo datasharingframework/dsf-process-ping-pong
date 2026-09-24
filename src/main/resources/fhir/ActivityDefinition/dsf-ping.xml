@@ -40,10 +40,10 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pongFirstTry" />
+			<valueString value="pongFirstAttempt" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-first-try|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-first-attempt|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -66,10 +66,10 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pongSecondTry" />
+			<valueString value="pongSecondAttempt" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-second-try|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-pong-second-attempt|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

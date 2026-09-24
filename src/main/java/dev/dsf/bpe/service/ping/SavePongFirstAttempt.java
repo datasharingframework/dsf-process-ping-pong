@@ -14,6 +14,7 @@ import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.ProcessErrors;
+import dev.dsf.bpe.service.variables.DownloadResourceReference;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
@@ -21,18 +22,18 @@ import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
 import dev.dsf.bpe.v2.variables.Target;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class SavePongSecondTry implements ServiceTask
+public class SavePongFirstAttempt implements ServiceTask
 {
-	private static final Logger logger = LoggerFactory.getLogger(SavePongSecondTry.class);
+	private static final Logger logger = LoggerFactory.getLogger(SavePongFirstAttempt.class);
 
 	@Override
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Target target = variables.getTarget();
-		logger.debug("Pong received from {}. Try {}. Saving pong information...", target.getEndpointUrl(), 2);
+		logger.debug("Pong received from {}. Attempt {}. Saving pong information...", target.getEndpointUrl(), 1);
 		String correlationKey = target.getCorrelationKey();
 
-		variables.setString(ExecutionVariables.pongTry.name(), "2");
+		variables.setString(ExecutionVariables.pongAttempt.name(), "1");
 
 		Task pong = variables.getLatestTask();
 
@@ -49,14 +50,11 @@ public class SavePongSecondTry implements ServiceTask
 		optDownloadedBytes.ifPresent(decimalType -> variables.setLong(
 				ExecutionVariables.uploadedBytes.correlatedValue(correlationKey), decimalType.getValue().longValue()));
 
+		DownloadResourceReference.setFromTask(api, variables, pong);
+
 		ProcessErrors errorList = new ProcessErrors(parseInputs(pong));
+
 		ErrorListUtils.addAll(errorList, variables, correlationKey);
-
-		ProcessError referenceResolutionError = new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
-				CodeSystem.DsfPingError.Concept.LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION,
-				ConstantsPing.POTENTIAL_FIX_URL_LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION);
-		ErrorListUtils.add(referenceResolutionError, variables, correlationKey);
-
 		variables.setJsonVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey),
 				CodeSystem.DsfPingStatus.Code.PONG_RECEIVED);
 

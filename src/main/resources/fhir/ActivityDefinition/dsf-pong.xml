@@ -8,10 +8,10 @@
 	</meta>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pingFirstTry" />
+			<valueString value="pingFirstAttempt" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-first-try|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-first-attempt|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>
@@ -34,10 +34,10 @@
 	</extension>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="pingSecondTry" />
+			<valueString value="pingSecondAttempt" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-second-try|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-second-attempt|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

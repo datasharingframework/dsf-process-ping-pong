@@ -13,19 +13,19 @@ import dev.dsf.bpe.v2.activity.ServiceTask;
 import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class LogPingFirstTry implements ServiceTask
+public class LogPingSecondAttempt implements ServiceTask
 {
-	private static final Logger logger = LoggerFactory.getLogger(LogPingFirstTry.class);
+	private static final Logger logger = LoggerFactory.getLogger(LogPingSecondAttempt.class);
 
 	@Override
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Task task = variables.getLatestTask();
-		String pingTry = "1";
+		String pingAttempt = "2";
 
-		variables.setString(ExecutionVariables.pingTry.name(), pingTry);
+		variables.setString(ExecutionVariables.pingAttempt.name(), pingAttempt);
 		logger.info("PING from {} (endpoint: {}, try: {})", task.getRequester().getIdentifier().getValue(),
-				getEndpointIdentifierValue(api, task), pingTry);
+				getEndpointIdentifierValue(api, task), pingAttempt);
 	}
 
 	private String getEndpointIdentifierValue(ProcessPluginApi api, Task task)

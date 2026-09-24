@@ -31,17 +31,17 @@ public final class ConstantsPing
 	public static final String PROFILE_DSF_TASK_START_PING = "http://dsf.dev/fhir/StructureDefinition/task-start-ping";
 	public static final String PROFILE_DSF_TASK_START_PING_MESSAGE_NAME = "startPing";
 
-	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY = "http://dsf.dev/fhir/StructureDefinition/task-ping-first-try";
-	public static final String PROFILE_DSF_TASK_PING_SECOND_TRY = "http://dsf.dev/fhir/StructureDefinition/task-ping-second-try";
+	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY = "http://dsf.dev/fhir/StructureDefinition/task-ping-first-attempt";
+	public static final String PROFILE_DSF_TASK_PING_SECOND_TRY = "http://dsf.dev/fhir/StructureDefinition/task-ping-second-attempt";
 	public static final String PROFILE_DSF_TASK_PING_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PING;
-	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY_MESSAGE_NAME = "pingFirstTry";
-	public static final String PROFILE_DSF_TASK_PING_SECOND_TRY_MESSAGE_NAME = "pingSecondTry";
+	public static final String PROFILE_DSF_TASK_PING_FIRST_TRY_MESSAGE_NAME = "pingFirstAttempt";
+	public static final String PROFILE_DSF_TASK_PING_SECOND_TRY_MESSAGE_NAME = "pingSecondAttempt";
 
-	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-first-try";
+	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-first-attempt";
 	public static final String PROFILE_DSF_TASK_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;
-	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_MESSAGE_NAME = "pongFirstTry";
-	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-second-try";
-	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_MESSAGE_NAME = "pongSecondTry";
+	public static final String PROFILE_DSF_TASK_PONG_FIRST_TRY_MESSAGE_NAME = "pongFirstAttempt";
+	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_TASK = "http://dsf.dev/fhir/StructureDefinition/task-pong-second-attempt";
+	public static final String PROFILE_DSF_TASK_PONG_SECOND_TRY_MESSAGE_NAME = "pongSecondAttempt";
 
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG = "http://dsf.dev/fhir/StructureDefinition/task-cleanup-pong";
 	public static final String PROFILE_DSF_TASK_CLEANUP_PONG_PROCESS_URI = PROCESS_DSF_URI_BASE + PROCESS_NAME_PONG;

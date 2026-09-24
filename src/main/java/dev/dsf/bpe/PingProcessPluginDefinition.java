@@ -33,10 +33,10 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 		var cPingError = "fhir/CodeSystem/dsf-ping-error.xml";
 
 		var sPingStatus = "fhir/StructureDefinition/dsf-extension-ping-status.xml";
-		var sPingFirstTry = "fhir/StructureDefinition/dsf-task-ping-first-try.xml";
-		var sPingSecondTry = "fhir/StructureDefinition/dsf-task-ping-second-try.xml";
-		var sPongFirstTry = "fhir/StructureDefinition/dsf-task-pong-first-try.xml";
-		var sPongSecondTry = "fhir/StructureDefinition/dsf-task-pong-second-try.xml";
+		var sPingFirstAttempt = "fhir/StructureDefinition/dsf-task-ping-first-attempt.xml";
+		var sPingSecondAttempt = "fhir/StructureDefinition/dsf-task-ping-second-attempt.xml";
+		var sPongFirstAttempt = "fhir/StructureDefinition/dsf-task-pong-first-attempt.xml";
+		var sPongSecondAttempt = "fhir/StructureDefinition/dsf-task-pong-second-attempt.xml";
 		var sStartPing = "fhir/StructureDefinition/dsf-task-start-ping.xml";
 		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
@@ -56,12 +56,13 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 
 		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
 				Arrays.asList(aPing, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sStartPing,
-						sPongFirstTry, sPongSecondTry, sCleanupPong, sBasicConnectionTestPong,
+						sPongFirstAttempt, sPongSecondAttempt, sCleanupPong, sBasicConnectionTestPong,
 						sReferenceResolutionTestPong, tStartPing, vPing, vPingStatus, vPingUnits),
 				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
-				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingError,
-						sErrorExtension, sPingStatus, sPingFirstTry, sPingSecondTry, vPing, vPongStatus, vPingUnits));
+				ConstantsPing.PROCESS_NAME_FULL_PONG,
+				Arrays.asList(aPong, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sPingFirstAttempt,
+						sPingSecondAttempt, vPing, vPongStatus, vPingUnits));
 	}
 }

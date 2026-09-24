@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0abzurc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.39.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:message id="Message_1pklz6t" name="startPing" />
-  <bpmn:message id="Message_10o3b8y" name="pongFirstTry" />
+  <bpmn:message id="Message_10o3b8y" name="pongFirstAttempt" />
   <bpmn:error id="Error_1jmenbm" name="resourceDownloadError" errorCode="resourceDownloadError" />
   <bpmn:process id="dsfdev_ping" name="" isExecutable="true" camunda:versionTag="#{version}" camunda:historyTimeToLive="180">
     <bpmn:subProcess id="SubProcess">
@@ -28,7 +28,7 @@
           <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">${execution.hasVariable("pongTimerDuration") ? pongTimerDuration : "PT30S"}</bpmn:timeDuration>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
-      <bpmn:intermediateCatchEvent id="PongFirstTryCatchEvent" name="Pong First Try" camunda:asyncAfter="true">
+      <bpmn:intermediateCatchEvent id="PongFirstTryCatchEvent" name="Pong First Attempt" camunda:asyncAfter="true">
         <bpmn:extensionElements>
           <camunda:failedJobRetryTimeCycle>R3/PT5S</camunda:failedJobRetryTimeCycle>
         </bpmn:extensionElements>
@@ -71,10 +71,10 @@
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="messageName">
-            <camunda:string>pingFirstTry</camunda:string>
+            <camunda:string>pingFirstAttempt</camunda:string>
           </camunda:field>
           <camunda:field name="profile">
-            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-first-try|#{version}</camunda:string>
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-first-attempt|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="includeReference">
             <camunda:expression>${true}</camunda:expression>
@@ -139,11 +139,11 @@
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="DownloadResourceAndMeasureSpeedServiceTask">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongTry == '1' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == '1' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="DownloadResourceLogAndSaveErrorServiceTask" targetRef="CleanupPongMessageSendTask" />
       <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongFirstTryCatchEvent" targetRef="SavePongServiceTask" />
-      <bpmn:serviceTask id="SavePongServiceTask" name="Save Pong First Try" camunda:class="dev.dsf.bpe.service.ping.SavePongFirstTry">
+      <bpmn:serviceTask id="SavePongServiceTask" name="Save Pong First Attempt" camunda:class="dev.dsf.bpe.service.ping.SavePongFirstAttempt">
         <bpmn:incoming>Flow_1ewmc79</bpmn:incoming>
         <bpmn:outgoing>Flow_1jwekqw</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -179,10 +179,10 @@
             <camunda:string>http://dsf.dev/bpe/Process/pong|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="messageName">
-            <camunda:string>pingSecondTry</camunda:string>
+            <camunda:string>pingSecondAttempt</camunda:string>
           </camunda:field>
           <camunda:field name="profile">
-            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-second-try|#{version}</camunda:string>
+            <camunda:string>http://dsf.dev/fhir/StructureDefinition/task-ping-second-attempt|#{version}</camunda:string>
           </camunda:field>
           <camunda:field name="includeReference">
             <camunda:expression>${false}</camunda:expression>
@@ -245,17 +245,17 @@
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_1ncztgo" sourceRef="DownloadResourceAndMeasureSpeedServiceTask" targetRef="Gateway_0de83s3" />
       <bpmn:sequenceFlow id="Flow_0hahcbu" sourceRef="Gateway_0p0be0a" targetRef="CleanupPongMessageSendTask">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongTry == '2' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == '2' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="CleanupPongMessageSendTask" targetRef="Gateway_02orad4" />
-      <bpmn:intermediateCatchEvent id="PongSecondTryCatchEvent" name="Pong Second Try" camunda:asyncAfter="true">
+      <bpmn:intermediateCatchEvent id="PongSecondAttemptCatchEvent" name="Pong Second Attempt" camunda:asyncAfter="true">
         <bpmn:incoming>Flow_0qul900</bpmn:incoming>
         <bpmn:outgoing>Flow_1ugvqat</bpmn:outgoing>
         <bpmn:messageEventDefinition id="MessageEventDefinition_1mv6rgs" messageRef="Message_281sc3o" />
       </bpmn:intermediateCatchEvent>
-      <bpmn:sequenceFlow id="Flow_0qul900" sourceRef="EventBasedGateway" targetRef="PongSecondTryCatchEvent" />
-      <bpmn:sequenceFlow id="Flow_1ugvqat" sourceRef="PongSecondTryCatchEvent" targetRef="Activity_09j7x4m" />
-      <bpmn:serviceTask id="Activity_09j7x4m" name="Save Pong Second Try" camunda:class="dev.dsf.bpe.service.ping.SavePongSecondTry">
+      <bpmn:sequenceFlow id="Flow_0qul900" sourceRef="EventBasedGateway" targetRef="PongSecondAttemptCatchEvent" />
+      <bpmn:sequenceFlow id="Flow_1ugvqat" sourceRef="PongSecondAttemptCatchEvent" targetRef="Activity_09j7x4m" />
+      <bpmn:serviceTask id="Activity_09j7x4m" name="Save Pong Second Attempt" camunda:class="dev.dsf.bpe.service.ping.SavePongSecondAttempt">
         <bpmn:incoming>Flow_1ugvqat</bpmn:incoming>
         <bpmn:outgoing>Flow_086pb0l</bpmn:outgoing>
       </bpmn:serviceTask>
@@ -364,7 +364,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
   <bpmn:error id="Error_14xet40" name="no_targets" errorCode="no_targets" camunda:errorMessage="" />
   <bpmn:message id="Message_2gnkmdb" name="basicConnectionTestPong" />
   <bpmn:message id="Message_3luphq5" name="referenceResolutionTestPong" />
-  <bpmn:message id="Message_281sc3o" name="pongSecondTry" />
+  <bpmn:message id="Message_281sc3o" name="pongSecondAttempt" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="dsfdev_ping">
       <bpmndi:BPMNShape id="BPMNShape_1wz1w4r" bpmnElement="SubProcess" isExpanded="true">
@@ -382,7 +382,7 @@ Store = store on DSF FHIR server either as separate resource or output parameter
       <bpmndi:BPMNShape id="BPMNShape_1xv73wh" bpmnElement="PongFirstTryCatchEvent">
         <dc:Bounds x="1902" y="712" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1886" y="693" width="69" height="14" />
+          <dc:Bounds x="1895" y="676" width="51" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_01k7kv3" bpmnElement="EventBasedGateway">
@@ -466,10 +466,10 @@ Store = store on DSF FHIR server either as separate resource or output parameter
         <dc:Bounds x="1550" y="510" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1gqnb8y_di" bpmnElement="PongSecondTryCatchEvent">
+      <bpmndi:BPMNShape id="Event_1gqnb8y_di" bpmnElement="PongSecondAttemptCatchEvent">
         <dc:Bounds x="1902" y="822" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1878" y="803" width="85" height="14" />
+          <dc:Bounds x="1887" y="786" width="67" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1fa65kw_di" bpmnElement="Activity_09j7x4m">

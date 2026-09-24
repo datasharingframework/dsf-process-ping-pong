@@ -63,9 +63,10 @@ public class TaskProfileTest
 	public static final ValidationSupportRule validationRule = new ValidationSupportRule(def.getResourceVersion(),
 			def.getResourceReleaseDate(),
 			Arrays.asList("dsf-task-2.0.0.xml", "dsf-extension-error.xml", "dsf-extension-ping-status.xml",
-					"dsf-task-ping-first-try.xml", "dsf-task-ping-second-try.xml", "dsf-task-pong-first-try.xml",
-					"dsf-task-pong-second-try.xml", "dsf-task-start-ping.xml", "dsf-task-start-ping-autostart.xml",
-					"dsf-task-stop-ping-autostart.xml", "dsf-task-cleanup-pong.xml"),
+					"dsf-task-ping-first-attempt.xml", "dsf-task-ping-second-attempt.xml",
+					"dsf-task-pong-first-attempt.xml", "dsf-task-pong-second-attempt.xml", "dsf-task-start-ping.xml",
+					"dsf-task-start-ping-autostart.xml", "dsf-task-stop-ping-autostart.xml",
+					"dsf-task-cleanup-pong.xml"),
 			Arrays.asList("dsf-read-access-tag-2.0.0.xml", "dsf-bpmn-message-2.0.0.xml", "dsf-ping-1_0.xml",
 					"dsf-ping.xml", "dsf-ping-status-1_0.xml", "dsf-ping-status.xml"),
 			Arrays.asList("dsf-read-access-tag-2.0.0.xml", "dsf-bpmn-message-2.0.0.xml", "dsf-ping-1_0.xml",
@@ -462,9 +463,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingFirstTryValid()
+	public void testTaskPingFirstAttemptValid()
 	{
-		Task task = createValidTaskPingFirstTry();
+		Task task = createValidTaskPingFirstAttempt();
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -474,7 +475,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingFirstTryValidWithPingStatusOutput() throws Exception
+	public void testTaskPingFirstAttemptValidWithPingStatusOutput() throws Exception
 	{
 		Target target = new Target()
 		{
@@ -502,7 +503,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPingFirstTry();
+		Task task = createValidTaskPingFirstAttempt();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -513,7 +514,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingFirstTryValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
+	public void testTaskPingFirstAttemptValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
 			throws Exception
 	{
 		Target target = new Target()
@@ -542,7 +543,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPingFirstTry();
+		Task task = createValidTaskPingFirstAttempt();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000, def.getResourceVersion()));
@@ -556,7 +557,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	public static Task createValidTaskPingFirstTry()
+	public static Task createValidTaskPingFirstAttempt()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING_FIRST_TRY);
@@ -585,9 +586,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingSecondTryValid()
+	public void testTaskPingSecondAttemptValid()
 	{
-		Task task = createValidTaskPingSecondTry();
+		Task task = createValidTaskPingSecondAttempt();
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -597,7 +598,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingSecondTryValidWithPingStatusOutput() throws Exception
+	public void testTaskPingSecondAttemptValidWithPingStatusOutput() throws Exception
 	{
 		Target target = new Target()
 		{
@@ -625,7 +626,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPingSecondTry();
+		Task task = createValidTaskPingSecondAttempt();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		ValidationResult result = resourceValidator.validate(task);
@@ -636,7 +637,7 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPingSecondTryValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
+	public void testTaskPingSecondAttemptValidWithPingStatusOutputAndDownloadResourceSizeAndDownloadResourceReference()
 			throws Exception
 	{
 		Target target = new Target()
@@ -665,7 +666,7 @@ public class TaskProfileTest
 				return UUID.randomUUID().toString();
 			}
 		};
-		Task task = createValidTaskPingSecondTry();
+		Task task = createValidTaskPingSecondAttempt();
 		task.addOutput(createPongStatusOutput(target, CodeSystem.DsfPingStatus.Code.PONG_SENT));
 
 		task.addInput(DownloadResourceSizeGenerator.create(1000, def.getResourceVersion()));
@@ -677,7 +678,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	public static Task createValidTaskPingSecondTry()
+	public static Task createValidTaskPingSecondAttempt()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PING_SECOND_TRY);
@@ -706,9 +707,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongFirstTryValid()
+	public void testTaskPongFirstAttemptValid()
 	{
-		Task task = createValidTaskPongFirstTry();
+		Task task = createValidTaskPongFirstAttempt();
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -718,9 +719,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongFirstTryValidWithReferenceAndDownloadedDurationMillisAndDownloadedBytesPresent()
+	public void testTaskPongFirstAttemptValidWithReferenceAndDownloadedDurationMillisAndDownloadedBytesPresent()
 	{
-		Task task = createValidTaskPongFirstTry();
+		Task task = createValidTaskPongFirstAttempt();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary",
 				def.getResourceVersion()));
@@ -735,9 +736,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongFirstTryValidWithMultipleErrorMessages()
+	public void testTaskPongFirstAttemptValidWithMultipleErrorMessages()
 	{
-		Task task = createValidTaskPongFirstTry();
+		Task task = createValidTaskPongFirstAttempt();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary",
 				def.getResourceVersion()));
@@ -753,7 +754,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	private Task createValidTaskPongFirstTry()
+	private Task createValidTaskPongFirstAttempt()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PONG_FIRST_TRY_TASK);
@@ -777,9 +778,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongSecondTryValid()
+	public void testTaskPongSecondAttemptValid()
 	{
-		Task task = createValidTaskPongSecondTry();
+		Task task = createValidTaskPongSecondAttempt();
 
 		ValidationResult result = resourceValidator.validate(task);
 		ValidationSupportRule.logValidationMessages(logger, result);
@@ -789,9 +790,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongSecondTryInvalidWithReferenceAndDownloadedDurationMillisAndDownloadedBytesPresent()
+	public void testTaskPongSecondAttemptInvalidWithReferenceAndDownloadedDurationMillisAndDownloadedBytesPresent()
 	{
-		Task task = createValidTaskPongSecondTry();
+		Task task = createValidTaskPongSecondAttempt();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary",
 				def.getResourceVersion()));
@@ -806,9 +807,9 @@ public class TaskProfileTest
 	}
 
 	@Test
-	public void testTaskPongSecondTryValidWithMultipleErrorMessages()
+	public void testTaskPongSecondAttemptValidWithMultipleErrorMessages()
 	{
-		Task task = createValidTaskPongSecondTry();
+		Task task = createValidTaskPongSecondAttempt();
 
 		task.addInput(DownloadResourceReferenceGenerator.create("https://test.endpoint.org/fhir/Binary",
 				def.getResourceVersion()));
@@ -824,7 +825,7 @@ public class TaskProfileTest
 				|| ResultSeverityEnum.FATAL.equals(m.getSeverity())).count());
 	}
 
-	private Task createValidTaskPongSecondTry()
+	private Task createValidTaskPongSecondAttempt()
 	{
 		Task task = new Task();
 		task.getMeta().addProfile(ConstantsPing.PROFILE_DSF_TASK_PONG_SECOND_TRY_TASK);
