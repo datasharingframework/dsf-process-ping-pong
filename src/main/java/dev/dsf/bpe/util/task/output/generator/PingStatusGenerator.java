@@ -234,11 +234,16 @@ public final class PingStatusGenerator
 
 	private boolean hasTargetSet(TaskOutputComponent outputComponent)
 	{
-		List<Extension> correlationKeyExtensions = outputComponent
+		Optional<Extension> optPingStatusExtension = getPingStatusExtension(outputComponent);
+		if (optPingStatusExtension.isEmpty())
+			return false;
+
+		Extension pingStatusExtension = optPingStatusExtension.get();
+		List<Extension> correlationKeyExtensions = pingStatusExtension
 				.getExtensionsByUrl(ConstantsPing.EXTENSION_URL_CORRELATION_KEY);
-		List<Extension> organizationIdentifierExtensions = outputComponent
+		List<Extension> organizationIdentifierExtensions = pingStatusExtension
 				.getExtensionsByUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER);
-		List<Extension> endpointIdentifierExtensions = outputComponent
+		List<Extension> endpointIdentifierExtensions = pingStatusExtension
 				.getExtensionsByUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER);
 		return !correlationKeyExtensions.isEmpty() || !organizationIdentifierExtensions.isEmpty()
 				|| !endpointIdentifierExtensions.isEmpty();
@@ -391,7 +396,8 @@ public final class PingStatusGenerator
 				.getExtensionByUrl(ConstantsPing.EXTENSION_URL_ORGANIZATION_IDENTIFIER);
 		if (organizationIdentifierExtension != null)
 		{
-			organizationIdentifierExtension.setValue(new StringType(target.getOrganizationIdentifierValue()));
+			organizationIdentifierExtension
+					.setValue(OrganizationIdentifier.withValue(target.getOrganizationIdentifierValue()));
 		}
 		else
 		{
@@ -402,7 +408,7 @@ public final class PingStatusGenerator
 		Extension urlEndpointIdentifier = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_ENDPOINT_IDENTIFIER);
 		if (urlEndpointIdentifier != null)
 		{
-			urlEndpointIdentifier.setValue(new StringType(target.getEndpointIdentifierValue()));
+			urlEndpointIdentifier.setValue(EndpointIdentifier.withValue(target.getEndpointIdentifierValue()));
 		}
 		else
 		{
