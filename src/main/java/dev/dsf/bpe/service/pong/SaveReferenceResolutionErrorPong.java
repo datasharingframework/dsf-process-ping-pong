@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
 import dev.dsf.bpe.v2.ProcessPluginApi;
@@ -25,14 +24,6 @@ public class SaveReferenceResolutionErrorPong implements ServiceTask
 				CodeSystem.DsfPingError.Concept.REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION,
 				ConstantsPing.POTENTIAL_FIX_URL_REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION);
 		ErrorListUtils.add(errorLocal, variables, correlationKey);
-
-		ProcessError errorRemote = new ProcessError(ConstantsPing.PROCESS_NAME_PONG,
-				CodeSystem.DsfPingError.Concept.LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION,
-				ConstantsPing.POTENTIAL_FIX_URL_LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION);
-		ErrorListUtils.addRemote(errorRemote, variables);
-
-		variables.setBoolean(ExecutionVariables.sendPong.name(), true);
-		variables.setBoolean(ExecutionVariables.includeReferencePong.name(), false);
 
 		logger.info(
 				"Sending a message with a reference failed with HTTP 403, sending a message without a reference succeeded: {}",
