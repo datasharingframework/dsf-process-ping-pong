@@ -3,10 +3,8 @@ package dev.dsf.bpe;
 public enum ExecutionVariables
 {
 	timerInterval,
-	stopTimer,
 	downloadResourceSizeBytes,
 	maxDownloadResourceSizeBytes,
-	downloadResource,
 	downloadResourceReference,
 	statusCode,
 	statusCodeString,
