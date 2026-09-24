@@ -137,7 +137,7 @@ public class PingConfig implements InitializingBean
 				PongStatusGatewayListener.class, SaveReferenceResolutionErrorPing.class,
 				SavePongInstallOrAllowlistError.class, ClearPingStatus.class, SetDownloadResourceReference.class,
 				LogAndSaveSendErrorPong.class, LogReferenceResolutionSuccess.class,
-				SavePingInstallOrAllowlistError.class, SaveReferenceResolutionErrorPong.class);
+				SavePingInstallOrAllowlistError.class, SaveReferenceResolutionErrorPong.class, ClearPongStatus.class);
 	}
 
 	@Bean
