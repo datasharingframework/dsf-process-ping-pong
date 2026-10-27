@@ -22,13 +22,12 @@ import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
+import dev.dsf.bpe.util.ParsedUri;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.ServiceTask;
 import dev.dsf.bpe.v2.constants.NamingSystems.EndpointIdentifier;
@@ -49,7 +48,7 @@ public class SelectPingTargets implements ServiceTask
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Stream<Endpoint> targetEndpoints = getTargetEndpointsSearchParameter(api, variables)
-				.map(uriComponents -> searchForEndpoints(api, uriComponents)).orElse(allEndpoints(api))
+				.map(ParsedUri -> searchForEndpoints(api, ParsedUri)).orElse(allEndpoints(api))
 				.filter(isLocalEndpoint(api).negate());
 
 		List<Organization> remoteOrganizations = api.getOrganizationProvider().getRemoteOrganizations();
@@ -89,21 +88,21 @@ public class SelectPingTargets implements ServiceTask
 		};
 	}
 
-	private Optional<UriComponents> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
+	private Optional<ParsedUri> getTargetEndpointsSearchParameter(ProcessPluginApi api, Variables variables)
 	{
 		Task mainTask = variables.getStartTask();
 		return api.getTaskHelper()
 				.getFirstInputParameterStringValue(mainTask, CodeSystem.DsfPing.URL,
 						CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue())
-				.map(requestUrl -> UriComponentsBuilder.fromUriString(requestUrl).build());
+				.map(requestUrl -> ParsedUri.fromUriString(requestUrl));
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters)
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, ParsedUri searchParameters)
 	{
 		return searchForEndpoints(api, searchParameters, 1, 0);
 	}
 
-	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, UriComponents searchParameters, int page,
+	private Stream<Endpoint> searchForEndpoints(ProcessPluginApi api, ParsedUri searchParameters, int page,
 			int currentTotal)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
@@ -128,7 +127,7 @@ public class SelectPingTargets implements ServiceTask
 	}
 
 	@SuppressWarnings("unchecked")
-	private Optional<Class<? extends Resource>> getResourceType(UriComponents searchParameters)
+	private Optional<Class<? extends Resource>> getResourceType(ParsedUri searchParameters)
 	{
 		if (searchParameters.getPathSegments().isEmpty())
 			return Optional.empty();
