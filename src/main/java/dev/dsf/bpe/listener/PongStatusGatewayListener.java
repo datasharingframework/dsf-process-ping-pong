@@ -1,7 +1,5 @@
 package dev.dsf.bpe.listener;
 
-import java.util.Objects;
-
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.v2.ProcessPluginApi;
