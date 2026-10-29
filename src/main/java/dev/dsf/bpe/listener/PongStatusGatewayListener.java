@@ -1,0 +1,23 @@
+package dev.dsf.bpe.listener;
+
+import dev.dsf.bpe.CodeSystem;
+import dev.dsf.bpe.ExecutionVariables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ExecutionListener;
+import dev.dsf.bpe.v2.variables.Variables;
+
+public class PongStatusGatewayListener implements ExecutionListener
+{
+	@Override
+	public void notify(ProcessPluginApi api, Variables variables) throws Exception
+	{
+		setPongStatusAsString(variables);
+	}
+
+	private void setPongStatusAsString(Variables variables)
+	{
+		CodeSystem.DsfPingStatus.Code statusCode = variables.getVariableLocal(ExecutionVariables.statusCode.name());
+		if (statusCode != null)
+			variables.setString(ExecutionVariables.statusCodeString.name(), statusCode.getValue());
+	}
+}

@@ -3,12 +3,12 @@ package dev.dsf.bpe;
 public enum ExecutionVariables
 {
 	timerInterval,
-	stopTimer,
 	downloadResourceSizeBytes,
 	maxDownloadResourceSizeBytes,
-	downloadResource,
 	downloadResourceReference,
 	statusCode,
+	statusCodeString,
+	rawHttpStatus,
 	error,
 	errorLocal,
 	errorRemote,
@@ -25,7 +25,10 @@ public enum ExecutionVariables
 	resourceUploadErrorRemote,
 	pongTimerDuration,
 	pingTaskId,
-	cleanupTimerDuration;
+	cleanupTimerDuration,
+	sendPong,
+	pingAttempt,
+	pongAttempt;
 
 	public String correlatedValue(String correlationKey)
 	{

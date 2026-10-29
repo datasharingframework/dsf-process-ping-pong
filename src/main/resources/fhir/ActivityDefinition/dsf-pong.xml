@@ -1,5 +1,6 @@
 <ActivityDefinition xmlns="http://hl7.org/fhir">
 	<meta>
+		<profile value="http://dsf.dev/fhir/StructureDefinition/activity-definition" />
 		<tag>
 			<system value="http://dsf.dev/fhir/CodeSystem/read-access-tag" />
 			<code value="ALL" />
@@ -7,10 +8,36 @@
 	</meta>
 	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
 		<extension url="message-name">
-			<valueString value="ping" />
+			<valueString value="pingFirstAttempt" />
 		</extension>
 		<extension url="task-profile">
-			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping|#{version}" />
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-first-attempt|#{version}" />
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="REMOTE_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="requester">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+		<extension url="recipient">
+			<valueCoding>
+				<system value="http://dsf.dev/fhir/CodeSystem/process-authorization" />
+				<code value="LOCAL_ALL" />
+			</valueCoding>
+		</extension>
+	</extension>
+	<extension url="http://dsf.dev/fhir/StructureDefinition/extension-process-authorization">
+		<extension url="message-name">
+			<valueString value="pingSecondAttempt" />
+		</extension>
+		<extension url="task-profile">
+			<valueCanonical value="http://dsf.dev/fhir/StructureDefinition/task-ping-second-attempt|#{version}" />
 		</extension>
 		<extension url="requester">
 			<valueCoding>

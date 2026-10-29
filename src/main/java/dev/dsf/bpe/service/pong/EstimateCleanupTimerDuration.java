@@ -3,27 +3,21 @@ package dev.dsf.bpe.service.pong;
 import java.time.Duration;
 import java.util.Optional;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.service.AbstractService;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class EstimateCleanupTimerDuration extends AbstractService
+public class EstimateCleanupTimerDuration implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(EstimateCleanupTimerDuration.class);
 
-	public EstimateCleanupTimerDuration(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi processPluginApi, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Estimating cleanup timer duration...");
 		final long minTimerDurationMillis = 20000;

@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import dev.dsf.bpe.v1.ProcessPluginDefinition;
+import dev.dsf.bpe.v2.ProcessPluginDefinition;
 
 public class PingProcessPluginDefinitionTest
 {
@@ -20,7 +20,7 @@ public class PingProcessPluginDefinitionTest
 
 		var ping = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING);
 		assertNotNull(ping);
-		assertEquals(13, ping.stream().filter(this::exists).count());
+		assertEquals(16, ping.stream().filter(this::exists).count());
 
 		var pingAutostart = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART);
 		assertNotNull(pingAutostart);
@@ -28,7 +28,7 @@ public class PingProcessPluginDefinitionTest
 
 		var pong = resourcesByProcessId.get(ConstantsPing.PROCESS_NAME_FULL_PONG);
 		assertNotNull(pong);
-		assertEquals(10, pong.stream().filter(this::exists).count());
+		assertEquals(11, pong.stream().filter(this::exists).count());
 	}
 
 	private boolean exists(String file)

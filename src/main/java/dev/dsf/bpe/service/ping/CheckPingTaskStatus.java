@@ -1,7 +1,7 @@
 package dev.dsf.bpe.service.ping;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
+import java.time.Duration;
+
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,26 +10,24 @@ import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.service.AbstractService;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
-import dev.dsf.fhir.client.FhirWebserviceClient;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.client.dsf.DelayStrategy;
+import dev.dsf.bpe.v2.client.dsf.DsfClient;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.error.ServiceTaskErrorHandler;
+import dev.dsf.bpe.v2.error.impl.DefaultServiceTaskErrorHandler;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 import jakarta.ws.rs.WebApplicationException;
 
-public class CheckPingTaskStatus extends AbstractService
+public class CheckPingTaskStatus implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(CheckPingTaskStatus.class);
 
-	public CheckPingTaskStatus(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Checking status of ping task...");
 
@@ -45,10 +43,10 @@ public class CheckPingTaskStatus extends AbstractService
 		{
 			if (taskId != null)
 			{
-				FhirWebserviceClient fhirWebserviceClient = api.getFhirWebserviceClientProvider()
-						.getWebserviceClient(target.getEndpointUrl());
+				DsfClient dsfClient = api.getDsfClientProvider().getByEndpointUrl(target.getEndpointUrl());
 
-				Task pingTask = fhirWebserviceClient.withRetry(3, 1000).read(Task.class, taskId);
+				Task pingTask = dsfClient.withRetry(3, DelayStrategy.constant(Duration.ofSeconds(1))).read(Task.class,
+						taskId);
 				ProcessError error = switch (pingTask.getStatus())
 				{
 					case COMPLETED -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
@@ -62,18 +60,18 @@ public class CheckPingTaskStatus extends AbstractService
 					default -> new ProcessError(ConstantsPing.PROCESS_NAME_PING,
 							CodeSystem.DsfPingError.Concept.RESPONSE_MESSAGE_TIMEOUT_STATUS_UNEXPECTED, null);
 				};
-				ErrorListUtils.add(error, delegateExecution, correlationKey);
+				ErrorListUtils.add(error, variables, correlationKey);
 			}
 		}
 		catch (WebApplicationException e)
 		{
 			ProcessError error = getProcessError(e);
-			ErrorListUtils.add(error, delegateExecution, correlationKey);
+			ErrorListUtils.add(error, variables, correlationKey);
 		}
 		finally
 		{
-			variables.setVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey),
-					new CodeValueImpl(CodeSystem.DsfPingStatus.Code.PONG_MISSING));
+			variables.setJsonVariable(ExecutionVariables.statusCode.correlatedValue(correlationKey),
+					CodeSystem.DsfPingStatus.Code.PONG_MISSING);
 		}
 
 		logger.debug("Saved '{}' to process execution for correlation key '{}'",
@@ -113,14 +111,20 @@ public class CheckPingTaskStatus extends AbstractService
 	}
 
 	@Override
-	protected void handleException(DelegateExecution execution, Variables variables, Exception exception)
-			throws Exception
+	public ServiceTaskErrorHandler getErrorHandler()
 	{
-		logger.error("Unexpected error while checking status of ping task.", exception);
-		String correlationKey = variables.getTarget().getCorrelationKey();
-		ErrorListUtils.add(
-				new ProcessError(ConstantsPing.PROCESS_NAME_PING, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null),
-				execution, correlationKey);
-		throw new BpmnError(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR);
+		return new DefaultServiceTaskErrorHandler()
+		{
+			@Override
+			public Exception handleException(ProcessPluginApi processPluginApi, Variables variables, Exception e)
+			{
+				logger.error("Unexpected error while checking status of ping task.", e);
+				String correlationKey = variables.getTarget().getCorrelationKey();
+				ErrorListUtils.add(new ProcessError(ConstantsPing.PROCESS_NAME_PING,
+						CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null), variables, correlationKey);
+				return new ErrorBoundaryEvent(ConstantsPing.BPMN_ERROR_CODE_UNEXPECTED_ERROR,
+						ConstantsPing.BPMN_ERROR_MESSAGE_UNEXPECTED_ERROR);
+			}
+		};
 	}
 }

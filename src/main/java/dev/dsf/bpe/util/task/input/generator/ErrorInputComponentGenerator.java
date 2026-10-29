@@ -17,19 +17,20 @@ public final class ErrorInputComponentGenerator
 	{
 	}
 
-	public static List<Task.ParameterComponent> create(List<ProcessError> errors)
+	public static List<Task.ParameterComponent> create(List<ProcessError> errors, String resourceVersion)
 	{
 		if (errors == null || errors.isEmpty())
 			return List.of();
-		return errors.stream().map(ErrorInputComponentGenerator::create).collect(Collectors.toList());
+		return errors.stream().map(e -> ErrorInputComponentGenerator.create(e, resourceVersion))
+				.collect(Collectors.toList());
 	}
 
-	public static Task.ParameterComponent create(ProcessError error)
+	public static Task.ParameterComponent create(ProcessError error, String resourceVersion)
 	{
 		Task.ParameterComponent param = new Task.ParameterComponent();
 
-		param.getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.ERROR));
-		param.addExtension(ProcessError.toExtension(error));
+		param.getType().addCoding(CodeSystem.DsfPing.fromCode(CodeSystem.DsfPing.Code.ERROR, resourceVersion));
+		param.addExtension(ProcessError.toExtension(error, resourceVersion));
 		Extension dataAbsentReason = new Extension()
 				.setUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
 				.setValue(new CodeType("not-applicable"));

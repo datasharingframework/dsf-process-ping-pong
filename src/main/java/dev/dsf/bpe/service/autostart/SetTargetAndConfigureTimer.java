@@ -1,30 +1,24 @@
 package dev.dsf.bpe.service.autostart;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.service.AbstractService;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SetTargetAndConfigureTimer extends AbstractService
+public class SetTargetAndConfigureTimer implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SetTargetAndConfigureTimer.class);
 
-	public SetTargetAndConfigureTimer(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
-		String timerInterval = getTimerInterval(variables);
+		String timerInterval = getTimerInterval(api, variables);
 		logger.debug("Setting variable '{}' to {}", ExecutionVariables.timerInterval.name(), timerInterval);
 
 		variables.setString(ExecutionVariables.timerInterval.name(), timerInterval);
@@ -34,7 +28,7 @@ public class SetTargetAndConfigureTimer extends AbstractService
 						api.getEndpointProvider().getLocalEndpointAddress()));
 	}
 
-	private String getTimerInterval(Variables variables)
+	private String getTimerInterval(ProcessPluginApi api, Variables variables)
 	{
 		return api.getTaskHelper()
 				.getFirstInputParameterStringValue(variables.getStartTask(), CodeSystem.DsfPing.URL,

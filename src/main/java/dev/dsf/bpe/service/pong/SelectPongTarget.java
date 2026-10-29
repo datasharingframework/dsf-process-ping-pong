@@ -1,36 +1,32 @@
 package dev.dsf.bpe.service.pong;
 
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
+import static dev.dsf.bpe.ConstantsPing.BPMN_ERROR_CODE_TARGET_NOT_ALLOWED;
+import static dev.dsf.bpe.ConstantsPing.BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED;
+
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.service.AbstractService;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.constants.CodeSystems.BpmnMessage;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.constants.CodeSystems.BpmnMessage;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SelectPongTarget extends AbstractService implements InitializingBean
+public class SelectPongTarget implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SelectPongTarget.class);
 
-	public SelectPongTarget(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected void doExecuteWithErrorHandling(DelegateExecution execution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Selecting pong targets...");
 
 		Task task = variables.getStartTask();
 
 		String correlationKey = api.getTaskHelper()
-				.getFirstInputParameterStringValue(task, BpmnMessage.URL, BpmnMessage.Codes.CORRELATION_KEY).get();
+				.getFirstInputParameterStringValue(task, BpmnMessage.SYSTEM, BpmnMessage.Codes.CORRELATION_KEY).get();
 		String targetOrganizationIdentifierValue = task.getRequester().getIdentifier().getValue();
 		String targetEndpointIdentifierValue = variables.getString(ExecutionVariables.targetEndpointIdentifier.name());
 
@@ -40,7 +36,8 @@ public class SelectPongTarget extends AbstractService implements InitializingBea
 					logger.warn(
 							"Pong response target (organization {}, endpoint {}) not found locally or not active, not sending pong",
 							targetOrganizationIdentifierValue, targetEndpointIdentifierValue);
-					return new BpmnError("target_not_allowed");
+					return new ErrorBoundaryEvent(BPMN_ERROR_CODE_TARGET_NOT_ALLOWED,
+							BPMN_ERROR_MESSAGE_TARGET_NOT_ALLOWED);
 				});
 
 		variables.setTarget(variables.createTarget(targetOrganizationIdentifierValue, targetEndpointIdentifierValue,

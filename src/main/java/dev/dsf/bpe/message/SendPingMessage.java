@@ -1,106 +1,125 @@
 package dev.dsf.bpe.message;
 
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.IdType;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.hl7.fhir.r4.model.Task;
-import org.hl7.fhir.r4.model.Task.ParameterComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
-import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.util.task.SendTaskErrorConverter;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceReferenceGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadResourceSizeGenerator;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.codesystem.dsfpingstatus.CodeValueImpl;
-import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
-import dev.dsf.fhir.client.FhirWebserviceClient;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.MessageSendTask;
+import dev.dsf.bpe.v2.activity.task.DefaultTaskSender;
+import dev.dsf.bpe.v2.activity.task.TaskSender;
+import dev.dsf.bpe.v2.activity.values.SendTaskValues;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.error.MessageSendTaskErrorHandler;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SendPingMessage extends AbstractTaskMessageSend
+public class SendPingMessage implements MessageSendTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(SendPingMessage.class);
-	private IdType taskId;
+	private boolean includeReference;
 
-	public SendPingMessage(ProcessPluginApi api)
+	public void setIncludeReference(boolean includeReference)
 	{
-		super(api);
+		this.includeReference = includeReference;
 	}
 
 	@Override
-	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
+	public List<Task.ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
+			SendTaskValues sendTaskValues, Target target)
 	{
 		String downloadResourceReference = variables.getString(ExecutionVariables.downloadResourceReference.name());
 		long downloadResourceSizeBytes = variables.getLong(ExecutionVariables.downloadResourceSizeBytes.name());
 
-		Stream<ParameterComponent> downloadResourceReferenceStream = downloadResourceReference == null ? Stream.empty()
-				: Stream.of(DownloadResourceReferenceGenerator.create(downloadResourceReference));
-		Stream<ParameterComponent> downloadResourceSizeBytesStream = Stream
-				.of(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes));
-		ParameterComponent endpointIdentifierComponent = api.getTaskHelper().createInput(
-				new Reference().setIdentifier(getLocalEndpointIdentifier()).setType(ResourceType.Endpoint.name()),
-				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue());
-		endpointIdentifierComponent.getType().getCodingFirstRep()
-				.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
-		Stream<ParameterComponent> endpointIdentifierStream = Stream.of(endpointIdentifierComponent);
+		List<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
 
-		return Stream.concat(endpointIdentifierStream,
-				Stream.concat(downloadResourceReferenceStream, downloadResourceSizeBytesStream));
-	}
+		String resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-	@Override
-	protected void sendTask(DelegateExecution execution, Variables variables, Target target,
-			String instantiatesCanonical, String messageName, String businessKey, String profile,
-			Stream<ParameterComponent> additionalInputParameters)
-	{
-		super.sendTask(execution, variables, target, instantiatesCanonical, messageName, businessKey, profile,
-				additionalInputParameters);
-		if (taskId != null)
+		if (includeReference && downloadResourceReference != null)
 		{
-			execution.setVariableLocal(ExecutionVariables.pingTaskId.name(), taskId.getIdPart());
+			additionalInputParameters
+					.add(DownloadResourceReferenceGenerator.create(downloadResourceReference, resourceVersion));
 		}
+
+		additionalInputParameters.add(DownloadResourceSizeGenerator.create(downloadResourceSizeBytes, resourceVersion));
+
+		Task.ParameterComponent endpointIdentifierComponent = api.getTaskHelper().createInput(
+				new Reference().setIdentifier(getLocalEndpointIdentifier(api)).setType(ResourceType.Endpoint.name()),
+				CodeSystem.DsfPing.URL, CodeSystem.DsfPing.Code.ENDPOINT_IDENTIFIER.getValue(), resourceVersion);
+		endpointIdentifierComponent.getType().getCodingFirstRep().setVersion(resourceVersion);
+
+		additionalInputParameters.add(endpointIdentifierComponent);
+
+		return additionalInputParameters;
 	}
 
 	@Override
-	protected IdType doSend(FhirWebserviceClient client, Task task)
+	public TaskSender getTaskSender(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
 	{
-		taskId = super.doSend(client, task);
-		return taskId;
+		return new DefaultTaskSender(api, variables, sendTaskValues, getBusinessKeyStrategy(),
+				target -> getAdditionalInputParameters(api, variables, sendTaskValues, target))
+		{
+			@Override
+			protected IdType doSend(Task task, String targetEndpointUrl)
+			{
+				IdType taskId = super.doSend(task, targetEndpointUrl);
+				if (taskId != null)
+				{
+					variables.setStringLocal(ExecutionVariables.pingTaskId.name(), taskId.getIdPart());
+				}
+				return taskId;
+			}
+		};
 	}
 
 	@Override
-	protected void handleSendTaskError(DelegateExecution execution, Variables variables, Exception exception,
-			String errorMessage)
+	public MessageSendTaskErrorHandler getErrorHandler()
 	{
-		Target target = variables.getTarget();
-		SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
-				.convertLocal(exception, true, ConstantsPing.PROCESS_NAME_PING);
+		return new MessageSendTaskErrorHandler()
+		{
+			@Override
+			public ErrorBoundaryEvent handleErrorBoundaryEvent(ProcessPluginApi processPluginApi, Variables variables,
+					ErrorBoundaryEvent errorBoundaryEvent)
+			{
+				return errorBoundaryEvent;
+			}
 
-		execution.setVariableLocal(ExecutionVariables.error.name(), new ProcessErrorValueImpl(errorAndStatus.error()));
-		execution.setVariableLocal(ExecutionVariables.statusCode.name(),
-				new CodeValueImpl(errorAndStatus.statusCode()));
+			@Override
+			public Exception handleException(ProcessPluginApi processPluginApi, Variables variables,
+					SendTaskValues sendTaskValues, Exception e)
+			{
+				Target target = variables.getTarget();
+				SendTaskErrorConverter.ProcessErrorWithStatusCode errorAndStatus = SendTaskErrorConverter
+						.convertLocal(e, includeReference, ConstantsPing.PROCESS_NAME_PING);
 
-		logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
-				errorAndStatus.error().concept().getDisplay());
+				variables.setJsonVariableLocal(ExecutionVariables.error.name(), errorAndStatus.error());
+				variables.setJsonVariableLocal(ExecutionVariables.statusCode.name(), errorAndStatus.statusCode());
+
+				String rawHttpStatus = errorAndStatus.rawHttpStatus();
+				variables.setStringLocal(ExecutionVariables.rawHttpStatus.name(), rawHttpStatus);
+
+				logger.info("Request to {} resulted in error: {}", target.getEndpointUrl(),
+						errorAndStatus.error().concept().getDisplay());
+
+				return null;
+			}
+		};
 	}
 
-	@Override
-	protected void addErrorMessage(Task task, String errorMessage)
-	{
-		// error message part of status extension
-	}
-
-	private Identifier getLocalEndpointIdentifier()
+	private Identifier getLocalEndpointIdentifier(ProcessPluginApi api)
 	{
 		return api.getEndpointProvider().getLocalEndpointIdentifier()
 				.orElseThrow(() -> new IllegalStateException("Local endpoint identifier unknown"));

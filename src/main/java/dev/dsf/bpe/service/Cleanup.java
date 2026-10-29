@@ -5,40 +5,32 @@ import java.util.Locale;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.Expression;
 import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.ErrorListUtils;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractServiceDelegate;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
-public class Cleanup extends AbstractServiceDelegate implements InitializingBean
+public class Cleanup implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(Cleanup.class);
-	private Expression process;
+	private String process;
 
-	public Cleanup(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
-	public void doExecute(DelegateExecution delegateExecution, Variables variables)
+	@Override
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Cleaning up...");
-
-		String process = (String) this.process.getValue(delegateExecution);
 
 		String downloadResourceId = new IdType(variables.getString(ExecutionVariables.downloadResourceReference.name()))
 				.getIdPart();
@@ -46,10 +38,8 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 		{
 			try
 			{
-				api.getFhirWebserviceClientProvider().getLocalWebserviceClient().delete(Binary.class,
-						downloadResourceId);
-				api.getFhirWebserviceClientProvider().getLocalWebserviceClient().deletePermanently(Binary.class,
-						downloadResourceId);
+				api.getDsfClientProvider().getLocal().delete(Binary.class, downloadResourceId);
+				api.getDsfClientProvider().getLocal().deletePermanently(Binary.class, downloadResourceId);
 				logger.debug("Deleted Binary resource with ID {}", downloadResourceId);
 			}
 			catch (ProcessingException e)
@@ -57,32 +47,32 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 				if (e.getCause() instanceof SocketTimeoutException timeoutException)
 				{
 					ProcessError error = toProcessError(timeoutException, process);
-					ErrorListUtils.add(error, delegateExecution);
+					ErrorListUtils.add(error, variables);
 					logger.error(e.getCause().getMessage());
 				}
 				else if (e.getCause() instanceof ConnectTimeoutException)
 				{
 					ProcessError error = toProcessErrorConnectTimeout(process);
-					ErrorListUtils.add(error, delegateExecution);
+					ErrorListUtils.add(error, variables);
 					logger.error(e.getCause().getMessage());
 				}
 				else if (e.getCause() instanceof HttpHostConnectException)
 				{
 					ProcessError error = toProcessErrorLocalHttpHostConnect(process);
-					ErrorListUtils.add(error, delegateExecution);
+					ErrorListUtils.add(error, variables);
 					logger.error(e.getCause().getMessage());
 				}
 				else
 				{
 					ProcessError error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
-					ErrorListUtils.add(error, delegateExecution);
+					ErrorListUtils.add(error, variables);
 					logger.error("Unexpected error: {}", e.getCause().getMessage());
 				}
 			}
 			catch (WebApplicationException e)
 			{
 				ProcessError error = toProcessError(e, process);
-				ErrorListUtils.add(error, delegateExecution);
+				ErrorListUtils.add(error, variables);
 			}
 		}
 		else
@@ -153,7 +143,7 @@ public class Cleanup extends AbstractServiceDelegate implements InitializingBean
 		};
 	}
 
-	public void setProcess(Expression process)
+	public void setProcess(String process)
 	{
 		this.process = process;
 	}

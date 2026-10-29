@@ -13,12 +13,16 @@ import org.junit.Test;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
+import dev.dsf.bpe.PingProcessPluginDefinition;
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.util.task.output.generator.PingStatusGenerator;
 import dev.dsf.fhir.profiles.TaskProfileTest;
 
 public class PingStatusGeneratorTest
 {
+	private static final PingProcessPluginDefinition def = new PingProcessPluginDefinition();
+	private static final PingStatusGenerator pingStatusGenerator = new PingStatusGenerator(def.getResourceVersion());
+
 	@Test
 	public void updatingPongErrorsResultsInOneErrorsExtensionTest()
 	{
@@ -28,11 +32,11 @@ public class PingStatusGeneratorTest
 
 		Task pongTask = TaskProfileTest.createValidTaskStartPingProcess();
 
-		PingStatusGenerator.updatePongStatusOutput(pongTask, errors);
+		pingStatusGenerator.updatePongStatusOutput(pongTask, errors);
 
 		errors.add(new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_BINARY_POST_HTTP_UNEXPECTED, null));
 
-		PingStatusGenerator.updatePongStatusOutput(pongTask, errors);
+		pingStatusGenerator.updatePongStatusOutput(pongTask, errors);
 
 		List<Extension> errorsExtensions = pongTask.getOutput().stream().map(Element::getExtension)
 				.map(extensions -> extensions.stream()

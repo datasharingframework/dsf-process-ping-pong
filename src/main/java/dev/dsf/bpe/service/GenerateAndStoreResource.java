@@ -5,47 +5,37 @@ import java.util.Locale;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
-import org.camunda.bpm.engine.delegate.BpmnError;
-import org.camunda.bpm.engine.delegate.DelegateExecution;
-import org.camunda.bpm.engine.delegate.Expression;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.ExecutionVariables;
 import dev.dsf.bpe.ProcessError;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.variables.Variables;
-import dev.dsf.bpe.variables.process_error.ProcessErrorValueImpl;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.ServiceTask;
+import dev.dsf.bpe.v2.error.ErrorBoundaryEvent;
+import dev.dsf.bpe.v2.variables.Variables;
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.WebApplicationException;
 
-public class GenerateAndStoreResource extends AbstractService implements InitializingBean
+public class GenerateAndStoreResource implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(GenerateAndStoreResource.class);
 	private final long maxUploadSizeBytes;
-	private Expression process;
+	private String process;
 
-	public GenerateAndStoreResource(ProcessPluginApi api, long maxUploadSizeBytes)
+	public GenerateAndStoreResource(long maxUploadSizeBytes)
 	{
-		super(api);
 		this.maxUploadSizeBytes = maxUploadSizeBytes;
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception
-	{
-		super.afterPropertiesSet();
-	}
-
-	public void doExecuteWithErrorHandling(DelegateExecution delegateExecution, Variables variables) throws BpmnError
+	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		logger.debug("Generating resource...");
 		long downloadResourceSizeBytes = getDownloadResourceSize(variables);
-		String process = (String) this.process.getValue(delegateExecution);
 		RandomByteInputStream resourceContent;
 		if (downloadResourceSizeBytes > maxUploadSizeBytes)
 		{
@@ -65,7 +55,7 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 
 		try
 		{
-			IdType downloadResource = storeBinary(resourceContent);
+			IdType downloadResource = storeBinary(api, resourceContent);
 
 			String reference = downloadResource.toVersionless().getValueAsString();
 
@@ -138,11 +128,10 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 					break;
 			}
 
-			variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+			variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 			if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 			{
-				variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-						new ProcessErrorValueImpl(errorRemote));
+				variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 			}
 		}
 		catch (ProcessingException e)
@@ -152,11 +141,10 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 				ProcessError error = toProcessErrorLocal(socketTimeoutException, process);
 				ProcessError errorRemote = toProcessErrorRemote(socketTimeoutException, process);
 
-				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							new ProcessErrorValueImpl(errorRemote));
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else if (e.getCause() instanceof ConnectTimeoutException)
@@ -164,11 +152,10 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 				ProcessError error = toProcessErrorLocalConnectTimeout(process);
 				ProcessError errorRemote = toProcessErrorRemoteConnectTimeout(process);
 
-				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							new ProcessErrorValueImpl(errorRemote));
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else if (e.getCause() instanceof HttpHostConnectException)
@@ -176,11 +163,10 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 				ProcessError error = toProcessErrorLocalHttpHostConnect(process);
 				ProcessError errorRemote = toProcessErrorRemoteHttpHostConnect(process);
 
-				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							new ProcessErrorValueImpl(errorRemote));
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 			}
 			else
@@ -188,11 +174,10 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 				ProcessError error = new ProcessError(process, CodeSystem.DsfPingError.Concept.LOCAL_UNKNOWN, null);
 				ProcessError errorRemote = new ProcessError(process, CodeSystem.DsfPingError.Concept.REMOTE_UNKNOWN,
 						null);
-				variables.setVariable(ExecutionVariables.resourceUploadError.name(), new ProcessErrorValueImpl(error));
+				variables.setJsonVariable(ExecutionVariables.resourceUploadError.name(), error);
 				if (ConstantsPing.PROCESS_NAME_PONG.equals(process))
 				{
-					variables.setVariable(ExecutionVariables.resourceUploadErrorRemote.name(),
-							new ProcessErrorValueImpl(errorRemote));
+					variables.setJsonVariable(ExecutionVariables.resourceUploadErrorRemote.name(), errorRemote);
 				}
 				logger.error("Unexpected error: {}", e.getMessage());
 			}
@@ -277,14 +262,14 @@ public class GenerateAndStoreResource extends AbstractService implements Initial
 		variables.setLong(ExecutionVariables.downloadResourceSizeBytes.name(), resourceSizeBytes);
 	}
 
-	private IdType storeBinary(RandomByteInputStream downloadResourceContent)
+	private IdType storeBinary(ProcessPluginApi api, RandomByteInputStream downloadResourceContent)
 	{
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().withMinimalReturn().createBinary(
-				downloadResourceContent, ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
+		return api.getDsfClientProvider().getLocal().withMinimalReturn().createBinary(downloadResourceContent,
+				ConstantsPing.DOWNLOAD_RESOURCE_MIME_TYPE,
 				api.getOrganizationProvider().getLocalOrganization().get().getIdElement().getValue());
 	}
 
-	public void setProcess(Expression process)
+	public void setProcess(String process)
 	{
 		this.process = process;
 	}

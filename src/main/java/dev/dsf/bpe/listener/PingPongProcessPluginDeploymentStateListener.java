@@ -1,7 +1,5 @@
 package dev.dsf.bpe.listener;
 
-import static dev.dsf.bpe.PingProcessPluginDefinition.RESOURCE_VERSION;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -19,27 +17,29 @@ import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.StructureDefinition;
 import org.hl7.fhir.r4.model.Task;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.ProcessPluginDeploymentStateListener;
-import dev.dsf.fhir.client.FhirWebserviceClient;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.ProcessPluginDeploymentListener;
+import dev.dsf.bpe.v2.client.dsf.DsfClient;
+import dev.dsf.bpe.v2.service.DsfClientProvider;
+import dev.dsf.bpe.v2.service.TaskHelper;
 
-public class PingPongProcessPluginDeploymentStateListener
-		implements ProcessPluginDeploymentStateListener, InitializingBean
+public class PingPongProcessPluginDeploymentStateListener implements ProcessPluginDeploymentListener
 {
-	private final ProcessPluginApi api;
+	private final DsfClientProvider dsfClientProvider;
+	private final TaskHelper taskHelper;
+	private final String resourceVersion;
 
 	public PingPongProcessPluginDeploymentStateListener(ProcessPluginApi api)
 	{
-		this.api = api;
-	}
+		this.dsfClientProvider = api.getDsfClientProvider();
+		this.taskHelper = api.getTaskHelper();
+		this.resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
 
-	@Override
-	public void afterPropertiesSet()
-	{
-		Objects.requireNonNull(api, "api");
+		Objects.requireNonNull(dsfClientProvider, "dsfClientProvider");
+		Objects.requireNonNull(taskHelper, "taskHelper");
+		Objects.requireNonNull(resourceVersion, "resourceVersion");
 	}
 
 	@Override
@@ -65,10 +65,10 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private void updateDraftTaskResources()
 	{
-		FhirWebserviceClient client = api.getFhirWebserviceClientProvider().getLocalWebserviceClient();
+		DsfClient client = dsfClientProvider.getLocal();
 
-		String pingProcessPrefix = "http://dsf.dev/bpe/Process/ping/" + RESOURCE_VERSION;
-		String pingAutostartProcessPrefix = "http://dsf.dev/bpe/Process/pingAutostart/" + RESOURCE_VERSION;
+		String pingProcessPrefix = "http://dsf.dev/bpe/Process/ping/" + resourceVersion;
+		String pingAutostartProcessPrefix = "http://dsf.dev/bpe/Process/pingAutostart/" + resourceVersion;
 		List<String> draftTaskResourceIdentifiers = List.of(pingProcessPrefix + "/task-start-ping",
 				pingAutostartProcessPrefix + "/task-start-ping-autostart");
 
@@ -91,9 +91,9 @@ public class PingPongProcessPluginDeploymentStateListener
 		Coding downloadResourceSizeBytesCoding = new Coding();
 		downloadResourceSizeBytesCoding.setSystem(dev.dsf.bpe.CodeSystem.DsfPing.URL)
 				.setCode(dev.dsf.bpe.CodeSystem.DsfPing.Code.DOWNLOAD_RESOURCE_SIZE_BYTES.getValue())
-				.setVersion(RESOURCE_VERSION);
+				.setVersion(resourceVersion);
 
-		Optional<Task.ParameterComponent> optInput = api.getTaskHelper().getFirstInputParameter(task,
+		Optional<Task.ParameterComponent> optInput = taskHelper.getFirstInputParameter(task,
 				downloadResourceSizeBytesCoding, DecimalType.class);
 		if (optInput.isEmpty())
 		{
@@ -106,9 +106,9 @@ public class PingPongProcessPluginDeploymentStateListener
 		Coding pongTimeoutDurationCoding = new Coding();
 		pongTimeoutDurationCoding.setSystem(dev.dsf.bpe.CodeSystem.DsfPing.URL)
 				.setCode(dev.dsf.bpe.CodeSystem.DsfPing.Code.PONG_TIMEOUT_DURATION_ISO_8601.getValue())
-				.setVersion(RESOURCE_VERSION);
+				.setVersion(resourceVersion);
 
-		optInput = api.getTaskHelper().getFirstInputParameter(task, pongTimeoutDurationCoding, StringType.class);
+		optInput = taskHelper.getFirstInputParameter(task, pongTimeoutDurationCoding, StringType.class);
 		if (optInput.isEmpty())
 		{
 			Task.ParameterComponent pongTimeoutDuration = new Task.ParameterComponent();
@@ -134,13 +134,12 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private Bundle search(Class<? extends Resource> type, String url)
 	{
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().search(type,
-				Map.of("url", List.of(url)));
+		return dsfClientProvider.getLocal().search(type, Map.of("url", List.of(url)));
 	}
 
 	private Bundle searchTask(String identifier)
 	{
-		return api.getFhirWebserviceClientProvider().getLocalWebserviceClient().search(Task.class,
+		return dsfClientProvider.getLocal().search(Task.class,
 				Map.of("identifier", List.of(identifier), "status", List.of("draft")));
 	}
 
@@ -170,7 +169,7 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private boolean currentIsNewestResource(List<? extends MetadataResource> resources)
 	{
-		return !resources.isEmpty() && RESOURCE_VERSION.equals(resources.get(resources.size() - 1).getVersion());
+		return !resources.isEmpty() && resourceVersion.equals(resources.get(resources.size() - 1).getVersion());
 	}
 
 	private MinorMajorVersion getMajorMinorVersion(String version)
@@ -230,7 +229,7 @@ public class PingPongProcessPluginDeploymentStateListener
 
 	private void updateResources(List<? extends MetadataResource> resources)
 	{
-		resources.forEach(m -> api.getFhirWebserviceClientProvider().getLocalWebserviceClient().update(m));
+		resources.forEach(m -> dsfClientProvider.getLocal().update(m));
 	}
 
 	private record MinorMajorVersion(int major, int minor)

@@ -1,34 +1,38 @@
 package dev.dsf.bpe.message;
 
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.hl7.fhir.r4.model.Task;
 import org.hl7.fhir.r4.model.Task.ParameterComponent;
 
 import dev.dsf.bpe.CodeSystem;
-import dev.dsf.bpe.v1.ProcessPluginApi;
-import dev.dsf.bpe.v1.activity.AbstractTaskMessageSend;
-import dev.dsf.bpe.v1.variables.Target;
-import dev.dsf.bpe.v1.variables.Variables;
+import dev.dsf.bpe.v2.ProcessPluginApi;
+import dev.dsf.bpe.v2.activity.MessageIntermediateThrowEvent;
+import dev.dsf.bpe.v2.activity.task.BusinessKeyStrategies;
+import dev.dsf.bpe.v2.activity.task.BusinessKeyStrategy;
+import dev.dsf.bpe.v2.activity.values.SendTaskValues;
+import dev.dsf.bpe.v2.variables.Target;
+import dev.dsf.bpe.v2.variables.Variables;
 
-public class SendStartPing extends AbstractTaskMessageSend
+public class SendStartPing implements MessageIntermediateThrowEvent
 {
-	public SendStartPing(ProcessPluginApi api)
-	{
-		super(api);
-	}
-
 	@Override
-	protected Stream<ParameterComponent> getAdditionalInputParameters(DelegateExecution execution, Variables variables)
+	public List<ParameterComponent> getAdditionalInputParameters(ProcessPluginApi api, Variables variables,
+			SendTaskValues sendTaskValues, Target target)
 	{
-		return Stream.concat(
-				variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType)
-						.filter(i -> i.getType().getCoding().stream()
-								.anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
-										&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode()))),
-				variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter));
+		List<Task.ParameterComponent> additionalInputParameters = new ArrayList<>();
+
+		variables.getStartTask().getInput().stream().filter(Task.ParameterComponent::hasType)
+				.filter(i -> i.getType().getCoding().stream()
+						.anyMatch(c -> CodeSystem.DsfPing.URL.equals(c.getSystem())
+								&& CodeSystem.DsfPing.Code.TARGET_ENDPOINTS.getValue().equals(c.getCode())))
+				.forEach(additionalInputParameters::add);
+
+		variables.getStartTask().getInput().stream().filter(this::isDownloadResourceSizeParameter)
+				.forEach(additionalInputParameters::add);
+
+		return additionalInputParameters;
 	}
 
 	private boolean isDownloadResourceSizeParameter(ParameterComponent parameterComponent)
@@ -39,14 +43,8 @@ public class SendStartPing extends AbstractTaskMessageSend
 	}
 
 	@Override
-	protected void sendTask(DelegateExecution execution, Variables variables, Target target,
-			String instantiatesCanonical, String messageName, String businessKey, String profile,
-			Stream<ParameterComponent> additionalInputParameters)
+	public BusinessKeyStrategy getBusinessKeyStrategy()
 	{
-		// different business-key for every start-ping execution
-		businessKey = UUID.randomUUID().toString();
-
-		super.sendTask(execution, variables, target, instantiatesCanonical, messageName, businessKey, profile,
-				additionalInputParameters);
+		return BusinessKeyStrategies.NEW;
 	}
 }

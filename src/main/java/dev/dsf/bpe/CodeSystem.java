@@ -57,10 +57,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.getValue())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.getValue()).setVersion(resourceVersion);
 		}
 
 		public enum Code implements SingleStringValueEnum
@@ -75,7 +74,8 @@ public final class CodeSystem
 			DOWNLOADED_BYTES("downloaded-bytes"),
 			DOWNLOAD_RESOURCE_REFERENCE("download-resource-reference"),
 			ERROR("error"),
-			PONG_TIMEOUT_DURATION_ISO_8601("pong-timeout-duration");
+			PONG_TIMEOUT_DURATION_ISO_8601("pong-timeout-duration"),
+			TEST_REFERENCE("test-reference");
 
 			private final String value;
 
@@ -84,6 +84,7 @@ public final class CodeSystem
 				this.value = value;
 			}
 
+			@Override
 			public String getValue()
 			{
 				return value;
@@ -104,10 +105,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.getValue())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.getValue()).setVersion(resourceVersion);
 		}
 
 		public enum Code implements SingleStringValueEnum
@@ -125,6 +125,7 @@ public final class CodeSystem
 				this.value = value;
 			}
 
+			@Override
 			public String getValue()
 			{
 				return value;
@@ -146,10 +147,9 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromCode(Code code)
+		public static Coding fromCode(Code code, String resourceVersion)
 		{
-			return new Coding().setSystem(URL).setCode(code.toUcum())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+			return new Coding().setSystem(URL).setCode(code.toUcum()).setVersion(resourceVersion);
 		}
 
 		public enum Code
@@ -359,10 +359,10 @@ public final class CodeSystem
 		{
 		}
 
-		public static Coding fromConcept(Concept concept)
+		public static Coding fromConcept(Concept concept, String resourceVersion)
 		{
 			return new Coding().setSystem(URL).setCode(concept.getCode()).setDisplay(concept.getDisplay())
-					.setVersion(PingProcessPluginDefinition.RESOURCE_VERSION);
+					.setVersion(resourceVersion);
 		}
 
 		public enum Concept
@@ -822,8 +822,28 @@ public final class CodeSystem
 					"Remote instance encountered a read timeout trying to download the binary resource from this server"
 			),
 			REMOTE_BINARY_DOWNLOAD_MISSING_REFERENCE(
-					"remote-binary-download-http-host-connect",
-					"Remote instance was unable to download the binary resource from the local DSF FHIR server because the connection was refused"
+					"remote-binary-download-missing-reference",
+					"Remote instance was unable to download the binary resource from this server because the reference was missing"
+			),
+
+			REMOTE_ORG_MISSING_PONG_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST(
+					"remote-org-missing-pong-install-or-local-org-not-in-remote-allowlist",
+					"Remote instance either does not have the pong process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
+			),
+
+			REMOTE_ORG_MISSING_PING_INSTALL_OR_LOCAL_ORG_NOT_IN_REMOTE_ALLOWLIST(
+					"remote-org-missing-ping-install-or-local-org-not-in-remote-allowlist",
+					"Remote instance either does not have the ping process installed or your organization is not in their allowlist (or a proxy returned 403 - Forbidden)"
+			),
+
+			REMOTE_ORG_FHIR_SERVER_REFERENCE_RESOLUTION(
+					"remote-org-fhir-server-reference-resolution",
+					"The DSF FHIR server of the remote instance was unable to resolve a reference on the local DSF FHIR server"
+			),
+
+			LOCAL_ORG_FHIR_SERVER_REFERENCE_RESOLUTION(
+					"local-org-fhir-server-reference-resolution",
+					"The local DSF FHIR server was unable to resolve a reference on the DSF FHIR server of the remote instance"
 			),
 
 			LOCAL_UNKNOWN(

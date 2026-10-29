@@ -1,44 +1,14 @@
 package dev.dsf.bpe;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import dev.dsf.bpe.spring.config.PingConfig;
-import dev.dsf.bpe.v1.ProcessPluginDefinition;
+import dev.dsf.bpe.v2.AbstractProcessPluginDefinition;
 
-public class PingProcessPluginDefinition implements ProcessPluginDefinition
+public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 {
-	public static final String RESOURCE_VERSION = "2.1";
-	public static final String NON_RESOURCE_VERSION = "0.0";
-	public static final String VERSION = RESOURCE_VERSION + "." + NON_RESOURCE_VERSION;
-	public static final LocalDate RELEASE_DATE = LocalDate.of(2025, 11, 25);
-
-	@Override
-	public String getName()
-	{
-		return "dsf-process-ping-pong";
-	}
-
-	@Override
-	public String getVersion()
-	{
-		return VERSION;
-	}
-
-	@Override
-	public String getResourceVersion()
-	{
-		return RESOURCE_VERSION;
-	}
-
-	@Override
-	public LocalDate getReleaseDate()
-	{
-		return RELEASE_DATE;
-	}
-
 	@Override
 	public List<String> getProcessModels()
 	{
@@ -63,13 +33,17 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var cPingError = "fhir/CodeSystem/dsf-ping-error.xml";
 
 		var sPingStatus = "fhir/StructureDefinition/dsf-extension-ping-status.xml";
-		var sPing = "fhir/StructureDefinition/dsf-task-ping.xml";
-		var sPong = "fhir/StructureDefinition/dsf-task-pong.xml";
+		var sPingFirstAttempt = "fhir/StructureDefinition/dsf-task-ping-first-attempt.xml";
+		var sPingSecondAttempt = "fhir/StructureDefinition/dsf-task-ping-second-attempt.xml";
+		var sPongFirstAttempt = "fhir/StructureDefinition/dsf-task-pong-first-attempt.xml";
+		var sPongSecondAttempt = "fhir/StructureDefinition/dsf-task-pong-second-attempt.xml";
 		var sStartPing = "fhir/StructureDefinition/dsf-task-start-ping.xml";
 		var sStartPingAutostart = "fhir/StructureDefinition/dsf-task-start-ping-autostart.xml";
 		var sStopPingAutostart = "fhir/StructureDefinition/dsf-task-stop-ping-autostart.xml";
 		var sCleanupPong = "fhir/StructureDefinition/dsf-task-cleanup-pong.xml";
 		var sErrorExtension = "fhir/StructureDefinition/dsf-extension-error.xml";
+		var sBasicConnectionTestPong = "fhir/StructureDefinition/dsf-task-basic-connection-test-pong.xml";
+		var sReferenceResolutionTestPong = "fhir/StructureDefinition/dsf-task-reference-resolution-test-pong.xml";
 
 		var tStartPing = "fhir/Task/dsf-task-start-ping.xml";
 		var tStartPingAutoStart = "fhir/Task/dsf-task-start-ping-autostart.xml";
@@ -81,12 +55,20 @@ public class PingProcessPluginDefinition implements ProcessPluginDefinition
 		var vPongStatus = "fhir/ValueSet/dsf-pong-status.xml";
 
 		return Map.of(ConstantsPing.PROCESS_NAME_FULL_PING,
-				Arrays.asList(aPing, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sStartPing, sPong,
-						sCleanupPong, tStartPing, vPing, vPingStatus, vPingUnits),
+				Arrays.asList(aPing, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sStartPing,
+						sPongFirstAttempt, sPongSecondAttempt, sCleanupPong, sBasicConnectionTestPong,
+						sReferenceResolutionTestPong, tStartPing, vPing, vPingStatus, vPingUnits),
 				ConstantsPing.PROCESS_NAME_FULL_PING_AUTOSTART,
 				Arrays.asList(aPingAutostart, cPing, sStartPingAutostart, sStopPingAutostart, tStartPingAutoStart,
 						tStopPingAutoStart, vPing),
-				ConstantsPing.PROCESS_NAME_FULL_PONG, Arrays.asList(aPong, cPing, cPingStatus, cPingError,
-						sErrorExtension, sPingStatus, sPing, vPing, vPongStatus, vPingUnits));
+				ConstantsPing.PROCESS_NAME_FULL_PONG,
+				Arrays.asList(aPong, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sPingFirstAttempt,
+						sPingSecondAttempt, vPing, vPongStatus, vPingUnits));
+	}
+
+	@Override
+	public License getLicense()
+	{
+		return License.Apache2;
 	}
 }
