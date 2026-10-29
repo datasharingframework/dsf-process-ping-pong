@@ -21,7 +21,7 @@ public class ProcessErrors
 	@JsonCreator
 	public ProcessErrors(@JsonProperty("entries") Collection<ProcessError> entries)
 	{
-		if (Objects.nonNull(entries))
+		if (entries != null)
 		{
 			this.entries = new Vector<>(entries);
 		}

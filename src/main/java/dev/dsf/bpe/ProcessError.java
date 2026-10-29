@@ -29,7 +29,7 @@ public record ProcessError(String process, CodeSystem.DsfPingError.Concept conce
 
 		extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_ERROR)
 				.setValue(CodeSystem.DsfPingError.fromConcept(error.concept(), resourceVersion));
-		if (Objects.nonNull(error.potentialFixUrl))
+		if (error.potentialFixUrl != null)
 		{
 			extension.addExtension().setUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX)
 					.setValue(new UrlType(error.potentialFixUrl()));
@@ -46,7 +46,7 @@ public record ProcessError(String process, CodeSystem.DsfPingError.Concept conce
 				.fromCode(((Coding) errorExtension.getValue()).getCode());
 
 		Extension potentalFixUrlExtension = extension.getExtensionByUrl(ConstantsPing.EXTENSION_URL_POTENTIAL_FIX);
-		String potentialFixUrl = Objects.nonNull(potentalFixUrlExtension)
+		String potentialFixUrl = potentalFixUrlExtension != null
 				? ((UrlType) potentalFixUrlExtension.getValue()).getValue()
 				: null;
 
