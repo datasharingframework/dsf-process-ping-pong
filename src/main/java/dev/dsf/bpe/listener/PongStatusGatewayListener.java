@@ -20,8 +20,6 @@ public class PongStatusGatewayListener implements ExecutionListener
 	{
 		CodeSystem.DsfPingStatus.Code statusCode = variables.getVariableLocal(ExecutionVariables.statusCode.name());
 		if (statusCode != null)
-		{
 			variables.setString(ExecutionVariables.statusCodeString.name(), statusCode.getValue());
-		}
 	}
 }
