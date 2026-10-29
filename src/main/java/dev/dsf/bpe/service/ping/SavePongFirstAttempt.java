@@ -33,7 +33,7 @@ public class SavePongFirstAttempt implements ServiceTask
 		logger.debug("Pong received from {}. Attempt {}. Saving pong information...", target.getEndpointUrl(), 1);
 		String correlationKey = target.getCorrelationKey();
 
-		variables.setString(ExecutionVariables.pongAttempt.name(), "1");
+		variables.setInteger(ExecutionVariables.pongAttempt.name(), 1);
 
 		Task pong = variables.getLatestTask();
 

@@ -139,7 +139,7 @@
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${downloadResourceSizeBytes &lt; 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_1yt9547" sourceRef="Gateway_0p0be0a" targetRef="DownloadResourceAndMeasureSpeedServiceTask">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == '1' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == 1 &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0jcfur3" sourceRef="DownloadResourceLogAndSaveErrorServiceTask" targetRef="CleanupPongMessageSendTask" />
       <bpmn:sequenceFlow id="Flow_1ewmc79" sourceRef="PongFirstTryCatchEvent" targetRef="SavePongServiceTask" />
@@ -245,7 +245,7 @@
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="Flow_1ncztgo" sourceRef="DownloadResourceAndMeasureSpeedServiceTask" targetRef="Gateway_0de83s3" />
       <bpmn:sequenceFlow id="Flow_0hahcbu" sourceRef="Gateway_0p0be0a" targetRef="CleanupPongMessageSendTask">
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == '2' &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${pongAttempt == 2 &amp;&amp; downloadResourceSizeBytes &gt;= 0}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:sequenceFlow id="Flow_0klalf8" sourceRef="CleanupPongMessageSendTask" targetRef="Gateway_02orad4" />
       <bpmn:intermediateCatchEvent id="PongSecondAttemptCatchEvent" name="Pong Second Attempt" camunda:asyncAfter="true">

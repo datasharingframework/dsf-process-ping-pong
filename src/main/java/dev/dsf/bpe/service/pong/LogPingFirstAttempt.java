@@ -21,10 +21,10 @@ public class LogPingFirstAttempt implements ServiceTask
 	public void execute(ProcessPluginApi api, Variables variables) throws ErrorBoundaryEvent, Exception
 	{
 		Task task = variables.getLatestTask();
-		String pingAttempt = "1";
+		int pingAttempt = 1;
 
-		variables.setString(ExecutionVariables.pingAttempt.name(), pingAttempt);
-		logger.info("PING from {} (endpoint: {}, try: {})", task.getRequester().getIdentifier().getValue(),
+		variables.setInteger(ExecutionVariables.pingAttempt.name(), pingAttempt);
+		logger.info("PING from {} (endpoint: {}, attempt: {})", task.getRequester().getIdentifier().getValue(),
 				getEndpointIdentifierValue(api, task), pingAttempt);
 	}
 
