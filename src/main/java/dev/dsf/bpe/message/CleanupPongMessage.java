@@ -16,6 +16,7 @@ import dev.dsf.bpe.util.task.input.generator.DownloadedBytesGenerator;
 import dev.dsf.bpe.util.task.input.generator.DownloadedDurationGenerator;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.activity.MessageSendTask;
+import dev.dsf.bpe.v2.activity.task.BusinessKeyStrategies;
 import dev.dsf.bpe.v2.activity.task.DefaultTaskSender;
 import dev.dsf.bpe.v2.activity.task.TaskSender;
 import dev.dsf.bpe.v2.activity.values.SendTaskValues;
@@ -85,38 +86,12 @@ public class CleanupPongMessage implements MessageSendTask
 	@Override
 	public TaskSender getTaskSender(ProcessPluginApi api, Variables variables, SendTaskValues sendTaskValues)
 	{
-		return new DefaultTaskSender(api, variables, sendTaskValues, this.getBusinessKeyStrategy())
+		return new DefaultTaskSender(api, variables, sendTaskValues, BusinessKeyStrategies.SAME)
 		{
 			@Override
-			protected Target getTarget()
+			protected String getCorrelationKey(Target target)
 			{
-				Target oldTarget = super.getTarget();
-				return new Target()
-				{
-					@Override
-					public String getOrganizationIdentifierValue()
-					{
-						return oldTarget.getOrganizationIdentifierValue();
-					}
-
-					@Override
-					public String getEndpointIdentifierValue()
-					{
-						return oldTarget.getEndpointIdentifierValue();
-					}
-
-					@Override
-					public String getEndpointUrl()
-					{
-						return oldTarget.getEndpointUrl();
-					}
-
-					@Override
-					public String getCorrelationKey()
-					{
-						return null;
-					}
-				};
+				return null;
 			}
 		};
 	}
