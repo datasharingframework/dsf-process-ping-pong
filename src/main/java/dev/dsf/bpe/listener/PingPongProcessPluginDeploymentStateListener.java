@@ -17,7 +17,6 @@ import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.StructureDefinition;
 import org.hl7.fhir.r4.model.Task;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ConstantsPing;
 import dev.dsf.bpe.v2.ProcessPluginApi;
@@ -26,7 +25,7 @@ import dev.dsf.bpe.v2.client.dsf.DsfClient;
 import dev.dsf.bpe.v2.service.DsfClientProvider;
 import dev.dsf.bpe.v2.service.TaskHelper;
 
-public class PingPongProcessPluginDeploymentStateListener implements ProcessPluginDeploymentListener, InitializingBean
+public class PingPongProcessPluginDeploymentStateListener implements ProcessPluginDeploymentListener
 {
 	private final DsfClientProvider dsfClientProvider;
 	private final TaskHelper taskHelper;
@@ -37,11 +36,7 @@ public class PingPongProcessPluginDeploymentStateListener implements ProcessPlug
 		this.dsfClientProvider = api.getDsfClientProvider();
 		this.taskHelper = api.getTaskHelper();
 		this.resourceVersion = api.getProcessPluginDefinition().getResourceVersion();
-	}
 
-	@Override
-	public void afterPropertiesSet()
-	{
 		Objects.requireNonNull(dsfClientProvider, "dsfClientProvider");
 		Objects.requireNonNull(taskHelper, "taskHelper");
 		Objects.requireNonNull(resourceVersion, "resourceVersion");

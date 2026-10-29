@@ -7,13 +7,12 @@ import java.util.Objects;
 import org.hl7.fhir.r4.model.IdType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.ProcessError;
 import dev.dsf.bpe.v2.ProcessPluginApi;
 import dev.dsf.bpe.v2.variables.Target;
 
-public class AggregateErrorMailService implements InitializingBean
+public class AggregateErrorMailService
 {
 	private static final Logger errorMailServiceLogger = LoggerFactory.getLogger("error-mail-service-logger");
 	private static final String MAIL_MESSAGE_INTRO = "Error(s) while executing ping-pong process:";
@@ -30,12 +29,9 @@ public class AggregateErrorMailService implements InitializingBean
 		this.api = api;
 		this.sendProcessFailedMail = sendProcessFailedMail;
 		this.subject = subject;
-	}
 
-	@Override
-	public void afterPropertiesSet()
-	{
 		Objects.requireNonNull(api, "api");
+		Objects.requireNonNull(subject, "subject");
 	}
 
 	public void send(IdType taskId, List<ProcessError> localProcessErrors,

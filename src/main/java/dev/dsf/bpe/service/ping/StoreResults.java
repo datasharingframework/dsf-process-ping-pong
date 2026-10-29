@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.hl7.fhir.r4.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 import dev.dsf.bpe.CodeSystem;
 import dev.dsf.bpe.ExecutionVariables;
@@ -28,7 +27,7 @@ import dev.dsf.bpe.v2.variables.Target;
 import dev.dsf.bpe.v2.variables.Targets;
 import dev.dsf.bpe.v2.variables.Variables;
 
-public class StoreResults implements ServiceTask, InitializingBean
+public class StoreResults implements ServiceTask
 {
 	private static final Logger logger = LoggerFactory.getLogger(StoreResults.class);
 	private final AggregateErrorMailService errorMailService;
@@ -41,11 +40,7 @@ public class StoreResults implements ServiceTask, InitializingBean
 		this.networkSpeedUnit = networkSpeedUnit;
 		this.errorMailService = errorMailService;
 		this.pingStatusGenerator = pingStatusGenerator;
-	}
 
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
 		Objects.requireNonNull(errorMailService, "errorMailService");
 	}
 
