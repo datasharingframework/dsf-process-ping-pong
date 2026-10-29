@@ -18,7 +18,6 @@ public final class DownloadResourceReference
 
 	private DownloadResourceReference()
 	{
-
 	}
 
 	public static void setFromTask(ProcessPluginApi api, Variables variables, Task task)
