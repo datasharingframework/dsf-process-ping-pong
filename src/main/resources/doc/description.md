@@ -12,13 +12,6 @@ The Ping Pong process's output paremters will link to a page which contains trou
 
 Troubleshooting tips and network speeds can be found in the outputs of the completed process. They are named `potential-fix`, `download-speed-from-remote` and `upload-speed-to-remote`  respectively.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/7f037f1e-2498-4086-801c-27cccf7c9cb4">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/21a3fa10-5ca5-4eee-bd1a-48e522e169a5">
-  <img alt="Ping Pong Process Collaboration Diagram" src="https://github.com/user-attachments/assets/21a3fa10-5ca5-4eee-bd1a-48e522e169a5">
-</picture>
-
-
 ### Autostart Process
 The ping pong process plugin includes an autostart process which allows automatically starting the ping process on an interval.
 
