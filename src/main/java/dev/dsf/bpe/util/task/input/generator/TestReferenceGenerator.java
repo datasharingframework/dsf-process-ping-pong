@@ -9,7 +9,6 @@ public final class TestReferenceGenerator
 {
 	private TestReferenceGenerator()
 	{
-
 	}
 
 	public static Task.ParameterComponent create(String uri, String version)
