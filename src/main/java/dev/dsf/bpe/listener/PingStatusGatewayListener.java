@@ -19,13 +19,6 @@ public class PingStatusGatewayListener implements ExecutionListener
 	private void setPingStatusAsString(Variables variables)
 	{
 		CodeSystem.DsfPingStatus.Code statusCode = variables.getVariableLocal(ExecutionVariables.statusCode.name());
-		if (statusCode != null)
-		{
-			variables.setStringLocal(ExecutionVariables.statusCodeString.name(), statusCode.getValue());
-		}
-		else
-		{
-			variables.setStringLocal(ExecutionVariables.statusCodeString.name(), null);
-		}
+		variables.setStringLocal(ExecutionVariables.statusCodeString.name(), statusCode == null ? null : statusCode.getValue());
 	}
 }
