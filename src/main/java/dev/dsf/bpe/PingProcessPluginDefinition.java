@@ -65,4 +65,10 @@ public class PingProcessPluginDefinition extends AbstractProcessPluginDefinition
 				Arrays.asList(aPong, cPing, cPingStatus, cPingError, sErrorExtension, sPingStatus, sPingFirstAttempt,
 						sPingSecondAttempt, vPing, vPongStatus, vPingUnits));
 	}
+
+	@Override
+	public License getLicense()
+	{
+		return License.Apache2;
+	}
 }
