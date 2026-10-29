@@ -17,8 +17,8 @@ public class SetCorrelationKeyListener implements ExecutionListener
 	public void notify(ProcessPluginApi processPluginApi, Variables variables) throws Exception
 	{
 		logger.debug("Setting correlation key for subprocess instance {}", variables.getActivityInstanceId());
-		Target target = variables.getTarget();
 
+		Target target = variables.getTarget();
 		variables.setStringLocal(BpmnExecutionVariables.CORRELATION_KEY, target.getCorrelationKey());
 	}
 }
